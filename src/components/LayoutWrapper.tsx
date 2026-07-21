@@ -856,10 +856,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <aside 
-            className="w-72 max-w-[80vw] h-full bg-card border-r border-border p-6 flex flex-col justify-between"
+            className="w-72 max-w-[80vw] h-full bg-card border-r border-border flex flex-col justify-between overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="space-y-8">
+            <div className="space-y-6 flex-1 overflow-y-auto no-scrollbar p-5">
               <div className="flex items-center justify-between border-b border-border pb-4 mt-4">
                 <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
                   <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-premium text-white">
@@ -982,7 +982,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               </div>
             </div>
             
-            <div className="text-center text-[10px] text-text_secondary pt-6 border-t border-border">
+            <div className="text-center text-[10px] text-text_secondary py-3.5 border-t border-border bg-slate-50 flex-shrink-0">
               Think Your College © 2026
             </div>
           </aside>
