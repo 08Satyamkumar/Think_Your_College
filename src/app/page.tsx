@@ -76,10 +76,10 @@ const heroSlides = [
     slug: "iit-delhi"
   },
   {
-    name: "IIM Ahmedabad Campus",
-    location: "Ahmedabad, Gujarat",
-    image: "/images/iimahmedabad.png",
-    slug: "iim-ahmedabad"
+    name: "AIIMS Rishikesh Campus",
+    location: "Rishikesh, Uttarakhand",
+    image: "/images/aiimsrishikesh.webp",
+    slug: "aiims-rishikesh"
   }
 ];
 

@@ -214,6 +214,39 @@ const collegesDb: Record<string, {
       { name: "Central Library", icon: "BookOpen" },
       { name: "Student Canteens", icon: "Coffee" }
     ]
+  },
+  "aiims-rishikesh": {
+    name: "AIIMS Rishikesh - All India Institute of Medical Sciences",
+    location: "Virbhadra Road, Rishikesh, Uttarakhand",
+    nirfRank: "NIRF #22 (Medical)",
+    rating: 4.8,
+    ratingCount: "384 Reviews",
+    type: "Government",
+    estd: "2012",
+    stream: "Medical",
+    highestPackage: "N/A (PG Focus)",
+    averagePackage: "₹12.0 Lakhs PA",
+    totalFees: "₹5,850 (Total)",
+    courses: [
+      { name: "MBBS (Bachelor of Medicine & Bachelor of Surgery)", duration: "5.5 Years", fees: "₹1,628 / Yr", eligibility: "NEET UG score (650+ for General)" },
+      { name: "B.Sc (Hons) Nursing", duration: "4 Years", fees: "₹1,500 / Yr", eligibility: "AIIMS Entrance Exam" },
+      { name: "MD / MS (Postgraduate Specialization)", duration: "3 Years", fees: "₹2,000 / Yr", eligibility: "INI CET score" }
+    ],
+    recruiters: ["AIIMS Residency", "Apollo Hospitals", "Fortis Healthcare", "Max Healthcare", "Medanta"],
+    reviews: [
+      { id: "1", author: "Dr. Nikita Joshi", course: "MBBS (Batch 2023)", year: "4 days ago", rating: 5, title: "Scenic beauty meets world-class clinical exposure", content: "AIIMS Rishikesh campus is built in the lap of Himalayas. The clinical load is huge, providing rich patient exposure. Faculty are highly distinguished and the medical labs are top-notch." }
+    ],
+    cutoffs: [
+      { branch: "MBBS General Category NEET Rank", openRank: 120, closeRank: 850 },
+      { branch: "MBBS OBC Category NEET Rank", openRank: 900, closeRank: 1800 }
+    ],
+    facilities: [
+      { name: "Ultra-Modern Hospital", icon: "Building" },
+      { name: "High-Speed Wi-Fi", icon: "Wifi" },
+      { name: "Central Library", icon: "BookOpen" },
+      { name: "Cafeteria", icon: "Coffee" },
+      { name: "Student Hostels", icon: "Building" }
+    ]
   }
 };
 
