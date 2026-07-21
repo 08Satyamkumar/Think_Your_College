@@ -1398,6 +1398,30 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         )}
       </AnimatePresence>
 
+      {/* Floating WhatsApp Button */}
+      <AnimatePresence>
+        {!isChatOpen && (
+          <motion.a
+            href="https://wa.me/918585951111?text=Hi%20Sarthi,%20I%20have%20a%20query%20about%20college%20admissions."
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            className="fixed bottom-24 right-6 w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-xl shadow-emerald-500/30 flex items-center justify-center z-50 border border-emerald-400/20 group cursor-pointer"
+          >
+            <span className="absolute right-16 px-3 py-1.5 rounded-xl bg-slate-900/90 text-white text-[10px] font-bold tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+              Chat on WhatsApp
+            </span>
+            <svg className="w-6 h-6 text-white fill-current" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.115-2.905-6.99C16.558 1.876 14.077.841 11.997.841 6.561.841 2.137 5.26 2.133 10.7c-.001 1.688.455 3.328 1.32 4.795l-.995 3.64 3.729-.981zM17.487 14.39c-.3-.15-1.782-.88-2.03-.97-.25-.09-.43-.13-.61.15-.18.28-.7 1-.86 1.18-.16.18-.32.2-.62.05-1.8-.9-3.21-2.42-4.14-4.04-.08-.13-.01-.26.06-.39.06-.11.13-.3.2-.45.07-.15.11-.26.17-.38.06-.11.03-.23-.01-.38-.05-.15-.43-1.04-.6-1.43-.16-.38-.32-.33-.43-.33h-.37c-.13 0-.33.05-.51.25-.18.2-1.3 1.27-1.3 3.1s1.33 3.6 1.51 3.85c.18.24 2.62 4.02 6.3 5.6.88.37 1.57.6 2.11.77.88.28 1.68.24 2.3.15.7-.1 1.782-.73 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.32-.2-.62-.35z" />
+            </svg>
+          </motion.a>
+        )}
+      </AnimatePresence>
+
       {/* Floating Toggle Button */}
       <motion.button
         onClick={() => setIsChatOpen(!isChatOpen)}
