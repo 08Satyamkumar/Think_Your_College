@@ -57,9 +57,27 @@ const heroSlides = [
     slug: "chandigarh-university"
   },
   {
-    name: "Galgotias University",
+    name: "Galgotias University (Academic Block)",
     location: "Greater Noida, Uttar Pradesh",
-    image: "/images/galgotias.png",
+    image: "/images/galgotias_lego_1.png",
+    slug: "galgotias-university"
+  },
+  {
+    name: "Galgotias University (Campus Entrance)",
+    location: "Greater Noida, Uttar Pradesh",
+    image: "/images/galgotias_lego_5.png",
+    slug: "galgotias-university"
+  },
+  {
+    name: "Galgotias University (Full Campus Layout)",
+    location: "Greater Noida, Uttar Pradesh",
+    image: "/images/galgotias_lego_6.png",
+    slug: "galgotias-university"
+  },
+  {
+    name: "Galgotias University (Hostel Block)",
+    location: "Greater Noida, Uttar Pradesh",
+    image: "/images/galgotias_lego_3.png",
     slug: "galgotias-university"
   },
   {
@@ -331,7 +349,7 @@ export default function HomePage() {
       type: "Private",
       slug: "galgotias-university",
       stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1607237138185-eedd996c5c00?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "/images/galgotias_lego_1.png",
       nirfRank: 95
     },
     {

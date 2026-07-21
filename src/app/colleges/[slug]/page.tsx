@@ -181,6 +181,39 @@ const collegesDb: Record<string, {
       { name: "Student Canteen", icon: "Coffee" },
       { name: "Sports Complex", icon: "Heart" }
     ]
+  },
+  "galgotias-university": {
+    name: "Galgotias University",
+    location: "Greater Noida, Uttar Pradesh",
+    nirfRank: "NIRF #95 (Engineering)",
+    rating: 4.2,
+    ratingCount: "512 Reviews",
+    type: "Private",
+    estd: "2011",
+    stream: "Engineering",
+    highestPackage: "35.0 LPA",
+    averagePackage: "8.5 LPA",
+    totalFees: "₹6.4 Lakhs (4 Years)",
+    courses: [
+      { name: "B.Tech Computer Science and Engineering (AI & DS)", duration: "4 Years", fees: "₹1,59,000 / Yr", eligibility: "UPTAC / JEE Main score + 60% in 12th Class" },
+      { name: "B.Tech Electronics & Communication Engineering", duration: "4 Years", fees: "₹1,49,000 / Yr", eligibility: "UPTAC / JEE Main score + 60% in 12th Class" },
+      { name: "B.Tech Mechanical Engineering", duration: "4 Years", fees: "₹1,39,000 / Yr", eligibility: "UPTAC / JEE Main score + 60% in 12th Class" }
+    ],
+    recruiters: ["Cognizant", "Wipro", "Infosys", "Amazon", "L&T EduTech", "HCL Tech", "Tech Mahindra"],
+    reviews: [
+      { id: "1", author: "Satyam Kumar", course: "B.Tech CSE AI & DS (Batch 2026)", year: "Just now", rating: 5, title: "Modern infrastructure with top-class AI & Data Science labs", content: "Campus building is massive and built beautifully. We have advanced coding labs collaborated with L&T EduTech and HCL. Highly cooperative placement cell." }
+    ],
+    cutoffs: [
+      { branch: "Computer Science (CSE AI & DS)", openRank: 12000, closeRank: 24500 },
+      { branch: "Electronics & Communication (ECE)", openRank: 25000, closeRank: 42000 }
+    ],
+    facilities: [
+      { name: "High-Speed Wi-Fi", icon: "Wifi" },
+      { name: "3D Printing & Makers Lab", icon: "Building" },
+      { name: "L&T EduTech Lab", icon: "Building" },
+      { name: "Central Library", icon: "BookOpen" },
+      { name: "Student Canteens", icon: "Coffee" }
+    ]
   }
 };
 
