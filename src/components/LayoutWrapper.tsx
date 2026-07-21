@@ -396,6 +396,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     { name: "All Colleges", href: "/colleges" },
     { name: "Compare Colleges", href: "/compare" },
     { name: "College Predictor", href: "/predictor" },
+    { name: "Scholarship & Loans", href: "/scholarship" },
     { name: "Bihar Credit Card", href: "/credit-card" },
     { name: "Contact Counseling", href: "/contact" },
   ];
@@ -523,6 +524,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         links: [
           { name: "College Predictor Tool", href: "/predictor" },
           { name: "Compare Colleges Hub", href: "/compare" },
+          { name: "Scholarship & Loan Estimator", href: "/scholarship" },
         ]
       }
     ],
