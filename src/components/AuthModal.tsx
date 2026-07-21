@@ -173,6 +173,87 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
   }, [isOpen, defaultMode]);
 
   useEffect(() => {
+    if (typeof window !== "undefined" && !document.getElementById("google-gsi-client")) {
+      const script = document.createElement("script");
+      script.id = "google-gsi-client";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  // Google GSI Real Login states
+  const [customClientId, setCustomClientId] = useState("");
+  const [googleError, setGoogleError] = useState("");
+  const [gsiTab, setGsiTab] = useState<"demo" | "real">("demo");
+
+  const handleGoogleLogin = () => {
+    const envClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const sessionClientId = typeof window !== "undefined" ? sessionStorage.getItem("tyc-google-client-id") : null;
+    const activeClientId = envClientId || sessionClientId || customClientId;
+
+    if (!activeClientId) {
+      // Show assistant overlay if no client ID is found
+      setGoogleSimStep("select_account");
+      setGsiTab("real"); // Default to setup tab so they know they need a client ID
+      return;
+    }
+
+    if (typeof window === "undefined" || !(window as any).google?.accounts?.oauth2) {
+      setGoogleError("Google Sign-In is initializing. Please try again in a moment.");
+      setGoogleSimStep("select_account");
+      return;
+    }
+
+    setGoogleError("");
+    setGoogleSimStep("loading");
+
+    try {
+      const client = (window as any).google.accounts.oauth2.initTokenClient({
+        client_id: activeClientId,
+        scope: "openid email profile",
+        callback: (tokenResponse: any) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            // Save client ID for subsequent sessions if verified
+            if (customClientId) {
+              sessionStorage.setItem("tyc-google-client-id", customClientId);
+            }
+            fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokenResponse.access_token}`)
+              .then(res => {
+                if (!res.ok) throw new Error("Profile fetch failed");
+                return res.json();
+              })
+              .then(data => {
+                if (data.email) {
+                  onLoginSuccess({
+                    name: data.name || data.email.split("@")[0],
+                    email: data.email
+                  });
+                  setGoogleSimStep("idle");
+                }
+              })
+              .catch(err => {
+                setGoogleError("Failed to fetch Google profile. Try again.");
+                setGoogleSimStep("select_account");
+              });
+          } else {
+            setGoogleSimStep("select_account");
+          }
+        },
+        error_callback: (err: any) => {
+          setGoogleError("Google authentication failed. Verify console client configuration.");
+          setGoogleSimStep("select_account");
+        }
+      });
+      client.requestAccessToken();
+    } catch (e) {
+      setGoogleError("Google Sign-In failed to initialize. Check Client ID origins.");
+      setGoogleSimStep("select_account");
+    }
+  };
+
+  useEffect(() => {
     if (otpTimer <= 0) return;
     const t = setTimeout(() => setOtpTimer(s => s - 1), 1000);
     return () => clearTimeout(t);
@@ -342,7 +423,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         className="space-y-3"
                       >
-                        <GoogleBtn label="Log in with Google" onClick={() => setGoogleSimStep("select_account")} />
+                        <GoogleBtn label="Log in with Google" onClick={handleGoogleLogin} />
                         <OrDivider />
 
                         {/* Email / Mobile tabs */}
@@ -463,7 +544,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         className="space-y-2.5"
                       >
-                        <GoogleBtn label="Sign up with Google" onClick={() => setGoogleSimStep("select_account")} />
+                        <GoogleBtn label="Sign up with Google" onClick={handleGoogleLogin} />
                         <OrDivider />
 
                         <PhoneInput value={signupPhone} onChange={setSignupPhone} />
@@ -557,72 +638,145 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                       </div>
 
                       {googleSimStep === "select_account" ? (
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div className="space-y-5">
-                            <div className="text-center space-y-1">
-                              <h3 className="font-outfit font-bold text-base text-slate-800 ">Choose an account</h3>
-                              <p className="text-[11px] text-slate-500 font-semibold">to continue to Think Your College</p>
-                            </div>
-
-                            {/* Accounts List */}
-                            <div className="space-y-2 border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
-                              {/* Account 1 */}
+                        <div className="flex-grow flex flex-col justify-between overflow-y-auto">
+                          <div className="space-y-4">
+                            {/* Tabs for Real vs Demo */}
+                            <div className="flex border-b border-slate-100 p-0.5 bg-slate-50 rounded-xl">
                               <button
-                                onClick={() => handleSelectAccount("Satyam Kumar", "satyam.kumar08@gmail.com")}
-                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 "
+                                type="button"
+                                onClick={() => setGsiTab("demo")}
+                                className={`flex-1 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${
+                                  gsiTab === "demo"
+                                    ? "bg-white text-indigo-600 shadow-sm"
+                                    : "text-slate-500 hover:text-slate-800"
+                                }`}
                               >
-                                <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-black text-xs">
-                                    S
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-bold text-slate-800 ">Satyam Kumar</p>
-                                    <p className="text-[10px] text-slate-500 font-semibold">satyam.kumar08@gmail.com</p>
-                                  </div>
-                                </div>
+                                🎯 Demo Login
                               </button>
-
-                              {/* Account 2 */}
                               <button
-                                onClick={() => handleSelectAccount("TYC Demo Student", "thinkyourcollege.demo@gmail.com")}
-                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 "
+                                type="button"
+                                onClick={() => setGsiTab("real")}
+                                className={`flex-1 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${
+                                  gsiTab === "real"
+                                    ? "bg-white text-indigo-600 shadow-sm"
+                                    : "text-slate-500 hover:text-slate-800"
+                                }`}
                               >
-                                <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-black text-xs">
-                                    T
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-bold text-slate-800 ">TYC Demo Student</p>
-                                    <p className="text-[10px] text-slate-500 font-semibold">thinkyourcollege.demo@gmail.com</p>
-                                  </div>
-                                </div>
-                              </button>
-
-                              {/* Account 3 */}
-                              <button
-                                onClick={() => handleSelectAccount("Guest User", "guest.user@gmail.com")}
-                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors text-left"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-black text-xs">
-                                    G
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-bold text-slate-800 ">Use guest account</p>
-                                    <p className="text-[10px] text-slate-500 font-semibold">guest.user@gmail.com</p>
-                                  </div>
-                                </div>
+                                🔑 Real Google Login
                               </button>
                             </div>
 
-                            <p className="text-[10px] text-slate-400 font-semibold leading-relaxed text-center px-4">
-                              To continue, Google will share your name, email address, language preference, and profile picture with Think Your College.
+                            {googleError && (
+                              <div className="p-2.5 rounded-xl bg-red-50 text-[10px] font-semibold text-red-600 border border-red-100 text-center animate-pulse">
+                                ⚠️ {googleError}
+                              </div>
+                            )}
+
+                            {gsiTab === "demo" ? (
+                              <div className="space-y-4">
+                                <div className="text-center space-y-1">
+                                  <h3 className="font-outfit font-bold text-xs text-slate-800">Select an email to test immediately</h3>
+                                </div>
+
+                                {/* Accounts List */}
+                                <div className="space-y-1.5 border border-slate-100 rounded-2xl overflow-hidden shadow-sm bg-white">
+                                  <button
+                                    onClick={() => handleSelectAccount("Satyam Kumar", "satyam.kumar08@gmail.com")}
+                                    className="w-full flex items-center justify-between p-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100"
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-black text-xs">
+                                        S
+                                      </div>
+                                      <div>
+                                        <p className="text-xs font-bold text-slate-800">Satyam Kumar</p>
+                                        <p className="text-[10px] text-slate-500 font-semibold">satyam.kumar08@gmail.com</p>
+                                      </div>
+                                    </div>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleSelectAccount("TYC Demo Student", "thinkyourcollege.demo@gmail.com")}
+                                    className="w-full flex items-center justify-between p-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100"
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-black text-xs">
+                                        T
+                                      </div>
+                                      <div>
+                                        <p className="text-xs font-bold text-slate-800">TYC Demo Student</p>
+                                        <p className="text-[10px] text-slate-500 font-semibold">thinkyourcollege.demo@gmail.com</p>
+                                      </div>
+                                    </div>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleSelectAccount("Guest User", "guest.user@gmail.com")}
+                                    className="w-full flex items-center justify-between p-3 hover:bg-slate-50 transition-colors text-left"
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-black text-xs">
+                                        G
+                                      </div>
+                                      <div>
+                                        <p className="text-xs font-bold text-slate-800">Use guest account</p>
+                                        <p className="text-[10px] text-slate-500 font-semibold">guest.user@gmail.com</p>
+                                      </div>
+                                    </div>
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3.5">
+                                <div className="text-center space-y-1">
+                                  <h3 className="font-outfit font-bold text-xs text-slate-800">Set up Google Client ID</h3>
+                                  <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
+                                    To use Google's real authentication popup, enter your Google Client ID below. We will save it temporarily to run OAuth live!
+                                  </p>
+                                </div>
+
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-wider">Google Client ID</label>
+                                  <input
+                                    type="text"
+                                    value={customClientId}
+                                    onChange={(e) => setCustomClientId(e.target.value)}
+                                    placeholder="your-client-id.apps.googleusercontent.com"
+                                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold bg-white"
+                                  />
+                                </div>
+
+                                <button
+                                  type="button"
+                                  onClick={handleGoogleLogin}
+                                  disabled={!customClientId.includes("googleusercontent.com")}
+                                  className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:cursor-not-allowed text-white font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-indigo-600/10"
+                                >
+                                  🔑 Login with Google Live
+                                </button>
+
+                                {/* Steps helper */}
+                                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-[9px] text-slate-500 space-y-1.5 leading-relaxed">
+                                  <p className="font-black text-slate-700 uppercase tracking-wider">Quick Setup Instructions:</p>
+                                  <ol className="list-decimal pl-3.5 space-y-1 font-medium">
+                                    <li>Go to <b>Google Cloud Console</b> &rarr; APIs & Services &rarr; Credentials.</li>
+                                    <li>Create OAuth Client ID (Web Application).</li>
+                                    <li>Add <b>{typeof window !== "undefined" ? window.location.origin : "Your domain"}</b> to Authorized JavaScript origins.</li>
+                                    <li>Copy the Client ID, paste it here, and tap Login!</li>
+                                  </ol>
+                                </div>
+                              </div>
+                            )}
+
+                            <p className="text-[9px] text-slate-400 font-semibold leading-relaxed text-center px-4 select-none">
+                              To continue, Google will share your verified name, email address, language preference, and profile picture with Think Your College.
                             </p>
                           </div>
 
-                          <button 
-                            onClick={() => setGoogleSimStep("idle")}
-                            className="w-full mt-6 py-2.5 text-center text-xs font-black text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all uppercase tracking-wider"
+                          <button
+                            type="button" 
+                            onClick={() => { setGoogleSimStep("idle"); setGoogleError(""); }}
+                            className="w-full mt-4 py-2 text-center text-xs font-black text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all uppercase tracking-wider"
                           >
                             Cancel
                           </button>
