@@ -10,6 +10,7 @@ import {
   Menu, 
   X, 
   Award,
+  CheckCircle,
   BookOpen,
   Layers,
   FileText,
@@ -121,6 +122,36 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       setChatMessages(prev => [...prev, botMsg]);
       setIsBotTyping(false);
     }, 1200);
+  };
+
+  // ══════════════════════════════════════════
+  //      ADMISSION ALERTS POPUP STATE & LOGIC
+  // ══════════════════════════════════════════
+  const [isAlertOpen, setIsAlertOpen] = useState(true);
+  const [alertName, setAlertName] = useState("");
+  const [alertContact, setAlertContact] = useState("");
+  const [isAlertSubscribed, setIsAlertSubscribed] = useState(false);
+
+  const handleAlertSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!alertName.trim() || !alertContact.trim()) return;
+
+    // Save lead details into localStorage
+    const newLead = {
+      id: Math.random().toString(),
+      name: alertName,
+      contact: alertContact,
+      timestamp: new Date().toLocaleString()
+    };
+
+    const existingLeads = JSON.parse(localStorage.getItem("tyc-leads") || "[]");
+    localStorage.setItem("tyc-leads", JSON.stringify([...existingLeads, newLead]));
+
+    setIsAlertSubscribed(true);
+    setTimeout(() => {
+      // Auto-hide alert card after successful subscription
+      setIsAlertOpen(false);
+    }, 2500);
   };
 
   // MBA Mega Menu Sub-tabs structure matching screenshot
@@ -1419,6 +1450,92 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.115-2.905-6.99C16.558 1.876 14.077.841 11.997.841 6.561.841 2.137 5.26 2.133 10.7c-.001 1.688.455 3.328 1.32 4.795l-.995 3.64 3.729-.981zM17.487 14.39c-.3-.15-1.782-.88-2.03-.97-.25-.09-.43-.13-.61.15-.18.28-.7 1-.86 1.18-.16.18-.32.2-.62.05-1.8-.9-3.21-2.42-4.14-4.04-.08-.13-.01-.26.06-.39.06-.11.13-.3.2-.45.07-.15.11-.26.17-.38.06-.11.03-.23-.01-.38-.05-.15-.43-1.04-.6-1.43-.16-.38-.32-.33-.43-.33h-.37c-.13 0-.33.05-.51.25-.18.2-1.3 1.27-1.3 3.1s1.33 3.6 1.51 3.85c.18.24 2.62 4.02 6.3 5.6.88.37 1.57.6 2.11.77.88.28 1.68.24 2.3.15.7-.1 1.782-.73 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.32-.2-.62-.35z" />
             </svg>
           </motion.a>
+        )}
+      </AnimatePresence>
+
+      {/* ══════════════════════════════════════════
+           ADMISSION ALERTS FLOATING WIDGET (LEFT)
+         ══════════════════════════════════════════ */}
+      <AnimatePresence>
+        {isAlertOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: -50, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -50, y: 50, scale: 0.95 }}
+            className="fixed bottom-6 left-6 w-[90vw] sm:w-[320px] bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-2xl z-40 overflow-hidden p-5 flex flex-col font-sans gap-3.5"
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="relative w-8 h-8 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20 text-orange-500">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 absolute top-1.5 right-1.5 animate-ping" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 absolute top-1.5 right-1.5" />
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-outfit font-black text-xs text-slate-800 tracking-wide uppercase">Admission Alerts 2026</h4>
+                  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none mt-0.5">Never Miss Deadlines</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsAlertOpen(false)}
+                className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all text-slate-500 hover:text-slate-800"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Description */}
+            {!isAlertSubscribed ? (
+              <>
+                <p className="text-[11px] leading-relaxed text-slate-600 font-semibold">
+                  Get instant notification updates on top college entrance exams, form releases, cutoffs, and counseling deadlines directly.
+                </p>
+                
+                {/* Form */}
+                <form onSubmit={handleAlertSubscribe} className="flex flex-col gap-2.5">
+                  <input
+                    type="text"
+                    required
+                    value={alertName}
+                    onChange={(e) => setAlertName(e.target.value)}
+                    placeholder="Enter Your Name"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-[11px] text-slate-800 outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <input
+                    type="text"
+                    required
+                    value={alertContact}
+                    onChange={(e) => setAlertContact(e.target.value)}
+                    placeholder="Enter Email or Phone Number"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-[11px] text-slate-800 outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[11px] font-black tracking-wide rounded-xl shadow-md shadow-orange-500/10 uppercase"
+                  >
+                    Activate Free Alerts
+                  </motion.button>
+                </form>
+              </>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="py-4 text-center flex flex-col items-center gap-2"
+              >
+                <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 border-2 border-emerald-100">
+                  <CheckCircle className="w-6 h-6" />
+                </div>
+                <h5 className="font-outfit font-black text-sm text-slate-800 leading-none">Subscription Active!</h5>
+                <p className="text-[10px] text-slate-500 font-semibold px-2 leading-relaxed">
+                  Congratulations {alertName}! You will receive real-time admission updates on {alertContact}.
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
         )}
       </AnimatePresence>
 
