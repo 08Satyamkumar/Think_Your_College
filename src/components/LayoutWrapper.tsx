@@ -50,6 +50,16 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   // Theme is always light — useTheme kept for context but toggle not used
   useTheme();
 
+  // User authentication state
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("tyc-user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
   // ══════════════════════════════════════════
   //      AI SARTHI CHATBOT STATES & LOGIC
   // ══════════════════════════════════════════
@@ -606,22 +616,45 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
           {/* Right auth links */}
           <div className="hidden md:flex items-center gap-6 text-xs font-bold whitespace-nowrap">
-            <motion.button
-              onClick={() => setAuthModal({ open: true, mode: "login" })}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.96 }}
-              className="text-slate-700 hover:text-primary font-bold transition-colors"
-            >
-              Login
-            </motion.button>
-            <motion.button
-              onClick={() => setAuthModal({ open: true, mode: "signup" })}
-              whileHover={{ scale: 1.05, boxShadow: "0 4px 18px rgba(249,115,22,0.35)" }}
-              whileTap={{ scale: 0.96 }}
-              className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-[11px] tracking-wide shadow-sm shadow-orange-500/20 transition-all"
-            >
-              Sign Up
-            </motion.button>
+            {user ? (
+              <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
+                {/* Avatar circular badge */}
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center font-black text-xs shadow-sm uppercase">
+                  {user.name.charAt(0)}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-slate-800 text-[10px] font-black tracking-wide leading-none">{user.name}</span>
+                  <button 
+                    onClick={() => {
+                      setUser(null);
+                      localStorage.removeItem("tyc-user");
+                    }}
+                    className="text-[9px] text-red-500 hover:text-red-600 font-extrabold uppercase tracking-widest text-left mt-1 hover:underline transition-all"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <motion.button
+                  onClick={() => setAuthModal({ open: true, mode: "login" })}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="text-slate-700 hover:text-primary font-bold transition-colors"
+                >
+                  Login
+                </motion.button>
+                <motion.button
+                  onClick={() => setAuthModal({ open: true, mode: "signup" })}
+                  whileHover={{ scale: 1.05, boxShadow: "0 4px 18px rgba(249,115,22,0.35)" }}
+                  whileTap={{ scale: 0.96 }}
+                  className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-[11px] tracking-wide shadow-sm shadow-orange-500/20 transition-all"
+                >
+                  Sign Up
+                </motion.button>
+              </>
+            )}
           </div>
 
           {/* MOBILE MENU TRIGGER */}
@@ -1053,20 +1086,46 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
               {/* Mobile Auth Buttons */}
               <div className="flex flex-col gap-3 pt-2">
-                <motion.button
-                  onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ open: true, mode: "login" }); }}
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition-colors"
-                >
-                  Login
-                </motion.button>
-                <motion.button
-                  onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ open: true, mode: "signup" }); }}
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-sm tracking-wide shadow-sm"
-                >
-                  Sign Up
-                </motion.button>
+                {user ? (
+                  <div className="w-full p-4 rounded-2xl bg-orange-50/50 border border-orange-100 flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center font-black text-sm uppercase">
+                        {user.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-slate-800 text-xs font-black">{user.name}</p>
+                        <p className="text-slate-500 text-[10px] font-semibold">{user.email}</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setUser(null);
+                        localStorage.removeItem("tyc-user");
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full mt-2 py-2 text-center text-xs font-black text-red-500 hover:text-white hover:bg-red-500 border border-red-200 rounded-xl transition-all uppercase tracking-wider"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <motion.button
+                      onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ open: true, mode: "login" }); }}
+                      whileTap={{ scale: 0.97 }}
+                      className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition-colors"
+                    >
+                      Login
+                    </motion.button>
+                    <motion.button
+                      onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ open: true, mode: "signup" }); }}
+                      whileTap={{ scale: 0.97 }}
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-sm tracking-wide shadow-sm"
+                    >
+                      Sign Up
+                    </motion.button>
+                  </>
+                )}
               </div>
             </div>
             
@@ -1324,6 +1383,11 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         isOpen={authModal.open}
         defaultMode={authModal.mode}
         onClose={() => setAuthModal(m => ({ ...m, open: false }))}
+        onLoginSuccess={(userData) => {
+          setUser(userData);
+          localStorage.setItem("tyc-user", JSON.stringify(userData));
+          setAuthModal(m => ({ ...m, open: false }));
+        }}
       />
 
       {/* ══════════════════════════════════════════

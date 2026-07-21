@@ -22,12 +22,14 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultMode?: "login" | "signup";
+  onLoginSuccess: (user: { name: string; email: string }) => void;
 }
 
 // ── Google Button ──────────────────────────────────────────────────────────
-function GoogleBtn({ label }: { label: string }) {
+function GoogleBtn({ label, onClick }: { label: string; onClick?: () => void }) {
   return (
     <motion.button
+      onClick={onClick}
       whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(99,102,241,0.25)" }}
       whileTap={{ scale: 0.97 }}
       className="w-full flex items-center justify-center gap-3 py-3 px-5 rounded-xl border-2 border-indigo-200 dark:border-indigo-700 bg-white dark:bg-slate-900 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all duration-300 group relative overflow-hidden"
@@ -135,7 +137,7 @@ function OrDivider() {
 }
 
 // ── Main AuthModal ─────────────────────────────────────────────────────────
-export default function AuthModal({ isOpen, onClose, defaultMode = "login" }: AuthModalProps) {
+export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLoginSuccess }: AuthModalProps) {
   const [mode, setMode] = useState<"login" | "signup">(defaultMode);
   const [loginType, setLoginType] = useState<"email" | "mobile">("mobile");
   const [otpSent, setOtpSent] = useState(false);
@@ -148,6 +150,17 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login" }: Au
   const [agreed, setAgreed] = useState(false);
   const [otpTimer, setOtpTimer] = useState(0);
 
+  // Google Sign In Simulator States
+  const [googleSimStep, setGoogleSimStep] = useState<"idle" | "select_account" | "loading">("idle");
+
+  const handleSelectAccount = (name: string, emailStr: string) => {
+    setGoogleSimStep("loading");
+    setTimeout(() => {
+      onLoginSuccess({ name, email: emailStr });
+      setGoogleSimStep("idle");
+    }, 1500);
+  };
+
   useEffect(() => {
     if (isOpen) {
       setMode(defaultMode);
@@ -155,6 +168,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login" }: Au
       setOtp(["", "", "", "", "", ""]);
       setPhone(""); setEmail(""); setFullName(""); setSignupEmail(""); setSignupPhone("");
       setAgreed(false); setOtpTimer(0);
+      setGoogleSimStep("idle");
     }
   }, [isOpen, defaultMode]);
 
@@ -519,6 +533,111 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login" }: Au
 
                   </AnimatePresence>
                 </div>
+
+                {/* ── GOOGLE ACCOUNTS SIMULATOR OVERLAY ── */}
+                <AnimatePresence>
+                  {googleSimStep !== "idle" && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 z-30 bg-white dark:bg-slate-950 flex flex-col p-7 gap-6 font-sans"
+                    >
+                      {/* Google Logo */}
+                      <div className="flex justify-center mt-2 flex-shrink-0">
+                        <div className="flex gap-0.5 text-lg font-bold tracking-tight select-none">
+                          <span className="text-[#4285F4]">G</span>
+                          <span className="text-[#EA4335]">o</span>
+                          <span className="text-[#FBBC05]">o</span>
+                          <span className="text-[#4285F4]">g</span>
+                          <span className="text-[#34A853]">l</span>
+                          <span className="text-[#EA4335]">e</span>
+                        </div>
+                      </div>
+
+                      {googleSimStep === "select_account" ? (
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div className="space-y-5">
+                            <div className="text-center space-y-1">
+                              <h3 className="font-outfit font-bold text-base text-slate-800 dark:text-slate-200">Choose an account</h3>
+                              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">to continue to Think Your College</p>
+                            </div>
+
+                            {/* Accounts List */}
+                            <div className="space-y-2 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm">
+                              {/* Account 1 */}
+                              <button
+                                onClick={() => handleSelectAccount("Satyam Kumar", "satyam.kumar08@gmail.com")}
+                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors text-left border-b border-slate-100 dark:border-slate-800"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-black text-xs">
+                                    S
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Satyam Kumar</p>
+                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">satyam.kumar08@gmail.com</p>
+                                  </div>
+                                </div>
+                              </button>
+
+                              {/* Account 2 */}
+                              <button
+                                onClick={() => handleSelectAccount("TYC Demo Student", "thinkyourcollege.demo@gmail.com")}
+                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors text-left border-b border-slate-100 dark:border-slate-800"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-black text-xs">
+                                    T
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">TYC Demo Student</p>
+                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">thinkyourcollege.demo@gmail.com</p>
+                                  </div>
+                                </div>
+                              </button>
+
+                              {/* Account 3 */}
+                              <button
+                                onClick={() => handleSelectAccount("Guest User", "guest.user@gmail.com")}
+                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors text-left"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-black text-xs">
+                                    G
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Use guest account</p>
+                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">guest.user@gmail.com</p>
+                                  </div>
+                                </div>
+                              </button>
+                            </div>
+
+                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold leading-relaxed text-center px-4">
+                              To continue, Google will share your name, email address, language preference, and profile picture with Think Your College.
+                            </p>
+                          </div>
+
+                          <button 
+                            onClick={() => setGoogleSimStep("idle")}
+                            className="w-full mt-6 py-2.5 text-center text-xs font-black text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all uppercase tracking-wider"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex-grow flex flex-col items-center justify-center space-y-4">
+                          <div className="w-10 h-10 border-4 border-[#4285F4] border-t-transparent rounded-full animate-spin" />
+                          <div className="space-y-1 text-center">
+                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Signing in with Google...</p>
+                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">Connecting securely to Think Your College</p>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           </div>
