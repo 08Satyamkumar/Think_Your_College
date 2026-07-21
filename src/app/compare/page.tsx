@@ -68,6 +68,29 @@ function CompareContent() {
     window.history.replaceState(null, "", `/compare?ids=${newIds}`);
   };
 
+  // Dynamically calculate the IDs of the best-performing colleges in each parameter category
+  const maxPackageId = useMemo(() => {
+    if (comparedColleges.length < 2) return null;
+    const maxVal = Math.max(...comparedColleges.map(c => c.highestPackage));
+    if (maxVal <= 0) return null;
+    const best = comparedColleges.find(c => c.highestPackage === maxVal);
+    return best ? best.id : null;
+  }, [comparedColleges]);
+
+  const minFeesId = useMemo(() => {
+    if (comparedColleges.length < 2) return null;
+    const minVal = Math.min(...comparedColleges.map(c => c.fees));
+    const best = comparedColleges.find(c => c.fees === minVal);
+    return best ? best.id : null;
+  }, [comparedColleges]);
+
+  const maxRatingId = useMemo(() => {
+    if (comparedColleges.length < 2) return null;
+    const maxVal = Math.max(...comparedColleges.map(c => c.rating));
+    const best = comparedColleges.find(c => c.rating === maxVal);
+    return best ? best.id : null;
+  }, [comparedColleges]);
+
   return (
     <div className="space-y-8">
       {/* HEADER SECTION */}
@@ -156,23 +179,38 @@ function CompareContent() {
               </thead>
               <tbody className="divide-y divide-border/60">
                 {/* 1. Rating */}
-                <tr>
+                <tr className="hover:bg-slate-50/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-text_secondary uppercase tracking-wider text-[10px]">
                     Rating & Reviews
                   </td>
-                  {comparedColleges.map(c => (
-                    <td key={c.id} className="py-4 px-6 border-l border-border">
-                      <div className="flex items-center gap-1.5 font-bold text-text_primary text-xs">
-                        <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                        {c.rating} / 5.0
-                      </div>
-                    </td>
-                  ))}
+                  {comparedColleges.map(c => {
+                    const isBest = maxRatingId === c.id;
+                    return (
+                      <td 
+                        key={c.id} 
+                        className={`py-4 px-6 border-l border-border transition-all duration-200 ${
+                          isBest ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 font-bold text-text_primary text-xs">
+                            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            {c.rating} / 5.0
+                          </div>
+                          {isBest && (
+                            <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-700 font-extrabold text-[8px] uppercase tracking-wider whitespace-nowrap">
+                              Top Rated ⭐
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                   {comparedColleges.length < 3 && <td className="border-l border-border bg-slate-500/5" />}
                 </tr>
 
                 {/* 2. Stream */}
-                <tr>
+                <tr className="hover:bg-slate-50/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-text_secondary uppercase tracking-wider text-[10px]">
                     Stream
                   </td>
@@ -185,7 +223,7 @@ function CompareContent() {
                 </tr>
 
                 {/* 3. College Type */}
-                <tr>
+                <tr className="hover:bg-slate-50/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-text_secondary uppercase tracking-wider text-[10px]">
                     College Type
                   </td>
@@ -198,28 +236,58 @@ function CompareContent() {
                 </tr>
 
                 {/* 4. Tuition Fees */}
-                <tr>
+                <tr className="hover:bg-slate-50/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-text_secondary uppercase tracking-wider text-[10px]">
                     Annual Fees
                   </td>
-                  {comparedColleges.map(c => (
-                    <td key={c.id} className="py-4 px-6 border-l border-border">
-                      <p className="font-outfit font-extrabold text-sm text-text_primary">{c.feesLabel}</p>
-                    </td>
-                  ))}
+                  {comparedColleges.map(c => {
+                    const isBest = minFeesId === c.id;
+                    return (
+                      <td 
+                        key={c.id} 
+                        className={`py-4 px-6 border-l border-border transition-all duration-200 ${
+                          isBest ? "bg-emerald-500/5 border-l-2 border-l-emerald-500" : ""
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="font-outfit font-extrabold text-sm text-text_primary">{c.feesLabel}</p>
+                          {isBest && (
+                            <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 font-extrabold text-[8px] uppercase tracking-wider whitespace-nowrap">
+                              Best Value 💸
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                   {comparedColleges.length < 3 && <td className="border-l border-border bg-slate-500/5" />}
                 </tr>
 
                 {/* 5. Placements */}
-                <tr>
+                <tr className="hover:bg-slate-50/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-text_secondary uppercase tracking-wider text-[10px]">
                     Highest Placement
                   </td>
-                  {comparedColleges.map(c => (
-                    <td key={c.id} className="py-4 px-6 border-l border-border">
-                      <p className="font-outfit font-extrabold text-sm text-emerald-500">{c.highestPackageLabel}</p>
-                    </td>
-                  ))}
+                  {comparedColleges.map(c => {
+                    const isBest = maxPackageId === c.id;
+                    return (
+                      <td 
+                        key={c.id} 
+                        className={`py-4 px-6 border-l border-border transition-all duration-200 ${
+                          isBest ? "bg-indigo-500/5 border-l-2 border-l-indigo-500" : ""
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <p className={`font-outfit font-extrabold text-sm ${isBest ? "text-indigo-600 font-black" : "text-emerald-500"}`}>{c.highestPackageLabel}</p>
+                          {isBest && (
+                            <span className="px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-700 font-extrabold text-[8px] uppercase tracking-wider whitespace-nowrap">
+                              Top Placement 🏆
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                   {comparedColleges.length < 3 && <td className="border-l border-border bg-slate-500/5" />}
                 </tr>
 
