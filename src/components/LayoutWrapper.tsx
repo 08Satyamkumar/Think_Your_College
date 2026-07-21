@@ -42,7 +42,6 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     open: false,
     mode: "login",
   });
-  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   // Theme is always light — useTheme kept for context but toggle not used
@@ -530,12 +529,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                 onMouseEnter={() => setActiveMegaMenu(category)}
               >
                 <button 
-                  onClick={() => {
-                    if (window.innerWidth < 768) {
-                      setExpandedMobileCategory(category);
-                      setIsMobileMenuOpen(true);
-                    }
-                  }}
+                  onClick={() => setActiveMegaMenu(activeMegaMenu === category ? null : category)}
                   className="flex items-center gap-1 px-4 h-full text-[10px] font-black tracking-wider text-slate-700 hover:text-primary hover:bg-amber-100/30 transition-colors uppercase whitespace-nowrap"
                 >
                   {category}
@@ -548,7 +542,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu === "MBA" && (
                 <div 
-                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[850px] z-50 pointer-events-auto"
+                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu("MBA")}
                 >
                   <motion.div
@@ -557,7 +551,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     exit={{ opacity: 0, y: 10, scale: 0.97, transition: { duration: 0.15 } }}
                     transition={{ type: "spring", stiffness: 380, damping: 26 }}
                     style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border border-amber-100/40 dark:border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex text-text_primary overflow-hidden"
+                    className="w-full bg-white/95 backdrop-blur-xl border border-amber-100/40 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.15)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
                   >
                     {/* Floating Glowing Gradient border at top */}
                     <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 shadow-[0_1px_10px_rgba(245,158,11,0.5)] z-20" />
@@ -673,7 +667,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu === "ENGINEERING" && (
                 <div 
-                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[850px] z-50 pointer-events-auto"
+                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu("ENGINEERING")}
                 >
                   <motion.div
@@ -682,7 +676,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     exit={{ opacity: 0, y: 10, scale: 0.97, transition: { duration: 0.15 } }}
                     transition={{ type: "spring", stiffness: 380, damping: 26 }}
                     style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border border-blue-100/40 dark:border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(59,130,246,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex text-text_primary overflow-hidden"
+                    className="w-full bg-white/95 backdrop-blur-xl border border-blue-100/40 rounded-2xl shadow-[0_20px_50px_rgba(59,130,246,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
                   >
                     {/* Floating Glowing Gradient border at top */}
                     <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 shadow-[0_1px_10px_rgba(99,102,241,0.5)] z-20" />
@@ -796,7 +790,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu !== null && activeMegaMenu !== "MBA" && activeMegaMenu !== "ENGINEERING" && megaMenus[activeMegaMenu] && (
                 <div 
-                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[720px] z-50 pointer-events-auto"
+                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu(activeMegaMenu)}
                 >
                   <motion.div
@@ -806,7 +800,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     exit={{ opacity: 0, y: 10, scale: 0.97, transition: { duration: 0.15 } }}
                     transition={{ type: "spring", stiffness: 380, damping: 26 }}
                     style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border border-teal-100/40 dark:border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(20,184,166,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] p-6 grid grid-cols-3 gap-6 text-text_primary overflow-hidden"
+                    className="w-full bg-white/95 backdrop-blur-xl border border-teal-100/40 rounded-2xl shadow-[0_20px_50px_rgba(20,184,166,0.12)] p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
                   >
                     {/* Floating Glowing Gradient border at top */}
                     <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-emerald-400 via-teal-500 to-indigo-500 shadow-[0_1px_10px_rgba(16,185,129,0.3)] z-20" />
@@ -847,6 +841,14 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             </AnimatePresence>
           </div>
         </div>
+
+        {/* BACKDROP OVERLAY WHEN MEGA MENU IS OPEN */}
+        {activeMegaMenu && (
+          <div 
+            className="fixed inset-0 bg-black/20 z-40"
+            onClick={() => setActiveMegaMenu(null)}
+          />
+        )}
       </header>
 
       {/* MOBILE DRAWER DRAWER */}
@@ -908,60 +910,6 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                   );
                 })}
               </nav>
-
-              {/* Expandable Category Accordions */}
-              <div className="space-y-2 pt-3 border-t border-border/60">
-                <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase px-1 mb-2">Explore Categories</p>
-                {categories.map((category) => {
-                  const isExpanded = expandedMobileCategory === category;
-                  const menuItems = megaMenus[category] || [];
-                  return (
-                    <div key={category} className="border border-border/40 rounded-xl overflow-hidden bg-slate-50/50">
-                      <button
-                        onClick={() => setExpandedMobileCategory(isExpanded ? null : category)}
-                        className={`w-full flex items-center justify-between px-4 py-2.5 text-xs font-black tracking-wider transition-colors uppercase ${
-                          isExpanded ? "bg-amber-500/5 text-primary border-l-4 border-primary pl-3" : "text-slate-700 hover:bg-slate-100/50"
-                        }`}
-                      >
-                        <span>{category}</span>
-                        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isExpanded ? "rotate-180 text-primary" : ""}`} />
-                      </button>
-
-                      <AnimatePresence initial={false}>
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white border-t border-border/30 overflow-hidden"
-                          >
-                            <div className="p-3.5 space-y-4">
-                              {menuItems.map((item) => (
-                                <div key={item.category} className="space-y-1.5">
-                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{item.category}</p>
-                                  <div className="grid grid-cols-1 gap-1 pl-2 border-l border-slate-100">
-                                    {item.links.map((link) => (
-                                      <Link
-                                        key={link.name}
-                                        href={link.href}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="text-xs font-bold text-slate-700 hover:text-primary py-1 block transition-colors"
-                                      >
-                                        • {link.name}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </div>
 
               {/* Mobile Auth Buttons */}
               <div className="flex flex-col gap-3 pt-2">
