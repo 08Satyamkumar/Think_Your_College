@@ -68,18 +68,7 @@ const heroSlides = [
     image: "/images/galgotias_lego_5.png",
     slug: "galgotias-university"
   },
-  {
-    name: "Galgotias University (Full Campus Layout)",
-    location: "Greater Noida, Uttar Pradesh",
-    image: "/images/galgotias_lego_6.png",
-    slug: "galgotias-university"
-  },
-  {
-    name: "Galgotias University (Hostel Block)",
-    location: "Greater Noida, Uttar Pradesh",
-    image: "/images/galgotias_lego_3.png",
-    slug: "galgotias-university"
-  },
+
   {
     name: "IIT Delhi Campus",
     location: "Hauz Khas, New Delhi",
