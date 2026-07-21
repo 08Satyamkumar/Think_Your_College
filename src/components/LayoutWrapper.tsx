@@ -517,32 +517,37 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         </div>
 
         {/* ROW 2: SUB-NAVIGATION BAR (Dropdown Category Items) */}
-        <div className="border-t border-amber-100/50 bg-amber-50/30 overflow-x-auto no-scrollbar scroll-smooth">
-          <div 
-            className="max-w-[1440px] mx-auto px-4 md:px-12 flex items-center justify-start md:justify-center gap-1 h-11 relative min-w-max md:min-w-0"
-            onMouseLeave={() => setActiveMegaMenu(null)}
-          >
-            {categories.map((category) => (
-              <div 
-                key={category}
-                className="h-full flex items-center"
-                onMouseEnter={() => setActiveMegaMenu(category)}
-              >
-                <button 
-                  onClick={() => setActiveMegaMenu(activeMegaMenu === category ? null : category)}
-                  className="flex items-center gap-1 px-4 h-full text-[10px] font-black tracking-wider text-slate-700 hover:text-primary hover:bg-amber-100/30 transition-colors uppercase whitespace-nowrap"
+        <div className="relative border-t border-amber-100/50 bg-amber-50/30">
+          {/* Scrollable Row of Category Buttons */}
+          <div className="overflow-x-auto no-scrollbar scroll-smooth">
+            <div 
+              className="max-w-[1440px] mx-auto px-4 md:px-12 flex items-center justify-start md:justify-center gap-1 h-11 relative min-w-max md:min-w-0"
+            >
+              {categories.map((category) => (
+                <div 
+                  key={category}
+                  className="h-full flex items-center"
+                  onMouseEnter={() => setActiveMegaMenu(category)}
                 >
-                  {category}
-                  <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${activeMegaMenu === category ? "rotate-180 text-primary" : ""}`} />
-                </button>
-              </div>
-            ))}
+                  <button 
+                    onClick={() => setActiveMegaMenu(activeMegaMenu === category ? null : category)}
+                    className="flex items-center gap-1 px-4 h-full text-[10px] font-black tracking-wider text-slate-700 hover:text-primary hover:bg-amber-100/30 transition-colors uppercase whitespace-nowrap"
+                  >
+                    {category}
+                    <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${activeMegaMenu === category ? "rotate-180 text-primary" : ""}`} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
 
+          {/* Mega Menu Dropdown Panels (Rendered outside overflow-x-auto so they pop out unclipped) */}
+          <div className="relative max-w-[1440px] mx-auto" onMouseLeave={() => setActiveMegaMenu(null)}>
             {/* MEGA MENU DROPDOWN PANEL FOR MBA */}
             <AnimatePresence>
               {activeMegaMenu === "MBA" && (
                 <div 
-                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu("MBA")}
                 >
                   <motion.div
@@ -564,15 +569,16 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
 
                     {/* Left Column: Vertical Sub-Tabs Menu */}
-                    <div className="w-[240px] bg-slate-50/40 dark:bg-slate-950/40 border-r border-border/60 p-3 space-y-1.5 pt-4 relative z-10">
+                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
                       {Object.keys(mbaTabs).map((tabName) => {
                         const TabIcon = mbaTabIcons[tabName] || Award;
                         const isActive = activeMbaTab === tabName;
                         return (
                           <button
                             key={tabName}
+                            onClick={() => setActiveMbaTab(tabName)}
                             onMouseEnter={() => setActiveMbaTab(tabName)}
-                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 ${
+                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
                               isActive
                                 ? "bg-gradient-to-r from-amber-500/10 to-orange-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-amber-500/5"
                                 : "text-text_secondary hover:bg-amber-500/5 hover:text-text_primary hover:translate-x-0.5"
@@ -586,7 +592,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
 
                     {/* Middle Column: Dynamic Link Lists */}
-                    <div className="flex-1 p-6 relative pt-7 z-10">
+                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
                       
                       <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
@@ -594,7 +600,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                         {activeMbaTab}
                       </h4>
                       
-                      <div className="grid grid-cols-2 gap-x-6 gap-y-3 relative z-10">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 relative z-10">
                         {mbaTabs[activeMbaTab]?.map((link, idx) => (
                           <Link
                             key={idx}
@@ -613,7 +619,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
 
                     {/* Right Column: Featured Colleges */}
-                    <div className="w-[220px] bg-slate-50/30 dark:bg-slate-950/20 p-6 border-l border-border/60 flex flex-col justify-between pt-7 relative z-10">
+                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
                       <div>
                         <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
                           <Award className="w-3.5 h-3.5 text-amber-500" />
@@ -667,7 +673,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu === "ENGINEERING" && (
                 <div 
-                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu("ENGINEERING")}
                 >
                   <motion.div
@@ -689,15 +695,16 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
 
                     {/* Left Column: Vertical Sub-Tabs Menu */}
-                    <div className="w-[240px] bg-slate-50/40 dark:bg-slate-950/40 border-r border-border/60 p-3 space-y-1.5 pt-4 relative z-10">
+                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
                       {Object.keys(engTabs).map((tabName) => {
                         const TabIcon = engTabIcons[tabName] || Award;
                         const isActive = activeEngTab === tabName;
                         return (
                           <button
                             key={tabName}
+                            onClick={() => setActiveEngTab(tabName)}
                             onMouseEnter={() => setActiveEngTab(tabName)}
-                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 ${
+                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
                               isActive
                                 ? "bg-gradient-to-r from-blue-500/10 to-indigo-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-blue-500/5"
                                 : "text-text_secondary hover:bg-blue-500/5 hover:text-text_primary hover:translate-x-0.5"
@@ -711,7 +718,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
 
                     {/* Middle Column: Dynamic Link Lists */}
-                    <div className="flex-1 p-6 relative pt-7 z-10">
+                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
                       
                       <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
@@ -719,7 +726,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                         {activeEngTab}
                       </h4>
                       
-                      <div className="grid grid-cols-2 gap-x-6 gap-y-3 relative z-10">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 relative z-10">
                         {engTabs[activeEngTab]?.map((link, idx) => (
                           <Link
                             key={idx}
@@ -736,7 +743,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
 
                     {/* Right Column: Featured Colleges */}
-                    <div className="w-[220px] bg-slate-50/30 dark:bg-slate-950/20 p-6 border-l border-border/60 flex flex-col justify-between pt-7 relative z-10">
+                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
                       <div>
                         <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
                           <Award className="w-3.5 h-3.5 text-blue-500" />
@@ -790,7 +797,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu !== null && activeMegaMenu !== "MBA" && activeMegaMenu !== "ENGINEERING" && megaMenus[activeMegaMenu] && (
                 <div 
-                  className="absolute top-[46px] left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu(activeMegaMenu)}
                 >
                   <motion.div
