@@ -394,19 +394,19 @@ export default function HomePage() {
         </div>
 
         {/* Bottom left active slide label */}
-        <div className="absolute bottom-6 left-8 z-10 hidden sm:block">
+        <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-8 z-10 block">
           <Link
             href={`/colleges/${heroSlides[activeSlide].slug}`}
-            className="px-3.5 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 hover:border-primary/50 text-[10px] font-bold text-white tracking-wide transition-all hover:bg-slate-950 flex items-center gap-1.5 shadow-lg shadow-black/25 group/hero-lbl"
+            className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 hover:border-primary/50 text-[9px] sm:text-[10px] font-bold text-white tracking-wide transition-all hover:bg-slate-950 flex items-center gap-1 sm:gap-1.5 shadow-lg shadow-black/25 group/hero-lbl max-w-[90vw] sm:max-w-none"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="font-extrabold text-slate-100 group-hover/hero-lbl:text-primary transition-colors">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
+            <span className="font-extrabold text-slate-100 group-hover/hero-lbl:text-primary transition-colors truncate">
               {heroSlides[activeSlide].name}, {heroSlides[activeSlide].location.split(",")[0]}
             </span>
             <span className="text-slate-400">|</span>
-            <span className="text-[9px] font-black uppercase text-primary tracking-wider flex items-center gap-0.5">
-              View Details
-              <ArrowRight className="w-3.5 h-3.5 text-primary group-hover/hero-lbl:translate-x-0.5 transition-transform" />
+            <span className="text-[9px] font-black uppercase text-primary tracking-wider flex items-center gap-0.5 flex-shrink-0">
+              View
+              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary group-hover/hero-lbl:translate-x-0.5 transition-transform" />
             </span>
           </Link>
         </div>

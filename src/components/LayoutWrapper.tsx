@@ -9,8 +9,6 @@ import {
   ChevronDown, 
   Menu, 
   X, 
-  Sun, 
-  Moon,
   Award,
   BookOpen,
   Layers,
@@ -46,7 +44,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   });
   const pathname = usePathname();
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme();
+  // Theme is always light — useTheme kept for context but toggle not used
+  useTheme();
 
   // MBA Mega Menu Sub-tabs structure matching screenshot
   const mbaTabs: Record<string, { name: string; href: string }[]> = {
@@ -451,7 +450,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     <div className="min-h-screen bg-background text-text_primary flex flex-col font-sans transition-all duration-300">
       
       {/* SHIKSHA SCREENSHOT MATCHING DOUBLE-ROW HEADER */}
-      <header className="fixed top-0 left-0 right-0 bg-brand_header text-slate-800 dark:text-white z-40 shadow-md transition-colors backdrop-blur-md border-b border-amber-100/50 dark:border-white/5">
+      <header className="fixed top-0 left-0 right-0 bg-brand_header text-slate-800 z-40 shadow-md transition-colors backdrop-blur-md border-b border-amber-100/50">
         
         {/* ROW 1: TOP ROW (Logo, Wide Search Bar, Login/Sign Up) */}
         <div className="h-16 max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
@@ -461,7 +460,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-premium text-white shadow-sm">
               <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="font-outfit font-black text-base tracking-tight text-slate-800 dark:text-white hover:text-primary transition-colors uppercase">
+            <span className="font-outfit font-black text-base tracking-tight text-slate-950 hover:text-primary transition-colors uppercase">
               Think Your College
             </span>
           </Link>
@@ -469,7 +468,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           {/* Wide Global Search Bar (Conjoined Input & Button) */}
           <form 
             onSubmit={handleSearchSubmit} 
-            className="hidden md:flex items-center flex-1 max-w-2xl h-10 bg-white rounded-md overflow-hidden shadow-sm border border-amber-200/60 dark:border-none"
+            className="hidden md:flex items-center flex-1 max-w-2xl h-10 bg-white rounded-md overflow-hidden shadow-sm border border-amber-200/60"
           >
             <input 
               type="text"
@@ -486,21 +485,13 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             </button>
           </form>
 
-          {/* Right auth links + Theme Toggle */}
+          {/* Right auth links */}
           <div className="hidden md:flex items-center gap-6 text-xs font-bold whitespace-nowrap">
-            <button 
-              onClick={toggleTheme}
-              className="text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white p-1.5 rounded-lg hover:bg-amber-100/40 dark:hover:bg-white/10"
-              title="Toggle Theme"
-            >
-              {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-            </button>
-
             <motion.button
               onClick={() => setAuthModal({ open: true, mode: "login" })}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.96 }}
-              className="text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary font-bold transition-colors"
+              className="text-slate-700 hover:text-primary font-bold transition-colors"
             >
               Login
             </motion.button>
@@ -517,14 +508,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           {/* MOBILE MENU TRIGGER */}
           <div className="flex md:hidden items-center gap-3">
             <button 
-              onClick={toggleTheme}
-              className="text-slate-800 dark:text-white p-1"
-            >
-              {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
-            <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-slate-800 dark:text-white p-1"
+              className="text-slate-800 p-1"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -532,7 +517,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         </div>
 
         {/* ROW 2: SUB-NAVIGATION BAR (Dropdown Category Items) */}
-        <div className="hidden md:block border-t border-amber-100/50 dark:border-white/5 bg-amber-50/30 dark:bg-black/10">
+        <div className="hidden md:block border-t border-amber-100/50 bg-amber-50/30">
           <div 
             className="max-w-[1440px] mx-auto px-12 flex items-center justify-center gap-1.5 h-11 relative"
             onMouseLeave={() => setActiveMegaMenu(null)}
@@ -871,7 +856,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                   <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-premium text-white">
                     <GraduationCap className="w-5 h-5" />
                   </div>
-                  <span className="font-outfit font-extrabold text-xs tracking-tight bg-gradient-to-r from-indigo-500 to-emerald-500 bg-clip-text text-transparent uppercase">
+                  <span className="font-outfit font-black text-sm tracking-tight text-slate-950 hover:text-primary transition-colors uppercase">
                     Think Your College
                   </span>
                 </Link>
@@ -914,6 +899,24 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                   );
                 })}
               </nav>
+
+              {/* Mobile Auth Buttons */}
+              <div className="flex flex-col gap-3 pt-2">
+                <motion.button
+                  onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ open: true, mode: "login" }); }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition-colors"
+                >
+                  Login
+                </motion.button>
+                <motion.button
+                  onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ open: true, mode: "signup" }); }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-sm tracking-wide shadow-sm"
+                >
+                  Sign Up
+                </motion.button>
+              </div>
             </div>
             
             <div className="text-center text-[10px] text-text_secondary pt-6 border-t border-border">

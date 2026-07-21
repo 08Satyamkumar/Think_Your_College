@@ -260,7 +260,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login" }: Au
                       <GraduationCap className="w-5 h-5 text-white" />
                     </motion.div>
                     <div className="text-left">
-                      <p className="font-black text-[13px] tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent uppercase leading-tight">
+                      <p className="font-black text-[13px] tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent uppercase leading-tight">
                         Think Your College
                       </p>
                       <p className="text-[9px] text-slate-400 font-semibold tracking-widest uppercase">India's #1 College Discovery</p>
@@ -275,10 +275,10 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login" }: Au
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.18 }}
                     >
-                      <p className="text-[18px] font-black text-slate-800 dark:text-white leading-tight">
+                      <p className="text-[18px] font-black text-slate-800 leading-tight">
                         {mode === "login" ? "Welcome back! 👋" : "Create Free Account 🎓"}
                       </p>
-                      <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-1">
+                      <p className="text-[11px] font-medium text-slate-400 mt-1">
                         {mode === "login"
                           ? "Access personalized college recommendations"
                           : "India's best college discovery platform"}
