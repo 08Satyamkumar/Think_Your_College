@@ -384,7 +384,7 @@ export default function HomePage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover bg-[center_15%]"
               style={{ backgroundImage: `url(${heroSlides[activeSlide].image})` }}
             />
           </AnimatePresence>

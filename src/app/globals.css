@@ -49,9 +49,14 @@
     background: linear-gradient(135deg, var(--secondary), var(--secondary-hover));
   }
 
-  @media (max-width: 768px) {
+  .hero-section {
+    height: 38vw !important;
+    min-height: 280px !important;
+    max-height: 520px !important;
+  }
+  @media (min-width: 1440px) {
     .hero-section {
-      height: 280px !important;
+      height: 520px !important;
     }
   }
 
