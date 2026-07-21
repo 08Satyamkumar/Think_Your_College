@@ -944,8 +944,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         </div>
       )}
 
-      {/* MAIN VIEW CONTENT ( Taller Header requires pt-28 on desktop, pt-20 on mobile ) */}
-      <div className="flex-grow pt-16 md:pt-[108px]">
+      {/* MAIN VIEW CONTENT ( Double-Row Header height is 108px, requiring pt-[116px] on all screens ) */}
+      <div className="flex-grow pt-[116px]">
         <main className="w-full max-w-[1440px] mx-auto p-6 md:p-8">
           {children}
         </main>
