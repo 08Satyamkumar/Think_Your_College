@@ -57,7 +57,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     {
       id: "init",
       sender: "bot",
-      text: "Namaste! 🙏 Mai AI Sarthi hoon, aapka smart college counselor. Mujhe colleges, placements, fees, ya predictors ke baare mein poohein! (e.g. Try asking: 'Galgotias placements' or 'AIIMS Rishikesh fees')",
+      text: "Namaste! 🙏 Mai Sarthi hoon, aapka smart college counselor. Mujhe colleges, placements, fees, ya predictors ke baare mein poohein! (e.g. Try asking: 'Galgotias placements' or 'AIIMS Rishikesh fees')",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -106,7 +106,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       } else if (cleanText.includes("predictor") || cleanText.includes("counseling")) {
         responseText = "🎯 **Admission Predictor**:\n\nAap home page ya navigation menu mein **Predictor** tab par click karein. Wahan apna Entrance Exam (JEE/NEET/CAT), category aur secure rank input kijiye, aur humara tool aapko matching colleges predict kar ke dega!";
       } else if (cleanText.includes("hello") || cleanText.includes("hii") || cleanText.includes("hy") || cleanText.includes("suno")) {
-        responseText = "Hello! 👋 Mai AI Sarthi hoon. Mai aapki kya sahayata kar sakta hoon? Aap mujhe private aur government colleges, fees, rank, aur placements ke baare mein pooch sakte hain.";
+        responseText = "Hello! 👋 Mai Sarthi hoon. Mai aapki kya sahayata kar sakta hoon? Aap mujhe private aur government colleges, fees, rank, aur placements ke baare mein pooch sakte hain.";
       } else {
         responseText = "Mujhe aapka sawaal samajh aaya! 🤖\n\nAap private/government colleges, packages ya fees ke baare mein details pooch rahe hain. \n\nTry asking: \n• *'Galgotias placements?'*\n• *'IIT Delhi highest package?'*\n• *'AIIMS Rishikesh MBBS fees?'*";
       }
@@ -1283,13 +1283,14 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             className="fixed bottom-24 right-6 w-[92vw] sm:w-[380px] h-[520px] bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-2xl z-50 overflow-hidden flex flex-col font-sans"
           >
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-4 flex items-center justify-between text-white shadow-md">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-4 flex items-center justify-between text-white shadow-md shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center border border-white/10">
+                <div className="relative w-10 h-10 rounded-full bg-gradient-to-tr from-amber-300 via-orange-400 to-orange-600 flex items-center justify-center shadow-inner border-2 border-white/20">
                   <Bot className="w-5.5 h-5.5 text-white" />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-orange-500 rounded-full" />
                 </div>
                 <div>
-                  <h4 className="font-outfit font-black text-sm tracking-wide leading-none">AI Sarthi</h4>
+                  <h4 className="font-outfit font-black text-sm tracking-wide leading-none">Sarthi</h4>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-[9px] font-bold text-orange-100 uppercase tracking-widest">Counselor Online</span>
@@ -1303,6 +1304,22 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                 <X className="w-4 h-4" />
               </button>
             </div>
+
+            {/* WhatsApp Banner */}
+            <a
+              href="https://wa.me/918585951111?text=Hi%20Sarthi,%20I%20have%20a%20query%20about%20college%20admissions."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-emerald-500 hover:bg-emerald-600 px-5 py-2.5 flex items-center justify-between text-white text-[10px] font-bold transition-all shadow-inner shrink-0 gap-2"
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-white rounded-full animate-ping shrink-0" />
+                <span>Connect with Counselor on WhatsApp</span>
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-white text-emerald-600 font-black text-[9px] uppercase tracking-wide shrink-0">
+                Chat Now
+              </span>
+            </a>
 
             {/* Chat Message Box */}
             <div className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-slate-50/50">
