@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AuthModal from "@/components/AuthModal";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -19,6 +19,8 @@ import {
   Percent,
   Compass,
   MessageSquare,
+  Bot,
+  Send,
   TrendingUp,
   Sparkles,
   ArrowUpRight,
@@ -46,6 +48,80 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const router = useRouter();
   // Theme is always light — useTheme kept for context but toggle not used
   useTheme();
+
+  // ══════════════════════════════════════════
+  //      AI SARTHI CHATBOT STATES & LOGIC
+  // ══════════════════════════════════════════
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: "user" | "bot"; text: string; time: string }>>([
+    {
+      id: "init",
+      sender: "bot",
+      text: "Namaste! 🙏 Mai AI Sarthi hoon, aapka smart college counselor. Mujhe colleges, placements, fees, ya predictors ke baare mein poohein! (e.g. Try asking: 'Galgotias placements' or 'AIIMS Rishikesh fees')",
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const [isBotTyping, setIsBotTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom of messages
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages, isBotTyping]);
+
+  const handleSendMessage = (textToSend: string) => {
+    if (!textToSend.trim()) return;
+
+    const userMsg = {
+      id: Math.random().toString(),
+      sender: "user" as const,
+      text: textToSend,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setChatMessages(prev => [...prev, userMsg]);
+    setChatInput("");
+    setIsBotTyping(true);
+
+    // AI Responses Logic
+    setTimeout(() => {
+      let responseText = "";
+      const cleanText = textToSend.toLowerCase();
+
+      if (cleanText.includes("galgotias")) {
+        responseText = "🏫 **Galgotias University (Greater Noida)** is a leading private university:\n\n• **NIRF Rank**: #95 (Engineering)\n• **Highest Package**: 35.0 LPA\n• **Average Package**: 8.5 LPA\n• **B.Tech CSE Fee**: ₹1.59 Lakhs/Yr\n• **Key USP**: State-of-the-art AI & DS blocks, 3D Printing & Makers Lab, and partnership with L&T EduTech!";
+      } else if (cleanText.includes("delhi") || cleanText.includes("iitd")) {
+        responseText = "🏛️ **IIT Delhi (Hauz Khas, New Delhi)** is one of India's apex engineering institutes:\n\n• **NIRF Rank**: #2 (Engineering)\n• **Highest Package**: ₹1.2 Crore PA\n• **Average Package**: ₹21.5 Lakhs PA\n• **Fees**: ₹2.2 Lakhs/Yr\n• **Top Recruiters**: Google, Microsoft, Apple, Uber, Goldman Sachs.";
+      } else if (cleanText.includes("rishikesh") || cleanText.includes("aiims")) {
+        responseText = "🏥 **AIIMS Rishikesh (Uttarakhand)** is a world-class premier medical institution:\n\n• **NIRF Rank**: #22 (Medical)\n• **Total Academic Fees**: ₹5,850 (extremely subsidized)\n• **MBBS Admission**: Through NEET UG (650+ rank cutoff)\n• **Avg Package**: ₹12.0 Lakhs PA\n• **Highlights**: Scenic Himalayan valley campus, massive clinical patient load, modern research labs.";
+      } else if (cleanText.includes("amity")) {
+        responseText = "🏢 **Amity University (Noida)** is a world-class private campus:\n\n• **Estd**: 2005\n• **B.Tech Fees**: ₹2.2 Lakhs/Yr\n• **Highlights**: Multi-crore research grants, high placement record, sports complex, high student rating.";
+      } else if (cleanText.includes("chandigarh")) {
+        responseText = "🌲 **Chandigarh University (Punjab)** is a massive private university:\n\n• **NIRF Rank**: Top 30 in Universities\n• **Highest Package**: ₹54.0 LPA\n• **Average Package**: ₹7.5 LPA\n• **Highlights**: Vibrant campus life, global collaborations, strong industry networking.";
+      } else if (cleanText.includes("compare")) {
+        responseText = "⚖️ **Think Your College Comparison Tool**:\n\nAap custom colleges compare karne ke liye screen ke center-right mein floating **Compare Button (Shuffle Icon)** par click kijiye. Wahan aap categories like engineering/management select karke multiple colleges side-by-side analyze kar sakte hain.";
+      } else if (cleanText.includes("predictor") || cleanText.includes("counseling")) {
+        responseText = "🎯 **Admission Predictor**:\n\nAap home page ya navigation menu mein **Predictor** tab par click karein. Wahan apna Entrance Exam (JEE/NEET/CAT), category aur secure rank input kijiye, aur humara tool aapko matching colleges predict kar ke dega!";
+      } else if (cleanText.includes("hello") || cleanText.includes("hii") || cleanText.includes("hy") || cleanText.includes("suno")) {
+        responseText = "Hello! 👋 Mai AI Sarthi hoon. Mai aapki kya sahayata kar sakta hoon? Aap mujhe private aur government colleges, fees, rank, aur placements ke baare mein pooch sakte hain.";
+      } else {
+        responseText = "Mujhe aapka sawaal samajh aaya! 🤖\n\nAap private/government colleges, packages ya fees ke baare mein details pooch rahe hain. \n\nTry asking: \n• *'Galgotias placements?'*\n• *'IIT Delhi highest package?'*\n• *'AIIMS Rishikesh MBBS fees?'*";
+      }
+
+      const botMsg = {
+        id: Math.random().toString(),
+        sender: "bot" as const,
+        text: responseText,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      setChatMessages(prev => [...prev, botMsg]);
+      setIsBotTyping(false);
+    }, 1200);
+  };
 
   // MBA Mega Menu Sub-tabs structure matching screenshot
   const mbaTabs: Record<string, { name: string; href: string }[]> = {
@@ -1192,6 +1268,153 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         defaultMode={authModal.mode}
         onClose={() => setAuthModal(m => ({ ...m, open: false }))}
       />
+
+      {/* ══════════════════════════════════════════
+           AI SARTHI FLOATING CHATBOT WIDGET
+         ══════════════════════════════════════════ */}
+      
+      {/* Chat Window Panel */}
+      <AnimatePresence>
+        {isChatOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.95 }}
+            className="fixed bottom-24 right-6 w-[92vw] sm:w-[380px] h-[520px] bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-2xl z-50 overflow-hidden flex flex-col font-sans"
+          >
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-4 flex items-center justify-between text-white shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center border border-white/10">
+                  <Bot className="w-5.5 h-5.5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-outfit font-black text-sm tracking-wide leading-none">AI Sarthi</h4>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[9px] font-bold text-orange-100 uppercase tracking-widest">Counselor Online</span>
+                  </div>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsChatOpen(false)}
+                className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Chat Message Box */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-slate-50/50">
+              {chatMessages.map(msg => (
+                <div 
+                  key={msg.id}
+                  className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
+                >
+                  <div 
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-sm font-semibold whitespace-pre-line ${
+                      msg.sender === "user" 
+                        ? "bg-orange-500 text-white rounded-tr-none" 
+                        : "bg-white text-slate-800 border border-slate-100 rounded-tl-none"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                  <span className="text-[9px] text-slate-400 mt-1 px-1 font-semibold">{msg.time}</span>
+                </div>
+              ))}
+
+              {/* Typing Simulator Animation */}
+              {isBotTyping && (
+                <div className="flex flex-col items-start">
+                  <div className="bg-white border border-slate-100 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" />
+                  </div>
+                  <span className="text-[9px] text-slate-400 mt-1 px-1 font-semibold">Typing...</span>
+                </div>
+              )}
+              
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Suggestion Quick Pills */}
+            <div className="px-4 py-2 border-t border-slate-100 bg-white overflow-x-auto flex gap-2 no-scrollbar scrollbar-none shrink-0 font-sans">
+              {[
+                "Galgotias placements?",
+                "AIIMS Rishikesh fees?",
+                "IIT Delhi package?",
+                "Compare Tool?",
+                "Admission Predictor?"
+              ].map(pill => (
+                <button
+                  key={pill}
+                  onClick={() => handleSendMessage(pill)}
+                  className="px-3 py-1.5 bg-slate-50 hover:bg-orange-50 hover:text-orange-600 text-[10px] font-bold text-slate-600 rounded-full border border-slate-200/80 hover:border-orange-300 transition-all whitespace-nowrap shrink-0"
+                >
+                  {pill}
+                </button>
+              ))}
+            </div>
+
+            {/* Chat Input Area */}
+            <form 
+              onSubmit={(e) => { e.preventDefault(); handleSendMessage(chatInput); }}
+              className="p-3 border-t border-slate-100 bg-white flex gap-2 items-center shrink-0"
+            >
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask about colleges, placements, fees..."
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+              />
+              <button 
+                type="submit"
+                className="w-9 h-9 rounded-xl bg-orange-500 hover:bg-orange-600 flex items-center justify-center transition-all text-white shadow-md shadow-orange-500/20"
+              >
+                <Send className="w-4.5 h-4.5" />
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Toggle Button */}
+      <motion.button
+        onClick={() => setIsChatOpen(!isChatOpen)}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-xl shadow-orange-500/30 flex items-center justify-center z-50 border border-orange-400/20 group cursor-pointer"
+      >
+        <AnimatePresence mode="wait">
+          {isChatOpen ? (
+            <motion.div
+              key="close"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <X className="w-6 h-6" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="chat"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative"
+            >
+              <MessageSquare className="w-6 h-6" />
+              <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-emerald-400 border-2 border-orange-500 rounded-full animate-ping" />
+              <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-emerald-400 border-2 border-orange-500 rounded-full" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.button>
     </div>
   );
 }
