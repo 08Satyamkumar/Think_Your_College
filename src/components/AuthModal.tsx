@@ -32,16 +32,16 @@ function GoogleBtn({ label, onClick }: { label: string; onClick?: () => void }) 
       onClick={onClick}
       whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(99,102,241,0.25)" }}
       whileTap={{ scale: 0.97 }}
-      className="w-full flex items-center justify-center gap-3 py-3 px-5 rounded-xl border-2 border-indigo-200 dark:border-indigo-700 bg-white dark:bg-slate-900 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all duration-300 group relative overflow-hidden"
+      className="w-full flex items-center justify-center gap-3 py-3 px-5 rounded-xl border-2 border-indigo-200 bg-white hover:border-indigo-400 transition-all duration-300 group relative overflow-hidden"
     >
-      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-50/60 dark:via-indigo-900/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-50/60 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
       <svg width="20" height="20" viewBox="0 0 48 48" className="flex-shrink-0">
         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
         <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
         <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
       </svg>
-      <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{label}</span>
+      <span className="text-sm font-bold text-slate-700 ">{label}</span>
     </motion.button>
   );
 }
@@ -61,12 +61,12 @@ function FloatingInput({
     <div className="relative group">
       <div className={`flex items-center w-full rounded-xl border-2 transition-all duration-300 overflow-visible ${
         focused
-          ? "border-indigo-500 dark:border-indigo-400 bg-indigo-50/40 dark:bg-indigo-900/20 shadow-[0_0_0_3px_rgba(99,102,241,0.18)]"
-          : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-indigo-300 dark:hover:border-indigo-600"
+          ? "border-indigo-500 bg-indigo-50/40 shadow-[0_0_0_3px_rgba(99,102,241,0.18)]"
+          : "border-slate-200 bg-white hover:border-indigo-300"
       }`}>
         <div className="relative flex-1 h-12">
           <Icon className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-200 pointer-events-none z-10 ${
-            focused ? "text-indigo-500 dark:text-indigo-400" : "text-slate-400"
+            focused ? "text-indigo-500" : "text-slate-400"
           }`} />
           <motion.label
             htmlFor={id}
@@ -76,7 +76,7 @@ function FloatingInput({
               fontSize: lifted ? "10px" : "13px",
             }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="absolute left-9 pointer-events-none font-semibold text-slate-400 dark:text-slate-500 origin-left z-10 whitespace-nowrap"
+            className="absolute left-9 pointer-events-none font-semibold text-slate-400 origin-left z-10 whitespace-nowrap"
           >
             {label}
           </motion.label>
@@ -87,7 +87,7 @@ function FloatingInput({
             onChange={e => onChange(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="absolute inset-0 pt-5 pb-1 pl-9 pr-4 bg-transparent text-sm font-semibold text-slate-800 dark:text-slate-100 outline-none w-full"
+            className="absolute inset-0 pt-5 pb-1 pl-9 pr-4 bg-transparent text-sm font-semibold text-slate-800 outline-none w-full"
           />
         </div>
       </div>
@@ -101,10 +101,10 @@ function PhoneInput({ value, onChange }: { value: string; onChange: (v: string) 
   return (
     <div className={`flex items-center w-full rounded-xl border-2 h-12 transition-all duration-300 overflow-hidden ${
       focused
-        ? "border-indigo-500 dark:border-indigo-400 bg-indigo-50/40 dark:bg-indigo-900/20 shadow-[0_0_0_3px_rgba(99,102,241,0.18)]"
-        : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-indigo-300 dark:hover:border-indigo-600"
+        ? "border-indigo-500 bg-indigo-50/40 shadow-[0_0_0_3px_rgba(99,102,241,0.18)]"
+        : "border-slate-200 bg-white hover:border-indigo-300"
     }`}>
-      <div className="flex items-center gap-1.5 pl-3 pr-3 h-full border-r border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-600 dark:text-slate-300 flex-shrink-0 select-none">
+      <div className="flex items-center gap-1.5 pl-3 pr-3 h-full border-r border-slate-200 text-[11px] font-black text-slate-600 flex-shrink-0 select-none">
         <span className="text-base leading-none">🇮🇳</span>
         <span>IND +91</span>
         <svg className="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -118,7 +118,7 @@ function PhoneInput({ value, onChange }: { value: string; onChange: (v: string) 
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           placeholder="Mobile number"
-          className="w-full h-full pl-9 pr-4 bg-transparent text-sm font-semibold text-slate-800 dark:text-slate-100 outline-none placeholder:text-slate-400 placeholder:font-normal"
+          className="w-full h-full pl-9 pr-4 bg-transparent text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400 placeholder:font-normal"
         />
       </div>
     </div>
@@ -129,9 +129,9 @@ function PhoneInput({ value, onChange }: { value: string; onChange: (v: string) 
 function OrDivider() {
   return (
     <div className="flex items-center gap-3 my-0.5">
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent" />
-      <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest">OR</span>
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent" />
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+      <span className="text-[10px] font-black text-slate-400 tracking-widest">OR</span>
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
     </div>
   );
 }
@@ -244,7 +244,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                 className="absolute -inset-1.5 bg-gradient-to-br from-indigo-500/30 via-purple-500/20 to-orange-400/20 rounded-3xl blur-xl pointer-events-none"
               />
 
-              <div className="relative bg-white dark:bg-slate-950 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800 overflow-hidden">
+              <div className="relative bg-white rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.4)] border border-slate-100 overflow-hidden">
 
                 {/* Top gradient bar */}
                 <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-orange-500 z-10" />
@@ -257,7 +257,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                   whileHover={{ scale: 1.12, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={onClose}
-                  className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-all duration-200"
+                  className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200"
                 >
                   <X className="w-4 h-4" />
                 </motion.button>
@@ -317,7 +317,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                             transition={{ delay: i * 0.07 }}
                             className="flex flex-col items-center gap-1"
                           >
-                            <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center border border-indigo-100 dark:border-indigo-800">
+                            <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100 ">
                               <f.icon className="w-4 h-4 text-indigo-500" />
                             </div>
                             <span className="text-[9px] font-bold text-slate-400 text-center leading-tight max-w-[58px]">{f.text}</span>
@@ -342,19 +342,19 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         className="space-y-3"
                       >
-                        <GoogleBtn label="Log in with Google" />
+                        <GoogleBtn label="Log in with Google" onClick={() => setGoogleSimStep("select_account")} />
                         <OrDivider />
 
                         {/* Email / Mobile tabs */}
-                        <div className="flex gap-6 border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex gap-6 border-b border-slate-100 pb-2">
                           {(["email", "mobile"] as const).map(t => (
                             <button
                               key={t}
                               onClick={() => { setLoginType(t); setOtpSent(false); }}
                               className={`flex items-center gap-1.5 text-[11px] font-black pb-1.5 border-b-2 -mb-[calc(0.5rem+1px)] transition-all ${
                                 loginType === t
-                                  ? "border-indigo-500 text-indigo-600 dark:text-indigo-400"
-                                  : "border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                                  ? "border-indigo-500 text-indigo-600"
+                                  : "border-transparent text-slate-400 hover:text-slate-600"
                               } uppercase tracking-wider`}
                             >
                               {t === "email" ? <Mail className="w-3.5 h-3.5" /> : <Phone className="w-3.5 h-3.5" />}
@@ -380,7 +380,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                                 whileTap={{ scale: 0.97 }}
                                 onClick={handleSendOtp}
                                 disabled={!canSendOtp}
-                                className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-200 disabled:to-slate-200 dark:disabled:from-slate-800 dark:disabled:to-slate-800 disabled:cursor-not-allowed text-white disabled:text-slate-400 font-black text-sm shadow-md shadow-orange-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+                                className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-200 disabled:to-slate-200 disabled:cursor-not-allowed text-white disabled:text-slate-400 font-black text-sm shadow-md shadow-orange-500/25 transition-all duration-300 flex items-center justify-center gap-2"
                               >
                                 <Sparkles className="w-4 h-4" />
                                 Get OTP
@@ -392,9 +392,9 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
                               className="space-y-3"
                             >
-                              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 text-center">
+                              <p className="text-[11px] font-semibold text-slate-500 text-center">
                                 OTP sent to{" "}
-                                <span className="font-black text-indigo-600 dark:text-indigo-400">
+                                <span className="font-black text-indigo-600 ">
                                   {loginType === "mobile" ? `+91 ${phone}` : email}
                                 </span>
                               </p>
@@ -411,7 +411,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                                     onChange={e => handleOtpChange(i, e.target.value)}
                                     onKeyDown={e => handleOtpKeyDown(i, e)}
                                     whileFocus={{ scale: 1.15, boxShadow: "0 0 0 3px rgba(99,102,241,0.3)" }}
-                                    className="w-11 h-12 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-center text-xl font-black text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-900 outline-none focus:border-indigo-500 transition-all cursor-text"
+                                    className="w-11 h-12 rounded-xl border-2 border-slate-200 text-center text-xl font-black text-indigo-600 bg-white outline-none focus:border-indigo-500 transition-all cursor-text"
                                   />
                                 ))}
                               </div>
@@ -431,7 +431,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                                 ) : (
                                   <button
                                     onClick={() => { setOtpSent(false); setOtp(["","","","","",""]); }}
-                                    className="text-[11px] font-bold text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 underline transition-colors"
+                                    className="text-[11px] font-bold text-indigo-500 hover:text-indigo-700 underline transition-colors"
                                   >
                                     Resend OTP
                                   </button>
@@ -441,7 +441,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                           )}
                         </AnimatePresence>
 
-                        <p className="text-center text-[11px] text-slate-500 dark:text-slate-400 pt-1">
+                        <p className="text-center text-[11px] text-slate-500 pt-1">
                           New to Think Your College?{" "}
                           <button
                             onClick={() => switchMode("signup")}
@@ -463,7 +463,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         className="space-y-2.5"
                       >
-                        <GoogleBtn label="Sign up with Google" />
+                        <GoogleBtn label="Sign up with Google" onClick={() => setGoogleSimStep("select_account")} />
                         <OrDivider />
 
                         <PhoneInput value={signupPhone} onChange={setSignupPhone} />
@@ -471,7 +471,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         <FloatingInput id="signup-email" label="Email address" icon={Mail} value={signupEmail} onChange={setSignupEmail} type="email" />
 
                         {/* Location chip */}
-                        <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 bg-indigo-50/70 dark:bg-indigo-900/20 rounded-xl px-3 py-2 border border-indigo-100 dark:border-indigo-800/60">
+                        <div className="flex items-center gap-2 text-[11px] text-slate-500 bg-indigo-50/70 rounded-xl px-3 py-2 border border-indigo-100 ">
                           <MapPin className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
                           <span className="flex-1">Greater Noida is your current location.</span>
                           <button className="font-black text-indigo-500 hover:text-indigo-700 transition-colors">Change</button>
@@ -486,7 +486,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                             <div className={`w-[18px] h-[18px] rounded-[5px] border-2 flex items-center justify-center transition-all duration-200 ${
                               agreed
                                 ? "bg-indigo-500 border-indigo-500"
-                                : "border-slate-300 dark:border-slate-600 group-hover:border-indigo-400"
+                                : "border-slate-300 group-hover:border-indigo-400"
                             }`}>
                               <AnimatePresence>
                                 {agreed && (
@@ -500,7 +500,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                               </AnimatePresence>
                             </div>
                           </div>
-                          <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
+                          <span className="text-[10px] text-slate-500 leading-snug">
                             I agree to Think Your College{" "}
                             <span className="text-indigo-500 font-bold hover:underline cursor-pointer">Terms & Conditions</span>
                             {" "}and{" "}
@@ -513,17 +513,18 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                           whileHover={{ scale: 1.02, boxShadow: "0 10px 28px rgba(249,115,22,0.4)" }}
                           whileTap={{ scale: 0.97 }}
                           disabled={!agreed || signupPhone.length < 10}
-                          className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-200 disabled:to-slate-200 dark:disabled:from-slate-800 dark:disabled:to-slate-800 disabled:cursor-not-allowed text-white disabled:text-slate-400 font-black text-sm shadow-md shadow-orange-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+                          onClick={() => onLoginSuccess({ name: fullName || "Student", email: signupEmail || `${signupPhone}@tyc.com` })}
+                          className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-200 disabled:to-slate-200 disabled:cursor-not-allowed text-white disabled:text-slate-400 font-black text-sm shadow-md shadow-orange-500/25 transition-all duration-300 flex items-center justify-center gap-2"
                         >
                           <ArrowRight className="w-4 h-4" />
                           Sign up
                         </motion.button>
 
-                        <p className="text-center text-[11px] text-slate-500 dark:text-slate-400">
+                        <p className="text-center text-[11px] text-slate-500 ">
                           Already have an account?{" "}
                           <button
                             onClick={() => switchMode("login")}
-                            className="font-black text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400 underline underline-offset-2 transition-colors"
+                            className="font-black text-indigo-500 hover:text-indigo-700 underline underline-offset-2 transition-colors"
                           >
                             Log in
                           </button>
@@ -541,7 +542,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="absolute inset-0 z-30 bg-white dark:bg-slate-950 flex flex-col p-7 gap-6 font-sans"
+                      className="absolute inset-0 z-30 bg-white flex flex-col p-7 gap-6 font-sans"
                     >
                       {/* Google Logo */}
                       <div className="flex justify-center mt-2 flex-shrink-0">
@@ -559,24 +560,24 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         <div className="flex-1 flex flex-col justify-between">
                           <div className="space-y-5">
                             <div className="text-center space-y-1">
-                              <h3 className="font-outfit font-bold text-base text-slate-800 dark:text-slate-200">Choose an account</h3>
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">to continue to Think Your College</p>
+                              <h3 className="font-outfit font-bold text-base text-slate-800 ">Choose an account</h3>
+                              <p className="text-[11px] text-slate-500 font-semibold">to continue to Think Your College</p>
                             </div>
 
                             {/* Accounts List */}
-                            <div className="space-y-2 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm">
+                            <div className="space-y-2 border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
                               {/* Account 1 */}
                               <button
                                 onClick={() => handleSelectAccount("Satyam Kumar", "satyam.kumar08@gmail.com")}
-                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors text-left border-b border-slate-100 dark:border-slate-800"
+                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 "
                               >
                                 <div className="flex items-center gap-3">
                                   <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-black text-xs">
                                     S
                                   </div>
                                   <div>
-                                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Satyam Kumar</p>
-                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">satyam.kumar08@gmail.com</p>
+                                    <p className="text-xs font-bold text-slate-800 ">Satyam Kumar</p>
+                                    <p className="text-[10px] text-slate-500 font-semibold">satyam.kumar08@gmail.com</p>
                                   </div>
                                 </div>
                               </button>
@@ -584,15 +585,15 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                               {/* Account 2 */}
                               <button
                                 onClick={() => handleSelectAccount("TYC Demo Student", "thinkyourcollege.demo@gmail.com")}
-                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors text-left border-b border-slate-100 dark:border-slate-800"
+                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 "
                               >
                                 <div className="flex items-center gap-3">
                                   <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-black text-xs">
                                     T
                                   </div>
                                   <div>
-                                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">TYC Demo Student</p>
-                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">thinkyourcollege.demo@gmail.com</p>
+                                    <p className="text-xs font-bold text-slate-800 ">TYC Demo Student</p>
+                                    <p className="text-[10px] text-slate-500 font-semibold">thinkyourcollege.demo@gmail.com</p>
                                   </div>
                                 </div>
                               </button>
@@ -600,28 +601,28 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                               {/* Account 3 */}
                               <button
                                 onClick={() => handleSelectAccount("Guest User", "guest.user@gmail.com")}
-                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors text-left"
+                                className="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors text-left"
                               >
                                 <div className="flex items-center gap-3">
                                   <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-black text-xs">
                                     G
                                   </div>
                                   <div>
-                                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Use guest account</p>
-                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">guest.user@gmail.com</p>
+                                    <p className="text-xs font-bold text-slate-800 ">Use guest account</p>
+                                    <p className="text-[10px] text-slate-500 font-semibold">guest.user@gmail.com</p>
                                   </div>
                                 </div>
                               </button>
                             </div>
 
-                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold leading-relaxed text-center px-4">
+                            <p className="text-[10px] text-slate-400 font-semibold leading-relaxed text-center px-4">
                               To continue, Google will share your name, email address, language preference, and profile picture with Think Your College.
                             </p>
                           </div>
 
                           <button 
                             onClick={() => setGoogleSimStep("idle")}
-                            className="w-full mt-6 py-2.5 text-center text-xs font-black text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all uppercase tracking-wider"
+                            className="w-full mt-6 py-2.5 text-center text-xs font-black text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all uppercase tracking-wider"
                           >
                             Cancel
                           </button>
@@ -630,8 +631,8 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
                         <div className="flex-grow flex flex-col items-center justify-center space-y-4">
                           <div className="w-10 h-10 border-4 border-[#4285F4] border-t-transparent rounded-full animate-spin" />
                           <div className="space-y-1 text-center">
-                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Signing in with Google...</p>
-                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">Connecting securely to Think Your College</p>
+                            <p className="text-xs font-bold text-slate-800 ">Signing in with Google...</p>
+                            <p className="text-[10px] text-slate-400 font-semibold">Connecting securely to Think Your College</p>
                           </div>
                         </div>
                       )}
