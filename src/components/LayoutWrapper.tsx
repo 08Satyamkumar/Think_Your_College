@@ -154,6 +154,16 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     }, 2500);
   };
 
+  // Auto-reopen alert popup if closed and not subscribed (every 7 seconds)
+  useEffect(() => {
+    if (!isAlertOpen && !isAlertSubscribed) {
+      const timer = setTimeout(() => {
+        setIsAlertOpen(true);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAlertOpen, isAlertSubscribed]);
+
   // MBA Mega Menu Sub-tabs structure matching screenshot
   const mbaTabs: Record<string, { name: string; href: string }[]> = {
     "Top Ranked Colleges": [
@@ -1454,15 +1464,15 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       </AnimatePresence>
 
       {/* ══════════════════════════════════════════
-           ADMISSION ALERTS FLOATING WIDGET (LEFT)
+           ADMISSION ALERTS FLOATING WIDGET (TOP CENTER)
          ══════════════════════════════════════════ */}
       <AnimatePresence>
         {isAlertOpen && (
           <motion.div
-            initial={{ opacity: 0, x: -50, y: 50, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -50, y: 50, scale: 0.95 }}
-            className="fixed bottom-6 left-6 w-[90vw] sm:w-[320px] bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-2xl z-40 overflow-hidden p-5 flex flex-col font-sans gap-3.5"
+            initial={{ opacity: 0, y: -50, x: "-50%", scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+            exit={{ opacity: 0, y: -50, x: "-50%", scale: 0.95 }}
+            className="fixed top-32 left-1/2 w-[92vw] sm:w-[340px] bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-2xl z-40 overflow-hidden p-5 flex flex-col font-sans gap-3.5"
           >
             {/* Header */}
             <div className="flex items-start justify-between">
