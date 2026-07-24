@@ -173,7 +173,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = "login", onLo
 
   const handleGoogleLogin = () => {
     const envClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-    const activeClientId = envClientId || "1041926639535-dummyclientid.apps.googleusercontent.com";
+    const activeClientId = envClientId || "102650280321-egj6rje44f90klbgi0a5l7t1fb6p62um.apps.googleusercontent.com";
 
     if (typeof window === "undefined" || !(window as any).google?.accounts?.oauth2) {
       alert("Google Sign-In is initializing. Please try again in a moment.");
