@@ -711,7 +711,83 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                 </Link>
               </div>
             </div>
-          </div>
+          </div>
+          {/* ROW 3: SLEEK SUB-HEADER RIBBON (News, Exams, Reviews etc) */}
+          <div className="relative bg-slate-50 border-t border-b border-slate-200/80">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-4 h-9 overflow-x-auto no-scrollbar scroll-smooth">
+              {/* Left/Center side links */}
+              <div className="flex items-center gap-1 md:gap-2 h-full min-w-max">
+                {/* Top Colleges */}
+                <Link 
+                  href="/colleges" 
+                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+                >
+                  Top Colleges
+                </Link>
+                <div className="w-[1px] h-3 bg-slate-200" />
+
+                {/* Top Courses */}
+                <Link 
+                  href="/colleges" 
+                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+                >
+                  Top Courses
+                </Link>
+                <div className="w-[1px] h-3 bg-slate-200" />
+
+                {/* Entrance Exams */}
+                <Link 
+                  href="/colleges" 
+                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+                >
+                  Entrance Exams
+                </Link>
+                <div className="w-[1px] h-3 bg-slate-200" />
+
+                {/* Boards */}
+                <Link 
+                  href="/colleges" 
+                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+                >
+                  Boards
+                </Link>
+                <div className="w-[1px] h-3 bg-slate-200" />
+
+                {/* Admission 2026 (Opens the Admission Alerts popup!) */}
+                <button 
+                  onClick={() => setIsAlertOpen(true)}
+                  className="flex items-center gap-1.5 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap group"
+                >
+                  <span>Admission 2026</span>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500"></span>
+                  </span>
+                </button>
+                <div className="w-[1px] h-3 bg-slate-200" />
+
+                {/* News & Articles */}
+                <Link 
+                  href="/colleges" 
+                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+                >
+                  News
+                </Link>
+              </div>
+
+              {/* Right side: Write a Review button */}
+              <div className="flex items-center h-full flex-shrink-0">
+                <Link 
+                  href="/colleges"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-md border border-orange-500 hover:bg-orange-50 text-[9px] font-black tracking-wider text-orange-600 uppercase transition-all whitespace-nowrap shadow-sm hover:shadow active:scale-95"
+                >
+                  <Star className="w-2.5 h-2.5 fill-current" />
+                  Write a Review
+                </Link>
+              </div>
+            </div>
+          </div>
+
 
           {/* Mega Menu Dropdown Panels (Rendered outside overflow-x-auto so they pop out unclipped) */}
           <div className="relative max-w-[1440px] mx-auto" onMouseLeave={() => setActiveMegaMenu(null)}>
@@ -1142,8 +1218,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         </div>
       )}
 
-      {/* MAIN VIEW CONTENT ( Double-Row Header height is 108px, requiring pt-[116px] on all screens ) */}
-      <div className="flex-grow pt-[116px]">
+      {/* MAIN VIEW CONTENT ( Triple-Row Header height is 144px, requiring pt-[152px] on all screens ) */}
+      <div className="flex-grow pt-[152px]">
         <main className="w-full max-w-[1440px] mx-auto p-6 md:p-8">
           {children}
         </main>
