@@ -706,37 +706,49 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="flex md:grid overflow-x-auto md:overflow-x-visible no-scrollbar gap-6 md:gap-8 pb-5 md:pb-0 snap-x md:snap-none snap-mandatory grid-cols-1 md:grid-cols-2">
           {filteredColleges.map((college) => (
             <motion.div
               layout
               key={college.id}
-              className="group bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-premium hover:border-primary/20 transition-all duration-300"
+              className="group snap-start w-[85vw] sm:w-[350px] md:w-auto flex-shrink-0 md:flex-shrink bg-card border border-border/80 hover:border-orange-500/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(249,115,22,0.12)] hover:-translate-y-2 transition-all duration-350 ease-out"
             >
               <div className="relative h-48 bg-slate-100 overflow-hidden">
-                {/* Fallback pattern for college banner */}
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-teal-500/20" />
+                {/* College banner image with smooth zoom hover animation */}
+                {college.image ? (
+                  <img 
+                    src={college.image} 
+                    alt={college.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-teal-500/20" />
+                )}
+                
+                {/* Dark gradient overlay for text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-75" />
                 
                 {/* NIRF Rank absolute badge */}
                 {college.nirfRank && (
-                  <div className="absolute top-4 left-4 bg-amber-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow-md shadow-amber-500/25">
+                  <div className="absolute top-4 left-4 bg-orange-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow-md shadow-orange-500/25 z-10">
                     NIRF Rank #{college.nirfRank}
                   </div>
                 )}
 
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-sm text-xs font-bold text-slate-800">
+                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-sm text-xs font-bold text-slate-800 z-10">
                   <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   {college.rating}
                 </div>
-                <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-semibold text-white">
+                <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-semibold text-white z-10">
                   {college.type}
                 </div>
               </div>
 
               <div className="p-6 space-y-4">
                 <div>
-                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-primary">{college.stream}</span>
-                  <h3 className="font-outfit font-bold text-lg text-text_primary group-hover:text-primary transition-colors line-clamp-1 mt-1">
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-orange-600">{college.stream}</span>
+                  <h3 className="font-outfit font-bold text-lg text-text_primary group-hover:text-orange-600 transition-colors line-clamp-1 mt-1">
                     {college.name}
                   </h3>
                   <p className="flex items-center gap-1.5 text-xs text-text_secondary mt-1">
@@ -752,7 +764,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">Average LPA</p>
-                    <p className="font-outfit font-bold text-xs text-primary mt-0.5">{college.averagePackage}</p>
+                    <p className="font-outfit font-bold text-xs text-orange-600 mt-0.5">{college.averagePackage}</p>
                   </div>
                   <div>
                     <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">Course Fees</p>
@@ -763,7 +775,7 @@ export default function HomePage() {
                 <div className="flex gap-3 pt-2">
                   <Link 
                     href={`/colleges/${college.slug}`}
-                    className="flex-1 px-4 py-2.5 bg-background hover:bg-border/30 border border-border text-text_primary hover:text-text_primary font-bold text-xs rounded-xl text-center transition-colors"
+                    className="flex-1 px-4 py-2.5 bg-background hover:bg-slate-50 border border-border hover:border-orange-500/30 text-text_primary hover:text-orange-600 font-bold text-xs rounded-xl text-center transition-colors"
                   >
                     View Details
                   </Link>
@@ -773,7 +785,7 @@ export default function HomePage() {
                       setModalType("general");
                       setShowInquiryModal(true);
                     }}
-                    className="flex-1 px-4 py-2.5 bg-gradient-premium hover:bg-primary text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-primary/10 active:scale-95"
+                    className="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-orange-500/20 active:scale-95"
                   >
                     Apply Now
                   </button>
