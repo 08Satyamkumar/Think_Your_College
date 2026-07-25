@@ -851,7 +851,6 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                   key={category}
                   className="h-full flex items-center"
                   onMouseEnter={() => setActiveMegaMenu(category)}
-                   onTouchStart={() => setActiveMegaMenu(category)}
                 >
                   <button 
                     onClick={() => setActiveMegaMenu(activeMegaMenu === category ? null : category)}
