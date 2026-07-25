@@ -1811,7 +1811,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", stiffness: 350, damping: 28 }}
-              className="w-full max-w-[850px] bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[520px] relative border border-slate-100"
+              className="w-full max-w-[850px] max-h-[92vh] md:max-h-none overflow-y-auto md:overflow-visible bg-white rounded-3xl shadow-2xl grid grid-cols-1 md:grid-cols-12 relative border border-slate-100"
             >
               {/* Close Button */}
               <button 
@@ -1822,7 +1822,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               </button>
 
               {/* LEFT SIDE PANEL (Saffron Banner - col-span-5) */}
-              <div className="col-span-5 bg-gradient-to-br from-orange-500 to-orange-600 text-white p-7 md:p-8 flex flex-col justify-between relative overflow-hidden hidden md:flex select-none">
+              <div className="col-span-12 md:col-span-5 bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 md:p-8 flex flex-col justify-between relative overflow-hidden select-none">
                 {/* Background decorative blobs */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
                 <div className="absolute -bottom-10 -left-10 w-44 h-44 bg-black/10 rounded-full blur-2xl" />
@@ -1840,7 +1840,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     <h3 className="font-outfit font-black text-lg md:text-xl leading-snug">
                       Brighten Your Future: Get Expert Guidance for Your College Journey
                     </h3>
-                    <p className="text-[11px] text-white/80 leading-relaxed font-semibold">
+                    <p className="text-[11px] text-white/80 leading-relaxed font-semibold hidden md:block">
                       Join thousands of students selecting their ideal engineering, management, and medical campuses with us.
                     </p>
                   </div>
@@ -1855,7 +1855,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
                     <div>
                       <p className="text-xs font-black leading-tight text-white">Never Miss Admission Deadlines!</p>
-                      <p className="text-[10px] text-white/70 font-semibold leading-normal">Instant alerts on exam dates, forms, and cutoffs.</p>
+                      <p className="text-[10px] text-white/70 font-semibold leading-normal hidden md:block">Instant alerts on exam dates, forms, and cutoffs.</p>
                     </div>
                   </div>
 
@@ -1866,7 +1866,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
                     <div>
                       <p className="text-xs font-black leading-tight text-white">1-on-1 Personalized Counseling</p>
-                      <p className="text-[10px] text-white/70 font-semibold leading-normal">Dedicated admission guidance based on ranks and state counseling.</p>
+                      <p className="text-[10px] text-white/70 font-semibold leading-normal hidden md:block">Dedicated admission guidance based on ranks and state counseling.</p>
                     </div>
                   </div>
 
@@ -1877,7 +1877,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     </div>
                     <div>
                       <p className="text-xs font-black leading-tight text-white">Verified Placement Reviews</p>
-                      <p className="text-[10px] text-white/70 font-semibold leading-normal">Get genuine reports on package details and hostel feedback.</p>
+                      <p className="text-[10px] text-white/70 font-semibold leading-normal hidden md:block">Get genuine reports on package details and hostel feedback.</p>
                     </div>
                   </div>
                 </div>
