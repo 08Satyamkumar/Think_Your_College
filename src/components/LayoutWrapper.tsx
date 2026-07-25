@@ -167,11 +167,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     const existingLeads = JSON.parse(localStorage.getItem("tyc-leads") || "[]");
     localStorage.setItem("tyc-leads", JSON.stringify([...existingLeads, newLead]));
 
-    setIsAlertSubscribed(true);
-    setTimeout(() => {
-      // Auto-hide alert card after successful subscription
-      setIsAlertOpen(false);
-    }, 3000);
+    setIsAlertSubscribed(true);
   };
 
   // Auto-reopen alert popup if closed and not subscribed (every 7 seconds)
@@ -1780,20 +1776,57 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                       </button>
                     </p>
                   </form>
-                ) : (
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="py-6 text-center flex flex-col items-center gap-3"
-                  >
-                    <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 border-2 border-emerald-100 shadow-sm animate-[pulse_2s_infinite]">
-                      <CheckCircle className="w-8 h-8" />
-                    </div>
-                    <h5 className="font-outfit font-black text-base text-slate-800 leading-none">Subscription Active!</h5>
-                    <p className="text-[11px] text-slate-500 font-semibold px-4 leading-relaxed">
-                      Congratulations <b>{alertName}</b>! You have successfully subscribed to instant admission alerts on <b>{alertEmail}</b>.
-                    </p>
-                  </motion.div>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="py-4 text-center flex flex-col items-center gap-4 w-full"
+                  >
+                    {/* Success Icon */}
+                    <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 border-2 border-emerald-100 shadow-sm animate-[pulse_2s_infinite]">
+                      <CheckCircle className="w-7 h-7" />
+                    </div>
+                    
+                    {/* Text confirmations */}
+                    <div className="space-y-1">
+                      <h5 className="font-outfit font-black text-base text-slate-800 leading-none">Subscription Active!</h5>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Congratulations {alertName}!</p>
+                      <p className="text-[11px] text-slate-500 font-semibold px-4 leading-relaxed mt-1">
+                        You have successfully subscribed to instant admission alerts on <b>{alertEmail}</b>.
+                      </p>
+                    </div>
+
+                    {/* Divider line */}
+                    <div className="w-full border-t border-slate-100 my-1" />
+
+                    {/* Contact Us CTA Section */}
+                    <div className="space-y-2.5 w-full px-4">
+                      <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider">Need Urgent Admission Help?</p>
+                      <p className="text-[11px] text-slate-500 font-semibold leading-tight">Connect with our senior counselors directly now:</p>
+                      
+                      <div className="flex flex-col sm:flex-row gap-2 mt-2 w-full">
+                        {/* WhatsApp Button */}
+                        <a 
+                          href="https://wa.me/918585951111?text=Hi%20Sarthi,%20I%20have%20a%20query%20about%20college%20admissions."
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 transition-colors text-white text-xs font-black uppercase tracking-wider shadow-sm"
+                        >
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.277L6.5 20.5l5.397-1.398c.95.534 2.12.87 3.114.872 3.182 0 5.768-2.587 5.77-5.767 0-3.18-2.587-5.767-5.77-5.767zm3.61 7.223c-.15.075-.89.44-1.03.49-.14.05-.24.07-.34-.07-.1.15-.39.49-.48.59-.09.1-.18.11-.33.04-.9-.45-1.6-1.21-2.07-2.02-.04-.06-.01-.13.03-.19.03-.06.07-.15.1-.22.04-.08.06-.13.09-.19.03-.06.02-.12-.01-.19-.03-.07-.24-.58-.33-.8-.09-.2-.18-.17-.24-.17h-.2c-.07 0-.18.03-.28.14-.1.1-.39.38-.39.93s.4 1.08.45 1.15c.05.07 1.34 2.05 3.25 2.87.45.19.81.3 1.08.39.45.14.86.12 1.18.07.36-.05.89-.36 1.02-.71.13-.35.13-.65.09-.71-.04-.07-.16-.11-.31-.19z"/></svg>
+                          WhatsApp Chat
+                        </a>
+
+                        {/* Call Button */}
+                        <a 
+                          href="tel:+918585951111"
+                          className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition-colors text-white text-xs font-black uppercase tracking-wider shadow-sm"
+                        >
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          Call Expert
+                        </a>
+                      </div>
+                    </div>
+                  </motion.div>
                 )}
               </div>
             </motion.div>
