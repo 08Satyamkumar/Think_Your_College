@@ -714,7 +714,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           </div>
           {/* ROW 3: SLEEK SUB-HEADER RIBBON (News, Exams, Reviews etc) */}
           <div className="relative bg-slate-50 border-t border-b border-slate-200/80">
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-4 h-9 overflow-x-auto no-scrollbar scroll-smooth">
+            <div className="max-w-[1440px] mx-auto px-4 md:px-12 flex items-center justify-between gap-4 h-9 overflow-x-auto no-scrollbar scroll-smooth">
               {/* Left/Center side links */}
               <div className="flex items-center gap-1 md:gap-2 h-full min-w-max">
                 {/* Top Colleges */}

@@ -19,6 +19,11 @@
     --brand-orange-hover: hsl(22, 90%, 48%);
   }
 
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--background);
     color: var(--text-primary);
