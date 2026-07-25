@@ -335,71 +335,233 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   };
 
   // Engineering Mega Menu Sub-tabs structure matching screenshot
-  const engTabs: Record<string, { name: string; href: string }[]> = {
+  interface MegaSubCategory {
+    heading: string;
+    links: { name: string; href: string }[];
+  }
+
+  const engTabs: Record<string, MegaSubCategory[]> = {
     "Top Ranked Colleges": [
-      { name: "Top Engineering Colleges in India", href: "/colleges/ranking?stream=Engineering" },
-      { name: "Top Private Engineering Colleges in India", href: "/colleges/ranking?stream=Engineering&type=Private" },
-      { name: "Top IITs in India", href: "/colleges?stream=Engineering" },
-      { name: "Top NITs in India", href: "/colleges?stream=Engineering" },
-      { name: "Top Engineering Colleges in Bangalore", href: "/colleges?stream=Engineering&state=Karnataka" },
-      { name: "Top Engineering Colleges in Karnataka", href: "/colleges?stream=Engineering&state=Karnataka" },
-      { name: "Top Engineering Colleges in Hyderabad", href: "/colleges?stream=Engineering" },
-      { name: "Top Engineering Colleges in Pune", href: "/colleges?stream=Engineering&state=Maharashtra" },
-      { name: "Top Engineering Colleges in Mumbai", href: "/colleges?stream=Engineering&state=Maharashtra" },
-      { name: "Top Engineering Colleges in Maharashtra", href: "/colleges?stream=Engineering&state=Maharashtra" },
-      { name: "Top Engineering Colleges in Chennai", href: "/colleges?stream=Engineering" },
-      { name: "Top Engineering Colleges in Kerala", href: "/colleges?stream=Engineering" },
-      { name: "Top Engineering Colleges in Delhi", href: "/colleges?stream=Engineering&state=Delhi" },
-      { name: "Top Engineering Colleges in Telangana", href: "/colleges?stream=Engineering" },
-      { name: "Top Engineering Colleges in Gujarat", href: "/colleges?stream=Engineering&state=Gujarat" },
-      { name: "Top Engineering Colleges in West Bengal", href: "/colleges?stream=Engineering" },
+      {
+        heading: "Colleges By Rank",
+        links: [
+          { name: "Top B.Tech Colleges", href: "/colleges/ranking?stream=Engineering" },
+          { name: "Top Private B.Tech Colleges", href: "/colleges/ranking?stream=Engineering&type=Private" },
+          { name: "Top IITs in India", href: "/colleges?stream=Engineering" },
+          { name: "Top NITs in India", href: "/colleges?stream=Engineering" }
+        ]
+      },
+      {
+        heading: "Colleges By State",
+        links: [
+          { name: "Uttar Pradesh", href: "/colleges?stream=Engineering&state=Uttar-Pradesh" },
+          { name: "Karnataka", href: "/colleges?stream=Engineering&state=Karnataka" },
+          { name: "Maharashtra", href: "/colleges?stream=Engineering&state=Maharashtra" },
+          { name: "Delhi NCR", href: "/colleges?stream=Engineering&state=Delhi" },
+          { name: "Gujarat", href: "/colleges?stream=Engineering&state=Gujarat" }
+        ]
+      },
+      {
+        heading: "Colleges By City",
+        links: [
+          { name: "Bangalore", href: "/colleges?stream=Engineering&state=Karnataka" },
+          { name: "Pune", href: "/colleges?stream=Engineering&state=Maharashtra" },
+          { name: "Mumbai", href: "/colleges?stream=Engineering&state=Maharashtra" },
+          { name: "Noida", href: "/colleges?stream=Engineering&state=Uttar-Pradesh" },
+          { name: "Chennai", href: "/colleges?stream=Engineering" }
+        ]
+      }
     ],
     "Popular Courses": [
-      { name: "B.Tech / B.E.", href: "/colleges?stream=Engineering" },
-      { name: "M.Tech / M.E.", href: "/colleges?stream=Engineering" },
-      { name: "Diploma in Engineering", href: "/colleges?stream=Engineering" },
+      {
+        heading: "Undergraduate (UG)",
+        links: [
+          { name: "B.Tech / B.E.", href: "/colleges?stream=Engineering" },
+          { name: "B.Tech Lateral Entry", href: "/colleges?stream=Engineering" },
+          { name: "Integrated B.Tech+M.Tech", href: "/colleges?stream=Engineering" }
+        ]
+      },
+      {
+        heading: "Postgraduate (PG)",
+        links: [
+          { name: "M.Tech / M.E.", href: "/colleges?stream=Engineering" }
+        ]
+      },
+      {
+        heading: "Other Programs",
+        links: [
+          { name: "Diploma in Engineering", href: "/colleges?stream=Engineering" },
+          { name: "PG Diploma in B.Tech", href: "/colleges?stream=Engineering" }
+        ]
+      }
     ],
     "Popular Specializations": [
-      { name: "Computer Science Engineering (CSE)", href: "/colleges?stream=Engineering&search=Computer" },
-      { name: "Electronics & Comm Engineering (ECE)", href: "/colleges?stream=Engineering&search=Electronics" },
-      { name: "Mechanical Engineering (ME)", href: "/colleges?stream=Engineering&search=Mechanical" },
-      { name: "Civil Engineering (CE)", href: "/colleges?stream=Engineering&search=Civil" },
-      { name: "Information Technology (IT)", href: "/colleges?stream=Engineering&search=Information" },
+      {
+        heading: "Core Technical",
+        links: [
+          { name: "Computer Science (CSE)", href: "/colleges?stream=Engineering&search=Computer" },
+          { name: "Electronics & Comm (ECE)", href: "/colleges?stream=Engineering&search=Electronics" },
+          { name: "Information Technology (IT)", href: "/colleges?stream=Engineering&search=Information" }
+        ]
+      },
+      {
+        heading: "Traditional",
+        links: [
+          { name: "Mechanical Engineering (ME)", href: "/colleges?stream=Engineering&search=Mechanical" },
+          { name: "Civil Engineering (CE)", href: "/colleges?stream=Engineering&search=Civil" },
+          { name: "Electrical Engineering (EE)", href: "/colleges?stream=Engineering&search=Electrical" }
+        ]
+      },
+      {
+        heading: "Emerging Fields",
+        links: [
+          { name: "Artificial Intelligence & ML", href: "/colleges?stream=Engineering&search=Intelligence" },
+          { name: "Cyber Security & IoT", href: "/colleges?stream=Engineering&search=Security" },
+          { name: "Data Science & Analytics", href: "/colleges?stream=Engineering&search=Data" }
+        ]
+      }
     ],
     "Exams": [
-      { name: "JEE Main Predictor", href: "/predictor" },
-      { name: "JEE Advanced Predictor", href: "/predictor" },
-      { name: "GATE Exam Cutoffs", href: "/colleges" },
-      { name: "WBJEE Details", href: "/colleges" },
+      {
+        heading: "National Entrance",
+        links: [
+          { name: "JEE Main Predictor", href: "/predictor" },
+          { name: "JEE Advanced Predictor", href: "/predictor" },
+          { name: "GATE Cutoffs", href: "/colleges" }
+        ]
+      },
+      {
+        heading: "State Exams",
+        links: [
+          { name: "WBJEE Predictor", href: "/colleges" },
+          { name: "MHT CET Details", href: "/colleges" },
+          { name: "COMEDK Guidelines", href: "/colleges" }
+        ]
+      },
+      {
+        heading: "University Exams",
+        links: [
+          { name: "LPUNEST Details", href: "/colleges" },
+          { name: "VITEEE Schedule", href: "/colleges" },
+          { name: "BITSAT Predictor", href: "/colleges" }
+        ]
+      }
     ],
     "Colleges By Location": [
-      { name: "Colleges in Delhi NCR", href: "/colleges?state=Delhi" },
-      { name: "Colleges in Bangalore", href: "/colleges?state=Karnataka" },
-      { name: "Colleges in Pune", href: "/colleges?state=Maharashtra" },
-      { name: "Colleges in Patna (Bihar)", href: "/colleges?state=Bihar" },
-      { name: "Colleges in Mumbai", href: "/colleges?state=Maharashtra" },
+      {
+        heading: "North India",
+        links: [
+          { name: "Colleges in Delhi NCR", href: "/colleges?state=Delhi" },
+          { name: "Colleges in Noida / Gr Noida", href: "/colleges?state=Uttar-Pradesh" },
+          { name: "Colleges in Patna (Bihar)", href: "/colleges?state=Bihar" },
+          { name: "Colleges in Jaipur (Rajasthan)", href: "/colleges?state=Rajasthan" }
+        ]
+      },
+      {
+        heading: "South India",
+        links: [
+          { name: "Colleges in Bangalore", href: "/colleges?state=Karnataka" },
+          { name: "Colleges in Chennai", href: "/colleges" },
+          { name: "Colleges in Hyderabad", href: "/colleges" },
+          { name: "Colleges in Kochi (Kerala)", href: "/colleges" }
+        ]
+      },
+      {
+        heading: "West & East",
+        links: [
+          { name: "Colleges in Mumbai", href: "/colleges?state=Maharashtra" },
+          { name: "Colleges in Pune", href: "/colleges?state=Maharashtra" },
+          { name: "Colleges in Kolkata", href: "/colleges" }
+        ]
+      }
     ],
     "Compare Colleges": [
-      { name: "Compare Top B.Tech Colleges", href: "/compare" },
-      { name: "Compare IIT Delhi vs IIT Bombay", href: "/compare" },
+      {
+        heading: "B.Tech Compare",
+        links: [
+          { name: "Compare B.Tech Colleges", href: "/compare" },
+          { name: "Compare IITs vs NITs", href: "/compare" }
+        ]
+      },
+      {
+        heading: "Popular Comparisons",
+        links: [
+          { name: "IIT Delhi vs IIT Bombay", href: "/compare" },
+          { name: "NIT Trichy vs NIT Surathkal", href: "/compare" },
+          { name: "Galgotias vs Amity Noida", href: "/compare" }
+        ]
+      }
     ],
     "Rank Predictors": [
-      { name: "JEE Main Rank Predictor", href: "/predictor" },
-      { name: "JEE Advanced Rank Predictor", href: "/predictor" },
+      {
+        heading: "JEE Predictors",
+        links: [
+          { name: "JEE Main Rank Predictor", href: "/predictor" },
+          { name: "JEE Advanced Predictor", href: "/predictor" }
+        ]
+      },
+      {
+        heading: "State Predictors",
+        links: [
+          { name: "WBJEE College Predictor", href: "/predictor" },
+          { name: "MHT CET Predictor", href: "/predictor" }
+        ]
+      }
     ],
     "Percentile Predictors": [
-      { name: "JEE Main Percentile Predictor", href: "/predictor" },
+      {
+        heading: "JEE Percentile",
+        links: [
+          { name: "JEE Main Percentile Predictor", href: "/predictor" }
+        ]
+      },
+      {
+        heading: "Other Percentiles",
+        links: [
+          { name: "GATE Score Estimator", href: "/predictor" }
+        ]
+      }
     ],
     "College Predictors": [
-      { name: "B.Tech College Predictor", href: "/predictor" },
+      {
+        heading: "Engineering Predictors",
+        links: [
+          { name: "B.Tech College Predictor", href: "/predictor" },
+          { name: "M.Tech College Predictor", href: "/predictor" }
+        ]
+      }
     ],
     "College Reviews": [
-      { name: "Read IIT Delhi Reviews", href: "/colleges/iit-delhi" },
-      { name: "Read Galgotias Reviews", href: "/colleges/galgotias-university" },
+      {
+        heading: "Top Reviews",
+        links: [
+          { name: "Read IIT Delhi Reviews", href: "/colleges/iit-delhi" },
+          { name: "Read IIT Bombay Reviews", href: "/colleges/iit-bombay" }
+        ]
+      },
+      {
+        heading: "Popular Reviews",
+        links: [
+          { name: "Read Galgotias Reviews", href: "/colleges/galgotias-university" },
+          { name: "Read Amity Noida Reviews", href: "/colleges/amity-university" }
+        ]
+      }
     ],
     "Resources": [
-      { name: "Bihar Credit Card for B.Tech", href: "/credit-card" },
-      { name: "B.Tech Admission Guidelines", href: "/contact" },
+      {
+        heading: "Financial Support",
+        links: [
+          { name: "Bihar Student Credit Card", href: "/credit-card" },
+          { name: "B.Tech Engineering Scholarships", href: "/scholarship" }
+        ]
+      },
+      {
+        heading: "Admissions Guide",
+        links: [
+          { name: "B.Tech Admission Guidelines", href: "/contact" },
+          { name: "State Counseling Dates 2026", href: "/contact" }
+        ]
+      }
     ]
   };
 
@@ -799,7 +961,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu === "MBA" && (
                 <div 
-                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu("MBA")}
                 >
                   <motion.div
@@ -925,7 +1087,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <AnimatePresence>
               {activeMegaMenu === "ENGINEERING" && (
                 <div 
-                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[850px] z-50 pointer-events-auto"
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
                   onMouseEnter={() => setActiveMegaMenu("ENGINEERING")}
                 >
                   <motion.div
@@ -978,18 +1140,28 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                         {activeEngTab}
                       </h4>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 relative z-10">
-                        {engTabs[activeEngTab]?.map((link, idx) => (
-                          <Link
-                            key={idx}
-                            href={link.href}
-                            onClick={() => setActiveMegaMenu(null)}
-                            className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1 py-1 hover:translate-x-1 duration-200"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
-                            <span className="flex-1 line-clamp-1">{link.name}</span>
-                            <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
-                          </Link>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                        {engTabs[activeEngTab]?.map((subCat, idx) => (
+                          <div key={idx} className="space-y-3">
+                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-blue-600 border-b border-blue-100/50 pb-1 flex items-center gap-1">
+                              {subCat.heading}
+                            </h5>
+                            <ul className="space-y-2">
+                              {subCat.links.map((link, lIdx) => (
+                                <li key={lIdx}>
+                                  <Link
+                                    href={link.href}
+                                    onClick={() => setActiveMegaMenu(null)}
+                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                    <span className="flex-1 line-clamp-1">{link.name}</span>
+                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         ))}
                       </div>
                     </div>
