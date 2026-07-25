@@ -579,17 +579,17 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     <div className="min-h-screen bg-background text-text_primary flex flex-col font-sans transition-all duration-300">
       
       {/* SHIKSHA SCREENSHOT MATCHING DOUBLE-ROW HEADER */}
-      <header className="fixed top-0 left-0 right-0 bg-brand_header text-slate-800 z-40 shadow-md transition-colors backdrop-blur-md border-b border-amber-100/50">
+      <header className="fixed top-0 left-0 right-0 bg-brand_header text-white z-40 shadow-md transition-colors border-b border-white/10">
         
         {/* ROW 1: TOP ROW (Logo, Wide Search Bar, Login/Sign Up) */}
         <div className="h-16 max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
           
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-premium text-white shadow-sm">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-orange-600 shadow-sm">
               <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="font-outfit font-black text-base tracking-tight text-slate-950 hover:text-primary transition-colors uppercase">
+            <span className="font-outfit font-black text-base tracking-tight text-white hover:text-amber-100 transition-colors uppercase">
               Think Your College
             </span>
           </Link>
@@ -617,19 +617,19 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           {/* Right auth links */}
           <div className="hidden md:flex items-center gap-6 text-xs font-bold whitespace-nowrap">
             {user ? (
-              <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
+              <div className="flex items-center gap-3 pl-2 border-l border-white/20">
                 {/* Avatar circular badge */}
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center font-black text-xs shadow-sm uppercase">
+                <div className="w-8 h-8 rounded-full bg-white text-orange-600 flex items-center justify-center font-black text-xs shadow-sm uppercase">
                   {user.name.charAt(0)}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-slate-800 text-[10px] font-black tracking-wide leading-none">{user.name}</span>
+                  <span className="text-white text-[10px] font-black tracking-wide leading-none">{user.name}</span>
                   <button 
                     onClick={() => {
                       setUser(null);
                       localStorage.removeItem("tyc-user");
                     }}
-                    className="text-[9px] text-red-500 hover:text-red-600 font-extrabold uppercase tracking-widest text-left mt-1 hover:underline transition-all"
+                    className="text-[9px] text-yellow-200 hover:text-yellow-100 font-extrabold uppercase tracking-widest text-left mt-1 hover:underline transition-all"
                   >
                     Logout
                   </button>
@@ -641,15 +641,15 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                   onClick={() => setAuthModal({ open: true, mode: "login" })}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.96 }}
-                  className="text-slate-700 hover:text-primary font-bold transition-colors"
+                  className="text-white hover:text-amber-100 font-bold transition-colors"
                 >
                   Login
                 </motion.button>
                 <motion.button
                   onClick={() => setAuthModal({ open: true, mode: "signup" })}
-                  whileHover={{ scale: 1.05, boxShadow: "0 4px 18px rgba(249,115,22,0.35)" }}
+                  whileHover={{ scale: 1.05, boxShadow: "0 4px 18px rgba(255,255,255,0.2)" }}
                   whileTap={{ scale: 0.96 }}
-                  className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-[11px] tracking-wide shadow-sm shadow-orange-500/20 transition-all"
+                  className="px-4 py-1.5 rounded-lg bg-white text-orange-600 hover:bg-amber-50 font-black text-[11px] tracking-wide shadow-sm transition-all"
                 >
                   Sign Up
                 </motion.button>
@@ -661,7 +661,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           <div className="flex md:hidden items-center gap-3">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-slate-800 p-1"
+              className="text-white p-1"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -669,7 +669,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         </div>
 
         {/* ROW 2: SUB-NAVIGATION BAR (Dropdown Category Items) */}
-        <div className="relative border-t border-amber-100/50 bg-amber-50/30">
+        <div className="relative border-t border-white/10 bg-black/10">
           {/* Scrollable Row of Category Buttons */}
           <div className="overflow-x-auto no-scrollbar scroll-smooth">
             <div 
@@ -683,10 +683,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                 >
                   <button 
                     onClick={() => setActiveMegaMenu(activeMegaMenu === category ? null : category)}
-                    className="flex items-center gap-1 px-4 h-full text-[10px] font-black tracking-wider text-slate-700 hover:text-primary hover:bg-amber-100/30 transition-colors uppercase whitespace-nowrap"
+                    className="flex items-center gap-1 px-4 h-full text-[10px] font-black tracking-wider text-white/95 hover:text-white hover:bg-white/10 transition-colors uppercase whitespace-nowrap"
                   >
                     {category}
-                    <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${activeMegaMenu === category ? "rotate-180 text-primary" : ""}`} />
+                    <ChevronDown className={`w-3 h-3 text-white/60 transition-transform ${activeMegaMenu === category ? "rotate-180 text-white" : ""}`} />
                   </button>
                 </div>
               ))}
@@ -695,12 +695,12 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               <div className="h-full flex items-center">
                 <Link 
                   href="/scholarship"
-                  className="flex items-center gap-1.5 px-4 h-full text-[10px] font-black tracking-wider text-orange-600 hover:text-orange-700 hover:bg-orange-100/10 transition-colors uppercase whitespace-nowrap"
+                  className="flex items-center gap-1.5 px-4 h-full text-[10px] font-black tracking-wider text-yellow-300 hover:text-yellow-200 hover:bg-white/10 transition-colors uppercase whitespace-nowrap"
                 >
                   <span>Scholarship</span>
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-400"></span>
                   </span>
                 </Link>
               </div>
