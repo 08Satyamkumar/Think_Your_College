@@ -270,6 +270,15 @@ function CollegesListContent() {
   const [selectedSpecializations, setSelectedSpecializations] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("popularity");
   const [shortlisted, setShortlisted] = useState<string[]>([]);
+
+  // New filters states from GetMyUni screenshots
+  const [selectedProgramModes, setSelectedProgramModes] = useState<string[]>([]);
+  const [selectedOwnerships, setSelectedOwnerships] = useState<string[]>([]);
+  const [selectedExams, setSelectedExams] = useState<string[]>([]);
+  const [selectedCourseTypes, setSelectedCourseTypes] = useState<string[]>([]);
+  const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>([]);
+  const [selectedApprovals, setSelectedApprovals] = useState<string[]>([]);
+  const [selectedFeesRanges, setSelectedFeesRanges] = useState<string[]>([]);
   
   // Accordion open states
   const [accordionStates, setAccordionStates] = useState({
@@ -277,7 +286,14 @@ function CollegesListContent() {
     city: true,
     stream: true,
     course: true,
-    specialization: true
+    specialization: true,
+    programMode: false,
+    ownership: false,
+    exam: false,
+    courseType: false,
+    affiliation: false,
+    approval: false,
+    totalFees: false
   });
 
   // Local filter search options states
@@ -285,6 +301,27 @@ function CollegesListContent() {
   const [cityFilterSearch, setCityFilterSearch] = useState("");
   const [courseFilterSearch, setCourseFilterSearch] = useState("");
   const [specFilterSearch, setSpecFilterSearch] = useState("");
+  const [progSearch, setProgSearch] = useState("");
+  const [ownerSearch, setOwnerSearch] = useState("");
+  const [examSearch, setExamSearch] = useState("");
+  const [courseTypeSearch, setCourseTypeSearch] = useState("");
+  const [affSearch, setAffSearch] = useState("");
+  const [appSearch, setAppSearch] = useState("");
+  const [feesSearch, setFeesSearch] = useState("");
+
+  // Static options lists for UI checkboxes (GetMyUni match)
+  const programModeOptions = ["Offline", "Distance Education", "Online"];
+  const ownershipOptions = ["Private", "Public"];
+  const examOptions = ["JEE Main", "CAT", "NEET", "CMAT", "CLAT", "GATE"];
+  const courseTypeOptions = ["Bachelors", "Masters", "Doctorate", "Postgraduate Diploma"];
+  const affiliationOptions = [
+    "Anna University, Chennai", 
+    "JNTUH - Jawaharlal Nehru Technological University, Hyderabad",
+    "Mumbai University",
+    "Delhi University"
+  ];
+  const approvalOptions = ["AICTE", "UGC", "PCI", "MHRD"];
+  const feesRangeOptions = ["Less than 1 Lakh", "1 Lakh - 3 Lakhs", "3 Lakhs - 5 Lakhs", "More than 5 Lakhs"];
 
   // Read URL search params on mount
   useEffect(() => {
@@ -406,6 +443,20 @@ function CollegesListContent() {
       setSelectedCourses(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
     } else if (type === "specialization") {
       setSelectedSpecializations(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "programMode") {
+      setSelectedProgramModes(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "ownership") {
+      setSelectedOwnerships(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "exam") {
+      setSelectedExams(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "courseType") {
+      setSelectedCourseTypes(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "affiliation") {
+      setSelectedAffiliations(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "approval") {
+      setSelectedApprovals(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+    } else if (type === "feesRange") {
+      setSelectedFeesRanges(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
     }
   };
 
@@ -417,6 +468,13 @@ function CollegesListContent() {
     setSelectedStreams([]);
     setSelectedCourses([]);
     setSelectedSpecializations([]);
+    setSelectedProgramModes([]);
+    setSelectedOwnerships([]);
+    setSelectedExams([]);
+    setSelectedCourseTypes([]);
+    setSelectedAffiliations([]);
+    setSelectedApprovals([]);
+    setSelectedFeesRanges([]);
   };
 
   // Trigger admission modal on click of Apply Now/Brochure (opens globally handled modal)
@@ -506,6 +564,48 @@ function CollegesListContent() {
               <span key={sp} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {sp}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("specialization", sp)} />
+              </span>
+            ))}
+            {selectedProgramModes.map(pm => (
+              <span key={pm} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {pm}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("programMode", pm)} />
+              </span>
+            ))}
+            {selectedOwnerships.map(os => (
+              <span key={os} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {os}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("ownership", os)} />
+              </span>
+            ))}
+            {selectedExams.map(ex => (
+              <span key={ex} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {ex}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("exam", ex)} />
+              </span>
+            ))}
+            {selectedCourseTypes.map(ct => (
+              <span key={ct} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {ct}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("courseType", ct)} />
+              </span>
+            ))}
+            {selectedAffiliations.map(af => (
+              <span key={af} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {af}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("affiliation", af)} />
+              </span>
+            ))}
+            {selectedApprovals.map(ap => (
+              <span key={ap} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {ap}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("approval", ap)} />
+              </span>
+            ))}
+            {selectedFeesRanges.map(fr => (
+              <span key={fr} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                {fr}
+                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("feesRange", fr)} />
               </span>
             ))}
 
@@ -714,6 +814,272 @@ function CollegesListContent() {
                               className="accent-orange-500 rounded border-slate-300"
                             />
                             <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{spec}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* PROGRAM MODE FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, programMode: !p.programMode }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Program Mode
+                  {accordionStates.programMode ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.programMode && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={progSearch}
+                      onChange={(e) => setProgSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {programModeOptions
+                        .filter(opt => opt.toLowerCase().includes(progSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedProgramModes.includes(opt)}
+                              onChange={() => toggleFilter("programMode", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* OWNERSHIP FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, ownership: !p.ownership }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Ownership
+                  {accordionStates.ownership ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.ownership && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={ownerSearch}
+                      onChange={(e) => setOwnerSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {ownershipOptions
+                        .filter(opt => opt.toLowerCase().includes(ownerSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedOwnerships.includes(opt)}
+                              onChange={() => toggleFilter("ownership", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* EXAMS ACCEPTED FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, exam: !p.exam }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Exams Accepted
+                  {accordionStates.exam ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.exam && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={examSearch}
+                      onChange={(e) => setExamSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {examOptions
+                        .filter(opt => opt.toLowerCase().includes(examSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedExams.includes(opt)}
+                              onChange={() => toggleFilter("exam", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* COURSE TYPE FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, courseType: !p.courseType }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Course Type
+                  {accordionStates.courseType ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.courseType && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={courseTypeSearch}
+                      onChange={(e) => setCourseTypeSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {courseTypeOptions
+                        .filter(opt => opt.toLowerCase().includes(courseTypeSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedCourseTypes.includes(opt)}
+                              onChange={() => toggleFilter("courseType", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* AFFILIATED BY FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, affiliation: !p.affiliation }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Affiliated By
+                  {accordionStates.affiliation ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.affiliation && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={affSearch}
+                      onChange={(e) => setAffSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {affiliationOptions
+                        .filter(opt => opt.toLowerCase().includes(affSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedAffiliations.includes(opt)}
+                              onChange={() => toggleFilter("affiliation", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* APPROVALS FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, approval: !p.approval }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Approvals
+                  {accordionStates.approval ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.approval && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={appSearch}
+                      onChange={(e) => setAppSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {approvalOptions
+                        .filter(opt => opt.toLowerCase().includes(appSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedApprovals.includes(opt)}
+                              onChange={() => toggleFilter("approval", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* TOTAL FEES FILTER */}
+              <div className="border-t border-slate-100 pt-4 pb-2">
+                <button
+                  onClick={() => setAccordionStates(p => ({ ...p, totalFees: !p.totalFees }))}
+                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
+                >
+                  Total Fees
+                  {accordionStates.totalFees ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </button>
+                
+                {accordionStates.totalFees && (
+                  <div className="mt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={feesSearch}
+                      onChange={(e) => setFeesSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                      {feesRangeOptions
+                        .filter(opt => opt.toLowerCase().includes(feesSearch.toLowerCase()))
+                        .map(opt => (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedFeesRanges.includes(opt)}
+                              onChange={() => toggleFilter("feesRange", opt)}
+                              className="accent-orange-500 rounded border-slate-300"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
                           </label>
                         ))}
                     </div>
