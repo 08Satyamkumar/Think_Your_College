@@ -183,8 +183,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   // MBA Mega Menu Sub-tabs structure matching screenshot
   const mbaTabs: Record<string, { name: string; href: string }[]> = {
     "Top Ranked Colleges": [
-      { name: "Top MBA Colleges in India", href: "/colleges/ranking?stream=Management" },
-      { name: "Top Private MBA Colleges in India", href: "/colleges/ranking?stream=Management" },
+      { name: "Top MBA Colleges in India", href: "/colleges?stream=Management" },
+      { name: "Top Private MBA Colleges in India", href: "/colleges?stream=Management" },
       { name: "Top MBA Colleges in Bangalore", href: "/colleges?stream=Management&state=Karnataka" },
       { name: "Top MBA Colleges in Mumbai", href: "/colleges?stream=Management&state=Maharashtra" },
       { name: "Top MBA Colleges in Pune", href: "/colleges?stream=Management&state=Maharashtra" },
@@ -296,13 +296,13 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       { name: "Other MBA colleges >", href: "/colleges?stream=Management" },
     ],
     "Resources": [
-      { name: "MBA Alumni Salary Data", href: "/colleges/ranking?stream=Management" },
+      { name: "MBA Alumni Salary Data", href: "/colleges?stream=Management" },
       { name: "Ask a Question", href: "/contact?subject=QnA" },
       { name: "Discussions", href: "/contact?subject=Discussion" },
       { name: "MBA News", href: "/predictor" },
       { name: "MBA Articles", href: "/predictor" },
       { name: "Apply to colleges", href: "/colleges?stream=Management" },
-      { name: "Trends in MBA", href: "/colleges/ranking?stream=Management" },
+      { name: "Trends in MBA", href: "/colleges?stream=Management" },
     ]
   };
 
@@ -345,8 +345,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       {
         heading: "Colleges By Rank",
         links: [
-          { name: "Top B.Tech Colleges", href: "/colleges/ranking?stream=Engineering" },
-          { name: "Top Private B.Tech Colleges", href: "/colleges/ranking?stream=Engineering&type=Private" },
+          { name: "Top B.Tech Colleges", href: "/colleges?stream=Engineering" },
+          { name: "Top Private B.Tech Colleges", href: "/colleges?stream=Engineering&type=Private" },
           { name: "Top IITs in India", href: "/colleges?stream=Engineering" },
           { name: "Top NITs in India", href: "/colleges?stream=Engineering" }
         ]
