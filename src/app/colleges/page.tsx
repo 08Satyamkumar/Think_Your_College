@@ -6,9 +6,8 @@ import Link from "next/link";
 import { 
   Search, 
   MapPin, 
+  Map,
   Star, 
-  ChevronDown, 
-  ChevronUp, 
   X, 
   Sparkles,
   Award,
@@ -19,7 +18,12 @@ import {
   Filter,
   MessageSquare,
   HelpCircle,
-  FileText
+  FileText,
+  Layers,
+  Compass,
+  GraduationCap,
+  Link as LinkIcon,
+  CheckCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -34,15 +38,19 @@ interface College {
   specializations: string[];
   exams: string[];
   feeRange: string;
-  fees: number; // numeric for sorting (in LPA or relative scale)
+  fees: number; // numeric for sorting/filtering (in Lakhs per year)
   rating: number;
   nirfRank?: number;
-  type: string; // Public / Private
+  type: string; // Public / Private (Ownership)
   description: string;
   logoText: string;
   slug: string;
   accreditation: string;
   image?: string;
+  programMode: string; // Offline / Distance / Online
+  courseTypes: string[]; // Bachelors / Masters / Doctorate / Postgraduate Diploma
+  affiliation: string; // University name
+  approvals: string[]; // AICTE / UGC / PCI / MHRD
 }
 
 const mockColleges: College[] = [
@@ -65,7 +73,11 @@ const mockColleges: College[] = [
     logoText: "IITM",
     slug: "iit-madras",
     accreditation: "A++ Grade",
-    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Masters"],
+    affiliation: "Delhi University", // dummy DU match for filtering
+    approvals: ["AICTE", "UGC"]
   },
   {
     id: "2",
@@ -86,7 +98,11 @@ const mockColleges: College[] = [
     logoText: "IITD",
     slug: "iit-delhi",
     accreditation: "A++ Grade",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Masters"],
+    affiliation: "Delhi University",
+    approvals: ["AICTE", "UGC"]
   },
   {
     id: "3",
@@ -107,7 +123,11 @@ const mockColleges: College[] = [
     logoText: "IIMA",
     slug: "iim-ahmedabad",
     accreditation: "EQUIS Accredited",
-    image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Masters", "Postgraduate Diploma"],
+    affiliation: "Mumbai University",
+    approvals: ["UGC", "MHRD"]
   },
   {
     id: "4",
@@ -128,7 +148,11 @@ const mockColleges: College[] = [
     logoText: "GU",
     slug: "galgotias-university",
     accreditation: "NAAC A+",
-    image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Masters"],
+    affiliation: "Anna University, Chennai",
+    approvals: ["AICTE", "UGC"]
   },
   {
     id: "5",
@@ -149,7 +173,11 @@ const mockColleges: College[] = [
     logoText: "SIBM",
     slug: "sibm-pune",
     accreditation: "NAAC A++",
-    image: "https://images.unsplash.com/photo-1541829019-259276a7f013?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1541829019-259276a7f013?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Masters", "Postgraduate Diploma"],
+    affiliation: "Mumbai University",
+    approvals: ["UGC"]
   },
   {
     id: "6",
@@ -170,7 +198,11 @@ const mockColleges: College[] = [
     logoText: "RVCE",
     slug: "rv-college-of-engineering",
     accreditation: "AICTE Approved",
-    image: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Masters"],
+    affiliation: "JNTUH - Jawaharlal Nehru Technological University, Hyderabad",
+    approvals: ["AICTE", "UGC"]
   },
   {
     id: "7",
@@ -183,7 +215,7 @@ const mockColleges: College[] = [
     specializations: ["General Medicine", "Pediatrics", "Surgery"],
     exams: ["NEET"],
     feeRange: "₹1,628/Yr",
-    fees: 0.02, // very low fees
+    fees: 0.02,
     rating: 4.9,
     nirfRank: 1,
     type: "Public",
@@ -191,7 +223,11 @@ const mockColleges: College[] = [
     logoText: "AIIMS",
     slug: "aiims-delhi",
     accreditation: "MCI Approved",
-    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Doctorate"],
+    affiliation: "Delhi University",
+    approvals: ["UGC", "MHRD"]
   },
   {
     id: "8",
@@ -212,7 +248,11 @@ const mockColleges: College[] = [
     logoText: "KMC",
     slug: "kmc-manipal",
     accreditation: "NAAC A++",
-    image: "https://images.unsplash.com/photo-1551076805-e18690237571?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1551076805-e18690237571?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Masters"],
+    affiliation: "Anna University, Chennai",
+    approvals: ["UGC", "PCI"]
   },
   {
     id: "9",
@@ -233,7 +273,11 @@ const mockColleges: College[] = [
     logoText: "NID",
     slug: "nid-ahmedabad",
     accreditation: "Autonomous",
-    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Masters"],
+    affiliation: "Mumbai University",
+    approvals: ["UGC", "MHRD"]
   },
   {
     id: "10",
@@ -254,7 +298,11 @@ const mockColleges: College[] = [
     logoText: "NLSIU",
     slug: "nlsiu-bangalore",
     accreditation: "BCI Approved",
-    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=60",
+    programMode: "Offline",
+    courseTypes: ["Bachelors", "Doctorate"],
+    affiliation: "Delhi University",
+    approvals: ["UGC", "MHRD"]
   }
 ];
 
@@ -279,22 +327,6 @@ function CollegesListContent() {
   const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>([]);
   const [selectedApprovals, setSelectedApprovals] = useState<string[]>([]);
   const [selectedFeesRanges, setSelectedFeesRanges] = useState<string[]>([]);
-  
-  // Accordion open states
-  const [accordionStates, setAccordionStates] = useState({
-    state: true,
-    city: true,
-    stream: true,
-    course: true,
-    specialization: true,
-    programMode: false,
-    ownership: false,
-    exam: false,
-    courseType: false,
-    affiliation: false,
-    approval: false,
-    totalFees: false
-  });
 
   // Local filter search options states
   const [stateFilterSearch, setStateFilterSearch] = useState("");
@@ -357,7 +389,7 @@ function CollegesListContent() {
     };
   }, []);
 
-  // Filtered colleges list
+  // Filtered colleges list - 100% Dynamic Filtering Logic
   const filteredColleges = useMemo(() => {
     let result = [...mockColleges];
 
@@ -406,9 +438,52 @@ function CollegesListContent() {
       );
     }
 
+    // Filter by Program Mode (Dynamic)
+    if (selectedProgramModes.length > 0) {
+      result = result.filter(c => selectedProgramModes.includes(c.programMode));
+    }
+
+    // Filter by Ownership (Dynamic)
+    if (selectedOwnerships.length > 0) {
+      result = result.filter(c => selectedOwnerships.includes(c.type));
+    }
+
+    // Filter by Exams Accepted (Dynamic)
+    if (selectedExams.length > 0) {
+      result = result.filter(c => c.exams.some(exam => selectedExams.includes(exam)));
+    }
+
+    // Filter by Course Type (Dynamic)
+    if (selectedCourseTypes.length > 0) {
+      result = result.filter(c => c.courseTypes.some(ct => selectedCourseTypes.includes(ct)));
+    }
+
+    // Filter by Affiliation (Dynamic)
+    if (selectedAffiliations.length > 0) {
+      result = result.filter(c => selectedAffiliations.includes(c.affiliation));
+    }
+
+    // Filter by Approvals (Dynamic)
+    if (selectedApprovals.length > 0) {
+      result = result.filter(c => c.approvals.some(app => selectedApprovals.includes(app)));
+    }
+
+    // Filter by Fees Range (Dynamic)
+    if (selectedFeesRanges.length > 0) {
+      result = result.filter(c => {
+        const fee = c.fees; // numeric fees scale
+        return selectedFeesRanges.some(range => {
+          if (range === "Less than 1 Lakh") return fee < 1.0;
+          if (range === "1 Lakh - 3 Lakhs") return fee >= 1.0 && fee <= 3.0;
+          if (range === "3 Lakhs - 5 Lakhs") return fee > 3.0 && fee <= 5.0;
+          if (range === "More than 5 Lakhs") return fee > 5.0;
+          return false;
+        });
+      });
+    }
+
     // Sorting logic
     if (sortBy === "popularity") {
-      // Sort by NIRF Rank ascending (smaller is better). Colleges without ranks go to the bottom.
       result.sort((a, b) => (a.nirfRank || 999) - (b.nirfRank || 999));
     } else if (sortBy === "fees_asc") {
       result.sort((a, b) => a.fees - b.fees);
@@ -419,7 +494,22 @@ function CollegesListContent() {
     }
 
     return result;
-  }, [searchTerm, selectedStates, selectedCities, selectedStreams, selectedCourses, selectedSpecializations, sortBy]);
+  }, [
+    searchTerm, 
+    selectedStates, 
+    selectedCities, 
+    selectedStreams, 
+    selectedCourses, 
+    selectedSpecializations, 
+    selectedProgramModes,
+    selectedOwnerships,
+    selectedExams,
+    selectedCourseTypes,
+    selectedAffiliations,
+    selectedApprovals,
+    selectedFeesRanges,
+    sortBy
+  ]);
 
   // Read More inline toggle helper
   const [expandedDescriptions, setExpandedDescriptions] = useState<string[]>([]);
@@ -480,7 +570,6 @@ function CollegesListContent() {
   // Trigger admission modal on click of Apply Now/Brochure (opens globally handled modal)
   const openInquiryModal = (stream: string) => {
     if (typeof window !== "undefined") {
-      // Dispatch custom event to trigger popup registration in LayoutWrapper
       const event = new CustomEvent("openAdmissionAlert", { detail: { stream } });
       window.dispatchEvent(event);
     }
@@ -521,7 +610,7 @@ function CollegesListContent() {
         </div>
 
         {/* ACTIVE FILTERS TAGS */}
-        {(selectedStates.length > 0 || selectedCities.length > 0 || selectedStreams.length > 0 || selectedCourses.length > 0 || selectedSpecializations.length > 0 || searchTerm !== "") && (
+        {(selectedStates.length > 0 || selectedCities.length > 0 || selectedStreams.length > 0 || selectedCourses.length > 0 || selectedSpecializations.length > 0 || selectedProgramModes.length > 0 || selectedOwnerships.length > 0 || selectedExams.length > 0 || selectedCourseTypes.length > 0 || selectedAffiliations.length > 0 || selectedApprovals.length > 0 || selectedFeesRanges.length > 0 || searchTerm !== "") && (
           <div className="flex flex-wrap gap-2 items-center mb-6 bg-orange-50/50 border border-orange-100 p-3 rounded-2xl">
             <span className="text-[9px] uppercase font-black text-orange-600 tracking-wider">Active Filters:</span>
             
@@ -566,42 +655,49 @@ function CollegesListContent() {
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("specialization", sp)} />
               </span>
             ))}
+
             {selectedProgramModes.map(pm => (
               <span key={pm} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {pm}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("programMode", pm)} />
               </span>
             ))}
+
             {selectedOwnerships.map(os => (
               <span key={os} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {os}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("ownership", os)} />
               </span>
             ))}
+
             {selectedExams.map(ex => (
               <span key={ex} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {ex}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("exam", ex)} />
               </span>
             ))}
+
             {selectedCourseTypes.map(ct => (
               <span key={ct} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {ct}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("courseType", ct)} />
               </span>
             ))}
+
             {selectedAffiliations.map(af => (
               <span key={af} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {af}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("affiliation", af)} />
               </span>
             ))}
+
             {selectedApprovals.map(ap => (
               <span key={ap} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {ap}
                 <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("approval", ap)} />
               </span>
             ))}
+
             {selectedFeesRanges.map(fr => (
               <span key={fr} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 {fr}
@@ -621,8 +717,8 @@ function CollegesListContent() {
         {/* MAIN CONTAINER */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* LEFT SIDEBAR: FILTERS CARD */}
-          <aside className="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm space-y-6">
+          {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
+          <aside className="lg:col-span-4 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none">
             
             {/* SEARCH BOX */}
             <div className="space-y-2">
@@ -639,452 +735,380 @@ function CollegesListContent() {
               </div>
             </div>
 
-            {/* FILTER SECTIONS ACCORDION */}
-            <div className="space-y-4 pt-4 border-t border-slate-100">
+            {/* FILTER SECTIONS (Non-collapsible, hamesha uge hue) */}
+            <div className="space-y-6 pt-4 border-t border-slate-100">
               
               {/* STATE FILTER */}
-              <div className="border-b border-slate-100 pb-4">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, state: !p.state }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <MapPin className="w-3.5 h-3.5 text-orange-500" />
                   State
-                  {accordionStates.state ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.state && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={stateFilterSearch}
-                      onChange={(e) => setStateFilterSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {filterOptions.states
-                        .filter(s => s.toLowerCase().includes(stateFilterSearch.toLowerCase()))
-                        .map(state => (
-                          <label key={state} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedStates.includes(state)}
-                              onChange={() => toggleFilter("state", state)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{state}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={stateFilterSearch}
+                    onChange={(e) => setStateFilterSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {filterOptions.states
+                      .filter(s => s.toLowerCase().includes(stateFilterSearch.toLowerCase()))
+                      .map(state => (
+                        <label key={state} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedStates.includes(state)}
+                            onChange={() => toggleFilter("state", state)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{state}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* CITY FILTER */}
-              <div className="border-b border-slate-100 pb-4">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, city: !p.city }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <Map className="w-3.5 h-3.5 text-orange-500" />
                   City
-                  {accordionStates.city ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.city && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={cityFilterSearch}
-                      onChange={(e) => setCityFilterSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {filterOptions.cities
-                        .filter(c => c.toLowerCase().includes(cityFilterSearch.toLowerCase()))
-                        .map(city => (
-                          <label key={city} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedCities.includes(city)}
-                              onChange={() => toggleFilter("city", city)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{city}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={cityFilterSearch}
+                    onChange={(e) => setCityFilterSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {filterOptions.cities
+                      .filter(c => c.toLowerCase().includes(cityFilterSearch.toLowerCase()))
+                      .map(city => (
+                        <label key={city} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedCities.includes(city)}
+                            onChange={() => toggleFilter("city", city)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{city}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* STREAM FILTER */}
-              <div className="border-b border-slate-100 pb-4">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, stream: !p.stream }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <Layers className="w-3.5 h-3.5 text-orange-500" />
                   Stream / Category
-                  {accordionStates.stream ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.stream && (
-                  <div className="mt-3 space-y-2 pt-1">
-                    {filterOptions.streams.map(stream => (
-                      <label key={stream} className="flex items-center gap-2 cursor-pointer group">
-                        <input
-                          type="checkbox"
-                          checked={selectedStreams.includes(stream)}
-                          onChange={() => toggleFilter("stream", stream)}
-                          className="accent-orange-500 rounded border-slate-300"
-                        />
-                        <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{stream}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
+                </h5>
+                <div className="space-y-2 pt-1">
+                  {filterOptions.streams.map(stream => (
+                    <label key={stream} className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={selectedStreams.includes(stream)}
+                        onChange={() => toggleFilter("stream", stream)}
+                        className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                      />
+                      <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{stream}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
 
               {/* COURSES FILTER */}
-              <div className="border-b border-slate-100 pb-4">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, course: !p.course }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <BookOpen className="w-3.5 h-3.5 text-orange-500" />
                   Courses Offered
-                  {accordionStates.course ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.course && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={courseFilterSearch}
-                      onChange={(e) => setCourseFilterSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {filterOptions.courses
-                        .filter(c => c.toLowerCase().includes(courseFilterSearch.toLowerCase()))
-                        .map(course => (
-                          <label key={course} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedCourses.includes(course)}
-                              onChange={() => toggleFilter("course", course)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{course}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={courseFilterSearch}
+                    onChange={(e) => setCourseFilterSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {filterOptions.courses
+                      .filter(c => c.toLowerCase().includes(courseFilterSearch.toLowerCase()))
+                      .map(course => (
+                        <label key={course} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedCourses.includes(course)}
+                            onChange={() => toggleFilter("course", course)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{course}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* SPECIALIZATION FILTER */}
-              <div className="pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, specialization: !p.specialization }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <Sparkles className="w-3.5 h-3.5 text-orange-500" />
                   Specialization
-                  {accordionStates.specialization ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.specialization && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={specFilterSearch}
-                      onChange={(e) => setSpecFilterSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {filterOptions.specializations
-                        .filter(sp => sp.toLowerCase().includes(specFilterSearch.toLowerCase()))
-                        .map(spec => (
-                          <label key={spec} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedSpecializations.includes(spec)}
-                              onChange={() => toggleFilter("specialization", spec)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{spec}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={specFilterSearch}
+                    onChange={(e) => setSpecFilterSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {filterOptions.specializations
+                      .filter(sp => sp.toLowerCase().includes(specFilterSearch.toLowerCase()))
+                      .map(spec => (
+                        <label key={spec} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedSpecializations.includes(spec)}
+                            onChange={() => toggleFilter("specialization", spec)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{spec}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* PROGRAM MODE FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, programMode: !p.programMode }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <Compass className="w-3.5 h-3.5 text-orange-500" />
                   Program Mode
-                  {accordionStates.programMode ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.programMode && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={progSearch}
-                      onChange={(e) => setProgSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {programModeOptions
-                        .filter(opt => opt.toLowerCase().includes(progSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedProgramModes.includes(opt)}
-                              onChange={() => toggleFilter("programMode", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={progSearch}
+                    onChange={(e) => setProgSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {programModeOptions
+                      .filter(opt => opt.toLowerCase().includes(progSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedProgramModes.includes(opt)}
+                            onChange={() => toggleFilter("programMode", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* OWNERSHIP FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, ownership: !p.ownership }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <Award className="w-3.5 h-3.5 text-orange-500" />
                   Ownership
-                  {accordionStates.ownership ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.ownership && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={ownerSearch}
-                      onChange={(e) => setOwnerSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {ownershipOptions
-                        .filter(opt => opt.toLowerCase().includes(ownerSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedOwnerships.includes(opt)}
-                              onChange={() => toggleFilter("ownership", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={ownerSearch}
+                    onChange={(e) => setOwnerSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {ownershipOptions
+                      .filter(opt => opt.toLowerCase().includes(ownerSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedOwnerships.includes(opt)}
+                            onChange={() => toggleFilter("ownership", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* EXAMS ACCEPTED FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, exam: !p.exam }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <FileText className="w-3.5 h-3.5 text-orange-500" />
                   Exams Accepted
-                  {accordionStates.exam ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.exam && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={examSearch}
-                      onChange={(e) => setExamSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {examOptions
-                        .filter(opt => opt.toLowerCase().includes(examSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedExams.includes(opt)}
-                              onChange={() => toggleFilter("exam", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={examSearch}
+                    onChange={(e) => setExamSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {examOptions
+                      .filter(opt => opt.toLowerCase().includes(examSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedExams.includes(opt)}
+                            onChange={() => toggleFilter("exam", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* COURSE TYPE FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, courseType: !p.courseType }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <GraduationCap className="w-3.5 h-3.5 text-orange-500" />
                   Course Type
-                  {accordionStates.courseType ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.courseType && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={courseTypeSearch}
-                      onChange={(e) => setCourseTypeSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {courseTypeOptions
-                        .filter(opt => opt.toLowerCase().includes(courseTypeSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedCourseTypes.includes(opt)}
-                              onChange={() => toggleFilter("courseType", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={courseTypeSearch}
+                    onChange={(e) => setCourseTypeSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {courseTypeOptions
+                      .filter(opt => opt.toLowerCase().includes(courseTypeSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedCourseTypes.includes(opt)}
+                            onChange={() => toggleFilter("courseType", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* AFFILIATED BY FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, affiliation: !p.affiliation }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <LinkIcon className="w-3.5 h-3.5 text-orange-500" />
                   Affiliated By
-                  {accordionStates.affiliation ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.affiliation && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={affSearch}
-                      onChange={(e) => setAffSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {affiliationOptions
-                        .filter(opt => opt.toLowerCase().includes(affSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedAffiliations.includes(opt)}
-                              onChange={() => toggleFilter("affiliation", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={affSearch}
+                    onChange={(e) => setAffSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {affiliationOptions
+                      .filter(opt => opt.toLowerCase().includes(affSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedAffiliations.includes(opt)}
+                            onChange={() => toggleFilter("affiliation", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* APPROVALS FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, approval: !p.approval }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="border-b border-slate-100 pb-5">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <CheckCircle className="w-3.5 h-3.5 text-orange-500" />
                   Approvals
-                  {accordionStates.approval ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.approval && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={appSearch}
-                      onChange={(e) => setAppSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {approvalOptions
-                        .filter(opt => opt.toLowerCase().includes(appSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedApprovals.includes(opt)}
-                              onChange={() => toggleFilter("approval", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={appSearch}
+                    onChange={(e) => setAppSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {approvalOptions
+                      .filter(opt => opt.toLowerCase().includes(appSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedApprovals.includes(opt)}
+                            onChange={() => toggleFilter("approval", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* TOTAL FEES FILTER */}
-              <div className="border-t border-slate-100 pt-4 pb-2">
-                <button
-                  onClick={() => setAccordionStates(p => ({ ...p, totalFees: !p.totalFees }))}
-                  className="w-full flex items-center justify-between font-outfit font-extrabold text-slate-700 text-xs uppercase tracking-wider text-left"
-                >
+              <div className="pb-2">
+                <h5 className="font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <DollarSign className="w-3.5 h-3.5 text-orange-500" />
                   Total Fees
-                  {accordionStates.totalFees ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                </button>
-                
-                {accordionStates.totalFees && (
-                  <div className="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Search options..."
-                      value={feesSearch}
-                      onChange={(e) => setFeesSearch(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                      {feesRangeOptions
-                        .filter(opt => opt.toLowerCase().includes(feesSearch.toLowerCase()))
-                        .map(opt => (
-                          <label key={opt} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="checkbox"
-                              checked={selectedFeesRanges.includes(opt)}
-                              onChange={() => toggleFilter("feesRange", opt)}
-                              className="accent-orange-500 rounded border-slate-300"
-                            />
-                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">{opt}</span>
-                          </label>
-                        ))}
-                    </div>
+                </h5>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={feesSearch}
+                    onChange={(e) => setFeesSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                    {feesRangeOptions
+                      .filter(opt => opt.toLowerCase().includes(feesSearch.toLowerCase()))
+                      .map(opt => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedFeesRanges.includes(opt)}
+                            onChange={() => toggleFilter("feesRange", opt)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{opt}</span>
+                        </label>
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
             </div>
@@ -1129,7 +1153,7 @@ function CollegesListContent() {
                               
                               <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-bold text-slate-500 mt-1">
                                 <span className="flex items-center gap-1 text-slate-600">
-                                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                                  <MapPin className="w-3.5 h-3.5 text-slate-405" />
                                   {college.location}
                                 </span>
                                 <span>•</span>
@@ -1173,7 +1197,7 @@ function CollegesListContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-[#fcfdfe] border border-slate-100/80 rounded-2xl text-center">
                           <div className="space-y-1 border-r border-slate-100/60 last:border-0">
                             <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <BookOpen className="w-3.5 h-3.5 text-slate-405" />
+                              <BookOpen className="w-3.5 h-3.5 text-slate-400 animate-pulse" />
                               Courses
                             </p>
                             <p className="font-outfit font-black text-[11px] text-slate-700 uppercase">
@@ -1183,7 +1207,7 @@ function CollegesListContent() {
                           
                           <div className="space-y-1 border-r border-slate-100/60 last:border-0">
                             <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <Sparkles className="w-3.5 h-3.5 text-slate-405" />
+                              <Sparkles className="w-3.5 h-3.5 text-slate-400" />
                               Exams Accepted
                             </p>
                             <p className="font-outfit font-black text-[11px] text-slate-700">
@@ -1193,7 +1217,7 @@ function CollegesListContent() {
 
                           <div className="space-y-1 border-r border-slate-100/60 last:border-0">
                             <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <DollarSign className="w-3.5 h-3.5 text-slate-405" />
+                              <DollarSign className="w-3.5 h-3.5 text-slate-400" />
                               Tuition Fees
                             </p>
                             <p className="font-outfit font-black text-[11px] text-orange-600">
@@ -1203,7 +1227,7 @@ function CollegesListContent() {
 
                           <div className="space-y-1 last:border-0">
                             <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <Award className="w-3.5 h-3.5 text-slate-405" />
+                              <Award className="w-3.5 h-3.5 text-slate-400" />
                               Accreditation
                             </p>
                             <p className="font-outfit font-black text-[11px] text-slate-600 uppercase">
