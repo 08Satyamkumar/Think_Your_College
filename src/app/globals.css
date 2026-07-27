@@ -71,3 +71,27 @@
   }
 }
 
+
+/* Custom Scrollbar for Filter Lists */
+.custom-filter-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.custom-filter-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-filter-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-filter-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-filter-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #f97316;
+}

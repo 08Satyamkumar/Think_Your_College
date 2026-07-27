@@ -390,6 +390,59 @@ function CollegesListContent() {
     { name: "Andaman and Nicobar Islands", count: 3 }
   ];
 
+  const cityOptions = [
+    { name: "Pune", count: 473 },
+    { name: "Delhi", count: 393 },
+    { name: "Hyderabad", count: 390 },
+    { name: "Mumbai", count: 381 },
+    { name: "Chennai", count: 345 },
+    { name: "Kolkata", count: 314 },
+    { name: "Jaipur", count: 244 },
+    { name: "Coimbatore", count: 191 },
+    { name: "Bhopal", count: 177 },
+    { name: "Ahmedabad", count: 175 },
+    { name: "Lucknow", count: 157 },
+    { name: "Bhubaneswar", count: 152 },
+    { name: "Indore", count: 137 },
+    { name: "Nagpur", count: 127 },
+    { name: "Ghaziabad", count: 117 },
+    { name: "Noida", count: 117 },
+    { name: "Dehradun", count: 108 },
+    { name: "Thiruvananthapuram", count: 108 },
+    { name: "Meerut", count: 101 },
+    { name: "Patna", count: 88 },
+    { name: "Visakhapatnam", count: 86 },
+    { name: "Guntur", count: 84 },
+    { name: "Gurgaon", count: 84 },
+    { name: "Mangalore", count: 83 },
+    { name: "Greater Noida", count: 79 },
+    { name: "Thrissur", count: 75 },
+    { name: "Ernakulam", count: 74 },
+    { name: "Mohali", count: 73 },
+    { name: "Kanpur", count: 72 },
+    { name: "Guwahati", count: 67 },
+    { name: "Kottayam", count: 67 },
+    { name: "Ludhiana", count: 67 },
+    { name: "Ranga Reddy", count: 64 },
+    { name: "Surat", count: 64 },
+    { name: "Aurangabad", count: 62 },
+    { name: "Nashik", count: 62 },
+    { name: "Tiruchirappalli", count: 62 },
+    { name: "Vadodara", count: 62 },
+    { name: "Gwalior", count: 61 },
+    { name: "Raipur", count: 59 },
+    { name: "Faridabad", count: 58 },
+    { name: "Namakkal", count: 58 },
+    { name: "Udaipur", count: 58 },
+    { name: "Jammu", count: 55 },
+    { name: "Chandigarh", count: 54 },
+    { name: "Mysore", count: 54 },
+    { name: "Patiala", count: 54 },
+    { name: "Malappuram", count: 53 },
+    { name: "Allahabad", count: 52 },
+    { name: "Kanyakumari", count: 52 }
+  ];
+
   // Read URL search params on mount
   useEffect(() => {
     const streamParam = searchParams.get("stream");
@@ -787,18 +840,18 @@ function CollegesListContent() {
                     onChange={(e) => setStateFilterSearch(e.target.value)}
                     className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
                   />
-                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
+                  <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                     {stateOptions
                       .filter(s => s.name.toLowerCase().includes(stateFilterSearch.toLowerCase()))
                       .map(state => (
-                        <label key={state.name} className="flex items-center gap-2 cursor-pointer group select-none">
+                        <label key={state.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
                           <input
                             type="checkbox"
                             checked={selectedStates.includes(state.name)}
                             onChange={() => toggleFilter("state", state.name)}
-                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                           />
-                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                             {state.name}
                             <span className="text-slate-400 font-medium ml-1">({state.count})</span>
                           </span>
@@ -822,18 +875,21 @@ function CollegesListContent() {
                     onChange={(e) => setCityFilterSearch(e.target.value)}
                     className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
                   />
-                  <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                    {filterOptions.cities
-                      .filter(c => c.toLowerCase().includes(cityFilterSearch.toLowerCase()))
+                  <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                    {cityOptions
+                      .filter(c => c.name.toLowerCase().includes(cityFilterSearch.toLowerCase()))
                       .map(city => (
-                        <label key={city} className="flex items-center gap-2 cursor-pointer group">
+                        <label key={city.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
                           <input
                             type="checkbox"
-                            checked={selectedCities.includes(city)}
-                            onChange={() => toggleFilter("city", city)}
-                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
+                            checked={selectedCities.includes(city.name)}
+                            onChange={() => toggleFilter("city", city.name)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                           />
-                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{city}</span>
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                            {city.name}
+                            <span className="text-slate-400 font-medium ml-1">({city.count})</span>
+                          </span>
                         </label>
                       ))}
                   </div>
