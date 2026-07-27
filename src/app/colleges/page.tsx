@@ -355,6 +355,41 @@ function CollegesListContent() {
   const approvalOptions = ["AICTE", "UGC", "PCI", "MHRD"];
   const feesRangeOptions = ["Less than 1 Lakh", "1 Lakh - 3 Lakhs", "3 Lakhs - 5 Lakhs", "More than 5 Lakhs"];
 
+  const stateOptions = [
+    { name: "Maharashtra", count: 1698 },
+    { name: "Tamil Nadu", count: 1299 },
+    { name: "Uttar Pradesh", count: 1294 },
+    { name: "Karnataka", count: 1214 },
+    { name: "Kerala", count: 864 },
+    { name: "West Bengal", count: 684 },
+    { name: "Telangana", count: 655 },
+    { name: "Gujarat", count: 629 },
+    { name: "Haryana", count: 588 },
+    { name: "Andhra Pradesh", count: 574 },
+    { name: "Punjab", count: 574 },
+    { name: "Madhya Pradesh", count: 553 },
+    { name: "Rajasthan", count: 541 },
+    { name: "Delhi NCR", count: 410 },
+    { name: "Odisha", count: 329 },
+    { name: "Uttarakhand", count: 217 },
+    { name: "Bihar", count: 207 },
+    { name: "Assam", count: 194 },
+    { name: "Chhattisgarh", count: 163 },
+    { name: "Jharkhand", count: 123 },
+    { name: "Himachal Pradesh", count: 108 },
+    { name: "Jammu and Kashmir", count: 108 },
+    { name: "Puducherry", count: 74 },
+    { name: "Goa", count: 39 },
+    { name: "Meghalaya", count: 27 },
+    { name: "Tripura", count: 22 },
+    { name: "Sikkim", count: 21 },
+    { name: "Manipur", count: 20 },
+    { name: "Nagaland", count: 19 },
+    { name: "Arunachal Pradesh", count: 18 },
+    { name: "Mizoram", count: 9 },
+    { name: "Andaman and Nicobar Islands", count: 3 }
+  ];
+
   // Read URL search params on mount
   useEffect(() => {
     const streamParam = searchParams.get("stream");
@@ -753,17 +788,20 @@ function CollegesListContent() {
                     className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
                   />
                   <div className="max-h-40 overflow-y-auto space-y-2 no-scrollbar pr-1 pt-1">
-                    {filterOptions.states
-                      .filter(s => s.toLowerCase().includes(stateFilterSearch.toLowerCase()))
+                    {stateOptions
+                      .filter(s => s.name.toLowerCase().includes(stateFilterSearch.toLowerCase()))
                       .map(state => (
-                        <label key={state} className="flex items-center gap-2 cursor-pointer group">
+                        <label key={state.name} className="flex items-center gap-2 cursor-pointer group select-none">
                           <input
                             type="checkbox"
-                            checked={selectedStates.includes(state)}
-                            onChange={() => toggleFilter("state", state)}
+                            checked={selectedStates.includes(state.name)}
+                            onChange={() => toggleFilter("state", state.name)}
                             className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
                           />
-                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{state}</span>
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">
+                            {state.name}
+                            <span className="text-slate-400 font-medium ml-1">({state.count})</span>
+                          </span>
                         </label>
                       ))}
                   </div>
