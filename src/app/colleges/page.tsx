@@ -340,6 +340,7 @@ function CollegesListContent() {
   const [affSearch, setAffSearch] = useState("");
   const [appSearch, setAppSearch] = useState("");
   const [feesSearch, setFeesSearch] = useState("");
+  const [streamFilterSearch, setStreamFilterSearch] = useState("");
 
   // Static options lists for UI checkboxes (GetMyUni match)
   const programModeOptions = ["Offline", "Distance Education", "Online"];
@@ -441,6 +442,30 @@ function CollegesListContent() {
     { name: "Malappuram", count: 53 },
     { name: "Allahabad", count: 52 },
     { name: "Kanyakumari", count: 52 }
+  ];
+
+  const streamOptions = [
+    { name: "Arts", count: 4581 },
+    { name: "Management", count: 5481 },
+    { name: "Engineering", count: 4140 },
+    { name: "Science", count: 4281 },
+    { name: "Commerce", count: 3096 },
+    { name: "Computer", count: 3151 },
+    { name: "Education", count: 2485 },
+    { name: "Medical", count: 865 },
+    { name: "Pharmacy", count: 926 },
+    { name: "Law", count: 755 },
+    { name: "Architecture", count: 415 },
+    { name: "Paramedical", count: 344 },
+    { name: "Design", count: 331 },
+    { name: "Dental", count: 285 },
+    { name: "Hotel Management", count: 342 },
+    { name: "Mass Communication", count: 308 },
+    { name: "Vocational Courses", count: 226 },
+    { name: "Veterinary", count: 50 },
+    { name: "Animation", count: 12 },
+    { name: "Agriculture", count: 3 },
+    { name: "Aviation", count: 3 }
   ];
 
   // Read URL search params on mount
@@ -902,18 +927,32 @@ function CollegesListContent() {
                   <Layers className="w-3.5 h-3.5 text-orange-500" />
                   Stream / Category
                 </h5>
-                <div className="space-y-2 pt-1">
-                  {filterOptions.streams.map(stream => (
-                    <label key={stream} className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={selectedStreams.includes(stream)}
-                        onChange={() => toggleFilter("stream", stream)}
-                        className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5"
-                      />
-                      <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 transition-colors">{stream}</span>
-                    </label>
-                  ))}
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search options..."
+                    value={streamFilterSearch}
+                    onChange={(e) => setStreamFilterSearch(e.target.value)}
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                  />
+                  <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                    {streamOptions
+                      .filter(s => s.name.toLowerCase().includes(streamFilterSearch.toLowerCase()))
+                      .map(stream => (
+                        <label key={stream.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                          <input
+                            type="checkbox"
+                            checked={selectedStreams.includes(stream.name)}
+                            onChange={() => toggleFilter("stream", stream.name)}
+                            className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                          />
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                            {stream.name}
+                            <span className="text-slate-400 font-medium ml-1">({stream.count})</span>
+                          </span>
+                        </label>
+                      ))}
+                  </div>
                 </div>
               </div>
 
