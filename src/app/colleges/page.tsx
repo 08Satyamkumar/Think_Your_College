@@ -526,7 +526,15 @@ function CollegesListContent() {
     { name: "VTUEEE", count: 1 },
     { name: "JENPAUH", count: 1 },
   ];
-  const courseTypeOptions = ["Bachelors", "Masters", "Doctorate", "Postgraduate Diploma"];
+  const courseTypeOptions = [
+    { name: "Bachelors", count: 11140 },
+    { name: "Masters", count: 8297 },
+    { name: "Doctorate", count: 2055 },
+    { name: "Postgraduate Diploma", count: 1758 },
+    { name: "Diploma", count: 627 },
+    { name: "Certificate", count: 100 },
+    { name: "Postgraduate Certificate", count: 64 }
+  ];
   const affiliationOptions = [
     "Anna University, Chennai", 
     "JNTUH - Jawaharlal Nehru Technological University, Hyderabad",
@@ -6828,16 +6836,19 @@ function CollegesListContent() {
                   />
                   <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                     {courseTypeOptions
-                      .filter(opt => opt.toLowerCase().includes(courseTypeSearch.toLowerCase()))
+                      .filter(opt => opt.name.toLowerCase().includes(courseTypeSearch.toLowerCase()))
                       .map(opt => (
-                        <label key={opt} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                        <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
                           <input
                             type="checkbox"
-                            checked={selectedCourseTypes.includes(opt)}
-                            onChange={() => toggleFilter("courseType", opt)}
+                            checked={selectedCourseTypes.includes(opt.name)}
+                            onChange={() => toggleFilter("courseType", opt.name)}
                             className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                           />
-                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">{opt}</span>
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                            {opt.name}
+                            <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                          </span>
                         </label>
                       ))}
                   </div>
