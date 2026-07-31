@@ -735,8 +735,21 @@ function CollegesListContent() {
     { name: "Sushant University", count: 3 },
     { name: "Tamil Nadu Dr Ambedkar Law University [TNDALU]", count: 3 },
   ];
-  const approvalOptions = ["AICTE", "UGC", "PCI", "MHRD"];
-  const feesRangeOptions = ["Less than 1 Lakh", "1 Lakh - 3 Lakhs", "3 Lakhs - 5 Lakhs", "More than 5 Lakhs"];
+  const approvalOptions = [
+    { name: "AICTE", count: 5005 },
+    { name: "UGC", count: 2171 },
+    { name: "PCI", count: 316 },
+    { name: "MHRD", count: 154 },
+    { name: "KNC", count: 22 },
+    { name: "CCH", count: 1 }
+  ];
+  const feesRangeOptions = [
+    { name: "Less than 1 Lakh", count: 1866 },
+    { name: "1 to 2 Lakhs", count: 1596 },
+    { name: "2 to 3 Lakhs", count: 1054 },
+    { name: "3 to 5 Lakhs", count: 1095 },
+    { name: "More than 5 Lakhs", count: 1053 }
+  ];
 
   const stateOptions = [
     { name: "Maharashtra", count: 1698 },
@@ -7100,16 +7113,19 @@ function CollegesListContent() {
                   />
                   <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                     {approvalOptions
-                      .filter(opt => opt.toLowerCase().includes(appSearch.toLowerCase()))
+                      .filter(opt => opt.name.toLowerCase().includes(appSearch.toLowerCase()))
                       .map(opt => (
-                        <label key={opt} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                        <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
                           <input
                             type="checkbox"
-                            checked={selectedApprovals.includes(opt)}
-                            onChange={() => toggleFilter("approval", opt)}
+                            checked={selectedApprovals.includes(opt.name)}
+                            onChange={() => toggleFilter("approval", opt.name)}
                             className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                           />
-                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">{opt}</span>
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                            {opt.name}
+                            <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                          </span>
                         </label>
                       ))}
                   </div>
@@ -7132,16 +7148,19 @@ function CollegesListContent() {
                   />
                   <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                     {feesRangeOptions
-                      .filter(opt => opt.toLowerCase().includes(feesSearch.toLowerCase()))
+                      .filter(opt => opt.name.toLowerCase().includes(feesSearch.toLowerCase()))
                       .map(opt => (
-                        <label key={opt} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                        <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
                           <input
                             type="checkbox"
-                            checked={selectedFeesRanges.includes(opt)}
-                            onChange={() => toggleFilter("feesRange", opt)}
+                            checked={selectedFeesRanges.includes(opt.name)}
+                            onChange={() => toggleFilter("feesRange", opt.name)}
                             className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                           />
-                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">{opt}</span>
+                          <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                            {opt.name}
+                            <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                          </span>
                         </label>
                       ))}
                   </div>
