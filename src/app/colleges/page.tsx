@@ -6700,7 +6700,7 @@ function CollegesListContent() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
-          <aside className="lg:col-span-5 lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none custom-filter-scrollbar">
+          <aside className="lg:col-span-4 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none">
             
             {/* SEARCH BOX */}
             <div className="space-y-2">
@@ -7408,7 +7408,7 @@ function CollegesListContent() {
           </aside>
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
-          <main className="lg:col-span-7 lg:h-[3200px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
+          <main className="lg:col-span-8 lg:h-[3200px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
             <AnimatePresence mode="popLayout">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
@@ -7427,7 +7427,7 @@ function CollegesListContent() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_15px_35px_rgba(249,115,22,0.07)] hover:scale-[1.002] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-4 p-4 md:py-4 md:px-5"
+                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_15px_35px_rgba(249,115,22,0.07)] hover:scale-[1.002] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-4 p-4 md:py-4 md:px-5 max-w-[720px] lg:mx-0 w-full"
                     >
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
