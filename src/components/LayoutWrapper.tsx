@@ -149,7 +149,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const [alertTermsAgree, setAlertTermsAgree] = useState(false);
   const [isAlertSubscribed, setIsAlertSubscribed] = useState(false);
 
-  const handleAlertSubscribe = (e: React.FormEvent) => {
+  const handleAlertSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!alertName.trim() || !alertEmail.trim() || !alertPhone.trim()) return;
 
@@ -166,6 +166,23 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
     const existingLeads = JSON.parse(localStorage.getItem("tyc-leads") || "[]");
     localStorage.setItem("tyc-leads", JSON.stringify([...existingLeads, newLead]));
+
+    try {
+      await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: alertName,
+          phone: alertPhone,
+          course_interest: `${alertStream} (${alertLevel})`,
+          college_interest: "General Inquiry (Global Popup)"
+        })
+      });
+    } catch (err) {
+      console.error("Failed to send lead to Supabase:", err);
+    }
 
     setIsAlertSubscribed(true);
   };
