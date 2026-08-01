@@ -6697,10 +6697,10 @@ function CollegesListContent() {
         )}
 
         {/* MAIN CONTAINER */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start lg:h-[calc(100vh-170px)] lg:overflow-hidden">
           
           {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
-          <aside className="lg:col-span-4 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none">
+          <aside className="lg:col-span-4 lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none custom-filter-scrollbar">
             
             {/* SEARCH BOX */}
             <div className="space-y-2">
@@ -7408,7 +7408,7 @@ function CollegesListContent() {
           </aside>
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
-          <main className="lg:col-span-8 lg:max-h-[calc(100vh-160px)] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
+          <main className="lg:col-span-8 lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
             <AnimatePresence mode="popLayout">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
@@ -7428,15 +7428,18 @@ function CollegesListContent() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      className="group bg-white border border-slate-200/80 hover:border-orange-500/35 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(249,115,22,0.06)] transition-all duration-350 flex flex-col"
+                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(249,115,22,0.08)] hover:scale-[1.005] transition-all duration-300 flex flex-col relative"
                     >
+                      {/* Premium AI Glowing Accent Line on Hover */}
+                      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      
                       <div className="p-6 md:p-7 space-y-5">
                         
                         {/* CARD HEADER ROW */}
                         <div className="flex items-start gap-4 justify-between relative">
                           <div className="flex items-center gap-3.5">
                             {/* LOGO BOX */}
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200/60 flex items-center justify-center text-xs font-black text-slate-800 uppercase tracking-widest shadow-sm">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-xs font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
                               {college.logoText}
                             </div>
                             
@@ -7450,20 +7453,20 @@ function CollegesListContent() {
                               </Link>
                               
                               <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-bold text-slate-500 mt-1">
-                                <span className="flex items-center gap-1 text-slate-600">
-                                  <MapPin className="w-3.5 h-3.5 text-slate-405" />
+                                <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
+                                  <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
                                   {college.location}
                                 </span>
                                 <span>•</span>
-                                <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wider font-extrabold">{college.type}</span>
+                                <span className="bg-slate-100 group-hover:bg-orange-50/50 text-slate-700 group-hover:text-orange-700 px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wider font-extrabold transition-all border border-transparent group-hover:border-orange-100/50">{college.type}</span>
                                 <span>•</span>
-                                <span className="flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-100/50 px-2 py-0.5 rounded-md text-[9px] font-extrabold">
+                                <span className="flex items-center gap-1 bg-amber-50 group-hover:bg-amber-100/40 text-amber-700 border border-amber-100/50 px-2 py-0.5 rounded-md text-[9px] font-extrabold transition-all">
                                   ★ {college.rating}
                                 </span>
                                 {college.nirfRank && (
                                   <>
                                     <span>•</span>
-                                    <span className="bg-orange-50 text-orange-700 border border-orange-100/50 px-2 py-0.5 rounded-md text-[9px] font-extrabold">
+                                    <span className="bg-orange-50 group-hover:bg-orange-100/50 text-orange-700 border border-orange-100/50 px-2 py-0.5 rounded-md text-[9px] font-extrabold transition-all">
                                       #{college.nirfRank} NIRF
                                     </span>
                                   </>
@@ -7473,7 +7476,7 @@ function CollegesListContent() {
                           </div>
 
                           {/* ACCREDITATION BADGE */}
-                          <div className="hidden sm:block absolute top-0 right-0 bg-slate-50 text-slate-500 border border-slate-200/60 px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider">
+                          <div className="hidden sm:block absolute top-0 right-0 bg-slate-50 group-hover:bg-orange-50/30 text-slate-500 group-hover:text-orange-700 border border-slate-200/60 group-hover:border-orange-100/50 px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all">
                             {college.accreditation}
                           </div>
                         </div>
