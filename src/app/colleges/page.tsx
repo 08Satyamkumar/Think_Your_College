@@ -6558,7 +6558,7 @@ function CollegesListContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] pt-32 pb-16 md:pt-40">
+    <div className="min-h-screen bg-[#f8f9fa] pt-24 pb-8 md:pt-28">
       <div className="max-w-[1240px] mx-auto px-4 md:px-6">
         
         {/* BREADCRUMBS & COUNT HEADER */}
@@ -7408,7 +7408,7 @@ function CollegesListContent() {
           </aside>
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
-          <main className="lg:col-span-8 lg:max-h-[calc(100vh-220px)] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
+          <main className="lg:col-span-8 lg:max-h-[calc(100vh-160px)] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
             <AnimatePresence mode="popLayout">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
