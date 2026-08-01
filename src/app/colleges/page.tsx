@@ -7419,7 +7419,6 @@ function CollegesListContent() {
                 filteredColleges.map((college) => {
                   const isExpanded = expandedDescriptions.includes(college.id);
                   const isShortlisted = shortlisted.includes(college.id);
-
                   return (
                     <motion.div
                       layout
@@ -7428,155 +7427,153 @@ function CollegesListContent() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(249,115,22,0.08)] hover:scale-[1.005] transition-all duration-300 flex flex-col relative"
+                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_15px_35px_rgba(249,115,22,0.07)] hover:scale-[1.005] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-6 p-5 md:p-6"
                     >
-                      {/* Premium AI Glowing Accent Line on Hover */}
+                      {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      
-                      <div className="p-6 md:p-7 space-y-5">
-                        
-                        {/* CARD HEADER ROW */}
-                        <div className="flex items-start gap-4 justify-between relative">
-                          <div className="flex items-center gap-3.5">
-                            {/* LOGO BOX */}
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-xs font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
-                              {college.logoText}
-                            </div>
-                            
-                            {/* TITLE & METADATA */}
-                            <div>
-                              <Link 
-                                href={`/colleges/${college.slug}`}
-                                className="font-outfit font-black text-sm md:text-base text-slate-800 hover:text-orange-500 hover:underline leading-snug transition-colors line-clamp-1"
-                              >
-                                {college.name}
-                              </Link>
-                              
-                              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-bold text-slate-500 mt-1">
-                                <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
-                                  <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
-                                  {college.location}
-                                </span>
-                                <span>•</span>
-                                <span className="bg-slate-100 group-hover:bg-orange-50/50 text-slate-700 group-hover:text-orange-700 px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wider font-extrabold transition-all border border-transparent group-hover:border-orange-100/50">{college.type}</span>
-                                <span>•</span>
-                                <span className="flex items-center gap-1 bg-amber-50 group-hover:bg-amber-100/40 text-amber-700 border border-amber-100/50 px-2 py-0.5 rounded-md text-[9px] font-extrabold transition-all">
-                                  ★ {college.rating}
-                                </span>
-                                {college.nirfRank && (
-                                  <>
-                                    <span>•</span>
-                                    <span className="bg-orange-50 group-hover:bg-orange-100/50 text-orange-700 border border-orange-100/50 px-2 py-0.5 rounded-md text-[9px] font-extrabold transition-all">
-                                      #{college.nirfRank} NIRF
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </div>
 
-                          {/* ACCREDITATION BADGE */}
-                          <div className="hidden sm:block absolute top-0 right-0 bg-slate-50 group-hover:bg-orange-50/30 text-slate-500 group-hover:text-orange-700 border border-slate-200/60 group-hover:border-orange-100/50 px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all">
+                      {/* LEFT PANEL: LOGO & RANKING BADGES */}
+                      <div className="col-span-12 lg:col-span-2 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-100 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
+                        {/* Logo and Ranking Group */}
+                        <div className="flex items-center lg:flex-col gap-3 lg:gap-2.5 text-center">
+                          {/* Logo Box */}
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-sm font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
+                            {college.logoText}
+                          </div>
+                          
+                          {/* Rank indicator (Shiksha style) */}
+                          {college.nirfRank ? (
+                            <div className="text-left lg:text-center">
+                              <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
+                                #{college.nirfRank}
+                              </span>
+                              <span className="block text-[8px] font-black text-orange-600 uppercase tracking-widest">
+                                NIRF Rank
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="text-left lg:text-center">
+                              <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
+                                ★ {college.rating}
+                              </span>
+                              <span className="block text-[8px] font-black text-amber-600 uppercase tracking-widest">
+                                Rating
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Mobile view Rating/NIRF fallback badge */}
+                        <div className="lg:hidden flex items-center gap-2">
+                          <span className="bg-amber-50 text-amber-700 border border-amber-100/50 px-2 py-0.5 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5">
+                            ★ {college.rating}
+                          </span>
+                          <span className="bg-orange-50 text-orange-700 border border-orange-100/50 px-2 py-0.5 rounded-lg text-[9px] font-extrabold">
                             {college.accreditation}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* CENTER PANEL: COLLEGE DETAILS (Shiksha + GetMyUni style hybrid) */}
+                      <div className="col-span-12 lg:col-span-7 flex flex-col space-y-3 mt-4 lg:mt-0">
+                        {/* Title and Location */}
+                        <div className="space-y-1">
+                          <Link 
+                            href={`/colleges/${college.slug}`}
+                            className="font-outfit font-black text-sm md:text-base text-slate-800 hover:text-orange-500 hover:underline leading-snug transition-colors line-clamp-1"
+                          >
+                            {college.name}
+                          </Link>
+                          
+                          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold text-slate-500">
+                            <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
+                              <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
+                              {college.location}
+                            </span>
+                            <span>•</span>
+                            <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[8px] uppercase tracking-wider font-extrabold">{college.type}</span>
                           </div>
                         </div>
 
-                        {/* DESCRIPTION */}
-                        <div>
-                          <p className={`text-xs text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}>
-                            {college.description}
-                          </p>
-                          <button
-                            onClick={() => toggleDescription(college.id)}
-                            className="text-[10px] font-black text-orange-600 hover:text-orange-700 uppercase tracking-wider mt-1.5 hover:underline"
-                          >
-                            {isExpanded ? "Collapse Description" : "... Read More"}
-                          </button>
-                        </div>
+                        {/* Short Description */}
+                        <p className={`text-[11px] text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}>
+                          {college.description}
+                        </p>
 
-                        {/* STATS MATRIX GRID */}
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-[#fcfdfe] border border-slate-100/80 rounded-2xl text-center">
-                          <div className="space-y-1 border-r border-slate-100/60 last:border-0">
-                            <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <BookOpen className="w-3.5 h-3.5 text-slate-400 animate-pulse" />
-                              Courses
-                            </p>
-                            <p className="font-outfit font-black text-[11px] text-slate-700 uppercase">
+                        {/* Metadata Grid (GetMyUni inspired, custom modern border box) */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-slate-50/50 border border-slate-100/80 rounded-2xl text-left select-none">
+                          {/* Courses */}
+                          <div className="space-y-0.5">
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Courses</p>
+                            <p className="font-outfit font-black text-[10px] text-slate-700 uppercase line-clamp-1">
                               {college.courses.join(", ")}
                             </p>
                           </div>
-                          
-                          <div className="space-y-1 border-r border-slate-100/60 last:border-0">
-                            <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <Sparkles className="w-3.5 h-3.5 text-slate-400" />
-                              Exams Accepted
-                            </p>
-                            <p className="font-outfit font-black text-[11px] text-slate-700">
+
+                          {/* Exams */}
+                          <div className="space-y-0.5">
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Exams Accepted</p>
+                            <p className="font-outfit font-black text-[10px] text-slate-700 line-clamp-1">
                               {college.exams.join(", ")}
                             </p>
                           </div>
 
-                          <div className="space-y-1 border-r border-slate-100/60 last:border-0">
-                            <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <DollarSign className="w-3.5 h-3.5 text-slate-400" />
-                              Tuition Fees
-                            </p>
-                            <p className="font-outfit font-black text-[11px] text-orange-600">
+                          {/* Fees */}
+                          <div className="space-y-0.5">
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Tuition Fees</p>
+                            <p className="font-outfit font-black text-[10px] text-orange-600 line-clamp-1">
                               {college.feeRange}
                             </p>
                           </div>
 
-                          <div className="space-y-1 last:border-0">
-                            <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest flex items-center justify-center gap-1">
-                              <Award className="w-3.5 h-3.5 text-slate-400" />
-                              Accreditation
-                            </p>
-                            <p className="font-outfit font-black text-[11px] text-slate-600 uppercase">
+                          {/* Accreditation */}
+                          <div className="space-y-0.5">
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Accreditation</p>
+                            <p className="font-outfit font-black text-[10px] text-slate-600 uppercase line-clamp-1">
                               {college.accreditation}
                             </p>
                           </div>
                         </div>
-
                       </div>
 
-                      {/* BOTTOM ACTION BUTTONS */}
-                      <div className="bg-slate-50/50 border-t border-slate-100/80 px-6 py-4 flex items-center justify-between gap-4">
-                        {/* Acc badge for mobile layout */}
-                        <div className="sm:hidden bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-wider">
-                          {college.accreditation}
-                        </div>
+                      {/* RIGHT PANEL: ACTIONS CTA (Stacked Vertically on Desktop) */}
+                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-3 lg:pl-4 lg:border-l lg:border-slate-100 mt-4 lg:mt-0 w-full">
+                        {/* Read More button as secondary details trigger */}
+                        <button
+                          onClick={() => toggleDescription(college.id)}
+                          className="hidden lg:block text-[9px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest hover:underline transition-colors mr-auto"
+                        >
+                          {isExpanded ? "Hide Details" : "Show Details"}
+                        </button>
 
-                        <div className="flex items-center gap-2.5 ml-auto w-full sm:w-auto">
-                          {/* Shortlist Toggle */}
-                          <button
-                            onClick={() => {
-                              if (isShortlisted) {
-                                setShortlisted(prev => prev.filter(id => id !== college.id));
-                              } else {
-                                setShortlisted(prev => [...prev, college.id]);
-                              }
-                            }}
-                            className={`flex items-center justify-center gap-1.5 px-4 py-2 border rounded-xl text-xs font-black uppercase tracking-wider transition-all w-1/2 sm:w-auto ${
-                              isShortlisted 
-                                ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
-                                : "bg-white border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
-                            }`}
-                          >
-                            <Heart className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`} />
-                            {isShortlisted ? "Shortlisted" : "Shortlist"}
-                          </button>
+                        {/* Shortlist Toggle */}
+                        <button
+                          onClick={() => {
+                            if (isShortlisted) {
+                              setShortlisted(prev => prev.filter(id => id !== college.id));
+                            } else {
+                              setShortlisted(prev => [...prev, college.id]);
+                            }
+                          }}
+                          className={`flex items-center justify-center gap-1.5 px-4 py-2.5 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
+                            isShortlisted 
+                              ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
+                              : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                          }`}
+                        >
+                          <Heart className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`} />
+                          {isShortlisted ? "Shortlisted" : "Shortlist"}
+                        </button>
 
-                          {/* Brochure CTA (Triggers inquiry/alerts popup) */}
-                          <button
-                            onClick={() => openInquiryModal(college.stream)}
-                            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer"
-                          >
-                            <FileText className="w-3.5 h-3.5" />
-                            Apply / Brochure
-                          </button>
-                        </div>
+                        {/* Apply / Brochure CTA */}
+                        <button
+                          onClick={() => openInquiryModal(college.stream)}
+                          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          Apply / Brochure
+                        </button>
                       </div>
-
                     </motion.div>
                   );
                 })
