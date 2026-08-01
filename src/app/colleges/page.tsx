@@ -7408,7 +7408,7 @@ function CollegesListContent() {
           </aside>
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
-          <main className="lg:col-span-8 lg:h-[1350px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
+          <main className="lg:col-span-8 lg:h-[2000px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
             <AnimatePresence mode="popLayout">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
