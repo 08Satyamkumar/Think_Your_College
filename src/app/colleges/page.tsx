@@ -6558,7 +6558,7 @@ function CollegesListContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] pt-24 pb-8 md:pt-28">
+    <div className="min-h-screen bg-[#f8f9fa] pt-32 pb-16 md:pt-40">
       <div className="max-w-[1240px] mx-auto px-4 md:px-6">
         
         {/* BREADCRUMBS & COUNT HEADER */}
@@ -6697,10 +6697,10 @@ function CollegesListContent() {
         )}
 
         {/* MAIN CONTAINER */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start lg:h-[calc(100vh-170px)] lg:overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
-          <aside className="lg:col-span-4 lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none custom-filter-scrollbar">
+          <aside className="lg:col-span-4 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none">
             
             {/* SEARCH BOX */}
             <div className="space-y-2">
@@ -7408,7 +7408,7 @@ function CollegesListContent() {
           </aside>
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
-          <main className="lg:col-span-8 lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
+          <main className="lg:col-span-8 lg:h-[1100px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
             <AnimatePresence mode="popLayout">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
