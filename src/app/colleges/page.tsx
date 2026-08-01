@@ -6700,7 +6700,7 @@ function CollegesListContent() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
-          <aside className="lg:col-span-4 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none">
+          <aside className="lg:col-span-4 lg:sticky lg:top-[120px] lg:max-h-[calc(100vh-165px)] lg:overflow-y-auto bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-6 select-none custom-filter-scrollbar">
             
             {/* SEARCH BOX */}
             <div className="space-y-2">
