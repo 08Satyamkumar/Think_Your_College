@@ -6422,127 +6422,76 @@ function CollegesListContent() {
     };
   }, []);
 
-  // Filtered colleges list - 100% Dynamic Filtering Logic
-  const filteredColleges = useMemo(() => {
-    let result = [...mockColleges];
+  const [collegesList, setCollegesList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-    // Search term matching name, location, courses or streams
-    if (searchTerm.trim() !== "") {
-      const q = searchTerm.toLowerCase();
-      result = result.filter(c => 
-        c.name.toLowerCase().includes(q) || 
-        c.location.toLowerCase().includes(q) ||
-        c.stream.toLowerCase().includes(q)
-      );
-    }
+  // Fetch colleges from API based on active filters
+  useEffect(() => {
+    const fetchColleges = async () => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams();
+        queryParams.append("page", page.toString());
+        queryParams.append("limit", "12");
+        if (searchTerm.trim()) queryParams.append("search", searchTerm);
+        if (selectedStates.length > 0) queryParams.append("state", selectedStates.join(","));
+        if (selectedCities.length > 0) queryParams.append("city", selectedCities.join(","));
+        if (selectedOwnerships.length > 0) queryParams.append("ownership", selectedOwnerships.join(","));
+        if (selectedExams.length > 0) queryParams.append("exam", selectedExams.join(","));
 
-    // Filter by State
-    if (selectedStates.length > 0) {
-      result = result.filter(c => 
-        selectedStates.some(state => c.state.toLowerCase() === state.toLowerCase())
-      );
-    }
+        const res = await fetch(`/api/colleges?${queryParams.toString()}`);
+        const data = await res.json();
+        
+        if (data.colleges) {
+          // Map database format to layout structure
+          const mapped = data.colleges.map((c: any) => {
+            const examsArr = c.exams_accepted ? c.exams_accepted.split(",").map((e: any) => e.trim()) : [];
+            const logo = c.name.split(" ").map((w: any) => w[0]).join("").substring(0, 3).toUpperCase();
+            return {
+              id: c.id,
+              name: c.name,
+              location: c.location,
+              state: c.state,
+              city: c.city,
+              stream: "Engineering", // fallback
+              courses: [c.courses_count || "Courses"],
+              specializations: [],
+              exams: examsArr.length > 0 ? examsArr : ["None"],
+              feeRange: c.tuition_fees || "N/A",
+              fees: 0,
+              rating: parseFloat(c.rating) || 4.2,
+              nirfRank: c.nirf_rank && c.nirf_rank !== "N/A" ? parseInt(c.nirf_rank.replace(/[^0-9]/g, "")) : undefined,
+              type: c.ownership || "Private",
+              description: c.description || "",
+              logoText: logo || "COL",
+              slug: c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+              accreditation: "AICTE Approved"
+            };
+          });
+          setCollegesList(mapped);
+          setTotalPages(data.pages || 1);
+          setTotalCount(data.total || 0);
+        }
+      } catch (err) {
+        console.error("Error fetching colleges:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchColleges();
+  }, [page, searchTerm, selectedStates, selectedCities, selectedOwnerships, selectedExams, sortBy]);
 
-    // Filter by City
-    if (selectedCities.length > 0) {
-      result = result.filter(c => 
-        selectedCities.some(city => c.city.toLowerCase() === city.toLowerCase())
-      );
-    }
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, selectedStates, selectedCities, selectedOwnerships, selectedExams, sortBy]);
 
-    // Filter by Stream
-    if (selectedStreams.length > 0) {
-      result = result.filter(c => 
-        selectedStreams.some(stream => c.stream.toLowerCase() === stream.toLowerCase())
-      );
-    }
-
-    // Filter by Course
-    if (selectedCourses.length > 0) {
-      result = result.filter(c => 
-        c.courses.some(course => selectedCourses.includes(course))
-      );
-    }
-
-    // Filter by Specialization
-    if (selectedSpecializations.length > 0) {
-      result = result.filter(c => 
-        c.specializations.some(s => selectedSpecializations.includes(s))
-      );
-    }
-
-    // Filter by Program Mode (Dynamic)
-    if (selectedProgramModes.length > 0) {
-      result = result.filter(c => selectedProgramModes.includes(c.programMode));
-    }
-
-    // Filter by Ownership (Dynamic)
-    if (selectedOwnerships.length > 0) {
-      result = result.filter(c => selectedOwnerships.includes(c.type));
-    }
-
-    // Filter by Exams Accepted (Dynamic)
-    if (selectedExams.length > 0) {
-      result = result.filter(c => c.exams.some(exam => selectedExams.includes(exam)));
-    }
-
-    // Filter by Course Type (Dynamic)
-    if (selectedCourseTypes.length > 0) {
-      result = result.filter(c => c.courseTypes.some(ct => selectedCourseTypes.includes(ct)));
-    }
-
-    // Filter by Affiliation (Dynamic)
-    if (selectedAffiliations.length > 0) {
-      result = result.filter(c => selectedAffiliations.includes(c.affiliation));
-    }
-
-    // Filter by Approvals (Dynamic)
-    if (selectedApprovals.length > 0) {
-      result = result.filter(c => c.approvals.some(app => selectedApprovals.includes(app)));
-    }
-
-    // Filter by Fees Range (Dynamic)
-    if (selectedFeesRanges.length > 0) {
-      result = result.filter(c => {
-        const fee = c.fees; // numeric fees scale
-        return selectedFeesRanges.some(range => {
-          if (range === "Less than 1 Lakh") return fee < 1.0;
-          if (range === "1 Lakh - 3 Lakhs") return fee >= 1.0 && fee <= 3.0;
-          if (range === "3 Lakhs - 5 Lakhs") return fee > 3.0 && fee <= 5.0;
-          if (range === "More than 5 Lakhs") return fee > 5.0;
-          return false;
-        });
-      });
-    }
-
-    // Sorting logic
-    if (sortBy === "popularity") {
-      result.sort((a, b) => (a.nirfRank || 999) - (b.nirfRank || 999));
-    } else if (sortBy === "fees_asc") {
-      result.sort((a, b) => a.fees - b.fees);
-    } else if (sortBy === "fees_desc") {
-      result.sort((a, b) => b.fees - a.fees);
-    } else if (sortBy === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
-    }
-
-    return result;
-  }, [
-    searchTerm, 
-    selectedStates, 
-    selectedCities, 
-    selectedStreams, 
-    selectedCourses, 
-    selectedSpecializations, 
-    selectedProgramModes,
-    selectedOwnerships,
-    selectedExams,
-    selectedCourseTypes,
-    selectedAffiliations,
-    selectedApprovals,
-    selectedFeesRanges,
-    sortBy
-  ]);
+  // Define filteredColleges alias for zero-break compatibility with existing template code
+  const filteredColleges = collegesList;
 
   // Read More inline toggle helper
   const [expandedDescriptions, setExpandedDescriptions] = useState<string[]>([]);
@@ -6622,7 +6571,7 @@ function CollegesListContent() {
             </div>
             <h1 className="font-outfit font-black text-2xl md:text-3xl text-slate-800 leading-tight mt-1 flex items-center gap-2">
               <Award className="w-7 h-7 text-orange-500" />
-              Showing {filteredColleges.length} Colleges
+              Showing {totalCount} Colleges
             </h1>
           </div>
 
@@ -7461,7 +7410,12 @@ function CollegesListContent() {
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
           <main className="lg:col-span-8 space-y-6">
             <AnimatePresence mode="popLayout">
-              {filteredColleges.length > 0 ? (
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
+                  <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">Loading colleges from database...</p>
+                </div>
+              ) : filteredColleges.length > 0 ? (
                 filteredColleges.map((college) => {
                   const isExpanded = expandedDescriptions.includes(college.id);
                   const isShortlisted = shortlisted.includes(college.id);
@@ -7643,6 +7597,29 @@ function CollegesListContent() {
                 </div>
               )}
             </AnimatePresence>
+
+            {/* PAGINATION CONTROLS */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between bg-white border border-slate-200/80 px-6 py-4 rounded-3xl shadow-sm mt-8">
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage(p => Math.max(p - 1, 1))}
+                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
+                >
+                  Previous
+                </button>
+                <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  disabled={page === totalPages}
+                  onClick={() => setPage(p => Math.min(p + 1, totalPages))}
+                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </main>
 
         </div>
