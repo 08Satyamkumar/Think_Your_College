@@ -7427,36 +7427,36 @@ function CollegesListContent() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_15px_35px_rgba(249,115,22,0.07)] hover:scale-[1.005] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-6 p-5 md:p-6"
+                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_15px_35px_rgba(249,115,22,0.07)] hover:scale-[1.002] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-4 p-4 md:py-4 md:px-5"
                     >
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                       {/* LEFT PANEL: LOGO & RANKING BADGES */}
-                      <div className="col-span-12 lg:col-span-2 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-100 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
+                      <div className="col-span-12 lg:col-span-2 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-100 lg:pr-3 gap-3 flex-shrink-0 select-none pb-3 lg:pb-0 border-b lg:border-b-0 border-slate-100">
                         {/* Logo and Ranking Group */}
-                        <div className="flex items-center lg:flex-col gap-3 lg:gap-2.5 text-center">
+                        <div className="flex items-center lg:flex-col gap-3 lg:gap-2 text-center">
                           {/* Logo Box */}
-                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-sm font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-xs font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
                             {college.logoText}
                           </div>
                           
                           {/* Rank indicator (Shiksha style) */}
                           {college.nirfRank ? (
                             <div className="text-left lg:text-center">
-                              <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
+                              <span className="block font-outfit font-black text-sm lg:text-base text-slate-800 leading-tight">
                                 #{college.nirfRank}
                               </span>
-                              <span className="block text-[8px] font-black text-orange-600 uppercase tracking-widest">
+                              <span className="block text-[7.5px] font-black text-orange-600 uppercase tracking-widest">
                                 NIRF Rank
                               </span>
                             </div>
                           ) : (
                             <div className="text-left lg:text-center">
-                              <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
+                              <span className="block font-outfit font-black text-sm lg:text-base text-slate-800 leading-tight">
                                 ★ {college.rating}
                               </span>
-                              <span className="block text-[8px] font-black text-amber-600 uppercase tracking-widest">
+                              <span className="block text-[7.5px] font-black text-amber-600 uppercase tracking-widest">
                                 Rating
                               </span>
                             </div>
@@ -7475,9 +7475,9 @@ function CollegesListContent() {
                       </div>
 
                       {/* CENTER PANEL: COLLEGE DETAILS (Shiksha + GetMyUni style hybrid) */}
-                      <div className="col-span-12 lg:col-span-7 flex flex-col space-y-3 mt-4 lg:mt-0">
+                      <div className="col-span-12 lg:col-span-7 flex flex-col space-y-2 mt-3 lg:mt-0">
                         {/* Title and Location */}
-                        <div className="space-y-1">
+                        <div className="space-y-0.5">
                           <Link 
                             href={`/colleges/${college.slug}`}
                             className="font-outfit font-black text-sm md:text-base text-slate-800 hover:text-orange-500 hover:underline leading-snug transition-colors line-clamp-1"
@@ -7485,9 +7485,9 @@ function CollegesListContent() {
                             {college.name}
                           </Link>
                           
-                          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold text-slate-500">
+                          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9.5px] font-bold text-slate-500">
                             <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
-                              <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
+                              <MapPin className="w-3 h-3 text-slate-400 group-hover:text-orange-500 transition-colors" />
                               {college.location}
                             </span>
                             <span>•</span>
@@ -7496,16 +7496,16 @@ function CollegesListContent() {
                         </div>
 
                         {/* Short Description */}
-                        <p className={`text-[11px] text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}>
+                        <p className={`text-[10.5px] text-slate-500 leading-normal font-semibold ${isExpanded ? "" : "line-clamp-1"}`}>
                           {college.description}
                         </p>
 
                         {/* Metadata Grid (GetMyUni inspired, custom modern border box) */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-slate-50/50 border border-slate-100/80 rounded-2xl text-left select-none">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 p-2 bg-slate-50/50 border border-slate-100/80 rounded-xl text-left select-none">
                           {/* Courses */}
                           <div className="space-y-0.5">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Courses</p>
-                            <p className="font-outfit font-black text-[10px] text-slate-700 uppercase line-clamp-1">
+                            <p className="font-outfit font-black text-[9.5px] text-slate-700 uppercase line-clamp-1">
                               {college.courses.join(", ")}
                             </p>
                           </div>
@@ -7513,7 +7513,7 @@ function CollegesListContent() {
                           {/* Exams */}
                           <div className="space-y-0.5">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Exams Accepted</p>
-                            <p className="font-outfit font-black text-[10px] text-slate-700 line-clamp-1">
+                            <p className="font-outfit font-black text-[9.5px] text-slate-700 line-clamp-1">
                               {college.exams.join(", ")}
                             </p>
                           </div>
@@ -7521,7 +7521,7 @@ function CollegesListContent() {
                           {/* Fees */}
                           <div className="space-y-0.5">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Tuition Fees</p>
-                            <p className="font-outfit font-black text-[10px] text-orange-600 line-clamp-1">
+                            <p className="font-outfit font-black text-[9.5px] text-orange-600 line-clamp-1">
                               {college.feeRange}
                             </p>
                           </div>
@@ -7529,7 +7529,7 @@ function CollegesListContent() {
                           {/* Accreditation */}
                           <div className="space-y-0.5">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Accreditation</p>
-                            <p className="font-outfit font-black text-[10px] text-slate-600 uppercase line-clamp-1">
+                            <p className="font-outfit font-black text-[9.5px] text-slate-600 uppercase line-clamp-1">
                               {college.accreditation}
                             </p>
                           </div>
@@ -7537,11 +7537,11 @@ function CollegesListContent() {
                       </div>
 
                       {/* RIGHT PANEL: ACTIONS CTA (Stacked Vertically on Desktop) */}
-                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-3 lg:pl-4 lg:border-l lg:border-slate-100 mt-4 lg:mt-0 w-full">
+                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-2 lg:pl-3 lg:border-l lg:border-slate-100 mt-3 lg:mt-0 w-full">
                         {/* Read More button as secondary details trigger */}
                         <button
                           onClick={() => toggleDescription(college.id)}
-                          className="hidden lg:block text-[9px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest hover:underline transition-colors mr-auto"
+                          className="hidden lg:block text-[8.5px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest hover:underline transition-colors mr-auto"
                         >
                           {isExpanded ? "Hide Details" : "Show Details"}
                         </button>
@@ -7555,22 +7555,22 @@ function CollegesListContent() {
                               setShortlisted(prev => [...prev, college.id]);
                             }
                           }}
-                          className={`flex items-center justify-center gap-1.5 px-4 py-2.5 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
+                          className={`flex items-center justify-center gap-1.5 px-3 py-2 border rounded-xl text-[9.5px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
                             isShortlisted 
                               ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
                               : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
                           }`}
                         >
-                          <Heart className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`} />
+                          <Heart className={`w-3 h-3 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`} />
                           {isShortlisted ? "Shortlisted" : "Shortlist"}
                         </button>
 
                         {/* Apply / Brochure CTA */}
                         <button
                           onClick={() => openInquiryModal(college.stream)}
-                          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
+                          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[9.5px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-3 h-3" />
                           Apply / Brochure
                         </button>
                       </div>
