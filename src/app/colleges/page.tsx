@@ -352,6 +352,19 @@ function CollegesListContent() {
     }));
   };
 
+  const checkUserAuth = () => {
+    if (typeof window !== "undefined") {
+      const savedUser = localStorage.getItem("tyc-user");
+      if (savedUser) {
+        return JSON.parse(savedUser);
+      }
+      if ((window as any).openTYCAuthModal) {
+        (window as any).openTYCAuthModal("login");
+      }
+    }
+    return null;
+  };
+
   // Local filter search options states
   const [stateFilterSearch, setStateFilterSearch] = useState("");
   const [cityFilterSearch, setCityFilterSearch] = useState("");
@@ -7549,6 +7562,8 @@ function CollegesListContent() {
                         {/* Shortlist Toggle */}
                         <button
                           onClick={() => {
+                            const loggedInUser = checkUserAuth();
+                            if (!loggedInUser) return;
                             if (isShortlisted) {
                               setShortlisted(prev => prev.filter(id => id !== college.id));
                             } else {
@@ -7567,7 +7582,11 @@ function CollegesListContent() {
 
                         {/* Apply / Brochure CTA */}
                         <button
-                          onClick={() => openInquiryModal(college.stream)}
+                          onClick={() => {
+                            const loggedInUser = checkUserAuth();
+                            if (!loggedInUser) return;
+                            openInquiryModal(college.stream);
+                          }}
                           className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
                         >
                           <FileText className="w-3.5 h-3.5" />

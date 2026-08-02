@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, course_interest, state_interest, college_interest } = body;
+    const { name, email, phone, course_interest, state_interest, college_interest, status } = body;
 
     // Validation
     if (!name || !phone) {
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
           course_interest: course_interest || null,
           state_interest: state_interest || null,
           college_interest: college_interest || null,
-          status: "Pending"
+          status: status || "Pending"
         }
       ])
       .select();

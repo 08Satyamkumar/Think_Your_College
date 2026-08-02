@@ -60,6 +60,33 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+
+    // Expose openTYCAuthModal globally so other client pages can request auth
+    if (typeof window !== "undefined") {
+      (window as any).openTYCAuthModal = (mode: "login" | "signup" = "login") => {
+        setAuthModal({ open: true, mode });
+      };
+    }
+
+    // Dispatch global event on user log in/out to sync other client pages
+    const syncUser = () => {
+      const liveUser = localStorage.getItem("tyc-user");
+      if (liveUser) {
+        setUser(JSON.parse(liveUser));
+      } else {
+        setUser(null);
+      }
+    };
+    window.addEventListener("storage", syncUser);
+    window.addEventListener("tyc-user-sync", syncUser);
+
+    return () => {
+      if (typeof window !== "undefined") {
+        delete (window as any).openTYCAuthModal;
+      }
+      window.removeEventListener("storage", syncUser);
+      window.removeEventListener("tyc-user-sync", syncUser);
+    };
   }, []);
 
   // ══════════════════════════════════════════
@@ -816,6 +843,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     onClick={() => {
                       setUser(null);
                       localStorage.removeItem("tyc-user");
+                      if (typeof window !== "undefined") {
+                        window.dispatchEvent(new Event("tyc-user-sync"));
+                      }
                     }}
                     className="text-[9px] text-yellow-200 hover:text-yellow-100 font-extrabold uppercase tracking-widest text-left mt-1 hover:underline transition-all"
                   >
@@ -1376,6 +1406,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                         setUser(null);
                         localStorage.removeItem("tyc-user");
                         setIsMobileMenuOpen(false);
+                        if (typeof window !== "undefined") {
+                          window.dispatchEvent(new Event("tyc-user-sync"));
+                        }
                       }}
                       className="w-full mt-2 py-2 text-center text-xs font-black text-red-500 hover:text-white hover:bg-red-500 border border-red-200 rounded-xl transition-all uppercase tracking-wider"
                     >
@@ -1661,6 +1694,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           setUser(userData);
           localStorage.setItem("tyc-user", JSON.stringify(userData));
           setAuthModal(m => ({ ...m, open: false }));
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new Event("tyc-user-sync"));
+          }
         }}
       />
 
