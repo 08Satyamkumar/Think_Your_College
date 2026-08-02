@@ -7427,17 +7427,17 @@ function CollegesListContent() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      className="group bg-white border border-slate-200/80 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_15px_35px_rgba(249,115,22,0.07)] hover:scale-[1.002] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-6 md:p-7 max-w-[600px] lg:mx-0 w-full"
+                      className="group bg-white border border-slate-200/80 hover:border-orange-500/50 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_20px_45px_rgba(249,115,22,0.08)] hover:scale-[1.002] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-6 md:p-7 max-w-[600px] lg:mx-0 w-full"
                     >
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                       {/* LEFT PANEL: LOGO & RANKING BADGES */}
-                      <div className="col-span-12 lg:col-span-3 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-100 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
+                      <div className="col-span-12 lg:col-span-3 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-200/60 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
                         {/* Logo and Ranking Group */}
                         <div className="flex items-center lg:flex-col gap-3 lg:gap-2.5 text-center">
                           {/* Logo Box */}
-                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-sm font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-sm font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
                             {college.logoText}
                           </div>
                           
@@ -7501,9 +7501,9 @@ function CollegesListContent() {
                         </p>
 
                         {/* Metadata Grid (GetMyUni inspired, custom modern border box) */}
-                        <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50/50 border border-slate-100/80 rounded-2xl text-left select-none">
+                        <div className="grid grid-cols-2 gap-3.5 select-none">
                           {/* Courses */}
-                          <div className="space-y-0.5">
+                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Courses</p>
                             <p className="font-outfit font-black text-[10px] text-slate-700 uppercase line-clamp-1">
                               {college.courses.join(", ")}
@@ -7511,7 +7511,7 @@ function CollegesListContent() {
                           </div>
 
                           {/* Exams */}
-                          <div className="space-y-0.5">
+                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Exams Accepted</p>
                             <p className="font-outfit font-black text-[10px] text-slate-700 line-clamp-1">
                               {college.exams.join(", ")}
@@ -7519,7 +7519,7 @@ function CollegesListContent() {
                           </div>
 
                           {/* Fees */}
-                          <div className="space-y-0.5">
+                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Tuition Fees</p>
                             <p className="font-outfit font-black text-[10px] text-orange-600 line-clamp-1">
                               {college.feeRange}
@@ -7527,7 +7527,7 @@ function CollegesListContent() {
                           </div>
 
                           {/* Accreditation */}
-                          <div className="space-y-0.5">
+                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
                             <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Accreditation</p>
                             <p className="font-outfit font-black text-[10px] text-slate-600 uppercase line-clamp-1">
                               {college.accreditation}
@@ -7537,7 +7537,7 @@ function CollegesListContent() {
                       </div>
 
                       {/* RIGHT PANEL: ACTIONS CTA (Stacked Vertically on Desktop) */}
-                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-3 lg:pl-4 lg:border-l lg:border-slate-100 mt-4 lg:mt-0 w-full">
+                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-3 lg:pl-4 lg:border-l lg:border-slate-200/60 mt-4 lg:mt-0 w-full">
                         {/* Read More button as secondary details trigger */}
                         <button
                           onClick={() => toggleDescription(college.id)}
