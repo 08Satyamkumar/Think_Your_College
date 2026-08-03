@@ -529,6 +529,7 @@ function CollegesListContent() {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedStreams, setSelectedStreams] = useState<string[]>([]);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isContactDrawerOpen, setIsContactDrawerOpen] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSpecializations, setSelectedSpecializations] = useState<
     string[]
@@ -8165,13 +8166,13 @@ function CollegesListContent() {
 
         {/* MAIN CONTAINER */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
-          <aside className="hidden md:block lg:col-span-3 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-5 select-none">
+          {/* LEFT SIDEBAR: FILTERS CARD (Visible at the bottom on mobile using order classes) */}
+          <aside className="order-2 lg:order-1 lg:col-span-3 bg-white border border-slate-300 lg:border-slate-200 hover:border-orange-500/20 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-5 select-none">
             {renderFilterContent()}
           </aside>
 
-          {/* RIGHT SIDE: COLLEGES CARDS LIST */}
-          <main className="lg:col-span-9 lg:h-[3200px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
+          {/* RIGHT SIDE: COLLEGES CARDS LIST (Loads first on mobile) */}
+          <main className="order-1 lg:order-2 lg:col-span-9 lg:h-[3200px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
             <AnimatePresence mode="popLayout">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
@@ -8417,7 +8418,7 @@ function CollegesListContent() {
       </div>
 
       {/* MOBILE FLOATING FILTER TOGGLE BUTTON */}
-      <div className="fixed bottom-18 left-1/2 -translate-x-1/2 z-40 md:hidden">
+      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-40 md:hidden">
         <button
           onClick={() => setIsMobileFilterOpen(true)}
           className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-full shadow-lg shadow-orange-500/25 active:scale-95 transition-all duration-200"
@@ -8494,40 +8495,114 @@ function CollegesListContent() {
         )}
       </AnimatePresence>
 
-      {/* MOBILE STICKY BOTTOM ACTIONS BAR */}
-      <div className="fixed bottom-0 left-0 right-0 h-14 bg-white border-t border-slate-100 px-3 py-2 flex gap-2.5 z-40 md:hidden shadow-[0_-8px_25px_rgba(0,0,0,0.05)] select-none">
-        {/* WhatsApp Button */}
-        <a
-          href="https://wa.me/918585951111?text=Hi%20Sarthi,%20I%20have%20a%20query%20about%20college%20admissions."
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 h-full rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-sm shadow-emerald-500/10"
-        >
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.277L6.5 20.5l5.397-1.398c.95.534 2.12.87 3.114.872 3.182 0 5.768-2.587 5.77-5.767 0-3.18-2.587-5.767-5.77-5.767zm3.61 7.223c-.15.075-.89.44-1.03.49-.14.05-.24.07-.34-.07-.1.15-.39.49-.48.59-.09.1-.18.11-.33.04-.9-.45-1.6-1.21-2.07-2.02-.04-.06-.01-.13.03-.19.03-.06.07-.15.1-.22.04-.08.06-.13.09-.19.03-.06.02-.12-.01-.19-.03-.07-.24-.58-.33-.8-.09-.2-.18-.17-.24-.17h-.2c-.07 0-.18.03-.28.14-.1.1-.39.38-.39.93s.4 1.08.45 1.15c.05.07 1.34 2.05 3.25 2.87.45.19.81.3 1.08.39.45.14.86.12 1.18.07.36-.05.89-.36 1.02-.71.13-.35.13-.65.09-.71-.04-.07-.16-.11-.31-.19z" />
-          </svg>
-          WhatsApp
-        </a>
+      {/* MOBILE COLLAPSIBLE DRAWER FOR CONTACT OPTIONS */}
+      <AnimatePresence>
+        {isContactDrawerOpen && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] md:hidden flex flex-col justify-end">
+            <div
+              className="absolute inset-0"
+              onClick={() => setIsContactDrawerOpen(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className="relative bg-white rounded-t-[32px] w-full shadow-2xl p-5 flex flex-col z-10 select-none pb-8"
+            >
+              {/* Drag handle line */}
+              <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 flex-shrink-0" />
 
-        {/* Call Button */}
-        <a
-          href="tel:+918585951111"
-          className="flex-1 flex items-center justify-center gap-1.5 h-full rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[10px] font-black uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-md shadow-orange-500/20"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="13"
-            height="13"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-          </svg>
-          Call Experts
-        </a>
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 flex-shrink-0">
+                <div className="text-left">
+                  <h3 className="font-outfit font-black text-slate-800 text-xs md:text-sm uppercase tracking-wide">
+                    Contact Counseling Expert
+                  </h3>
+                  <p className="text-[9px] text-slate-400 font-semibold mt-0.5">
+                    Choose your preferred way to connect
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsContactDrawerOpen(false)}
+                  className="p-1 rounded-full hover:bg-slate-100 text-slate-500 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-3">
+                {/* WhatsApp Option */}
+                <a
+                  href="https://wa.me/918585951111?text=Hi%20Sarthi,%20I%20have%20a%20query%20about%20college%20admissions."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsContactDrawerOpen(false)}
+                  className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-100 text-emerald-800 transition-all duration-200"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                    >
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.277L6.5 20.5l5.397-1.398c.95.534 2.12.87 3.114.872 3.182 0 5.768-2.587 5.77-5.767 0-3.18-2.587-5.767-5.77-5.767zm3.61 7.223c-.15.075-.89.44-1.03.49-.14.05-.24.07-.34-.07-.1.15-.39.49-.48.59-.09.1-.18.11-.33.04-.9-.45-1.6-1.21-2.07-2.02-.04-.06-.01-.13.03-.19.03-.06.07-.15.1-.22.04-.08.06-.13.09-.19.03-.06.02-.12-.01-.19-.03-.07-.24-.58-.33-.8-.09-.2-.18-.17-.24-.17h-.2c-.07 0-.18.03-.28.14-.1.1-.39.38-.39.93s.4 1.08.45 1.15c.05.07 1.34 2.05 3.25 2.87.45.19.81.3 1.08.39.45.14.86.12 1.18.07.36-.05.89-.36 1.02-.71.13-.35.13-.65.09-.71-.04-.07-.16-.11-.31-.19z" />
+                    </svg>
+                  </div>
+                  <div className="text-left min-w-0">
+                    <p className="text-xs font-black uppercase tracking-wider">
+                      Chat on WhatsApp
+                    </p>
+                    <p className="text-[9px] text-emerald-600 font-semibold mt-0.5">
+                      Instant response from senior counselors
+                    </p>
+                  </div>
+                </a>
+
+                {/* Direct Call Option */}
+                <a
+                  href="tel:+918585951111"
+                  onClick={() => setIsContactDrawerOpen(false)}
+                  className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-orange-50 hover:bg-orange-100/70 border border-orange-100 text-orange-800 transition-all duration-200"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </div>
+                  <div className="text-left min-w-0">
+                    <p className="text-xs font-black uppercase tracking-wider">
+                      Direct Voice Call
+                    </p>
+                    <p className="text-[9px] text-orange-600 font-semibold mt-0.5">
+                      Call +91 85859 51111 directly
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MOBILE STICKY BOTTOM TALK TO EXPERTS BAR */}
+      <div
+        onClick={() => setIsContactDrawerOpen(true)}
+        className="fixed bottom-0 left-0 right-0 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-[10.5px] tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer z-40 md:hidden shadow-[0_-5px_20px_rgba(249,115,22,0.25)] border-t border-orange-400/20 active:scale-[0.99] transition-all"
+      >
+        <MessageSquare className="w-4 h-4 animate-bounce" />
+        Talk to Counseling Experts
       </div>
     </div>
   );
