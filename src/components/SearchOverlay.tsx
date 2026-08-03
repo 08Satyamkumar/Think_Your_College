@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, GraduationCap, MapPin, Star, Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Search,
+  X,
+  GraduationCap,
+  MapPin,
+  Star,
+  Sparkles,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface SearchOverlayProps {
@@ -42,7 +51,9 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     }
     setLoading(true);
     try {
-      const res = await fetch(`/api/colleges?limit=8&search=${encodeURIComponent(val)}`);
+      const res = await fetch(
+        `/api/colleges?limit=8&search=${encodeURIComponent(val)}`,
+      );
       const data = await res.json();
       setSuggestions(data.colleges || []);
     } catch (e) {
@@ -61,7 +72,8 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   };
 
   const handleSelectSuggestion = (college: any) => {
-    const slug = college.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const slug =
+      college.slug || college.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     router.push(`/colleges/${slug}`);
     onClose();
   };
@@ -69,10 +81,18 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const popularSearches = [
     { name: "IIM Ahmedabad", type: "Management", slug: "iim-ahmedabad" },
     { name: "IIT Delhi", type: "Engineering", slug: "iit-delhi" },
-    { name: "Galgotias University", type: "Engineering", slug: "galgotias-university-greater-noida" },
+    {
+      name: "Galgotias University",
+      type: "Engineering",
+      slug: "galgotias-university-greater-noida",
+    },
     { name: "AIIMS New Delhi", type: "Medical", slug: "aiims-delhi" },
     { name: "CAT Exam Predictor", type: "Exam", href: "/predictor?exam=CAT" },
-    { name: "B.Tech Colleges in Pune", type: "Location", href: "/colleges?stream=Engineering&state=Maharashtra" },
+    {
+      name: "B.Tech Colleges in Pune",
+      type: "Location",
+      href: "/colleges?stream=Engineering&state=Maharashtra",
+    },
   ];
 
   return (
@@ -95,7 +115,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 Think Your College
               </span>
             </div>
-            
+
             {/* Close Button */}
             <motion.button
               whileHover={{ scale: 1.1, rotate: 90 }}
@@ -120,7 +140,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   placeholder="Search Colleges, Courses, Exams, or Locations..."
                   className="flex-1 px-4 h-full bg-transparent border-none outline-none text-slate-800 text-base md:text-xl font-bold placeholder-slate-400"
                 />
-                
+
                 {query.trim() && (
                   <button
                     type="button"
@@ -143,7 +163,8 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               </div>
               <p className="text-xs text-slate-400 font-semibold mt-2.5 pl-2 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-orange-500" />
-                Start typing to get real-time autocomplete suggestions from our database
+                Start typing to get real-time autocomplete suggestions from our
+                database
               </p>
             </form>
 
@@ -152,60 +173,44 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">
                   <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest animate-pulse">Searching Database...</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest animate-pulse">
+                    Searching Database...
+                  </p>
                 </div>
               ) : query.trim() ? (
                 <div className="space-y-4">
                   <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider pl-1">
                     Matching Recommendations ({suggestions.length})
                   </h3>
-                  
+
                   {suggestions.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-3">
+                    <div className="border border-slate-100 rounded-xl bg-white overflow-hidden shadow-md max-h-[60vh] overflow-y-auto">
                       {suggestions.map((item, idx) => (
-                        <motion.div
+                        <div
                           key={item.id || idx}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: idx * 0.04 }}
                           onClick={() => handleSelectSuggestion(item)}
-                          className="group flex items-center justify-between p-4 rounded-xl border border-slate-100 bg-white hover:border-orange-500/35 hover:shadow-lg hover:shadow-orange-500/5 transition-all duration-300 cursor-pointer"
+                          className="flex items-center justify-between px-6 py-4 hover:bg-orange-50/50 border-b border-slate-100 last:border-none cursor-pointer transition-all duration-150 group"
                         >
-                          <div className="flex items-center gap-3.5 min-w-0">
-                            <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-black group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
-                              <GraduationCap className="w-5 h-5" />
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-sm font-extrabold text-slate-800 group-hover:text-orange-600 transition-colors truncate">
-                                {item.name}
-                              </p>
-                              <div className="flex items-center gap-2 text-xs text-slate-400 font-semibold mt-1">
-                                <span className="flex items-center gap-1">
-                                  <MapPin className="w-3.5 h-3.5" />
-                                  {item.location}
-                                </span>
-                                <span>•</span>
-                                <span className="flex items-center gap-1 text-amber-500">
-                                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                                  {item.rating || "4.5"}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center gap-3.5">
-                            <span className="hidden sm:inline-block px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-wider">
-                              College
-                            </span>
-                            <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-300" />
-                          </div>
-                        </motion.div>
+                          <span className="text-sm font-semibold text-slate-700 group-hover:text-orange-600 transition-colors truncate pr-4">
+                            {item.name}
+                          </span>
+                          <span className="text-xs font-bold text-slate-400 group-hover:text-orange-500 transition-colors uppercase tracking-wider flex-shrink-0">
+                            {item.name.toLowerCase().includes("exam") ||
+                            item.name.toLowerCase().includes("cet")
+                              ? "Exam"
+                              : "College"}
+                          </span>
+                        </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-16 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                      <p className="text-sm font-bold text-slate-500">No colleges matched "{query}"</p>
-                      <p className="text-xs text-slate-400 mt-1">Try another search keyword or verify the spelling</p>
+                      <p className="text-sm font-bold text-slate-500">
+                        No colleges matched "{query}"
+                      </p>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Try another search keyword or verify the spelling
+                      </p>
                     </div>
                   )}
                 </div>
