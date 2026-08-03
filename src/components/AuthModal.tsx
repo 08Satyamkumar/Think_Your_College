@@ -519,139 +519,55 @@ export default function AuthModal({
                             </button>
                           ))}
                         </div>
-                        {/* OTP Flow */}
-                        <AnimatePresence mode="wait">
-                          {!otpSent ? (
-                            <motion.div
-                              key="pre-otp"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              className="space-y-3"
-                            >
-                              {loginType === "mobile" ? (
-                                <PhoneInput value={phone} onChange={setPhone} />
-                              ) : (
-                                <FloatingInput
-                                  id="login-email"
-                                  label="Email address"
-                                  icon={Mail}
-                                  value={email}
-                                  onChange={setEmail}
-                                  type="email"
-                                />
-                              )}
-                              <motion.button
-                                whileHover={{
-                                  scale: 1.02,
-                                  boxShadow: "0 10px 28px rgba(249,115,22,0.4)",
-                                }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={handleSendOtp}
-                                disabled={!canSendOtp}
-                                className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-200 disabled:to-slate-200 disabled:cursor-not-allowed text-white disabled:text-slate-400 font-black text-sm shadow-md shadow-orange-500/25 transition-all duration-300 flex items-center justify-center gap-2"
-                              >
-                                <Sparkles className="w-4 h-4" />
-                                Get OTP
-                              </motion.button>
-                            </motion.div>
+                        {/* Direct Login (No OTP required) */}
+                        <div className="space-y-3">
+                          {loginType === "mobile" ? (
+                            <PhoneInput value={phone} onChange={setPhone} />
                           ) : (
-                            <motion.div
-                              key="otp-verify"
-                              initial={{ opacity: 0, y: 12 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -12 }}
-                              className="space-y-3"
-                            >
-                              <p className="text-[11px] font-semibold text-slate-500 text-center">
-                                OTP sent to{" "}
-                                <span className="font-black text-indigo-600 ">
-                                  {loginType === "mobile"
-                                    ? `+91 ${phone}`
-                                    : email}
-                                </span>
-                              </p>
-                              {/* OTP boxes */}
-                              <div className="flex gap-2 justify-center">
-                                {otp.map((d, i) => (
-                                  <motion.input
-                                    key={i}
-                                    id={`otp-${i}`}
-                                    type="text"
-                                    inputMode="numeric"
-                                    maxLength={1}
-                                    value={d}
-                                    onChange={(e) =>
-                                      handleOtpChange(i, e.target.value)
-                                    }
-                                    onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                                    whileFocus={{
-                                      scale: 1.15,
-                                      boxShadow:
-                                        "0 0 0 3px rgba(99,102,241,0.3)",
-                                    }}
-                                    className="w-11 h-12 rounded-xl border-2 border-slate-200 text-center text-xl font-black text-indigo-600 bg-white outline-none focus:border-indigo-500 transition-all cursor-text"
-                                  />
-                                ))}
-                              </div>
-                              <motion.button
-                                whileHover={{
-                                  scale: 1.02,
-                                  boxShadow: "0 10px 28px rgba(99,102,241,0.4)",
-                                }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={() => {
-                                  const nameVal =
-                                    loginType === "mobile"
-                                      ? `Student`
-                                      : email.split("@")[0];
-                                  const emailVal =
-                                    loginType === "mobile"
-                                      ? `${phone}@tyc.com`
-                                      : email;
-                                  const phoneVal =
-                                    loginType === "mobile"
-                                      ? phone
-                                      : "Email OTP";
-                                  saveLeadData(
-                                    nameVal,
-                                    emailVal,
-                                    phoneVal,
-                                    `${loginType.toUpperCase()} OTP`,
-                                  );
-                                  onLoginSuccess({
-                                    name: nameVal,
-                                    email: emailVal,
-                                  });
-                                }}
-                                className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-black text-sm shadow-md shadow-indigo-500/25 transition-all duration-300 flex items-center justify-center gap-2"
-                              >
-                                <CheckCircle2 className="w-4 h-4" />
-                                Verify & Login
-                              </motion.button>
-                              <div className="text-center">
-                                {otpTimer > 0 ? (
-                                  <p className="text-[11px] text-slate-400">
-                                    Resend in{" "}
-                                    <span className="font-black text-indigo-500">
-                                      {otpTimer}s
-                                    </span>
-                                  </p>
-                                ) : (
-                                  <button
-                                    onClick={() => {
-                                      setOtpSent(false);
-                                      setOtp(["", "", "", "", "", ""]);
-                                    }}
-                                    className="text-[11px] font-bold text-indigo-500 hover:text-indigo-700 underline transition-colors"
-                                  >
-                                    Resend OTP
-                                  </button>
-                                )}
-                              </div>
-                            </motion.div>
+                            <FloatingInput
+                              id="login-email"
+                              label="Email address"
+                              icon={Mail}
+                              value={email}
+                              onChange={setEmail}
+                              type="email"
+                            />
                           )}
-                        </AnimatePresence>
+                          <motion.button
+                            whileHover={{
+                              scale: 1.02,
+                              boxShadow: "0 10px 28px rgba(249,115,22,0.4)",
+                            }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => {
+                              const nameVal =
+                                loginType === "mobile"
+                                  ? `Student`
+                                  : email.split("@")[0];
+                              const emailVal =
+                                loginType === "mobile"
+                                  ? `${phone}@tyc.com`
+                                  : email;
+                              const phoneVal =
+                                loginType === "mobile" ? phone : "Email Login";
+                              saveLeadData(
+                                nameVal,
+                                emailVal,
+                                phoneVal,
+                                `${loginType.toUpperCase()} Direct`,
+                              );
+                              onLoginSuccess({
+                                name: nameVal,
+                                email: emailVal,
+                              });
+                            }}
+                            disabled={!canSendOtp}
+                            className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-200 disabled:to-slate-200 disabled:cursor-not-allowed text-white disabled:text-slate-400 font-black text-sm shadow-md shadow-orange-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <Sparkles className="w-4 h-4" />
+                            Verify & Login
+                          </motion.button>
+                        </div>
                         <p className="text-center text-[11px] text-slate-500 pt-1">
                           New to Think Your College?{" "}
                           <button
