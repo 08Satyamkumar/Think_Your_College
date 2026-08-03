@@ -50,6 +50,7 @@ export default function LayoutWrapper({
   const [activeMedicalTab, setActiveMedicalTab] = useState(
     "Top Ranked Colleges",
   );
+  const [activeMoreTab, setActiveMoreTab] = useState("Paramedical");
   const [authModal, setAuthModal] = useState<{
     open: boolean;
     mode: "login" | "signup";
@@ -694,6 +695,203 @@ export default function LayoutWrapper({
     "College Predictors": Compass,
     "College Reviews": Star,
     Resources: Sparkles,
+  };
+
+  const moreTabs: Record<string, MegaSubCategory[]> = {
+    Paramedical: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "B.Sc Paramedical Colleges", href: "/colleges?stream=Paramedical" },
+          { name: "Diploma Paramedical Colleges", href: "/colleges?stream=Paramedical" },
+          { name: "B.Sc Nursing Colleges", href: "/colleges?stream=Paramedical" }
+        ]
+      },
+      {
+        heading: "Colleges By Location",
+        links: [
+          { name: "Colleges in Bangalore", href: "/colleges?stream=Paramedical" },
+          { name: "Colleges in Mumbai", href: "/colleges?stream=Paramedical" },
+          { name: "Colleges in Delhi NCR", href: "/colleges?stream=Paramedical" }
+        ]
+      },
+      {
+        heading: "Entrance Exams",
+        links: [
+          { name: "NEET Paramedical", href: "/predictor" },
+          { name: "AIIMS Nursing Entrance", href: "/predictor" }
+        ]
+      }
+    ],
+    Pharmacy: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "B.Pharm Colleges", href: "/colleges?stream=Pharmacy" },
+          { name: "D.Pharm Colleges", href: "/colleges?stream=Pharmacy" },
+          { name: "M.Pharm Colleges", href: "/colleges?stream=Pharmacy" }
+        ]
+      },
+      {
+        heading: "Colleges By State",
+        links: [
+          { name: "Maharashtra Pharmacy", href: "/colleges?stream=Pharmacy&state=Maharashtra" },
+          { name: "Uttar Pradesh Pharmacy", href: "/colleges?stream=Pharmacy&state=Uttar-Pradesh" },
+          { name: "Karnataka Pharmacy", href: "/colleges?stream=Pharmacy&state=Karnataka" }
+        ]
+      },
+      {
+        heading: "Pharmacy Exams",
+        links: [
+          { name: "GPAT Exam", href: "/predictor" },
+          { name: "KCET Pharmacy", href: "/predictor" },
+          { name: "MAHE OET", href: "/predictor" }
+        ]
+      }
+    ],
+    Architecture: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "B.Arch Colleges", href: "/colleges?stream=Architecture" },
+          { name: "M.Arch Colleges", href: "/colleges?stream=Architecture" }
+        ]
+      },
+      {
+        heading: "Entrance Exams",
+        links: [
+          { name: "NATA Exam", href: "/predictor" },
+          { name: "JEE Main Paper 2", href: "/predictor" }
+        ]
+      }
+    ],
+    Design: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "B.Des Colleges", href: "/colleges?stream=Design" },
+          { name: "M.Des Colleges", href: "/colleges?stream=Design" },
+          { name: "NIFT & NID Colleges", href: "/colleges?stream=Design" }
+        ]
+      },
+      {
+        heading: "Design Exams",
+        links: [
+          { name: "UCEED Exam", href: "/predictor" },
+          { name: "NIFT Entrance Exam", href: "/predictor" },
+          { name: "NID DAT Exam", href: "/predictor" }
+        ]
+      }
+    ],
+    Hospitality: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "BHM Colleges (Hotel Mgmt)", href: "/colleges?stream=Hospitality" },
+          { name: "B.Sc Hospitality", href: "/colleges?stream=Hospitality" }
+        ]
+      },
+      {
+        heading: "Entrance Exams",
+        links: [
+          { name: "NCHMCT JEE", href: "/predictor" }
+        ]
+      }
+    ],
+    Law: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "BA LLB Colleges", href: "/colleges?stream=Law" },
+          { name: "BBA LLB Colleges", href: "/colleges?stream=Law" },
+          { name: "LLM Colleges", href: "/colleges?stream=Law" }
+        ]
+      },
+      {
+        heading: "Law Exams",
+        links: [
+          { name: "CLAT Exam", href: "/predictor?exam=CLAT" },
+          { name: "AILET Exam", href: "/predictor" },
+          { name: "LSAT India", href: "/predictor" }
+        ]
+      }
+    ],
+    "Veterinary Science": [
+      {
+        heading: "Programs Offered",
+        links: [
+          { name: "B.V.Sc & AH Colleges", href: "/colleges?stream=Veterinary-Science" },
+          { name: "M.V.Sc Colleges", href: "/colleges?stream=Veterinary-Science" }
+        ]
+      },
+      {
+        heading: "Entrance Exams",
+        links: [
+          { name: "NEET Veterinary Cutoff", href: "/predictor" }
+        ]
+      }
+    ],
+    "Vocational Courses": [
+      {
+        heading: "Courses Offered",
+        links: [
+          { name: "B.Voc Colleges", href: "/colleges?stream=Vocational" },
+          { name: "M.Voc Colleges", href: "/colleges?stream=Vocational" },
+          { name: "Diploma Vocational", href: "/colleges?stream=Vocational" }
+        ]
+      }
+    ],
+    Arts: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "BA Fine Arts Colleges", href: "/colleges?stream=Arts" },
+          { name: "MA Fine Arts Colleges", href: "/colleges?stream=Arts" }
+        ]
+      }
+    ],
+    "Computer Application": [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "BCA Colleges", href: "/colleges?stream=Computer-Application" },
+          { name: "MCA Colleges", href: "/colleges?stream=Computer-Application" }
+        ]
+      },
+      {
+        heading: "MCA Exams",
+        links: [
+          { name: "NIMCET Exam", href: "/predictor" },
+          { name: "MAH MCA CET", href: "/predictor" }
+        ]
+      }
+    ],
+    Dental: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "BDS Colleges", href: "/colleges?stream=Dental" },
+          { name: "MDS Colleges", href: "/colleges?stream=Dental" }
+        ]
+      },
+      {
+        heading: "Dental Exams",
+        links: [
+          { name: "NEET BDS Cutoffs", href: "/predictor" },
+          { name: "NEET MDS Cutoffs", href: "/predictor" }
+        ]
+      }
+    ],
+    Education: [
+      {
+        heading: "Colleges By Course",
+        links: [
+          { name: "B.Ed Colleges", href: "/colleges?stream=Education" },
+          { name: "M.Ed Colleges", href: "/colleges?stream=Education" },
+          { name: "D.El.Ed Colleges", href: "/colleges?stream=Education" }
+        ]
+      }
+    ]
   };
 
   const medicalTabIcons: Record<string, any> = {
@@ -1909,6 +2107,177 @@ export default function LayoutWrapper({
               )}
             </AnimatePresence>
 
+            {/* MEGA MENU DROPDOWN PANEL FOR MORE */}
+            <AnimatePresence>
+              {activeMegaMenu === "MORE" && (
+                <div
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
+                  onMouseEnter={() => setActiveMegaMenu("MORE")}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                    exit={{
+                      opacity: 0,
+                      y: 10,
+                      scale: 0.97,
+                      transition: { duration: 0.15 },
+                    }}
+                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                    style={{ transformOrigin: "top center", perspective: 1000 }}
+                    className="w-full bg-white/95 backdrop-blur-xl border border-amber-100/40 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
+                  >
+                    {/* Floating Glowing Gradient border at top */}
+                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 shadow-[0_1px_10px_rgba(245,158,11,0.5)] z-20" />
+
+                    {/* Dynamic Animated Glass Ambient Background */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(245,158,11,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
+                      <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-amber-500/8 dark:bg-amber-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-orange-500/8 dark:bg-orange-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
+                    </div>
+
+                    {/* Left Column: Vertical Sub-Tabs Menu */}
+                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
+                      {Object.keys(moreTabs).map((tabName) => {
+                        const TabIcon = Award;
+                        const isActive = activeMoreTab === tabName;
+                        return (
+                          <button
+                            key={tabName}
+                            onClick={() => setActiveMoreTab(tabName)}
+                            onMouseEnter={() => setActiveMoreTab(tabName)}
+                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
+                              isActive
+                                ? "bg-gradient-to-r from-amber-500/10 to-orange-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-amber-500/5"
+                                : "text-text_secondary hover:bg-amber-500/5 hover:text-text_primary hover:translate-x-0.5"
+                            }`}
+                          >
+                            <TabIcon
+                              className={`w-3.5 h-3.5 ${
+                                isActive
+                                  ? "text-primary animate-pulse"
+                                  : "text-slate-400 dark:text-slate-500"
+                              }`}
+                            />
+                            {tabName}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Middle Column: Dynamic Link Lists */}
+                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+                      <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                        {activeMoreTab}
+                      </h4>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                        {moreTabs[activeMoreTab]?.map((subCat, idx) => (
+                          <div key={idx} className="space-y-3">
+                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-orange-600 border-b border-orange-100/50 pb-1 flex items-center gap-1">
+                              {subCat.heading}
+                            </h5>
+                            <ul className="space-y-2">
+                              {subCat.links.map((link, lIdx) => (
+                                <li key={lIdx}>
+                                  <Link
+                                    href={link.href}
+                                    onClick={() => setActiveMegaMenu(null)}
+                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                    <span className="flex-1 line-clamp-1">
+                                      {link.name}
+                                    </span>
+                                    {link.name.endsWith(">") ? null : (
+                                      <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                                    )}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Right Column: Featured Colleges */}
+                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
+                      <div>
+                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
+                          <Award className="w-3.5 h-3.5 text-amber-500" />
+                          Top Choice Streams
+                        </h4>
+                        <div className="space-y-3">
+                          {[
+                            {
+                              name: "B.Pharm (Pharmacy)",
+                              desc: "Top Pharmacy Colleges",
+                              slug: "Pharmacy",
+                              color: "from-emerald-500 to-teal-600",
+                            },
+                            {
+                              name: "BA LLB (Law School)",
+                              desc: "National Law Schools",
+                              slug: "Law",
+                              color: "from-blue-500 to-indigo-600",
+                            },
+                            {
+                              name: "B.Des (Design Inst.)",
+                              desc: "NIFT & NID Colleges",
+                              slug: "Design",
+                              color: "from-rose-500 to-red-600",
+                            },
+                          ].map((c, idx) => (
+                            <Link
+                              key={idx}
+                              href={`/colleges?stream=${c.slug}`}
+                              onClick={() => setActiveMegaMenu(null)}
+                              className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
+                                >
+                                  {c.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
+                                    {c.name}
+                                  </p>
+                                  <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
+                                    <span className="text-primary">
+                                      {c.desc}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+
+                      <Link
+                        href="/colleges"
+                        onClick={() => setActiveMegaMenu(null)}
+                        className="mt-4 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
+                      >
+                        Explore All Streams
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
+
             {/* MEGA MENU DROPDOWN PANEL FOR MEDICAL */}
             <AnimatePresence>
               {activeMegaMenu === "MEDICAL" && (
@@ -2265,6 +2634,7 @@ export default function LayoutWrapper({
                 activeMegaMenu !== "MBA" &&
                 activeMegaMenu !== "ENGINEERING" &&
                 activeMegaMenu !== "MEDICAL" &&
+                activeMegaMenu !== "MORE" &&
                 megaMenus[activeMegaMenu] && (
                   <div
                     className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"

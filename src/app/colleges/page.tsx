@@ -3,12 +3,12 @@
 import React, { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { 
-  Search, 
-  MapPin, 
+import {
+  Search,
+  MapPin,
   Map,
-  Star, 
-  X, 
+  Star,
+  X,
   Sparkles,
   Award,
   BookOpen,
@@ -24,7 +24,7 @@ import {
   Compass,
   GraduationCap,
   Link as LinkIcon,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -70,15 +70,17 @@ const mockColleges: College[] = [
     rating: 4.8,
     nirfRank: 1,
     type: "Public",
-    description: "IIT Madras is a world-class public technical university known for its cutting-edge research, startup incubation cell, and massive lush green campus in Chennai.",
+    description:
+      "IIT Madras is a world-class public technical university known for its cutting-edge research, startup incubation cell, and massive lush green campus in Chennai.",
     logoText: "IITM",
     slug: "iit-madras",
     accreditation: "A++ Grade",
-    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Masters"],
     affiliation: "Delhi University", // dummy DU match for filtering
-    approvals: ["AICTE", "UGC"]
+    approvals: ["AICTE", "UGC"],
   },
   {
     id: "2",
@@ -88,22 +90,29 @@ const mockColleges: College[] = [
     city: "Delhi",
     stream: "Engineering",
     courses: ["B.Tech", "M.Tech", "B.E"],
-    specializations: ["Computer Science", "Mechanical", "Civil", "Information Technology"],
+    specializations: [
+      "Computer Science",
+      "Mechanical",
+      "Civil",
+      "Information Technology",
+    ],
     exams: ["JEE Main", "JEE Advanced", "GATE"],
     feeRange: "₹2.2 Lakhs/Yr",
     fees: 2.2,
     rating: 4.9,
     nirfRank: 2,
     type: "Public",
-    description: "IIT Delhi is a premier engineering institute recognized for its outstanding placements, global alumni network, and strategic industry collaborations in the heart of India's capital.",
+    description:
+      "IIT Delhi is a premier engineering institute recognized for its outstanding placements, global alumni network, and strategic industry collaborations in the heart of India's capital.",
     logoText: "IITD",
     slug: "iit-delhi",
     accreditation: "A++ Grade",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Masters"],
     affiliation: "Delhi University",
-    approvals: ["AICTE", "UGC"]
+    approvals: ["AICTE", "UGC"],
   },
   {
     id: "3",
@@ -120,15 +129,17 @@ const mockColleges: College[] = [
     rating: 4.9,
     nirfRank: 1,
     type: "Public",
-    description: "Indian Institute of Management Ahmedabad is India's leading business school, famous worldwide for its case-study pedagogy, rigorous curriculum, and high placement records.",
+    description:
+      "Indian Institute of Management Ahmedabad is India's leading business school, famous worldwide for its case-study pedagogy, rigorous curriculum, and high placement records.",
     logoText: "IIMA",
     slug: "iim-ahmedabad",
     accreditation: "EQUIS Accredited",
-    image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Masters", "Postgraduate Diploma"],
     affiliation: "Mumbai University",
-    approvals: ["UGC", "MHRD"]
+    approvals: ["UGC", "MHRD"],
   },
   {
     id: "4",
@@ -138,22 +149,29 @@ const mockColleges: College[] = [
     city: "Noida",
     stream: "Engineering",
     courses: ["B.Tech", "MBA", "B.E"],
-    specializations: ["Computer Science", "Mechanical", "Electronics", "Information Technology"],
+    specializations: [
+      "Computer Science",
+      "Mechanical",
+      "Electronics",
+      "Information Technology",
+    ],
     exams: ["JEE Main", "CUET"],
     feeRange: "₹1.6 Lakhs/Yr",
     fees: 1.6,
     rating: 4.2,
     nirfRank: 95,
     type: "Private",
-    description: "Galgotias University is a highly ranked private campus offering industry-aligned engineering, management, and design programs with placement tie-ups in top Fortune 500 companies.",
+    description:
+      "Galgotias University is a highly ranked private campus offering industry-aligned engineering, management, and design programs with placement tie-ups in top Fortune 500 companies.",
     logoText: "GU",
     slug: "galgotias-university",
     accreditation: "NAAC A+",
-    image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Masters"],
     affiliation: "Anna University, Chennai",
-    approvals: ["AICTE", "UGC"]
+    approvals: ["AICTE", "UGC"],
   },
   {
     id: "5",
@@ -170,15 +188,17 @@ const mockColleges: College[] = [
     rating: 4.6,
     nirfRank: 17,
     type: "Private",
-    description: "Symbiosis Institute of Business Management is a premier private management institute with a beautiful hilltop campus in Pune, celebrated for its niche student development programs.",
+    description:
+      "Symbiosis Institute of Business Management is a premier private management institute with a beautiful hilltop campus in Pune, celebrated for its niche student development programs.",
     logoText: "SIBM",
     slug: "sibm-pune",
     accreditation: "NAAC A++",
-    image: "https://images.unsplash.com/photo-1541829019-259276a7f013?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1541829019-259276a7f013?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Masters", "Postgraduate Diploma"],
     affiliation: "Mumbai University",
-    approvals: ["UGC"]
+    approvals: ["UGC"],
   },
   {
     id: "6",
@@ -195,15 +215,17 @@ const mockColleges: College[] = [
     rating: 4.4,
     nirfRank: 85,
     type: "Private",
-    description: "RV College of Engineering is Bangalore's premier private institution, highly recognized for excellent core engineering and computer science placements within the IT hub.",
+    description:
+      "RV College of Engineering is Bangalore's premier private institution, highly recognized for excellent core engineering and computer science placements within the IT hub.",
     logoText: "RVCE",
     slug: "rv-college-of-engineering",
     accreditation: "AICTE Approved",
-    image: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Masters"],
     affiliation: "JNTUH - Jawaharlal Nehru Technological University, Hyderabad",
-    approvals: ["AICTE", "UGC"]
+    approvals: ["AICTE", "UGC"],
   },
   {
     id: "7",
@@ -220,15 +242,17 @@ const mockColleges: College[] = [
     rating: 4.9,
     nirfRank: 1,
     type: "Public",
-    description: "AIIMS New Delhi is India's premier public medical sciences university, offering highly subsidized, world-class healthcare education, research facilities, and extensive clinical exposure.",
+    description:
+      "AIIMS New Delhi is India's premier public medical sciences university, offering highly subsidized, world-class healthcare education, research facilities, and extensive clinical exposure.",
     logoText: "AIIMS",
     slug: "aiims-delhi",
     accreditation: "MCI Approved",
-    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Doctorate"],
     affiliation: "Delhi University",
-    approvals: ["UGC", "MHRD"]
+    approvals: ["UGC", "MHRD"],
   },
   {
     id: "8",
@@ -245,15 +269,17 @@ const mockColleges: College[] = [
     rating: 4.7,
     nirfRank: 10,
     type: "Private",
-    description: "Kasturba Medical College Manipal is a top-ranked private medical institute offering exceptional clinical research laboratories, modern hospitals, and global learning partnerships.",
+    description:
+      "Kasturba Medical College Manipal is a top-ranked private medical institute offering exceptional clinical research laboratories, modern hospitals, and global learning partnerships.",
     logoText: "KMC",
     slug: "kmc-manipal",
     accreditation: "NAAC A++",
-    image: "https://images.unsplash.com/photo-1551076805-e18690237571?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1551076805-e18690237571?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Masters"],
     affiliation: "Anna University, Chennai",
-    approvals: ["UGC", "PCI"]
+    approvals: ["UGC", "PCI"],
   },
   {
     id: "9",
@@ -263,22 +289,28 @@ const mockColleges: College[] = [
     city: "Ahmedabad",
     stream: "Design",
     courses: ["B.Des", "M.Des"],
-    specializations: ["Industrial Design", "Textile Design", "Communication Design"],
+    specializations: [
+      "Industrial Design",
+      "Textile Design",
+      "Communication Design",
+    ],
     exams: ["NID DAT"],
     feeRange: "₹3.8 Lakhs/Yr",
     fees: 3.8,
     rating: 4.8,
     nirfRank: 1,
     type: "Public",
-    description: "National Institute of Design is India's premier design institute, globally recognized for its creative industrial product designs, visual design labs, and eminent expert panels.",
+    description:
+      "National Institute of Design is India's premier design institute, globally recognized for its creative industrial product designs, visual design labs, and eminent expert panels.",
     logoText: "NID",
     slug: "nid-ahmedabad",
     accreditation: "Autonomous",
-    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Masters"],
     affiliation: "Mumbai University",
-    approvals: ["UGC", "MHRD"]
+    approvals: ["UGC", "MHRD"],
   },
   {
     id: "10",
@@ -288,23 +320,204 @@ const mockColleges: College[] = [
     city: "Bangalore",
     stream: "Law",
     courses: ["LLB"],
-    specializations: ["Corporate Law", "Criminal Law", "Intellectual Property Law"],
+    specializations: [
+      "Corporate Law",
+      "Criminal Law",
+      "Intellectual Property Law",
+    ],
     exams: ["CLAT"],
     feeRange: "₹2.5 Lakhs/Yr",
     fees: 2.5,
     rating: 4.9,
     nirfRank: 1,
     type: "Public",
-    description: "National Law School of India University is India's premier legal institution, serving as a pioneer of the integrated five-year law degree model with exceptional legal clinics.",
+    description:
+      "National Law School of India University is India's premier legal institution, serving as a pioneer of the integrated five-year law degree model with exceptional legal clinics.",
     logoText: "NLSIU",
     slug: "nlsiu-bangalore",
     accreditation: "BCI Approved",
-    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=60",
     programMode: "Offline",
     courseTypes: ["Bachelors", "Doctorate"],
     affiliation: "Delhi University",
-    approvals: ["UGC", "MHRD"]
-  }
+    approvals: ["UGC", "MHRD"],
+  },
+  {
+    id: "m1",
+    name: "AIIMS New Delhi - All India Institute of Medical Sciences",
+    location: "New Delhi, Delhi",
+    state: "Delhi",
+    city: "New Delhi",
+    stream: "Medical",
+    courses: ["MBBS"],
+    specializations: ["General Medicine"],
+    exams: ["NEET"],
+    feeRange: "₹5,850 Total",
+    fees: 0.05,
+    rating: 5.0,
+    nirfRank: 1,
+    type: "Public",
+    description:
+      "AIIMS New Delhi is the apex medical training and research institute of India.",
+    logoText: "AIIMS",
+    slug: "aiims-delhi",
+    accreditation: "MCI Approved",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "Autonomous",
+    approvals: ["UGC"],
+  },
+  {
+    id: "m2",
+    name: "Kasturba Medical College (KMC) Mangalore",
+    location: "Mangalore, Karnataka",
+    state: "Karnataka",
+    city: "Mangalore",
+    stream: "Medical",
+    courses: ["MBBS"],
+    specializations: ["Pediatrics"],
+    exams: ["NEET"],
+    feeRange: "₹17.8 Lakhs/Yr",
+    fees: 17.8,
+    rating: 4.7,
+    nirfRank: 23,
+    type: "Private",
+    description:
+      "KMC Mangalore is one of the premier private medical colleges in Karnataka.",
+    logoText: "KMC",
+    slug: "kmc-mangalore",
+    accreditation: "MCI Approved",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "Manipal Academy",
+    approvals: ["UGC"],
+  },
+  {
+    id: "p1",
+    name: "National Institute of Pharmaceutical Education and Research (NIPER)",
+    location: "Mohali, Punjab",
+    state: "Punjab",
+    city: "Mohali",
+    stream: "Pharmacy",
+    courses: ["B.Pharm"],
+    specializations: ["Pharmaceutics"],
+    exams: ["GPAT"],
+    feeRange: "₹1.2 Lakhs/Yr",
+    fees: 1.2,
+    rating: 4.8,
+    nirfRank: 1,
+    type: "Public",
+    description:
+      "NIPER Mohali is the first national-level institute in pharmaceutical sciences.",
+    logoText: "NIPER",
+    slug: "niper-mohali",
+    accreditation: "PCI Approved",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "Autonomous",
+    approvals: ["UGC"],
+  },
+  {
+    id: "a1",
+    name: "School of Planning and Architecture (SPA)",
+    location: "New Delhi, Delhi",
+    state: "Delhi",
+    city: "New Delhi",
+    stream: "Architecture",
+    courses: ["B.Arch"],
+    specializations: ["Urban Design"],
+    exams: ["JEE Main", "NATA"],
+    feeRange: "₹2.1 Lakhs/Yr",
+    fees: 2.1,
+    rating: 4.7,
+    nirfRank: 4,
+    type: "Public",
+    description:
+      "SPA Delhi is a premier higher education institute in architecture and planning.",
+    logoText: "SPA",
+    slug: "spa-delhi",
+    accreditation: "COA Approved",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "Autonomous",
+    approvals: ["UGC"],
+  },
+  {
+    id: "la1",
+    name: "Symbiosis Law School (SLS) Pune",
+    location: "Pune, Maharashtra",
+    state: "Maharashtra",
+    city: "Pune",
+    stream: "Law",
+    courses: ["BA LLB"],
+    specializations: ["Corporate Law"],
+    exams: ["SLAT"],
+    feeRange: "₹3.8 Lakhs/Yr",
+    fees: 3.8,
+    rating: 4.6,
+    nirfRank: 6,
+    type: "Private",
+    description:
+      "SLS Pune is one of the most prominent private law schools in India.",
+    logoText: "SLS",
+    slug: "sls-pune",
+    accreditation: "BCI Approved",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "Symbiosis International",
+    approvals: ["UGC"],
+  },
+  {
+    id: "de1",
+    name: "National Institute of Fashion Technology (NIFT) Patna",
+    location: "Patna, Bihar",
+    state: "Bihar",
+    city: "Patna",
+    stream: "Design",
+    courses: ["B.Des"],
+    specializations: ["Fashion Design"],
+    exams: ["NIFT Entrance"],
+    feeRange: "₹2.8 Lakhs/Yr",
+    fees: 2.8,
+    rating: 4.5,
+    nirfRank: 11,
+    type: "Public",
+    description:
+      "NIFT Patna offers top-tier fashion education under Ministry of Textiles.",
+    logoText: "NIFT",
+    slug: "nift-patna",
+    accreditation: "Autonomous",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "Autonomous",
+    approvals: ["UGC"],
+  },
+  {
+    id: "pa1",
+    name: "Government Paramedical College",
+    location: "Bangalore, Karnataka",
+    state: "Karnataka",
+    city: "Bangalore",
+    stream: "Paramedical",
+    courses: ["B.Sc Nursing"],
+    specializations: ["General Nursing"],
+    exams: ["KCET"],
+    feeRange: "₹85,000/Yr",
+    fees: 0.85,
+    rating: 4.4,
+    nirfRank: 50,
+    type: "Public",
+    description:
+      "A premier public institution offering medical laboratory and allied healthcare courses.",
+    logoText: "GPC",
+    slug: "govt-paramedical-college",
+    accreditation: "INC Approved",
+    programMode: "Offline",
+    courseTypes: ["Bachelors"],
+    affiliation: "RGUHS",
+    approvals: ["UGC"],
+  },
 ];
 
 function CollegesListContent() {
@@ -316,21 +529,29 @@ function CollegesListContent() {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedStreams, setSelectedStreams] = useState<string[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
-  const [selectedSpecializations, setSelectedSpecializations] = useState<string[]>([]);
+  const [selectedSpecializations, setSelectedSpecializations] = useState<
+    string[]
+  >([]);
   const [sortBy, setSortBy] = useState("popularity");
   const [shortlisted, setShortlisted] = useState<string[]>([]);
 
   // New filters states from GetMyUni screenshots
-  const [selectedProgramModes, setSelectedProgramModes] = useState<string[]>([]);
+  const [selectedProgramModes, setSelectedProgramModes] = useState<string[]>(
+    [],
+  );
   const [selectedOwnerships, setSelectedOwnerships] = useState<string[]>([]);
   const [selectedExams, setSelectedExams] = useState<string[]>([]);
   const [selectedCourseTypes, setSelectedCourseTypes] = useState<string[]>([]);
-  const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>([]);
+  const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>(
+    [],
+  );
   const [selectedApprovals, setSelectedApprovals] = useState<string[]>([]);
   const [selectedFeesRanges, setSelectedFeesRanges] = useState<string[]>([]);
 
   // Toggle state for sidebar filter accordions
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({
     state: true,
     city: true,
     stream: true,
@@ -346,9 +567,9 @@ function CollegesListContent() {
   });
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [section]: !prev[section]
+      [section]: !prev[section],
     }));
   };
 
@@ -363,6 +584,68 @@ function CollegesListContent() {
       }
     }
     return null;
+  };
+
+  const getStreamFromCollegeName = (name: string): string => {
+    const n = name.toLowerCase();
+    if (
+      n.includes("iim") ||
+      n.includes("management") ||
+      n.includes("business") ||
+      n.includes("mba") ||
+      n.includes("pgdm") ||
+      n.includes("sibm") ||
+      n.includes("spjimr") ||
+      n.includes("mdi")
+    )
+      return "Management";
+    if (
+      n.includes("iit") ||
+      n.includes("nit") ||
+      n.includes("engineering") ||
+      n.includes("technology") ||
+      n.includes("b.tech") ||
+      n.includes("rvce") ||
+      n.includes("college of engineering")
+    )
+      return "Engineering";
+    if (
+      n.includes("aiims") ||
+      n.includes("medical") ||
+      n.includes("hospital") ||
+      n.includes("mbbs") ||
+      n.includes("kmc") ||
+      n.includes("vellore") ||
+      n.includes("kasturba")
+    )
+      return "Medical";
+    if (n.includes("nift") || n.includes("nid") || n.includes("design"))
+      return "Design";
+    if (n.includes("law") || n.includes("nlsiu") || n.includes("nalsar"))
+      return "Law";
+    if (
+      n.includes("pharmacy") ||
+      n.includes("b.pharm") ||
+      n.includes("m.pharm") ||
+      n.includes("niper")
+    )
+      return "Pharmacy";
+    if (n.includes("paramedical") || n.includes("nursing"))
+      return "Paramedical";
+    if (
+      n.includes("architecture") ||
+      n.includes("b.arch") ||
+      n.includes("planning")
+    )
+      return "Architecture";
+    if (n.includes("hotel") || n.includes("hospitality")) return "Hospitality";
+    if (n.includes("veterinary")) return "Veterinary Science";
+    if (n.includes("arts") || n.includes("fine arts")) return "Arts";
+    if (n.includes("computer") || n.includes("mca"))
+      return "Computer Application";
+    if (n.includes("dental") || n.includes("bds")) return "Dental";
+    if (n.includes("education") || n.includes("b.ed")) return "Education";
+    return "Engineering"; // default fallback
   };
 
   // Local filter search options states
@@ -383,11 +666,11 @@ function CollegesListContent() {
   const programModeOptions = [
     { name: "Offline", count: 12802 },
     { name: "Distance Education", count: 117 },
-    { name: "Online", count: 108 }
+    { name: "Online", count: 108 },
   ];
   const ownershipOptions = [
     { name: "Private", count: 9978 },
-    { name: "Public", count: 1811 }
+    { name: "Public", count: 1811 },
   ];
   const examOptions = [
     { name: "Jee Main", count: 616 },
@@ -570,11 +853,14 @@ function CollegesListContent() {
     { name: "Postgraduate Diploma", count: 1758 },
     { name: "Diploma", count: 627 },
     { name: "Certificate", count: 100 },
-    { name: "Postgraduate Certificate", count: 64 }
+    { name: "Postgraduate Certificate", count: 64 },
   ];
   const affiliationOptions = [
     { name: "Anna University, Chennai", count: 451 },
-    { name: "JNTUH - Jawaharlal Nehru Technological University, Hyderabad", count: 292 },
+    {
+      name: "JNTUH - Jawaharlal Nehru Technological University, Hyderabad",
+      count: 292,
+    },
     { name: "Savitribai Phule Pune University [SPPU], Pune", count: 289 },
     { name: "University of Mumbai [UM] Mumbai", count: 225 },
     { name: "Calicut University, Calicut", count: 203 },
@@ -588,12 +874,18 @@ function CollegesListContent() {
     { name: "Gujarat Technological University", count: 150 },
     { name: "I.K Gujral Punjab Technical University (PTU)", count: 150 },
     { name: "CCSU - Chaudhary Charan Singh University", count: 148 },
-    { name: "Tamil Nadu Teachers Education University, [TNTEU] Chennai", count: 138 },
+    {
+      name: "Tamil Nadu Teachers Education University, [TNTEU] Chennai",
+      count: 138,
+    },
     { name: "Uttar Pradesh Technical University, [UPTU] Lucknow", count: 136 },
     { name: "RTU - Rajasthan Technical University", count: 134 },
     { name: "Dr. A.P.J. Abdul Kalam Technical University (AKTU)", count: 128 },
     { name: "Kerala University of Health Sciences", count: 128 },
-    { name: "Maulana Abul Kalam Azad University of Technology [MAKAUT]", count: 124 },
+    {
+      name: "Maulana Abul Kalam Azad University of Technology [MAKAUT]",
+      count: 124,
+    },
     { name: "Biju Patnaik University of Technology", count: 119 },
     { name: "Osmania University", count: 118 },
     { name: "Rashtrasant Tukadoji Maharaj Nagpur University", count: 115 },
@@ -601,7 +893,10 @@ function CollegesListContent() {
     { name: "University of Calcutta, [UC] Kolkata", count: 105 },
     { name: "Shivaji University, [SUK] Kolhapur", count: 89 },
     { name: "Gauhati University, Guwahati", count: 85 },
-    { name: "Guru Gobind Singh Indraprastha University, [GGSIPU] New Delhi", count: 84 },
+    {
+      name: "Guru Gobind Singh Indraprastha University, [GGSIPU] New Delhi",
+      count: 84,
+    },
     { name: "Delhi University [DU]", count: 82 },
     { name: "Bharathiar University, [BU] Coimbatore", count: 81 },
     { name: "DAVV - Devi Ahilya Vishwavidyalaya", count: 79 },
@@ -609,7 +904,10 @@ function CollegesListContent() {
     { name: "Panjab University, Chandigarh", count: 75 },
     { name: "University of Rajasthan, [UR] Jaipur", count: 73 },
     { name: "University of Madras, Chennai", count: 70 },
-    { name: "JNTUA - Jawaharlal Nehru Technological University, Anantapur", count: 68 },
+    {
+      name: "JNTUA - Jawaharlal Nehru Technological University, Anantapur",
+      count: 68,
+    },
     { name: "The Tamil Nadu Dr. M.G.R. Medical University", count: 65 },
     { name: "University of Burdwan, [UB] Bardhaman", count: 64 },
     { name: "Barkatullah University, [BU] Bhopal", count: 63 },
@@ -625,16 +923,28 @@ function CollegesListContent() {
     { name: "Dr Bhim Rao Ambedkar University, [DBRAU] Agra", count: 48 },
     { name: "UTU - Uttarakhand Technical University", count: 48 },
     { name: "Lucknow University", count: 47 },
-    { name: "Chhatrapati Sahu Ji Maharaj University [CSJMU], Kanpur", count: 46 },
+    {
+      name: "Chhatrapati Sahu Ji Maharaj University [CSJMU], Kanpur",
+      count: 46,
+    },
     { name: "Dibrugarh University, Dibrugarh", count: 46 },
     { name: "Pondicherry University, Puducherry", count: 45 },
     { name: "Utkal University, [UU] Bhubaneshwar", count: 45 },
     { name: "Baba Farid University of Health Sciences", count: 44 },
-    { name: "CSVTU - Chhattisgarh Swami Vivekanand Technical University", count: 43 },
+    {
+      name: "CSVTU - Chhattisgarh Swami Vivekanand Technical University",
+      count: 43,
+    },
     { name: "Sant Gadge Baba Amravati University", count: 41 },
-    { name: "Dr Babasaheb Ambedkar Marathwada University, [DBAMU] Aurangabad", count: 40 },
+    {
+      name: "Dr Babasaheb Ambedkar Marathwada University, [DBAMU] Aurangabad",
+      count: 40,
+    },
     { name: "Dr. NTR University of Health Sciences", count: 39 },
-    { name: "NMU - Kavayitri Bahinabai Chaudhari North Maharashtra University", count: 38 },
+    {
+      name: "NMU - Kavayitri Bahinabai Chaudhari North Maharashtra University",
+      count: 38,
+    },
     { name: "Dr. Ram Manohar Lohia Avadh University", count: 37 },
     { name: "University of Kalyani, Kalyani", count: 35 },
     { name: "Karnataka State Law University", count: 34 },
@@ -645,13 +955,22 @@ function CollegesListContent() {
     { name: "Veer Narmad South Gujarat University", count: 31 },
     { name: "Madurai Kamaraj University, [MKU] Madurai", count: 30 },
     { name: "Jiwaji University, Gwalior", count: 28 },
-    { name: "Makhanlal Chaturvedi National University of Journalism and Communication - MCNUJC", count: 28 },
+    {
+      name: "Makhanlal Chaturvedi National University of Journalism and Communication - MCNUJC",
+      count: 28,
+    },
     { name: "Kakatiya University", count: 27 },
     { name: "Vidyasagar University, [VU] Midnapore", count: 27 },
     { name: "AKU - Aryabhatta Knowledge University", count: 26 },
     { name: "Kumaun University, Nainital", count: 26 },
-    { name: "Pandit Bhagwat Dayal Sharma University of Health Sciences", count: 26 },
-    { name: "WBUHS - The West Bengal University of Health Sciences", count: 26 },
+    {
+      name: "Pandit Bhagwat Dayal Sharma University of Health Sciences",
+      count: 26,
+    },
+    {
+      name: "WBUHS - The West Bengal University of Health Sciences",
+      count: 26,
+    },
     { name: "Sardar Patel University, Vallabh Vidyanagar, Gujarat", count: 25 },
     { name: "Karnatak University Dharwad", count: 24 },
     { name: "SIU Pune - Symbiosis International", count: 24 },
@@ -664,13 +983,19 @@ function CollegesListContent() {
     { name: "Rani Channamma University", count: 22 },
     { name: "HNGU - Hemchandracharya North Gujarat University", count: 21 },
     { name: "Kashmir University, Srinagar", count: 21 },
-    { name: "Indira Gandhi National Open University, [IGNOU] New Delhi", count: 20 },
+    {
+      name: "Indira Gandhi National Open University, [IGNOU] New Delhi",
+      count: 20,
+    },
     { name: "SVU - Sri Venkateswara University", count: 20 },
     { name: "Manonmaniam Sundaranar University, [MSU] Tirunelveli", count: 19 },
     { name: "Saurashtra University, [SU] Rajkot", count: 19 },
     { name: "SRTMUN - Swami Ramanand Teerth Marathwada University", count: 19 },
     { name: "Bharati Vidyapeeth Deemed University Pune", count: 18 },
-    { name: "GJUST - Guru Jambheshwar University of Science And Technology", count: 17 },
+    {
+      name: "GJUST - Guru Jambheshwar University of Science And Technology",
+      count: 17,
+    },
     { name: "HPTU - Himachal Pradesh Technical University", count: 17 },
     { name: "Mahatma Gandhi Kashi Vidyapith - MGKVP", count: 17 },
     { name: "MLSU - Mohanlal Sukhadia University", count: 17 },
@@ -683,12 +1008,18 @@ function CollegesListContent() {
     { name: "Periyar University, [PU] Salem", count: 15 },
     { name: "PRSU - Pandit Ravishankar Shukla University", count: 15 },
     { name: "Ranchi University, [RU] Ranchi", count: 15 },
-    { name: "Pt. Deendayal Upadhyay Memorial Health Sciences and Ayush University, Raipur", count: 14 },
+    {
+      name: "Pt. Deendayal Upadhyay Memorial Health Sciences and Ayush University, Raipur",
+      count: 14,
+    },
     { name: "LNMU - Lalit Narayan Mithila University", count: 14 },
     { name: "Manipur University, [MU] Imphal", count: 14 },
     { name: "Nagaland University - Kohima Campus", count: 14 },
     { name: "Vikram University, [VU] Ujjain", count: 14 },
-    { name: "DCRUST - Deenbandhu Chhotu Ram University of Science and Technology", count: 13 },
+    {
+      name: "DCRUST - Deenbandhu Chhotu Ram University of Science and Technology",
+      count: 13,
+    },
     { name: "JNVU - Jai Narain Vyas University", count: 13 },
     { name: "KSOU - Karnataka State Open University", count: 13 },
     { name: "Kolhan University, Jamshedpur", count: 13 },
@@ -719,11 +1050,20 @@ function CollegesListContent() {
     { name: "North Eastern Hill University, Shillong", count: 8 },
     { name: "Assam University, Silchar", count: 7 },
     { name: "Guru Ravidas Ayurved University, Hoshiarpur", count: 7 },
-    { name: "JNAFAU - Jawaharlal Nehru Architecture And Fine Arts University", count: 7 },
+    {
+      name: "JNAFAU - Jawaharlal Nehru Architecture And Fine Arts University",
+      count: 7,
+    },
     { name: "Satavahana University, [SU] Machilipatnam", count: 7 },
-    { name: "Srimanta Sankaradeva University of Health Sciences [SSUHS] Guwahati", count: 7 },
+    {
+      name: "Srimanta Sankaradeva University of Health Sciences [SSUHS] Guwahati",
+      count: 7,
+    },
     { name: "Ahmedabad University", count: 6 },
-    { name: "Bhakta Kavi Narsinh Mehta University (BKNMU), Junagadh", count: 6 },
+    {
+      name: "Bhakta Kavi Narsinh Mehta University (BKNMU), Junagadh",
+      count: 6,
+    },
     { name: "Bhupendra Narayan Mandal University", count: 6 },
     { name: "BR AMBEDKAR BIHAR UNIVERSITY - [BRABU]", count: 6 },
     { name: "Ganpat University, Mehsana", count: 6 },
@@ -743,14 +1083,20 @@ function CollegesListContent() {
     { name: "IMU Chennai Indian Maritime University (IMUC)", count: 5 },
     { name: "Mother Teresa Women'S University - MTWU", count: 5 },
     { name: "Patliputra University, Patna", count: 5 },
-    { name: "Rajasthan University of Veterinary and Animal Sciences", count: 5 },
+    {
+      name: "Rajasthan University of Veterinary and Animal Sciences",
+      count: 5,
+    },
     { name: "Sikkim University, [SU] Gangtok", count: 5 },
     { name: "Tamil Nadu Open University, [TNOU] Chennai", count: 5 },
     { name: "Teerthanker Mahaveer University", count: 5 },
     { name: "Tumkur University, [TU] Tumkur", count: 5 },
     { name: "University of Kota, [UK] Kota", count: 5 },
     { name: "Bharath University, Chennai", count: 4 },
-    { name: "Hemwati Nandan Bahuguna Uttarakhand Medical Education University [HNBUMU], Dehradun", count: 4 },
+    {
+      name: "Hemwati Nandan Bahuguna Uttarakhand Medical Education University [HNBUMU], Dehradun",
+      count: 4,
+    },
     { name: "Indus University", count: 4 },
     { name: "KAU - Kerala Agricultural University", count: 4 },
     { name: "Mizoram University", count: 4 },
@@ -758,9 +1104,15 @@ function CollegesListContent() {
     { name: "SVSU - Swami Vivekanand Subharti University", count: 4 },
     { name: "TMBU - Tilka Manjhi Bhagalpur University", count: 4 },
     { name: "Amity University, Gwalior", count: 3 },
-    { name: "Dr. Babasaheb Ambedkar Open University (BAOU), Ahmedabad", count: 3 },
+    {
+      name: "Dr. Babasaheb Ambedkar Open University (BAOU), Ahmedabad",
+      count: 3,
+    },
     { name: "PDKV - Dr Panjabrao Deshmukh Krishi Vidyapeeth", count: 3 },
-    { name: "Dr. Sarvepalli Radhakrishnan Rajasthan Ayurved University", count: 3 },
+    {
+      name: "Dr. Sarvepalli Radhakrishnan Rajasthan Ayurved University",
+      count: 3,
+    },
     { name: "GGU - Guru Ghasidas Vishwavidyalaya", count: 3 },
     { name: "Kadi Sarva Vishwavidyalaya", count: 3 },
     { name: "Karnataka State Akkamahadevi Women's University", count: 3 },
@@ -778,14 +1130,14 @@ function CollegesListContent() {
     { name: "PCI", count: 316 },
     { name: "MHRD", count: 154 },
     { name: "KNC", count: 22 },
-    { name: "CCH", count: 1 }
+    { name: "CCH", count: 1 },
   ];
   const feesRangeOptions = [
     { name: "Less than 1 Lakh", count: 1866 },
     { name: "1 to 2 Lakhs", count: 1596 },
     { name: "2 to 3 Lakhs", count: 1054 },
     { name: "3 to 5 Lakhs", count: 1095 },
-    { name: "More than 5 Lakhs", count: 1053 }
+    { name: "More than 5 Lakhs", count: 1053 },
   ];
 
   const stateOptions = [
@@ -820,7 +1172,7 @@ function CollegesListContent() {
     { name: "Nagaland", count: 19 },
     { name: "Arunachal Pradesh", count: 18 },
     { name: "Mizoram", count: 9 },
-    { name: "Andaman and Nicobar Islands", count: 3 }
+    { name: "Andaman and Nicobar Islands", count: 3 },
   ];
 
   const cityOptions = [
@@ -873,7 +1225,7 @@ function CollegesListContent() {
     { name: "Patiala", count: 54 },
     { name: "Malappuram", count: 53 },
     { name: "Allahabad", count: 52 },
-    { name: "Kanyakumari", count: 52 }
+    { name: "Kanyakumari", count: 52 },
   ];
 
   const streamOptions = [
@@ -897,7 +1249,7 @@ function CollegesListContent() {
     { name: "Veterinary", count: 50 },
     { name: "Animation", count: 12 },
     { name: "Agriculture", count: 3 },
-    { name: "Aviation", count: 3 }
+    { name: "Aviation", count: 3 },
   ];
 
   const courseOptions = [
@@ -1218,7 +1570,10 @@ function CollegesListContent() {
     { name: "BSc Botany", count: 788 },
     { name: "MA Economics", count: 775 },
     { name: "BSc Zoology", count: 763 },
-    { name: "Bachelor of Engineering Electrical And Electronics Engineering", count: 720 },
+    {
+      name: "Bachelor of Engineering Electrical And Electronics Engineering",
+      count: 720,
+    },
     { name: "MSc Computer Science", count: 674 },
     { name: "MA History", count: 594 },
     { name: "BA Hindi", count: 591 },
@@ -1302,7 +1657,10 @@ function CollegesListContent() {
     { name: "BTech Communication Engineering", count: 225 },
     { name: "MD Microbiology", count: 225 },
     { name: "MD Pharmacology", count: 223 },
-    { name: "Bachelor of Engineering Electronics And Telecom Engineering", count: 222 },
+    {
+      name: "Bachelor of Engineering Electronics And Telecom Engineering",
+      count: 222,
+    },
     { name: "MSc Environmental Science", count: 221 },
     { name: "MTech Thermal Engineering", count: 220 },
     { name: "MD Physiology", count: 218 },
@@ -1750,7 +2108,10 @@ function CollegesListContent() {
     { name: "M.Pharm Pharmaceutical Technology", count: 36 },
     { name: "MTech Biomedical Engineering", count: 36 },
     { name: "PGD Child Health", count: 36 },
-    { name: "Bachelor of Occupational Therapy [BOT] Occupational Therapy", count: 35 },
+    {
+      name: "Bachelor of Occupational Therapy [BOT] Occupational Therapy",
+      count: 35,
+    },
     { name: "PhD Finance", count: 35 },
     { name: "PhD Public Administration", count: 35 },
     { name: "MD Ophthalmology", count: 35 },
@@ -1956,7 +2317,10 @@ function CollegesListContent() {
     { name: "BA Social Science", count: 22 },
     { name: "BBA Financial Market", count: 22 },
     { name: "BCom Tourism", count: 22 },
-    { name: "Bachelor of Engineering Information Science And Engineering", count: 22 },
+    {
+      name: "Bachelor of Engineering Information Science And Engineering",
+      count: 22,
+    },
     { name: "B.Ed Computer Science", count: 22 },
     { name: "BNYS Naturopathy", count: 22 },
     { name: "BSc Clinical Nutrition", count: 22 },
@@ -2261,7 +2625,10 @@ function CollegesListContent() {
     { name: "B.Des Game Design", count: 13 },
     { name: "B.Des Industrial Design", count: 13 },
     { name: "B.Des User Experience Design", count: 13 },
-    { name: "Bachelor of Engineering Aircraft Maintenance Engineering", count: 13 },
+    {
+      name: "Bachelor of Engineering Aircraft Maintenance Engineering",
+      count: 13,
+    },
     { name: "BSc Audiology", count: 13 },
     { name: "BSc Bioinformatics", count: 13 },
     { name: "BSc Maths", count: 13 },
@@ -2502,7 +2869,10 @@ function CollegesListContent() {
     { name: "BCom Management Studies", count: 9 },
     { name: "BCom Mathematics", count: 9 },
     { name: "Bachelor of Engineering Robotics", count: 9 },
-    { name: "Bachelor of Hospitality Management Hospitality Management", count: 9 },
+    {
+      name: "Bachelor of Hospitality Management Hospitality Management",
+      count: 9,
+    },
     { name: "BMS Event Management", count: 9 },
     { name: "BSc Anaesthesia", count: 9 },
     { name: "BSc Industrial Chemistry", count: 9 },
@@ -2588,7 +2958,10 @@ function CollegesListContent() {
     { name: "BCom Banking And Insurance Hons", count: 8 },
     { name: "BCom Financial Market Hons", count: 8 },
     { name: "B.Des Knitwear Design", count: 8 },
-    { name: "Bachelor of Engineering Electronics Communication Engineering", count: 8 },
+    {
+      name: "Bachelor of Engineering Electronics Communication Engineering",
+      count: 8,
+    },
     { name: "Bachelor of Engineering Petrochemical Engineering", count: 8 },
     { name: "B.Ed Sanskrit", count: 8 },
     { name: "BHM Culinary Arts", count: 8 },
@@ -2678,7 +3051,10 @@ function CollegesListContent() {
     { name: "BCom Business Administration Hons", count: 7 },
     { name: "BCom Economics Hons", count: 7 },
     { name: "BCom Information Technology", count: 7 },
-    { name: "Bachelor of Engineering Electronics and Instrumentation", count: 7 },
+    {
+      name: "Bachelor of Engineering Electronics and Instrumentation",
+      count: 7,
+    },
     { name: "B.Ed Physical Education", count: 7 },
     { name: "BSc Aeronautical Science", count: 7 },
     { name: "BSc Biomedical Science", count: 7 },
@@ -3205,7 +3581,10 @@ function CollegesListContent() {
     { name: "B.Des Communication Design Hons", count: 4 },
     { name: "B.Des Fashion Styling", count: 4 },
     { name: "BDS Biochemistry", count: 4 },
-    { name: "Bachelor of Engineering Applied Electronics And Instrumentation", count: 4 },
+    {
+      name: "Bachelor of Engineering Applied Electronics And Instrumentation",
+      count: 4,
+    },
     { name: "Bachelor of Engineering Chemical Technology", count: 4 },
     { name: "Bachelor of Engineering Food Technology", count: 4 },
     { name: "B.Ed Life Science", count: 4 },
@@ -3519,7 +3898,10 @@ function CollegesListContent() {
     { name: "BDS Pharmacology", count: 3 },
     { name: "BDS Physiology", count: 3 },
     { name: "BDS Prosthodontics", count: 3 },
-    { name: "Bachelor of Engineering Industrial Engineering And Management", count: 3 },
+    {
+      name: "Bachelor of Engineering Industrial Engineering And Management",
+      count: 3,
+    },
     { name: "Bachelor of Engineering Material Science", count: 3 },
     { name: "Bachelor of Engineering Pharmaceutical Engineering", count: 3 },
     { name: "Bachelor of Engineering Polymer Science", count: 3 },
@@ -3653,7 +4035,10 @@ function CollegesListContent() {
     { name: "Executive MBA Pharmaceutical Management", count: 3 },
     { name: "Executive MBA Project Management", count: 3 },
     { name: "Executive MBA Safety Management", count: 3 },
-    { name: "Executive Program Logistics And Supply Chain Management", count: 3 },
+    {
+      name: "Executive Program Logistics And Supply Chain Management",
+      count: 3,
+    },
     { name: "LLM Criminology", count: 3 },
     { name: "LLM Cyber Security", count: 3 },
     { name: "LLM Public Policy", count: 3 },
@@ -4665,7 +5050,10 @@ function CollegesListContent() {
     { name: "Advance Certificate Hr", count: 1 },
     { name: "Advance Certificate Industrial Training", count: 1 },
     { name: "Advance Certificate Information Security", count: 1 },
-    { name: "Advance Certificate Logistics And Supply Chain Management", count: 1 },
+    {
+      name: "Advance Certificate Logistics And Supply Chain Management",
+      count: 1,
+    },
     { name: "Advance Certificate Logistics Management", count: 1 },
     { name: "Advance Certificate Medicine", count: 1 },
     { name: "Advance Certificate Meditation", count: 1 },
@@ -4858,7 +5246,10 @@ function CollegesListContent() {
     { name: "BTTM Hospitality Management", count: 1 },
     { name: "BTTH Tourism Management", count: 1 },
     { name: "BUD Urban Design", count: 1 },
-    { name: "Bachelors in Logistics Management Logistics Management", count: 1 },
+    {
+      name: "Bachelors in Logistics Management Logistics Management",
+      count: 1,
+    },
     { name: "B.Des in Textile Design Textile Design", count: 1 },
     { name: "BAMS Naturopathy", count: 1 },
     { name: "BASLP Speech Therapy", count: 1 },
@@ -4998,10 +5389,16 @@ function CollegesListContent() {
     { name: "Bachelor of Engineering Ceramics", count: 1 },
     { name: "Bachelor of Engineering Chemical Engineering Hons", count: 1 },
     { name: "Bachelor of Engineering Chemistry", count: 1 },
-    { name: "Bachelor of Engineering Computer Integrated Manufacturing", count: 1 },
+    {
+      name: "Bachelor of Engineering Computer Integrated Manufacturing",
+      count: 1,
+    },
     { name: "Bachelor of Engineering Computer Science Engineering", count: 1 },
     { name: "Bachelor of Engineering Dairy Technology", count: 1 },
-    { name: "Bachelor of Engineering Electronics And Telecommunication Engineering", count: 1 },
+    {
+      name: "Bachelor of Engineering Electronics And Telecommunication Engineering",
+      count: 1,
+    },
     { name: "Bachelor of Engineering Fashion Technology", count: 1 },
     { name: "Bachelor of Engineering Fire Engineering", count: 1 },
     { name: "Bachelor of Engineering Fisheries", count: 1 },
@@ -6416,22 +6813,26 @@ function CollegesListContent() {
 
   // Extract unique filter options from mockup database
   const filterOptions = useMemo(() => {
-    const states = Array.from(new Set(mockColleges.map(c => c.state)));
-    const cities = Array.from(new Set(mockColleges.map(c => c.city)));
-    const streams = Array.from(new Set(mockColleges.map(c => c.stream)));
-    
+    const states = Array.from(new Set(mockColleges.map((c) => c.state)));
+    const cities = Array.from(new Set(mockColleges.map((c) => c.city)));
+    const streams = Array.from(new Set(mockColleges.map((c) => c.stream)));
+
     const coursesSet = new Set<string>();
-    mockColleges.forEach(c => c.courses.forEach(course => coursesSet.add(course)));
-    
+    mockColleges.forEach((c) =>
+      c.courses.forEach((course) => coursesSet.add(course)),
+    );
+
     const specializationsSet = new Set<string>();
-    mockColleges.forEach(c => c.specializations.forEach(s => specializationsSet.add(s)));
+    mockColleges.forEach((c) =>
+      c.specializations.forEach((s) => specializationsSet.add(s)),
+    );
 
     return {
       states,
       cities,
       streams,
       courses: Array.from(coursesSet),
-      specializations: Array.from(specializationsSet)
+      specializations: Array.from(specializationsSet),
     };
   }, []);
 
@@ -6450,38 +6851,52 @@ function CollegesListContent() {
         queryParams.append("page", page.toString());
         queryParams.append("limit", "12");
         if (searchTerm.trim()) queryParams.append("search", searchTerm);
-        if (selectedStates.length > 0) queryParams.append("state", selectedStates.join(","));
-        if (selectedCities.length > 0) queryParams.append("city", selectedCities.join(","));
-        if (selectedOwnerships.length > 0) queryParams.append("ownership", selectedOwnerships.join(","));
-        if (selectedExams.length > 0) queryParams.append("exam", selectedExams.join(","));
+        if (selectedStates.length > 0)
+          queryParams.append("state", selectedStates.join(","));
+        if (selectedCities.length > 0)
+          queryParams.append("city", selectedCities.join(","));
+        if (selectedOwnerships.length > 0)
+          queryParams.append("ownership", selectedOwnerships.join(","));
+        if (selectedExams.length > 0)
+          queryParams.append("exam", selectedExams.join(","));
 
         const res = await fetch(`/api/colleges?${queryParams.toString()}`);
         const data = await res.json();
-        
+
         if (data.colleges) {
           // Map database format to layout structure
           const mapped = data.colleges.map((c: any) => {
-            const examsArr = c.exams_accepted ? c.exams_accepted.split(",").map((e: any) => e.trim()) : [];
-            const logo = c.name.split(" ").map((w: any) => w[0]).join("").substring(0, 3).toUpperCase();
+            const examsArr = c.exams_accepted
+              ? c.exams_accepted.split(",").map((e: any) => e.trim())
+              : [];
+            const logo = c.name
+              .split(" ")
+              .map((w: any) => w[0])
+              .join("")
+              .substring(0, 3)
+              .toUpperCase();
             return {
               id: c.id,
               name: c.name,
               location: c.location,
               state: c.state,
               city: c.city,
-              stream: "Engineering", // fallback
+              stream: getStreamFromCollegeName(c.name),
               courses: [c.courses_count || "Courses"],
               specializations: [],
               exams: examsArr.length > 0 ? examsArr : ["None"],
               feeRange: c.tuition_fees || "N/A",
               fees: 0,
               rating: parseFloat(c.rating) || 4.2,
-              nirfRank: c.nirf_rank && c.nirf_rank !== "N/A" ? parseInt(c.nirf_rank.replace(/[^0-9]/g, "")) : undefined,
+              nirfRank:
+                c.nirf_rank && c.nirf_rank !== "N/A"
+                  ? parseInt(c.nirf_rank.replace(/[^0-9]/g, ""))
+                  : undefined,
               type: c.ownership || "Private",
               description: c.description || "",
               logoText: logo || "COL",
               slug: c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-              accreditation: "AICTE Approved"
+              accreditation: "AICTE Approved",
             };
           });
           setCollegesList(mapped);
@@ -6494,23 +6909,45 @@ function CollegesListContent() {
         setLoading(false);
       }
     };
-    
+
     fetchColleges();
-  }, [page, searchTerm, selectedStates, selectedCities, selectedOwnerships, selectedExams, sortBy]);
+  }, [
+    page,
+    searchTerm,
+    selectedStates,
+    selectedCities,
+    selectedOwnerships,
+    selectedExams,
+    sortBy,
+  ]);
 
   // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, selectedStates, selectedCities, selectedOwnerships, selectedExams, sortBy]);
+  }, [
+    searchTerm,
+    selectedStates,
+    selectedCities,
+    selectedOwnerships,
+    selectedExams,
+    sortBy,
+  ]);
 
   // Define filteredColleges alias for zero-break compatibility with existing template code
-  const filteredColleges = collegesList;
+  const filteredColleges = useMemo(() => {
+    if (selectedStreams.length === 0) return collegesList;
+    return collegesList.filter((c) => selectedStreams.includes(c.stream));
+  }, [collegesList, selectedStreams]);
 
   // Read More inline toggle helper
-  const [expandedDescriptions, setExpandedDescriptions] = useState<string[]>([]);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<string[]>(
+    [],
+  );
   const toggleDescription = (id: string) => {
     if (expandedDescriptions.includes(id)) {
-      setExpandedDescriptions(expandedDescriptions.filter(descId => descId !== id));
+      setExpandedDescriptions(
+        expandedDescriptions.filter((descId) => descId !== id),
+      );
     } else {
       setExpandedDescriptions([...expandedDescriptions, id]);
     }
@@ -6519,29 +6956,77 @@ function CollegesListContent() {
   // Toggle checklist filter options helper
   const toggleFilter = (type: string, value: string) => {
     if (type === "state") {
-      setSelectedStates(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedStates((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "city") {
-      setSelectedCities(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedCities((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "stream") {
-      setSelectedStreams(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedStreams((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "course") {
-      setSelectedCourses(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedCourses((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "specialization") {
-      setSelectedSpecializations(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedSpecializations((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "programMode") {
-      setSelectedProgramModes(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedProgramModes((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "ownership") {
-      setSelectedOwnerships(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedOwnerships((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "exam") {
-      setSelectedExams(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedExams((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "courseType") {
-      setSelectedCourseTypes(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedCourseTypes((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "affiliation") {
-      setSelectedAffiliations(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedAffiliations((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "approval") {
-      setSelectedApprovals(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedApprovals((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     } else if (type === "feesRange") {
-      setSelectedFeesRanges(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+      setSelectedFeesRanges((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
     }
   };
 
@@ -6565,7 +7050,9 @@ function CollegesListContent() {
   // Trigger admission modal on click of Apply Now/Brochure (opens globally handled modal)
   const openInquiryModal = (stream: string) => {
     if (typeof window !== "undefined") {
-      const event = new CustomEvent("openAdmissionAlert", { detail: { stream } });
+      const event = new CustomEvent("openAdmissionAlert", {
+        detail: { stream },
+      });
       window.dispatchEvent(event);
     }
   };
@@ -6573,12 +7060,13 @@ function CollegesListContent() {
   return (
     <div className="min-h-screen bg-[#f8f9fa] pt-32 pb-16 md:pt-40">
       <div className="max-w-[1240px] mx-auto px-4 md:px-6">
-        
         {/* BREADCRUMBS & COUNT HEADER */}
         <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-extrabold text-slate-400">
-              <Link href="/" className="hover:text-orange-500">Home</Link>
+              <Link href="/" className="hover:text-orange-500">
+                Home
+              </Link>
               <ChevronRight className="w-3 h-3 text-slate-300" />
               <span className="text-slate-600">All Colleges</span>
             </div>
@@ -6590,7 +7078,9 @@ function CollegesListContent() {
 
           {/* SORTING SELECT */}
           <div className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm self-stretch md:self-auto">
-            <span className="text-[10px] font-black uppercase text-slate-400">Sort By:</span>
+            <span className="text-[10px] font-black uppercase text-slate-400">
+              Sort By:
+            </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -6605,102 +7095,191 @@ function CollegesListContent() {
         </div>
 
         {/* ACTIVE FILTERS TAGS */}
-        {(selectedStates.length > 0 || selectedCities.length > 0 || selectedStreams.length > 0 || selectedCourses.length > 0 || selectedSpecializations.length > 0 || selectedProgramModes.length > 0 || selectedOwnerships.length > 0 || selectedExams.length > 0 || selectedCourseTypes.length > 0 || selectedAffiliations.length > 0 || selectedApprovals.length > 0 || selectedFeesRanges.length > 0 || searchTerm !== "") && (
+        {(selectedStates.length > 0 ||
+          selectedCities.length > 0 ||
+          selectedStreams.length > 0 ||
+          selectedCourses.length > 0 ||
+          selectedSpecializations.length > 0 ||
+          selectedProgramModes.length > 0 ||
+          selectedOwnerships.length > 0 ||
+          selectedExams.length > 0 ||
+          selectedCourseTypes.length > 0 ||
+          selectedAffiliations.length > 0 ||
+          selectedApprovals.length > 0 ||
+          selectedFeesRanges.length > 0 ||
+          searchTerm !== "") && (
           <div className="flex flex-wrap gap-2 items-center mb-6 bg-orange-50/50 border border-orange-100 p-3 rounded-2xl">
-            <span className="text-[9px] uppercase font-black text-orange-600 tracking-wider">Active Filters:</span>
-            
+            <span className="text-[9px] uppercase font-black text-orange-600 tracking-wider">
+              Active Filters:
+            </span>
+
             {searchTerm !== "" && (
               <span className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 Query: "{searchTerm}"
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => setSearchTerm("")} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => setSearchTerm("")}
+                />
               </span>
             )}
-            
-            {selectedStates.map(st => (
-              <span key={st} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+
+            {selectedStates.map((st) => (
+              <span
+                key={st}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {st}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("state", st)} />
-              </span>
-            ))}
-            
-            {selectedCities.map(ct => (
-              <span key={ct} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
-                {ct}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("city", ct)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("state", st)}
+                />
               </span>
             ))}
 
-            {selectedStreams.map(str => (
-              <span key={str} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedCities.map((ct) => (
+              <span
+                key={ct}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
+                {ct}
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("city", ct)}
+                />
+              </span>
+            ))}
+
+            {selectedStreams.map((str) => (
+              <span
+                key={str}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {str}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("stream", str)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("stream", str)}
+                />
               </span>
             ))}
 
-            {selectedCourses.map(cr => (
-              <span key={cr} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedCourses.map((cr) => (
+              <span
+                key={cr}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {cr}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("course", cr)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("course", cr)}
+                />
               </span>
             ))}
 
-            {selectedSpecializations.map(sp => (
-              <span key={sp} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedSpecializations.map((sp) => (
+              <span
+                key={sp}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {sp}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("specialization", sp)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("specialization", sp)}
+                />
               </span>
             ))}
 
-            {selectedProgramModes.map(pm => (
-              <span key={pm} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedProgramModes.map((pm) => (
+              <span
+                key={pm}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {pm}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("programMode", pm)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("programMode", pm)}
+                />
               </span>
             ))}
 
-            {selectedOwnerships.map(os => (
-              <span key={os} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedOwnerships.map((os) => (
+              <span
+                key={os}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {os}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("ownership", os)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("ownership", os)}
+                />
               </span>
             ))}
 
-            {selectedExams.map(ex => (
-              <span key={ex} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedExams.map((ex) => (
+              <span
+                key={ex}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {ex}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("exam", ex)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("exam", ex)}
+                />
               </span>
             ))}
 
-            {selectedCourseTypes.map(ct => (
-              <span key={ct} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedCourseTypes.map((ct) => (
+              <span
+                key={ct}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {ct}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("courseType", ct)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("courseType", ct)}
+                />
               </span>
             ))}
 
-            {selectedAffiliations.map(af => (
-              <span key={af} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedAffiliations.map((af) => (
+              <span
+                key={af}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {af}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("affiliation", af)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("affiliation", af)}
+                />
               </span>
             ))}
 
-            {selectedApprovals.map(ap => (
-              <span key={ap} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedApprovals.map((ap) => (
+              <span
+                key={ap}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {ap}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("approval", ap)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("approval", ap)}
+                />
               </span>
             ))}
 
-            {selectedFeesRanges.map(fr => (
-              <span key={fr} className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            {selectedFeesRanges.map((fr) => (
+              <span
+                key={fr}
+                className="flex items-center gap-1 bg-white text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg text-[10px] font-bold"
+              >
                 {fr}
-                <X className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer" onClick={() => toggleFilter("feesRange", fr)} />
+                <X
+                  className="w-3 h-3 text-slate-400 hover:text-red-500 cursor-pointer"
+                  onClick={() => toggleFilter("feesRange", fr)}
+                />
               </span>
             ))}
 
-            <button 
+            <button
               onClick={clearAllFilters}
               className="text-[9px] font-extrabold text-orange-600 hover:text-orange-700 uppercase tracking-widest hover:underline ml-auto"
             >
@@ -6711,13 +7290,13 @@ function CollegesListContent() {
 
         {/* MAIN CONTAINER */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          
           {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
           <aside className="lg:col-span-3 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-5 select-none">
-            
             {/* SEARCH BOX */}
             <div className="space-y-2">
-              <h4 className="text-[10px] uppercase font-black text-slate-400 tracking-wider">Search Colleges</h4>
+              <h4 className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
+                Search Colleges
+              </h4>
               <div className="relative">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
@@ -6732,10 +7311,9 @@ function CollegesListContent() {
 
             {/* FILTER SECTIONS (Non-collapsible, hamesha uge hue) */}
             <div className="space-y-6 pt-4 border-t border-slate-100">
-              
               {/* STATE FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("state")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -6743,7 +7321,7 @@ function CollegesListContent() {
                     <MapPin className="w-3.5 h-3.5 text-orange-500" />
                     State
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.state ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -6755,7 +7333,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -6768,18 +7349,29 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {stateOptions
-                            .filter(s => s.name.toLowerCase().includes(stateFilterSearch.toLowerCase()))
-                            .map(state => (
-                              <label key={state.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((s) =>
+                              s.name
+                                .toLowerCase()
+                                .includes(stateFilterSearch.toLowerCase()),
+                            )
+                            .map((state) => (
+                              <label
+                                key={state.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
                                   checked={selectedStates.includes(state.name)}
-                                  onChange={() => toggleFilter("state", state.name)}
+                                  onChange={() =>
+                                    toggleFilter("state", state.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {state.name}
-                                  <span className="text-slate-400 font-medium ml-1">({state.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({state.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -6792,7 +7384,7 @@ function CollegesListContent() {
 
               {/* CITY FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("city")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -6800,7 +7392,7 @@ function CollegesListContent() {
                     <Map className="w-3.5 h-3.5 text-orange-500" />
                     City
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.city ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -6812,7 +7404,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -6825,18 +7420,29 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {cityOptions
-                            .filter(c => c.name.toLowerCase().includes(cityFilterSearch.toLowerCase()))
-                            .map(city => (
-                              <label key={city.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((c) =>
+                              c.name
+                                .toLowerCase()
+                                .includes(cityFilterSearch.toLowerCase()),
+                            )
+                            .map((city) => (
+                              <label
+                                key={city.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
                                   checked={selectedCities.includes(city.name)}
-                                  onChange={() => toggleFilter("city", city.name)}
+                                  onChange={() =>
+                                    toggleFilter("city", city.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {city.name}
-                                  <span className="text-slate-400 font-medium ml-1">({city.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({city.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -6849,7 +7455,7 @@ function CollegesListContent() {
 
               {/* STREAM FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("stream")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -6857,7 +7463,7 @@ function CollegesListContent() {
                     <Layers className="w-3.5 h-3.5 text-orange-500" />
                     Stream / Category
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.stream ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -6869,7 +7475,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -6877,23 +7486,38 @@ function CollegesListContent() {
                           type="text"
                           placeholder="Search options..."
                           value={streamFilterSearch}
-                          onChange={(e) => setStreamFilterSearch(e.target.value)}
+                          onChange={(e) =>
+                            setStreamFilterSearch(e.target.value)
+                          }
                           className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {streamOptions
-                            .filter(s => s.name.toLowerCase().includes(streamFilterSearch.toLowerCase()))
-                            .map(stream => (
-                              <label key={stream.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((s) =>
+                              s.name
+                                .toLowerCase()
+                                .includes(streamFilterSearch.toLowerCase()),
+                            )
+                            .map((stream) => (
+                              <label
+                                key={stream.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedStreams.includes(stream.name)}
-                                  onChange={() => toggleFilter("stream", stream.name)}
+                                  checked={selectedStreams.includes(
+                                    stream.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("stream", stream.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {stream.name}
-                                  <span className="text-slate-400 font-medium ml-1">({stream.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({stream.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -6906,7 +7530,7 @@ function CollegesListContent() {
 
               {/* COURSES FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("course")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -6914,7 +7538,7 @@ function CollegesListContent() {
                     <BookOpen className="w-3.5 h-3.5 text-orange-500" />
                     Courses Offered
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.course ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -6926,7 +7550,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -6934,23 +7561,38 @@ function CollegesListContent() {
                           type="text"
                           placeholder="Search options..."
                           value={courseFilterSearch}
-                          onChange={(e) => setCourseFilterSearch(e.target.value)}
+                          onChange={(e) =>
+                            setCourseFilterSearch(e.target.value)
+                          }
                           className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {courseOptions
-                            .filter(c => c.name.toLowerCase().includes(courseFilterSearch.toLowerCase()))
-                            .map(course => (
-                              <label key={course.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((c) =>
+                              c.name
+                                .toLowerCase()
+                                .includes(courseFilterSearch.toLowerCase()),
+                            )
+                            .map((course) => (
+                              <label
+                                key={course.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedCourses.includes(course.name)}
-                                  onChange={() => toggleFilter("course", course.name)}
+                                  checked={selectedCourses.includes(
+                                    course.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("course", course.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {course.name}
-                                  <span className="text-slate-400 font-medium ml-1">({course.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({course.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -6963,7 +7605,7 @@ function CollegesListContent() {
 
               {/* SPECIALIZATION FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("specialization")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -6971,7 +7613,7 @@ function CollegesListContent() {
                     <Sparkles className="w-3.5 h-3.5 text-orange-500" />
                     Specialization
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.specialization ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -6983,7 +7625,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -6996,18 +7641,31 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {specializationOptions
-                            .filter(sp => sp.name.toLowerCase().includes(specFilterSearch.toLowerCase()))
-                            .map(spec => (
-                              <label key={spec.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((sp) =>
+                              sp.name
+                                .toLowerCase()
+                                .includes(specFilterSearch.toLowerCase()),
+                            )
+                            .map((spec) => (
+                              <label
+                                key={spec.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedSpecializations.includes(spec.name)}
-                                  onChange={() => toggleFilter("specialization", spec.name)}
+                                  checked={selectedSpecializations.includes(
+                                    spec.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("specialization", spec.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {spec.name}
-                                  <span className="text-slate-400 font-medium ml-1">({spec.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({spec.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7020,7 +7678,7 @@ function CollegesListContent() {
 
               {/* PROGRAM MODE FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("programMode")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7028,7 +7686,7 @@ function CollegesListContent() {
                     <Compass className="w-3.5 h-3.5 text-orange-500" />
                     Program Mode
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.programMode ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7040,7 +7698,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7053,18 +7714,31 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {programModeOptions
-                            .filter(opt => opt.name.toLowerCase().includes(progSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(progSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedProgramModes.includes(opt.name)}
-                                  onChange={() => toggleFilter("programMode", opt.name)}
+                                  checked={selectedProgramModes.includes(
+                                    opt.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("programMode", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7077,7 +7751,7 @@ function CollegesListContent() {
 
               {/* OWNERSHIP FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("ownership")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7085,7 +7759,7 @@ function CollegesListContent() {
                     <Award className="w-3.5 h-3.5 text-orange-500" />
                     Ownership
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.ownership ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7097,7 +7771,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7110,18 +7787,31 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {ownershipOptions
-                            .filter(opt => opt.name.toLowerCase().includes(ownerSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(ownerSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedOwnerships.includes(opt.name)}
-                                  onChange={() => toggleFilter("ownership", opt.name)}
+                                  checked={selectedOwnerships.includes(
+                                    opt.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("ownership", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7134,7 +7824,7 @@ function CollegesListContent() {
 
               {/* EXAMS ACCEPTED FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("exam")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7142,7 +7832,7 @@ function CollegesListContent() {
                     <FileText className="w-3.5 h-3.5 text-orange-500" />
                     Exams Accepted
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.exam ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7154,7 +7844,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7167,18 +7860,29 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {examOptions
-                            .filter(opt => opt.name.toLowerCase().includes(examSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(examSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
                                   checked={selectedExams.includes(opt.name)}
-                                  onChange={() => toggleFilter("exam", opt.name)}
+                                  onChange={() =>
+                                    toggleFilter("exam", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7191,7 +7895,7 @@ function CollegesListContent() {
 
               {/* COURSE TYPE FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("courseType")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7199,7 +7903,7 @@ function CollegesListContent() {
                     <GraduationCap className="w-3.5 h-3.5 text-orange-500" />
                     Course Type
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.courseType ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7211,7 +7915,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7224,18 +7931,31 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {courseTypeOptions
-                            .filter(opt => opt.name.toLowerCase().includes(courseTypeSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(courseTypeSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedCourseTypes.includes(opt.name)}
-                                  onChange={() => toggleFilter("courseType", opt.name)}
+                                  checked={selectedCourseTypes.includes(
+                                    opt.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("courseType", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7248,7 +7968,7 @@ function CollegesListContent() {
 
               {/* AFFILIATED BY FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("affiliation")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7256,7 +7976,7 @@ function CollegesListContent() {
                     <LinkIcon className="w-3.5 h-3.5 text-orange-500" />
                     Affiliated By
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.affiliation ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7268,7 +7988,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7281,18 +8004,31 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {affiliationOptions
-                            .filter(opt => opt.name.toLowerCase().includes(affSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(affSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedAffiliations.includes(opt.name)}
-                                  onChange={() => toggleFilter("affiliation", opt.name)}
+                                  checked={selectedAffiliations.includes(
+                                    opt.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("affiliation", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7305,7 +8041,7 @@ function CollegesListContent() {
 
               {/* APPROVALS FILTER */}
               <div className="border-b border-slate-100 pb-5">
-                <button 
+                <button
                   onClick={() => toggleSection("approval")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7313,7 +8049,7 @@ function CollegesListContent() {
                     <CheckCircle className="w-3.5 h-3.5 text-orange-500" />
                     Approvals
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.approval ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7325,7 +8061,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7338,18 +8077,29 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {approvalOptions
-                            .filter(opt => opt.name.toLowerCase().includes(appSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(appSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
                                   checked={selectedApprovals.includes(opt.name)}
-                                  onChange={() => toggleFilter("approval", opt.name)}
+                                  onChange={() =>
+                                    toggleFilter("approval", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7362,7 +8112,7 @@ function CollegesListContent() {
 
               {/* TOTAL FEES FILTER */}
               <div className="pb-2">
-                <button 
+                <button
                   onClick={() => toggleSection("feesRange")}
                   className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
                 >
@@ -7370,7 +8120,7 @@ function CollegesListContent() {
                     <DollarSign className="w-3.5 h-3.5 text-orange-500" />
                     Total Fees
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
                       expandedSections.feesRange ? "rotate-180" : ""
                     } group-hover/title:scale-110`}
@@ -7382,7 +8132,10 @@ function CollegesListContent() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
                       className="overflow-hidden"
                     >
                       <div className="pt-3 space-y-3">
@@ -7395,18 +8148,31 @@ function CollegesListContent() {
                         />
                         <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
                           {feesRangeOptions
-                            .filter(opt => opt.name.toLowerCase().includes(feesSearch.toLowerCase()))
-                            .map(opt => (
-                              <label key={opt.name} className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200">
+                            .filter((opt) =>
+                              opt.name
+                                .toLowerCase()
+                                .includes(feesSearch.toLowerCase()),
+                            )
+                            .map((opt) => (
+                              <label
+                                key={opt.name}
+                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                              >
                                 <input
                                   type="checkbox"
-                                  checked={selectedFeesRanges.includes(opt.name)}
-                                  onChange={() => toggleFilter("feesRange", opt.name)}
+                                  checked={selectedFeesRanges.includes(
+                                    opt.name,
+                                  )}
+                                  onChange={() =>
+                                    toggleFilter("feesRange", opt.name)
+                                  }
                                   className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
                                 />
                                 <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
                                   {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">({opt.count})</span>
+                                  <span className="text-slate-400 font-medium ml-1">
+                                    ({opt.count})
+                                  </span>
                                 </span>
                               </label>
                             ))}
@@ -7416,7 +8182,6 @@ function CollegesListContent() {
                   )}
                 </AnimatePresence>
               </div>
-
             </div>
           </aside>
 
@@ -7426,7 +8191,9 @@ function CollegesListContent() {
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
                   <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">Loading colleges from database...</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">
+                    Loading colleges from database...
+                  </p>
                 </div>
               ) : filteredColleges.length > 0 ? (
                 filteredColleges.map((college) => {
@@ -7453,7 +8220,7 @@ function CollegesListContent() {
                           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-sm font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300">
                             {college.logoText}
                           </div>
-                          
+
                           {/* Rank indicator (Shiksha style) */}
                           {college.nirfRank ? (
                             <div className="text-left lg:text-center">
@@ -7491,25 +8258,29 @@ function CollegesListContent() {
                       <div className="col-span-12 lg:col-span-6 flex flex-col space-y-3 mt-4 lg:mt-0">
                         {/* Title and Location */}
                         <div className="space-y-1">
-                          <Link 
+                          <Link
                             href={`/colleges/${college.slug}`}
                             className="font-outfit font-black text-sm md:text-base text-slate-800 hover:text-orange-500 hover:underline leading-snug transition-colors line-clamp-1"
                           >
                             {college.name}
                           </Link>
-                          
+
                           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold text-slate-500">
                             <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
                               <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
                               {college.location}
                             </span>
                             <span>•</span>
-                            <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[8px] uppercase tracking-wider font-extrabold">{college.type}</span>
+                            <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[8px] uppercase tracking-wider font-extrabold">
+                              {college.type}
+                            </span>
                           </div>
                         </div>
 
                         {/* Short Description */}
-                        <p className={`text-[11px] text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}>
+                        <p
+                          className={`text-[11px] text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}
+                        >
                           {college.description}
                         </p>
 
@@ -7517,7 +8288,9 @@ function CollegesListContent() {
                         <div className="grid grid-cols-2 gap-3.5 select-none">
                           {/* Courses */}
                           <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Courses</p>
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                              Courses
+                            </p>
                             <p className="font-outfit font-black text-[10px] text-slate-700 uppercase line-clamp-1">
                               {college.courses.join(", ")}
                             </p>
@@ -7525,7 +8298,9 @@ function CollegesListContent() {
 
                           {/* Exams */}
                           <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Exams Accepted</p>
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                              Exams Accepted
+                            </p>
                             <p className="font-outfit font-black text-[10px] text-slate-700 line-clamp-1">
                               {college.exams.join(", ")}
                             </p>
@@ -7533,7 +8308,9 @@ function CollegesListContent() {
 
                           {/* Fees */}
                           <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Tuition Fees</p>
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                              Tuition Fees
+                            </p>
                             <p className="font-outfit font-black text-[10px] text-orange-600 line-clamp-1">
                               {college.feeRange}
                             </p>
@@ -7541,7 +8318,9 @@ function CollegesListContent() {
 
                           {/* Accreditation */}
                           <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">Accreditation</p>
+                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                              Accreditation
+                            </p>
                             <p className="font-outfit font-black text-[10px] text-slate-600 uppercase line-clamp-1">
                               {college.accreditation}
                             </p>
@@ -7565,18 +8344,22 @@ function CollegesListContent() {
                             const loggedInUser = checkUserAuth();
                             if (!loggedInUser) return;
                             if (isShortlisted) {
-                              setShortlisted(prev => prev.filter(id => id !== college.id));
+                              setShortlisted((prev) =>
+                                prev.filter((id) => id !== college.id),
+                              );
                             } else {
-                              setShortlisted(prev => [...prev, college.id]);
+                              setShortlisted((prev) => [...prev, college.id]);
                             }
                           }}
                           className={`flex items-center justify-center gap-1.5 px-4 py-2.5 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
-                            isShortlisted 
+                            isShortlisted
                               ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
                               : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
                           }`}
                         >
-                          <Heart className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`} />
+                          <Heart
+                            className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`}
+                          />
                           {isShortlisted ? "Shortlisted" : "Shortlist"}
                         </button>
 
@@ -7602,12 +8385,16 @@ function CollegesListContent() {
                     <HelpCircle className="w-8 h-8" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-outfit font-black text-lg text-slate-800">No Colleges Found</h3>
+                    <h3 className="font-outfit font-black text-lg text-slate-800">
+                      No Colleges Found
+                    </h3>
                     <p className="text-xs text-slate-500 font-semibold leading-relaxed">
-                      We couldn't find any colleges matching your active filters. Try adjusting or clearing filters to browse others.
+                      We couldn't find any colleges matching your active
+                      filters. Try adjusting or clearing filters to browse
+                      others.
                     </p>
                   </div>
-                  <button 
+                  <button
                     onClick={clearAllFilters}
                     className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-95"
                   >
@@ -7622,7 +8409,7 @@ function CollegesListContent() {
               <div className="flex items-center justify-between bg-white border border-slate-200/80 px-6 py-4 rounded-3xl shadow-sm mt-8">
                 <button
                   disabled={page === 1}
-                  onClick={() => setPage(p => Math.max(p - 1, 1))}
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
                   className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
                 >
                   Previous
@@ -7632,7 +8419,7 @@ function CollegesListContent() {
                 </span>
                 <button
                   disabled={page === totalPages}
-                  onClick={() => setPage(p => Math.min(p + 1, totalPages))}
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                   className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
                 >
                   Next
@@ -7640,32 +8427,33 @@ function CollegesListContent() {
               </div>
             )}
           </main>
-
         </div>
-
       </div>
 
       {/* MOBILE STICKY BOTTOM TALK TO EXPERTS BAR */}
-      <div 
+      <div
         onClick={() => openInquiryModal("General")}
         className="fixed bottom-0 left-0 right-0 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-[10.5px] tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer z-40 md:hidden shadow-[0_-5px_20px_rgba(249,115,22,0.25)] border-t border-orange-400/20 active:scale-[0.99] transition-all"
       >
         <MessageSquare className="w-4 h-4 animate-bounce" />
         Talk to Counseling Experts
       </div>
-
     </div>
   );
 }
 
 export default function CollegesPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f9fa] gap-3">
-        <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">Loading colleges...</p>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f9fa] gap-3">
+          <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">
+            Loading colleges...
+          </p>
+        </div>
+      }
+    >
       <CollegesListContent />
     </Suspense>
   );
