@@ -528,6 +528,7 @@ function CollegesListContent() {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedStreams, setSelectedStreams] = useState<string[]>([]);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSpecializations, setSelectedSpecializations] = useState<
     string[]
@@ -7057,6 +7058,880 @@ function CollegesListContent() {
     }
   };
 
+  const renderFilterContent = () => {
+    return (
+      <div className="space-y-5 select-none">
+        {/* SEARCH BOX */}
+        <div className="space-y-2">
+          <h4 className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
+            Search Colleges
+          </h4>
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search for college details..."
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+            />
+          </div>
+        </div>
+
+        {/* FILTER SECTIONS (Non-collapsible, hamesha uge hue) */}
+        <div className="space-y-6 pt-4 border-t border-slate-100">
+          {/* STATE FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("state")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                State
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.state ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.state && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={stateFilterSearch}
+                      onChange={(e) => setStateFilterSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {stateOptions
+                        .filter((s) =>
+                          s.name
+                            .toLowerCase()
+                            .includes(stateFilterSearch.toLowerCase()),
+                        )
+                        .map((state) => (
+                          <label
+                            key={state.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedStates.includes(state.name)}
+                              onChange={() => toggleFilter("state", state.name)}
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {state.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({state.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* CITY FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("city")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <Map className="w-3.5 h-3.5 text-orange-500" />
+                City
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.city ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.city && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={cityFilterSearch}
+                      onChange={(e) => setCityFilterSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {cityOptions
+                        .filter((c) =>
+                          c.name
+                            .toLowerCase()
+                            .includes(cityFilterSearch.toLowerCase()),
+                        )
+                        .map((city) => (
+                          <label
+                            key={city.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedCities.includes(city.name)}
+                              onChange={() => toggleFilter("city", city.name)}
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {city.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({city.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* STREAM FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("stream")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <Layers className="w-3.5 h-3.5 text-orange-500" />
+                Stream / Category
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.stream ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.stream && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={streamFilterSearch}
+                      onChange={(e) => setStreamFilterSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {streamOptions
+                        .filter((s) =>
+                          s.name
+                            .toLowerCase()
+                            .includes(streamFilterSearch.toLowerCase()),
+                        )
+                        .map((stream) => (
+                          <label
+                            key={stream.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedStreams.includes(stream.name)}
+                              onChange={() =>
+                                toggleFilter("stream", stream.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {stream.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({stream.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* COURSES FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("course")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <BookOpen className="w-3.5 h-3.5 text-orange-500" />
+                Courses Offered
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.course ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.course && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={courseFilterSearch}
+                      onChange={(e) => setCourseFilterSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {courseOptions
+                        .filter((c) =>
+                          c.name
+                            .toLowerCase()
+                            .includes(courseFilterSearch.toLowerCase()),
+                        )
+                        .map((course) => (
+                          <label
+                            key={course.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedCourses.includes(course.name)}
+                              onChange={() =>
+                                toggleFilter("course", course.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {course.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({course.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* SPECIALIZATION FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("specialization")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+                Specialization
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.specialization ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.specialization && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={specFilterSearch}
+                      onChange={(e) => setSpecFilterSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {specializationOptions
+                        .filter((sp) =>
+                          sp.name
+                            .toLowerCase()
+                            .includes(specFilterSearch.toLowerCase()),
+                        )
+                        .map((spec) => (
+                          <label
+                            key={spec.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedSpecializations.includes(
+                                spec.name,
+                              )}
+                              onChange={() =>
+                                toggleFilter("specialization", spec.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {spec.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({spec.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* PROGRAM MODE FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("programMode")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <Compass className="w-3.5 h-3.5 text-orange-500" />
+                Program Mode
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.programMode ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.programMode && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={progSearch}
+                      onChange={(e) => setProgSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {programModeOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(progSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedProgramModes.includes(opt.name)}
+                              onChange={() =>
+                                toggleFilter("programMode", opt.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* OWNERSHIP FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("ownership")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <Award className="w-3.5 h-3.5 text-orange-500" />
+                Ownership
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.ownership ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.ownership && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={ownerSearch}
+                      onChange={(e) => setOwnerSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {ownershipOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(ownerSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedOwnerships.includes(opt.name)}
+                              onChange={() =>
+                                toggleFilter("ownership", opt.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* EXAMS ACCEPTED FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("exam")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <FileText className="w-3.5 h-3.5 text-orange-500" />
+                Exams Accepted
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.exam ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.exam && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={examSearch}
+                      onChange={(e) => setExamSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {examOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(examSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedExams.includes(opt.name)}
+                              onChange={() => toggleFilter("exam", opt.name)}
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* COURSE TYPE FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("courseType")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <GraduationCap className="w-3.5 h-3.5 text-orange-500" />
+                Course Type
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.courseType ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.courseType && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={courseTypeSearch}
+                      onChange={(e) => setCourseTypeSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {courseTypeOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(courseTypeSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedCourseTypes.includes(opt.name)}
+                              onChange={() =>
+                                toggleFilter("courseType", opt.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* AFFILIATED BY FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("affiliation")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <LinkIcon className="w-3.5 h-3.5 text-orange-500" />
+                Affiliated By
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.affiliation ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.affiliation && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={affSearch}
+                      onChange={(e) => setAffSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {affiliationOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(affSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedAffiliations.includes(opt.name)}
+                              onChange={() =>
+                                toggleFilter("affiliation", opt.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* APPROVALS FILTER */}
+          <div className="border-b border-slate-100 pb-5">
+            <button
+              onClick={() => toggleSection("approval")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <CheckCircle className="w-3.5 h-3.5 text-orange-500" />
+                Approvals
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.approval ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.approval && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={appSearch}
+                      onChange={(e) => setAppSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {approvalOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(appSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedApprovals.includes(opt.name)}
+                              onChange={() =>
+                                toggleFilter("approval", opt.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* TOTAL FEES FILTER */}
+          <div className="pb-2">
+            <button
+              onClick={() => toggleSection("feesRange")}
+              className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
+            >
+              <span className="flex items-center gap-2">
+                <DollarSign className="w-3.5 h-3.5 text-orange-500" />
+                Total Fees
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
+                  expandedSections.feesRange ? "rotate-180" : ""
+                } group-hover/title:scale-110`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {expandedSections.feesRange && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Search options..."
+                      value={feesSearch}
+                      onChange={(e) => setFeesSearch(e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
+                    />
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
+                      {feesRangeOptions
+                        .filter((opt) =>
+                          opt.name
+                            .toLowerCase()
+                            .includes(feesSearch.toLowerCase()),
+                        )
+                        .map((opt) => (
+                          <label
+                            key={opt.name}
+                            className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedFeesRanges.includes(opt.name)}
+                              onChange={() =>
+                                toggleFilter("feesRange", opt.name)
+                              }
+                              className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
+                            />
+                            <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
+                              {opt.name}
+                              <span className="text-slate-400 font-medium ml-1">
+                                ({opt.count})
+                              </span>
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-[#f8f9fa] pt-32 pb-16 md:pt-40">
       <div className="max-w-[1240px] mx-auto px-4 md:px-6">
@@ -7291,898 +8166,8 @@ function CollegesListContent() {
         {/* MAIN CONTAINER */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* LEFT SIDEBAR: FILTERS CARD (World-Class Real Design & Hover Glow Borders) */}
-          <aside className="lg:col-span-3 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-5 select-none">
-            {/* SEARCH BOX */}
-            <div className="space-y-2">
-              <h4 className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                Search Colleges
-              </h4>
-              <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search for college details..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                />
-              </div>
-            </div>
-
-            {/* FILTER SECTIONS (Non-collapsible, hamesha uge hue) */}
-            <div className="space-y-6 pt-4 border-t border-slate-100">
-              {/* STATE FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("state")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-orange-500" />
-                    State
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.state ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.state && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={stateFilterSearch}
-                          onChange={(e) => setStateFilterSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {stateOptions
-                            .filter((s) =>
-                              s.name
-                                .toLowerCase()
-                                .includes(stateFilterSearch.toLowerCase()),
-                            )
-                            .map((state) => (
-                              <label
-                                key={state.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedStates.includes(state.name)}
-                                  onChange={() =>
-                                    toggleFilter("state", state.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {state.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({state.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* CITY FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("city")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <Map className="w-3.5 h-3.5 text-orange-500" />
-                    City
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.city ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.city && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={cityFilterSearch}
-                          onChange={(e) => setCityFilterSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {cityOptions
-                            .filter((c) =>
-                              c.name
-                                .toLowerCase()
-                                .includes(cityFilterSearch.toLowerCase()),
-                            )
-                            .map((city) => (
-                              <label
-                                key={city.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedCities.includes(city.name)}
-                                  onChange={() =>
-                                    toggleFilter("city", city.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {city.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({city.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* STREAM FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("stream")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <Layers className="w-3.5 h-3.5 text-orange-500" />
-                    Stream / Category
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.stream ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.stream && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={streamFilterSearch}
-                          onChange={(e) =>
-                            setStreamFilterSearch(e.target.value)
-                          }
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {streamOptions
-                            .filter((s) =>
-                              s.name
-                                .toLowerCase()
-                                .includes(streamFilterSearch.toLowerCase()),
-                            )
-                            .map((stream) => (
-                              <label
-                                key={stream.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedStreams.includes(
-                                    stream.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("stream", stream.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {stream.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({stream.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* COURSES FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("course")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <BookOpen className="w-3.5 h-3.5 text-orange-500" />
-                    Courses Offered
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.course ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.course && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={courseFilterSearch}
-                          onChange={(e) =>
-                            setCourseFilterSearch(e.target.value)
-                          }
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {courseOptions
-                            .filter((c) =>
-                              c.name
-                                .toLowerCase()
-                                .includes(courseFilterSearch.toLowerCase()),
-                            )
-                            .map((course) => (
-                              <label
-                                key={course.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedCourses.includes(
-                                    course.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("course", course.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {course.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({course.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* SPECIALIZATION FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("specialization")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <Sparkles className="w-3.5 h-3.5 text-orange-500" />
-                    Specialization
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.specialization ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.specialization && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={specFilterSearch}
-                          onChange={(e) => setSpecFilterSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {specializationOptions
-                            .filter((sp) =>
-                              sp.name
-                                .toLowerCase()
-                                .includes(specFilterSearch.toLowerCase()),
-                            )
-                            .map((spec) => (
-                              <label
-                                key={spec.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedSpecializations.includes(
-                                    spec.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("specialization", spec.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {spec.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({spec.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* PROGRAM MODE FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("programMode")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <Compass className="w-3.5 h-3.5 text-orange-500" />
-                    Program Mode
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.programMode ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.programMode && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={progSearch}
-                          onChange={(e) => setProgSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {programModeOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(progSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedProgramModes.includes(
-                                    opt.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("programMode", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* OWNERSHIP FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("ownership")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <Award className="w-3.5 h-3.5 text-orange-500" />
-                    Ownership
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.ownership ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.ownership && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={ownerSearch}
-                          onChange={(e) => setOwnerSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {ownershipOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(ownerSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedOwnerships.includes(
-                                    opt.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("ownership", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* EXAMS ACCEPTED FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("exam")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <FileText className="w-3.5 h-3.5 text-orange-500" />
-                    Exams Accepted
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.exam ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.exam && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={examSearch}
-                          onChange={(e) => setExamSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {examOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(examSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedExams.includes(opt.name)}
-                                  onChange={() =>
-                                    toggleFilter("exam", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* COURSE TYPE FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("courseType")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <GraduationCap className="w-3.5 h-3.5 text-orange-500" />
-                    Course Type
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.courseType ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.courseType && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={courseTypeSearch}
-                          onChange={(e) => setCourseTypeSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {courseTypeOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(courseTypeSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedCourseTypes.includes(
-                                    opt.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("courseType", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* AFFILIATED BY FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("affiliation")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <LinkIcon className="w-3.5 h-3.5 text-orange-500" />
-                    Affiliated By
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.affiliation ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.affiliation && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={affSearch}
-                          onChange={(e) => setAffSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {affiliationOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(affSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedAffiliations.includes(
-                                    opt.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("affiliation", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* APPROVALS FILTER */}
-              <div className="border-b border-slate-100 pb-5">
-                <button
-                  onClick={() => toggleSection("approval")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <CheckCircle className="w-3.5 h-3.5 text-orange-500" />
-                    Approvals
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.approval ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.approval && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={appSearch}
-                          onChange={(e) => setAppSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {approvalOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(appSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedApprovals.includes(opt.name)}
-                                  onChange={() =>
-                                    toggleFilter("approval", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* TOTAL FEES FILTER */}
-              <div className="pb-2">
-                <button
-                  onClick={() => toggleSection("feesRange")}
-                  className="w-full font-outfit font-black text-slate-700 text-xs uppercase tracking-wider flex items-center justify-between cursor-pointer select-none group/title py-1 outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <DollarSign className="w-3.5 h-3.5 text-orange-500" />
-                    Total Fees
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-orange-500 transition-transform duration-300 ease-out ${
-                      expandedSections.feesRange ? "rotate-180" : ""
-                    } group-hover/title:scale-110`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {expandedSections.feesRange && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Search options..."
-                          value={feesSearch}
-                          onChange={(e) => setFeesSearch(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:border-orange-400 focus:bg-white transition-all font-semibold"
-                        />
-                        <div className="max-h-40 overflow-y-auto space-y-1.5 custom-filter-scrollbar pr-1 pt-1">
-                          {feesRangeOptions
-                            .filter((opt) =>
-                              opt.name
-                                .toLowerCase()
-                                .includes(feesSearch.toLowerCase()),
-                            )
-                            .map((opt) => (
-                              <label
-                                key={opt.name}
-                                className="group flex items-center gap-2 cursor-pointer select-none py-1 px-2 -mx-2 rounded-lg hover:bg-orange-50/30 transition-all duration-200"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedFeesRanges.includes(
-                                    opt.name,
-                                  )}
-                                  onChange={() =>
-                                    toggleFilter("feesRange", opt.name)
-                                  }
-                                  className="accent-orange-500 rounded border-slate-300 w-3.5 h-3.5 group-hover:scale-108 transition-transform duration-200"
-                                />
-                                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all duration-200">
-                                  {opt.name}
-                                  <span className="text-slate-400 font-medium ml-1">
-                                    ({opt.count})
-                                  </span>
-                                </span>
-                              </label>
-                            ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
+          <aside className="hidden md:block lg:col-span-3 bg-white border border-slate-200 hover:border-orange-500/20 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.05)] transition-all duration-350 space-y-5 select-none">
+            {renderFilterContent()}
           </aside>
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST */}
@@ -8429,6 +8414,84 @@ function CollegesListContent() {
           </main>
         </div>
       </div>
+
+      {/* MOBILE FLOATING FILTER TOGGLE BUTTON */}
+      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-40 md:hidden">
+        <button
+          onClick={() => setIsMobileFilterOpen(true)}
+          className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-full shadow-lg shadow-orange-500/25 active:scale-95 transition-all duration-200"
+        >
+          <Filter className="w-4 h-4" />
+          Filters & Search
+        </button>
+      </div>
+
+      {/* MOBILE COLLAPSIBLE DRAWER FOR FILTERS */}
+      <AnimatePresence>
+        {isMobileFilterOpen && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] md:hidden flex flex-col justify-end">
+            <div
+              className="absolute inset-0"
+              onClick={() => setIsMobileFilterOpen(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className="relative bg-white rounded-t-[32px] w-full max-h-[85vh] shadow-2xl p-5 flex flex-col z-10"
+            >
+              {/* Drag handle line */}
+              <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 flex-shrink-0" />
+
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 flex-shrink-0">
+                <h3 className="font-outfit font-black text-slate-800 text-sm uppercase tracking-wide">
+                  Filters & Search (
+                  {selectedStates.length +
+                    selectedCities.length +
+                    selectedStreams.length +
+                    selectedCourses.length +
+                    selectedSpecializations.length +
+                    selectedExams.length +
+                    selectedOwnerships.length}{" "}
+                  Active)
+                </h3>
+                <button
+                  onClick={() => setIsMobileFilterOpen(false)}
+                  className="p-1 rounded-full hover:bg-slate-100 text-slate-500 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Scrollable filters content */}
+              <div className="flex-1 overflow-y-auto pr-1">
+                {renderFilterContent()}
+              </div>
+
+              {/* Drawer sticky footer */}
+              <div className="mt-4 pt-4 border-t border-slate-100 flex gap-3 flex-shrink-0">
+                <button
+                  onClick={() => {
+                    clearAllFilters();
+                    setIsMobileFilterOpen(false);
+                  }}
+                  className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={() => setIsMobileFilterOpen(false)}
+                  className="flex-1 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md shadow-orange-500/20 active:scale-95 transition-all"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* MOBILE STICKY BOTTOM TALK TO EXPERTS BAR */}
       <div
