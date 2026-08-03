@@ -8192,7 +8192,9 @@ function CollegesListContent() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      className="group bg-white border border-slate-200/80 hover:border-orange-500/50 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_20px_45px_rgba(249,115,22,0.08)] hover:scale-[1.002] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-6 md:p-7 max-w-[600px] lg:mx-0 w-full"
+                      whileHover={{ scale: 1.005, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_35px_rgba(249,115,22,0.08)] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-4 md:p-6 lg:p-7 max-w-[600px] lg:mx-0 w-full"
                     >
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -8270,43 +8272,43 @@ function CollegesListContent() {
                         </p>
 
                         {/* Metadata Grid (GetMyUni inspired, custom modern border box) */}
-                        <div className="grid grid-cols-2 gap-3.5 select-none">
+                        <div className="grid grid-cols-2 gap-2 md:gap-3.5 select-none">
                           {/* Courses */}
-                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                          <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                            <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
                               Courses
                             </p>
-                            <p className="font-outfit font-black text-[10px] text-slate-700 uppercase line-clamp-1">
+                            <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-700 uppercase line-clamp-1">
                               {college.courses.join(", ")}
                             </p>
                           </div>
 
                           {/* Exams */}
-                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                          <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                            <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
                               Exams Accepted
                             </p>
-                            <p className="font-outfit font-black text-[10px] text-slate-700 line-clamp-1">
+                            <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-700 line-clamp-1">
                               {college.exams.join(", ")}
                             </p>
                           </div>
 
                           {/* Fees */}
-                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                          <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                            <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
                               Tuition Fees
                             </p>
-                            <p className="font-outfit font-black text-[10px] text-orange-600 line-clamp-1">
+                            <p className="font-outfit font-black text-[9px] md:text-[10px] text-orange-600 line-clamp-1">
                               {college.feeRange}
                             </p>
                           </div>
 
                           {/* Accreditation */}
-                          <div className="p-3 bg-slate-50/60 border border-slate-100 rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-1">
-                            <p className="text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                          <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                            <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
                               Accreditation
                             </p>
-                            <p className="font-outfit font-black text-[10px] text-slate-600 uppercase line-clamp-1">
+                            <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-600 uppercase line-clamp-1">
                               {college.accreditation}
                             </p>
                           </div>
@@ -8314,7 +8316,7 @@ function CollegesListContent() {
                       </div>
 
                       {/* RIGHT PANEL: ACTIONS CTA (Stacked Vertically on Desktop) */}
-                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-3 lg:pl-4 lg:border-l lg:border-slate-200/60 mt-4 lg:mt-0 w-full">
+                      <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-2.5 md:gap-3 lg:pl-4 lg:border-l lg:border-slate-200/60 mt-3 md:mt-4 lg:mt-0 w-full">
                         {/* Read More button as secondary details trigger */}
                         <button
                           onClick={() => toggleDescription(college.id)}
@@ -8336,7 +8338,7 @@ function CollegesListContent() {
                               setShortlisted((prev) => [...prev, college.id]);
                             }
                           }}
-                          className={`flex items-center justify-center gap-1.5 px-4 py-2.5 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
+                          className={`flex items-center justify-center gap-1.5 px-4 py-2 md:py-2.5 border rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
                             isShortlisted
                               ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
                               : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
@@ -8355,7 +8357,7 @@ function CollegesListContent() {
                             if (!loggedInUser) return;
                             openInquiryModal(college.stream);
                           }}
-                          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
+                          className="flex items-center justify-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
                         >
                           <FileText className="w-3.5 h-3.5" />
                           Apply / Brochure
