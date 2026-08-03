@@ -513,29 +513,25 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-      {/* TRENDING NOW TICKER SECTION */}
-      <section className="relative overflow-hidden bg-white border border-slate-100 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.02)] -mt-6 mb-8 py-3.5 px-4 flex items-center select-none gap-4">
+      {/* TRENDING NOW TICKER SECTION (Centered, Sharp edges, no blur, Mobile responsive) */}
+      <section className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl md:rounded-full shadow-[0_6px_20px_rgba(0,0,0,0.03)] mt-6 mb-8 py-2.5 px-4 md:py-3 md:px-5 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 max-w-[1000px] mx-auto w-full">
         {/* Left Skew Glowing Saffron Badge */}
-        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[10px] tracking-wider uppercase rounded-xl shadow-md shadow-orange-500/15 relative z-10 skew-x-[-8deg] origin-center">
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[9px] md:text-[10px] tracking-wider uppercase rounded-xl shadow-md shadow-orange-500/15 relative z-10 skew-x-[-8deg] origin-center">
           <span className="inline-block animate-pulse skew-x-[8deg]">🔥</span>
           <span className="skew-x-[8deg]">Trending Now</span>
         </div>
 
         {/* Scrollable Marquee Ticker */}
-        <div className="flex-1 overflow-hidden relative">
-          {/* Left/Right Fading Overlays */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
+        <div className="flex-1 overflow-hidden relative w-full">
           <div className="animate-marquee-slow flex items-center gap-8 whitespace-nowrap">
             {/* Render twice for seamless infinite scrolling loops */}
             {[...trendingUpdates, ...trendingUpdates].map((update, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveTrendingUpdate(update)}
-                className="flex items-center gap-2 text-slate-700 hover:text-orange-600 font-extrabold text-[11px] tracking-wide transition-colors cursor-pointer outline-none focus:text-orange-600 group"
+                className="flex items-center gap-2 text-slate-700 hover:text-orange-600 font-extrabold text-[10px] md:text-[11px] tracking-wide transition-colors cursor-pointer outline-none focus:text-orange-600 group"
               >
-                <span className="px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 border border-orange-100 font-black text-[8px] uppercase tracking-wider group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500 transition-colors">
+                <span className="px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 border border-orange-100 font-black text-[7.5px] md:text-[8px] uppercase tracking-wider group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500 transition-colors">
                   {update.tag}
                 </span>
                 <span>{update.title}</span>
