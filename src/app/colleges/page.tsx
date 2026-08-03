@@ -8186,15 +8186,14 @@ function CollegesListContent() {
                   const isShortlisted = shortlisted.includes(college.id);
                   return (
                     <motion.div
-                      layout
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.25 }}
                       key={college.id}
-                      whileHover={{ scale: 1.005, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_35px_rgba(249,115,22,0.08)] transition-all duration-300 relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-4 md:p-6 lg:p-7 max-w-[600px] lg:mx-0 w-full"
+                      whileHover={{ scale: 1.01, y: -3 }}
+                      whileTap={{ scale: 0.99 }}
+                      className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-4 md:p-6 lg:p-7 max-w-[600px] lg:mx-0 w-full"
                     >
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -8418,7 +8417,7 @@ function CollegesListContent() {
       </div>
 
       {/* MOBILE FLOATING FILTER TOGGLE BUTTON */}
-      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-40 md:hidden">
+      <div className="fixed bottom-18 left-1/2 -translate-x-1/2 z-40 md:hidden">
         <button
           onClick={() => setIsMobileFilterOpen(true)}
           className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-full shadow-lg shadow-orange-500/25 active:scale-95 transition-all duration-200"
@@ -8495,13 +8494,40 @@ function CollegesListContent() {
         )}
       </AnimatePresence>
 
-      {/* MOBILE STICKY BOTTOM TALK TO EXPERTS BAR */}
-      <div
-        onClick={() => openInquiryModal("General")}
-        className="fixed bottom-0 left-0 right-0 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-[10.5px] tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer z-40 md:hidden shadow-[0_-5px_20px_rgba(249,115,22,0.25)] border-t border-orange-400/20 active:scale-[0.99] transition-all"
-      >
-        <MessageSquare className="w-4 h-4 animate-bounce" />
-        Talk to Counseling Experts
+      {/* MOBILE STICKY BOTTOM ACTIONS BAR */}
+      <div className="fixed bottom-0 left-0 right-0 h-14 bg-white border-t border-slate-100 px-3 py-2 flex gap-2.5 z-40 md:hidden shadow-[0_-8px_25px_rgba(0,0,0,0.05)] select-none">
+        {/* WhatsApp Button */}
+        <a
+          href="https://wa.me/918585951111?text=Hi%20Sarthi,%20I%20have%20a%20query%20about%20college%20admissions."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-1.5 h-full rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-sm shadow-emerald-500/10"
+        >
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.277L6.5 20.5l5.397-1.398c.95.534 2.12.87 3.114.872 3.182 0 5.768-2.587 5.77-5.767 0-3.18-2.587-5.767-5.77-5.767zm3.61 7.223c-.15.075-.89.44-1.03.49-.14.05-.24.07-.34-.07-.1.15-.39.49-.48.59-.09.1-.18.11-.33.04-.9-.45-1.6-1.21-2.07-2.02-.04-.06-.01-.13.03-.19.03-.06.07-.15.1-.22.04-.08.06-.13.09-.19.03-.06.02-.12-.01-.19-.03-.07-.24-.58-.33-.8-.09-.2-.18-.17-.24-.17h-.2c-.07 0-.18.03-.28.14-.1.1-.39.38-.39.93s.4 1.08.45 1.15c.05.07 1.34 2.05 3.25 2.87.45.19.81.3 1.08.39.45.14.86.12 1.18.07.36-.05.89-.36 1.02-.71.13-.35.13-.65.09-.71-.04-.07-.16-.11-.31-.19z" />
+          </svg>
+          WhatsApp
+        </a>
+
+        {/* Call Button */}
+        <a
+          href="tel:+918585951111"
+          className="flex-1 flex items-center justify-center gap-1.5 h-full rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[10px] font-black uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-md shadow-orange-500/20"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="13"
+            height="13"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          Call Experts
+        </a>
       </div>
     </div>
   );
