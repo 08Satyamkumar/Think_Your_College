@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import AuthModal from "@/components/AuthModal";
+import SearchOverlay from "@/components/SearchOverlay";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -51,6 +52,7 @@ export default function LayoutWrapper({
     "Top Ranked Colleges",
   );
   const [activeMoreTab, setActiveMoreTab] = useState("Paramedical");
+  const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
   const [authModal, setAuthModal] = useState<{
     open: boolean;
     mode: "login" | "signup";
@@ -702,26 +704,41 @@ export default function LayoutWrapper({
       {
         heading: "Colleges By Course",
         links: [
-          { name: "B.Sc Paramedical Colleges", href: "/colleges?stream=Paramedical" },
-          { name: "Diploma Paramedical Colleges", href: "/colleges?stream=Paramedical" },
-          { name: "B.Sc Nursing Colleges", href: "/colleges?stream=Paramedical" }
-        ]
+          {
+            name: "B.Sc Paramedical Colleges",
+            href: "/colleges?stream=Paramedical",
+          },
+          {
+            name: "Diploma Paramedical Colleges",
+            href: "/colleges?stream=Paramedical",
+          },
+          {
+            name: "B.Sc Nursing Colleges",
+            href: "/colleges?stream=Paramedical",
+          },
+        ],
       },
       {
         heading: "Colleges By Location",
         links: [
-          { name: "Colleges in Bangalore", href: "/colleges?stream=Paramedical" },
+          {
+            name: "Colleges in Bangalore",
+            href: "/colleges?stream=Paramedical",
+          },
           { name: "Colleges in Mumbai", href: "/colleges?stream=Paramedical" },
-          { name: "Colleges in Delhi NCR", href: "/colleges?stream=Paramedical" }
-        ]
+          {
+            name: "Colleges in Delhi NCR",
+            href: "/colleges?stream=Paramedical",
+          },
+        ],
       },
       {
         heading: "Entrance Exams",
         links: [
           { name: "NEET Paramedical", href: "/predictor" },
-          { name: "AIIMS Nursing Entrance", href: "/predictor" }
-        ]
-      }
+          { name: "AIIMS Nursing Entrance", href: "/predictor" },
+        ],
+      },
     ],
     Pharmacy: [
       {
@@ -729,41 +746,50 @@ export default function LayoutWrapper({
         links: [
           { name: "B.Pharm Colleges", href: "/colleges?stream=Pharmacy" },
           { name: "D.Pharm Colleges", href: "/colleges?stream=Pharmacy" },
-          { name: "M.Pharm Colleges", href: "/colleges?stream=Pharmacy" }
-        ]
+          { name: "M.Pharm Colleges", href: "/colleges?stream=Pharmacy" },
+        ],
       },
       {
         heading: "Colleges By State",
         links: [
-          { name: "Maharashtra Pharmacy", href: "/colleges?stream=Pharmacy&state=Maharashtra" },
-          { name: "Uttar Pradesh Pharmacy", href: "/colleges?stream=Pharmacy&state=Uttar-Pradesh" },
-          { name: "Karnataka Pharmacy", href: "/colleges?stream=Pharmacy&state=Karnataka" }
-        ]
+          {
+            name: "Maharashtra Pharmacy",
+            href: "/colleges?stream=Pharmacy&state=Maharashtra",
+          },
+          {
+            name: "Uttar Pradesh Pharmacy",
+            href: "/colleges?stream=Pharmacy&state=Uttar-Pradesh",
+          },
+          {
+            name: "Karnataka Pharmacy",
+            href: "/colleges?stream=Pharmacy&state=Karnataka",
+          },
+        ],
       },
       {
         heading: "Pharmacy Exams",
         links: [
           { name: "GPAT Exam", href: "/predictor" },
           { name: "KCET Pharmacy", href: "/predictor" },
-          { name: "MAHE OET", href: "/predictor" }
-        ]
-      }
+          { name: "MAHE OET", href: "/predictor" },
+        ],
+      },
     ],
     Architecture: [
       {
         heading: "Colleges By Course",
         links: [
           { name: "B.Arch Colleges", href: "/colleges?stream=Architecture" },
-          { name: "M.Arch Colleges", href: "/colleges?stream=Architecture" }
-        ]
+          { name: "M.Arch Colleges", href: "/colleges?stream=Architecture" },
+        ],
       },
       {
         heading: "Entrance Exams",
         links: [
           { name: "NATA Exam", href: "/predictor" },
-          { name: "JEE Main Paper 2", href: "/predictor" }
-        ]
-      }
+          { name: "JEE Main Paper 2", href: "/predictor" },
+        ],
+      },
     ],
     Design: [
       {
@@ -771,32 +797,33 @@ export default function LayoutWrapper({
         links: [
           { name: "B.Des Colleges", href: "/colleges?stream=Design" },
           { name: "M.Des Colleges", href: "/colleges?stream=Design" },
-          { name: "NIFT & NID Colleges", href: "/colleges?stream=Design" }
-        ]
+          { name: "NIFT & NID Colleges", href: "/colleges?stream=Design" },
+        ],
       },
       {
         heading: "Design Exams",
         links: [
           { name: "UCEED Exam", href: "/predictor" },
           { name: "NIFT Entrance Exam", href: "/predictor" },
-          { name: "NID DAT Exam", href: "/predictor" }
-        ]
-      }
+          { name: "NID DAT Exam", href: "/predictor" },
+        ],
+      },
     ],
     Hospitality: [
       {
         heading: "Colleges By Course",
         links: [
-          { name: "BHM Colleges (Hotel Mgmt)", href: "/colleges?stream=Hospitality" },
-          { name: "B.Sc Hospitality", href: "/colleges?stream=Hospitality" }
-        ]
+          {
+            name: "BHM Colleges (Hotel Mgmt)",
+            href: "/colleges?stream=Hospitality",
+          },
+          { name: "B.Sc Hospitality", href: "/colleges?stream=Hospitality" },
+        ],
       },
       {
         heading: "Entrance Exams",
-        links: [
-          { name: "NCHMCT JEE", href: "/predictor" }
-        ]
-      }
+        links: [{ name: "NCHMCT JEE", href: "/predictor" }],
+      },
     ],
     Law: [
       {
@@ -804,32 +831,36 @@ export default function LayoutWrapper({
         links: [
           { name: "BA LLB Colleges", href: "/colleges?stream=Law" },
           { name: "BBA LLB Colleges", href: "/colleges?stream=Law" },
-          { name: "LLM Colleges", href: "/colleges?stream=Law" }
-        ]
+          { name: "LLM Colleges", href: "/colleges?stream=Law" },
+        ],
       },
       {
         heading: "Law Exams",
         links: [
           { name: "CLAT Exam", href: "/predictor?exam=CLAT" },
           { name: "AILET Exam", href: "/predictor" },
-          { name: "LSAT India", href: "/predictor" }
-        ]
-      }
+          { name: "LSAT India", href: "/predictor" },
+        ],
+      },
     ],
     "Veterinary Science": [
       {
         heading: "Programs Offered",
         links: [
-          { name: "B.V.Sc & AH Colleges", href: "/colleges?stream=Veterinary-Science" },
-          { name: "M.V.Sc Colleges", href: "/colleges?stream=Veterinary-Science" }
-        ]
+          {
+            name: "B.V.Sc & AH Colleges",
+            href: "/colleges?stream=Veterinary-Science",
+          },
+          {
+            name: "M.V.Sc Colleges",
+            href: "/colleges?stream=Veterinary-Science",
+          },
+        ],
       },
       {
         heading: "Entrance Exams",
-        links: [
-          { name: "NEET Veterinary Cutoff", href: "/predictor" }
-        ]
-      }
+        links: [{ name: "NEET Veterinary Cutoff", href: "/predictor" }],
+      },
     ],
     "Vocational Courses": [
       {
@@ -837,50 +868,56 @@ export default function LayoutWrapper({
         links: [
           { name: "B.Voc Colleges", href: "/colleges?stream=Vocational" },
           { name: "M.Voc Colleges", href: "/colleges?stream=Vocational" },
-          { name: "Diploma Vocational", href: "/colleges?stream=Vocational" }
-        ]
-      }
+          { name: "Diploma Vocational", href: "/colleges?stream=Vocational" },
+        ],
+      },
     ],
     Arts: [
       {
         heading: "Colleges By Course",
         links: [
           { name: "BA Fine Arts Colleges", href: "/colleges?stream=Arts" },
-          { name: "MA Fine Arts Colleges", href: "/colleges?stream=Arts" }
-        ]
-      }
+          { name: "MA Fine Arts Colleges", href: "/colleges?stream=Arts" },
+        ],
+      },
     ],
     "Computer Application": [
       {
         heading: "Colleges By Course",
         links: [
-          { name: "BCA Colleges", href: "/colleges?stream=Computer-Application" },
-          { name: "MCA Colleges", href: "/colleges?stream=Computer-Application" }
-        ]
+          {
+            name: "BCA Colleges",
+            href: "/colleges?stream=Computer-Application",
+          },
+          {
+            name: "MCA Colleges",
+            href: "/colleges?stream=Computer-Application",
+          },
+        ],
       },
       {
         heading: "MCA Exams",
         links: [
           { name: "NIMCET Exam", href: "/predictor" },
-          { name: "MAH MCA CET", href: "/predictor" }
-        ]
-      }
+          { name: "MAH MCA CET", href: "/predictor" },
+        ],
+      },
     ],
     Dental: [
       {
         heading: "Colleges By Course",
         links: [
           { name: "BDS Colleges", href: "/colleges?stream=Dental" },
-          { name: "MDS Colleges", href: "/colleges?stream=Dental" }
-        ]
+          { name: "MDS Colleges", href: "/colleges?stream=Dental" },
+        ],
       },
       {
         heading: "Dental Exams",
         links: [
           { name: "NEET BDS Cutoffs", href: "/predictor" },
-          { name: "NEET MDS Cutoffs", href: "/predictor" }
-        ]
-      }
+          { name: "NEET MDS Cutoffs", href: "/predictor" },
+        ],
+      },
     ],
     Education: [
       {
@@ -888,10 +925,10 @@ export default function LayoutWrapper({
         links: [
           { name: "B.Ed Colleges", href: "/colleges?stream=Education" },
           { name: "M.Ed Colleges", href: "/colleges?stream=Education" },
-          { name: "D.El.Ed Colleges", href: "/colleges?stream=Education" }
-        ]
-      }
-    ]
+          { name: "D.El.Ed Colleges", href: "/colleges?stream=Education" },
+        ],
+      },
+    ],
   };
 
   const medicalTabIcons: Record<string, any> = {
@@ -1733,8 +1770,11 @@ export default function LayoutWrapper({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onClick={() => setIsSearchOverlayOpen(true)}
+              onFocus={() => setIsSearchOverlayOpen(true)}
+              readOnly
               placeholder="Search Colleges, Courses, Exams, QnA, & Articles"
-              className="flex-1 px-4 h-full bg-transparent border-none outline-none text-slate-800 text-xs placeholder-slate-400 font-semibold"
+              className="flex-1 px-4 h-full bg-transparent border-none outline-none text-slate-800 text-xs placeholder-slate-400 font-semibold cursor-pointer"
             />
             <button
               type="submit"
@@ -2752,7 +2792,16 @@ export default function LayoutWrapper({
                   placeholder="Search Colleges..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent px-3 text-xs text-text_primary outline-none"
+                  onClick={() => {
+                    setIsSearchOverlayOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  onFocus={() => {
+                    setIsSearchOverlayOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  readOnly
+                  className="w-full bg-transparent px-3 text-xs text-text_primary outline-none cursor-pointer"
                 />
                 <button
                   type="submit"
@@ -3897,6 +3946,10 @@ export default function LayoutWrapper({
           )}
         </AnimatePresence>
       </motion.button>
+      <SearchOverlay
+        isOpen={isSearchOverlayOpen}
+        onClose={() => setIsSearchOverlayOpen(false)}
+      />
     </div>
   );
 }
