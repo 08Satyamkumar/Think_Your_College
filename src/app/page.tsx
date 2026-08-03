@@ -3,15 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Search, 
-  GraduationCap, 
-  BookOpen, 
-  ShieldCheck, 
-  TrendingUp, 
-  Building2, 
-  MapPin, 
-  DollarSign, 
+import {
+  Search,
+  GraduationCap,
+  BookOpen,
+  ShieldCheck,
+  TrendingUp,
+  Building2,
+  MapPin,
+  DollarSign,
   Star,
   Users,
   Compass,
@@ -25,7 +25,7 @@ import {
   FlaskConical,
   Calendar,
   ChevronRight,
-  Layers
+  Layers,
 } from "lucide-react";
 
 interface CollegeMock {
@@ -43,48 +43,109 @@ interface CollegeMock {
   nirfRank?: number;
 }
 
+const trendingUpdates = [
+  {
+    id: "1",
+    tag: "Exam Update",
+    title: "JEE Main 2027 Registration Portal Live - Apply before Deadline",
+    details:
+      "The registration portal for JEE Main 2027 Session 1 is officially open. Aspiring candidates can fill out the application form on the official website. Check eligible engineering colleges and cutoffs on Think Your College.",
+    actionText: "Search Engineering Colleges",
+    actionLink: "/colleges?stream=Engineering",
+  },
+  {
+    id: "2",
+    tag: "Admissions",
+    title: "NEET UG 2026 Counselling Round 1 Seat Allotment Out",
+    details:
+      "The Medical Counselling Committee (MCC) has declared the Round 1 seat allocation results for NEET UG 2026 MBBS/BDS admissions. View cutoff ranks, fee structures, and download college brochures instantly.",
+    actionText: "View Medical Colleges",
+    actionLink: "/colleges?stream=Medical",
+  },
+  {
+    id: "3",
+    tag: "MBA News",
+    title:
+      "CAT 2026 Registration Dates Extended - Check Top Colleges accepting CAT",
+    details:
+      "The Indian Institutes of Management (IIMs) have extended the last date to apply for CAT 2026. Get access to CAT cutoff predictor and direct admission link for top MBA colleges.",
+    actionText: "Explore MBA Colleges",
+    actionLink: "/colleges?stream=Management",
+  },
+  {
+    id: "4",
+    tag: "Scholarship",
+    title:
+      "Think Your College Scholarship Test (TYCST) 2026 - Win up to 100% tuition coverage",
+    details:
+      "TYCST 2026 registrations are now open for students seeking admissions in MBA, Engineering, and Medical courses. Participate and win financial aid up to ₹5 Lakhs.",
+    actionText: "Register for Scholarship",
+    actionLink: "/scholarship",
+  },
+  {
+    id: "5",
+    tag: "TYC Feature",
+    title:
+      "TYC College Predictor 2026 Launched: Predict your dream campus in seconds",
+    details:
+      "Get rank-based AI recommendations for IITs, NITs, AIIMS, and top private universities based on your JEE, NEET, or CAT exam scores.",
+    actionText: "Open College Predictor",
+    actionLink: "/predictor",
+  },
+  {
+    id: "6",
+    tag: "Student Cards",
+    title: "Get Student-friendly Credit Cards via TYC - Zero Annual Charges",
+    details:
+      "Apply for custom credit cards designed for university students to cover tuition fees, books, and living expenses with interest-free semesters.",
+    actionText: "Apply for Student Card",
+    actionLink: "/credit-card",
+  },
+];
+
 const heroSlides = [
   {
     name: "Amity University",
     location: "Noida, Uttar Pradesh",
     image: "/images/amity.png",
-    slug: "amity-university"
+    slug: "amity-university",
   },
   {
     name: "Chandigarh University",
     location: "Gharuan, Punjab",
     image: "/images/chandigarh.png",
-    slug: "chandigarh-university"
+    slug: "chandigarh-university",
   },
   {
     name: "Galgotias University (Academic Block)",
     location: "Greater Noida, Uttar Pradesh",
     image: "/images/galgotias_lego_1.png",
-    slug: "galgotias-university"
+    slug: "galgotias-university",
   },
   {
     name: "Galgotias University (Campus Entrance)",
     location: "Greater Noida, Uttar Pradesh",
     image: "/images/galgotias_lego_5.png",
-    slug: "galgotias-university"
+    slug: "galgotias-university",
   },
 
   {
     name: "IIT Delhi Campus",
     location: "Hauz Khas, New Delhi",
     image: "/images/iitdelhi.png",
-    slug: "iit-delhi"
+    slug: "iit-delhi",
   },
   {
     name: "AIIMS Rishikesh Campus",
     location: "Rishikesh, Uttarakhand",
     image: "/images/aiimsrishikesh.webp",
-    slug: "aiims-rishikesh"
-  }
+    slug: "aiims-rishikesh",
+  },
 ];
 
 export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [activeTrendingUpdate, setActiveTrendingUpdate] = useState<any>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -96,9 +157,16 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStream, setSelectedStream] = useState("All");
   const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [modalType, setModalType] = useState<"general" | "credit-card">("general");
+  const [modalType, setModalType] = useState<"general" | "credit-card">(
+    "general",
+  );
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: "", phone: "", stream: "Engineering", email: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    stream: "Engineering",
+    email: "",
+  });
 
   const [compareC1, setCompareC1] = useState("1");
   const [compareC2, setCompareC2] = useState("2");
@@ -122,7 +190,8 @@ export default function HomePage() {
       glow: "rgba(16,185,129,0.25)",
       bg: "from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/30",
       border: "hover:border-emerald-400/60 dark:hover:border-emerald-500/50",
-      badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
+      badge:
+        "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
     },
     {
       name: "Management",
@@ -132,7 +201,8 @@ export default function HomePage() {
       glow: "rgba(139,92,246,0.25)",
       bg: "from-purple-50 to-violet-50 dark:from-purple-950/40 dark:to-violet-950/30",
       border: "hover:border-purple-400/60 dark:hover:border-purple-500/50",
-      badge: "bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300",
+      badge:
+        "bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300",
     },
     {
       name: "Law",
@@ -142,7 +212,8 @@ export default function HomePage() {
       glow: "rgba(245,158,11,0.25)",
       bg: "from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/30",
       border: "hover:border-amber-400/60 dark:hover:border-amber-500/50",
-      badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300",
+      badge:
+        "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300",
     },
     {
       name: "IT & Software",
@@ -152,7 +223,8 @@ export default function HomePage() {
       glow: "rgba(99,102,241,0.25)",
       bg: "from-indigo-50 to-blue-50 dark:from-indigo-950/40 dark:to-blue-950/30",
       border: "hover:border-indigo-400/60 dark:hover:border-indigo-500/50",
-      badge: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300",
+      badge:
+        "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300",
     },
     {
       name: "Design",
@@ -182,7 +254,8 @@ export default function HomePage() {
       glow: "rgba(249,115,22,0.25)",
       bg: "from-orange-50 to-red-50 dark:from-orange-950/40 dark:to-red-950/30",
       border: "hover:border-orange-400/60 dark:hover:border-orange-500/50",
-      badge: "bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300",
+      badge:
+        "bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300",
     },
   ];
 
@@ -198,8 +271,9 @@ export default function HomePage() {
       type: "Government",
       slug: "iim-ahmedabad",
       stream: "Management",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 1
+      image:
+        "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 1,
     },
     {
       id: "2",
@@ -212,8 +286,9 @@ export default function HomePage() {
       type: "Government",
       slug: "iim-bangalore",
       stream: "Management",
-      image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 2
+      image:
+        "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 2,
     },
     {
       id: "3",
@@ -226,8 +301,9 @@ export default function HomePage() {
       type: "Government",
       slug: "iit-delhi",
       stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 2
+      image:
+        "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 2,
     },
     {
       id: "4",
@@ -240,8 +316,9 @@ export default function HomePage() {
       type: "Government",
       slug: "iit-bombay",
       stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 3
+      image:
+        "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 3,
     },
     {
       id: "5",
@@ -254,8 +331,9 @@ export default function HomePage() {
       type: "Government",
       slug: "aiims-delhi",
       stream: "Medical",
-      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 1
+      image:
+        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 1,
     },
     {
       id: "6",
@@ -268,8 +346,9 @@ export default function HomePage() {
       type: "Government",
       slug: "nlsiu-bangalore",
       stream: "Law",
-      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 1
+      image:
+        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 1,
     },
     {
       id: "7",
@@ -282,8 +361,9 @@ export default function HomePage() {
       type: "Private",
       slug: "sibm-pune",
       stream: "Management",
-      image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 17
+      image:
+        "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 17,
     },
     {
       id: "8",
@@ -296,8 +376,9 @@ export default function HomePage() {
       type: "Private",
       slug: "cmc-vellore",
       stream: "Medical",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 3
+      image:
+        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 3,
     },
     {
       id: "9",
@@ -310,8 +391,9 @@ export default function HomePage() {
       type: "Private",
       slug: "kmc-mangalore",
       stream: "Medical",
-      image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 21
+      image:
+        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 21,
     },
     {
       id: "10",
@@ -324,8 +406,9 @@ export default function HomePage() {
       type: "Private",
       slug: "bit-mesra-patna",
       stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1525920980995-f8a382bf42c5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 60
+      image:
+        "https://images.unsplash.com/photo-1525920980995-f8a382bf42c5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 60,
     },
     {
       id: "11",
@@ -339,7 +422,7 @@ export default function HomePage() {
       slug: "galgotias-university",
       stream: "Engineering",
       image: "/images/galgotias_lego_1.png",
-      nirfRank: 95
+      nirfRank: 95,
     },
     {
       id: "12",
@@ -352,9 +435,10 @@ export default function HomePage() {
       type: "Government",
       slug: "cnlu-patna",
       stream: "Law",
-      image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 25
-    }
+      image:
+        "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      nirfRank: 25,
+    },
   ];
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -367,14 +451,16 @@ export default function HomePage() {
     }, 2500);
   };
 
-  const filteredColleges = selectedStream === "All" 
-    ? trendingColleges 
-    : trendingColleges.filter(col => col.stream === selectedStream);
+  const filteredColleges =
+    selectedStream === "All"
+      ? trendingColleges
+      : trendingColleges.filter((col) => col.stream === selectedStream);
 
   return (
-    <div className="space-y-12">      {/* HERO SECTION */}
+    <div className="space-y-12">
+      {" "}
+      {/* HERO SECTION */}
       <section className="relative overflow-hidden -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-12 h-[380px] md:h-[560px] text-white flex flex-col justify-end">
-        
         {/* Slideshow background layer */}
         <div className="absolute inset-0 z-0">
           <AnimatePresence mode="wait">
@@ -385,18 +471,26 @@ export default function HomePage() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
               className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${heroSlides[activeSlide].image})` }}
+              style={{
+                backgroundImage: `url(${heroSlides[activeSlide].image})`,
+              }}
             />
           </AnimatePresence>
           {/* Gradient: only bottom fade — college fully visible above */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ background: "linear-gradient(to bottom, transparent 65%, rgba(var(--background-rgb, 248 248 252) / 0.6) 85%, var(--background) 100%)" }}
+            style={{
+              background:
+                "linear-gradient(to bottom, transparent 65%, rgba(var(--background-rgb, 248 248 252) / 0.6) 85%, var(--background) 100%)",
+            }}
           />
           {/* Extra crisp fade at very bottom edge */}
           <div
             className="absolute bottom-0 inset-x-0 h-20 pointer-events-none"
-            style={{ background: "linear-gradient(to bottom, transparent, var(--background))" }}
+            style={{
+              background:
+                "linear-gradient(to bottom, transparent, var(--background))",
+            }}
           />
         </div>
 
@@ -408,7 +502,8 @@ export default function HomePage() {
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
             <span className="font-extrabold text-slate-100 group-hover/hero-lbl:text-primary transition-colors truncate">
-              {heroSlides[activeSlide].name}, {heroSlides[activeSlide].location.split(",")[0]}
+              {heroSlides[activeSlide].name},{" "}
+              {heroSlides[activeSlide].location.split(",")[0]}
             </span>
             <span className="text-slate-400">|</span>
             <span className="text-[9px] font-black uppercase text-primary tracking-wider flex items-center gap-0.5 flex-shrink-0">
@@ -418,7 +513,38 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+      {/* TRENDING NOW TICKER SECTION */}
+      <section className="relative overflow-hidden bg-white border border-slate-100 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.02)] -mt-6 mb-8 py-3.5 px-4 flex items-center select-none gap-4">
+        {/* Left Skew Glowing Saffron Badge */}
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[10px] tracking-wider uppercase rounded-xl shadow-md shadow-orange-500/15 relative z-10 skew-x-[-8deg] origin-center">
+          <span className="inline-block animate-pulse skew-x-[8deg]">🔥</span>
+          <span className="skew-x-[8deg]">Trending Now</span>
+        </div>
 
+        {/* Scrollable Marquee Ticker */}
+        <div className="flex-1 overflow-hidden relative">
+          {/* Left/Right Fading Overlays */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+          <div className="animate-marquee-slow flex items-center gap-8 whitespace-nowrap">
+            {/* Render twice for seamless infinite scrolling loops */}
+            {[...trendingUpdates, ...trendingUpdates].map((update, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveTrendingUpdate(update)}
+                className="flex items-center gap-2 text-slate-700 hover:text-orange-600 font-extrabold text-[11px] tracking-wide transition-colors cursor-pointer outline-none focus:text-orange-600 group"
+              >
+                <span className="px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 border border-orange-100 font-black text-[8px] uppercase tracking-wider group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500 transition-colors">
+                  {update.tag}
+                </span>
+                <span>{update.title}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-orange-400 transition-colors ml-4" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* STREAM GRID */}
       <section className="space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -472,7 +598,9 @@ export default function HomePage() {
                 {/* Glow orb */}
                 <div
                   className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 pointer-events-none"
-                  style={{ background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)` }}
+                  style={{
+                    background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)`,
+                  }}
                 />
 
                 <div className="relative z-10 p-4 md:p-5">
@@ -491,7 +619,9 @@ export default function HomePage() {
                   </h3>
 
                   {/* Badge */}
-                  <span className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wide ${stream.badge}`}>
+                  <span
+                    className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wide ${stream.badge}`}
+                  >
                     {stream.count}
                   </span>
 
@@ -500,42 +630,52 @@ export default function HomePage() {
                     <span>Explore</span>
                     <motion.span
                       animate={{ x: [0, 3, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: idx * 0.15,
+                      }}
                     >
                       →
                     </motion.span>
                   </div>
                 </div>
 
-                <Link href={`/colleges?stream=${stream.name}`} className="absolute inset-0 z-20" />
+                <Link
+                  href={`/colleges?stream=${stream.name}`}
+                  className="absolute inset-0 z-20"
+                />
               </motion.div>
             );
           })}
         </div>
       </section>
-
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
         {/* WIDGET 1: COMPARE COLLEGES (INTERACTIVE WIDGET) */}
         <div className="lg:col-span-6 bg-card border border-border p-6 md:p-8 rounded-3xl space-y-6 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
-          
+
           <div className="space-y-2">
             <h2 className="font-outfit font-extrabold text-xl text-text_primary flex items-center gap-2">
               <Layers className="w-5 h-5 text-primary" />
               Compare Colleges Side-by-Side
             </h2>
             <p className="text-xs text-text_secondary leading-relaxed">
-              Confused between two institutes? Select them below to compare side-by-side placements package, annual fees, ranks, and user ratings.
+              Confused between two institutes? Select them below to compare
+              side-by-side placements package, annual fees, ranks, and user
+              ratings.
             </p>
           </div>
 
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">Select College 1</label>
-                <select 
+                <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">
+                  Select College 1
+                </label>
+                <select
                   value={compareC1}
                   onChange={(e) => setCompareC1(e.target.value)}
                   className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-xs text-text_primary outline-none focus:border-primary font-bold"
@@ -544,7 +684,9 @@ export default function HomePage() {
                   <option value="2">IIM Ahmedabad (Management)</option>
                   <option value="3">Galgotias University (Engineering)</option>
                   <option value="4">SIBM Pune (Management)</option>
-                  <option value="5">RV College of Engineering (Engineering)</option>
+                  <option value="5">
+                    RV College of Engineering (Engineering)
+                  </option>
                   <option value="6">Kasturba Medical College (Medical)</option>
                   <option value="7">NLSIU Bangalore (Law)</option>
                   <option value="8">AIIMS Delhi (Medical)</option>
@@ -552,8 +694,10 @@ export default function HomePage() {
               </div>
 
               <div>
-                <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">Select College 2</label>
-                <select 
+                <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">
+                  Select College 2
+                </label>
+                <select
                   value={compareC2}
                   onChange={(e) => setCompareC2(e.target.value)}
                   className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-xs text-text_primary outline-none focus:border-primary font-bold"
@@ -562,7 +706,9 @@ export default function HomePage() {
                   <option value="1">IIT Delhi (Engineering)</option>
                   <option value="3">Galgotias University (Engineering)</option>
                   <option value="4">SIBM Pune (Management)</option>
-                  <option value="5">RV College of Engineering (Engineering)</option>
+                  <option value="5">
+                    RV College of Engineering (Engineering)
+                  </option>
                   <option value="6">Kasturba Medical College (Medical)</option>
                   <option value="7">NLSIU Bangalore (Law)</option>
                   <option value="8">AIIMS Delhi (Medical)</option>
@@ -579,7 +725,9 @@ export default function HomePage() {
               <Link
                 href={`/compare?ids=${compareC1},${compareC2}`}
                 className={`w-full py-3 bg-primary hover:bg-primary_hover text-white font-bold text-xs rounded-xl active:scale-95 transition-all shadow-md shadow-primary/10 flex items-center justify-center gap-2 ${
-                  compareC1 === compareC2 ? "pointer-events-none opacity-50" : ""
+                  compareC1 === compareC2
+                    ? "pointer-events-none opacity-50"
+                    : ""
                 }`}
               >
                 Compare Selected Colleges
@@ -592,38 +740,67 @@ export default function HomePage() {
         {/* WIDGET 2: EXAMS & COUNSELING CALENDAR */}
         <div className="lg:col-span-6 bg-card border border-border p-6 md:p-8 rounded-3xl space-y-6 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl" />
-          
+
           <div className="space-y-2">
             <h2 className="font-outfit font-extrabold text-xl text-text_primary flex items-center gap-2">
               <Calendar className="w-5 h-5 text-emerald-500" />
               Entrance Exams & Counseling 2026
             </h2>
             <p className="text-xs text-text_secondary leading-relaxed">
-              Track upcoming registration deadlines, national level cutoffs, and call predictions for top government counseling programs.
+              Track upcoming registration deadlines, national level cutoffs, and
+              call predictions for top government counseling programs.
             </p>
           </div>
 
           <div className="space-y-3">
             {[
-              { name: "JEE Main 2026", date: "Registration open: Dec 2025", desc: "B.Tech/B.E Counseling", predictor: true },
-              { name: "CAT 2026", date: "Exam Date: 23 Nov 2026", desc: "IIM & Private MBA calls", predictor: true },
-              { name: "NEET UG 2026", date: "Registration starts: Feb 2026", desc: "AIIMS & MBBS Seats", predictor: true },
-              { name: "CLAT 2026", date: "Exam Date: 07 Dec 2025", desc: "National Law Universities", predictor: false },
+              {
+                name: "JEE Main 2026",
+                date: "Registration open: Dec 2025",
+                desc: "B.Tech/B.E Counseling",
+                predictor: true,
+              },
+              {
+                name: "CAT 2026",
+                date: "Exam Date: 23 Nov 2026",
+                desc: "IIM & Private MBA calls",
+                predictor: true,
+              },
+              {
+                name: "NEET UG 2026",
+                date: "Registration starts: Feb 2026",
+                desc: "AIIMS & MBBS Seats",
+                predictor: true,
+              },
+              {
+                name: "CLAT 2026",
+                date: "Exam Date: 07 Dec 2025",
+                desc: "National Law Universities",
+                predictor: false,
+              },
             ].map((exam, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 bg-background border border-border rounded-xl">
+              <div
+                key={idx}
+                className="flex items-center justify-between p-3 bg-background border border-border rounded-xl"
+              >
                 <div>
-                  <h4 className="font-outfit font-bold text-xs text-text_primary">{exam.name}</h4>
-                  <p className="text-[10px] text-text_secondary font-semibold mt-0.5">{exam.date} • <span className="text-primary">{exam.desc}</span></p>
+                  <h4 className="font-outfit font-bold text-xs text-text_primary">
+                    {exam.name}
+                  </h4>
+                  <p className="text-[10px] text-text_secondary font-semibold mt-0.5">
+                    {exam.date} •{" "}
+                    <span className="text-primary">{exam.desc}</span>
+                  </p>
                 </div>
                 {exam.predictor ? (
-                  <Link 
+                  <Link
                     href="/predictor"
                     className="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-[9px] font-black transition-colors animate-pulse"
                   >
                     Predictor
                   </Link>
                 ) : (
-                  <Link 
+                  <Link
                     href="/colleges"
                     className="px-3 py-1.5 border border-border hover:bg-border/30 rounded-lg text-[9px] font-bold text-text_secondary transition-colors"
                   >
@@ -635,11 +812,10 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* BIHAR STUDENT CREDIT CARD SPOTLIGHT BANNER */}
       <section className="p-8 md:p-12 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white relative overflow-hidden shadow-xl">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_35%)]" />
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           <div className="lg:col-span-8 space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-emerald-200">
@@ -648,13 +824,17 @@ export default function HomePage() {
             </div>
             <h2 className="font-outfit font-extrabold text-3xl md:text-4xl leading-tight">
               Higher Studies Admission Under <br />
-              <span className="underline decoration-emerald-300 underline-offset-8">Bihar Student Credit Card</span>
+              <span className="underline decoration-emerald-300 underline-offset-8">
+                Bihar Student Credit Card
+              </span>
             </h2>
             <p className="text-slate-100 font-sans text-sm md:text-base max-w-xl">
-              Get direct counseling for medical, B.Tech, MBA, pharmacy, and nursing courses fully covered under the Bihar Student Credit Card scheme. Zero upfront self-finance tuition fee options.
+              Get direct counseling for medical, B.Tech, MBA, pharmacy, and
+              nursing courses fully covered under the Bihar Student Credit Card
+              scheme. Zero upfront self-finance tuition fee options.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
-              <button 
+              <button
                 onClick={() => {
                   setModalType("credit-card");
                   setShowInquiryModal(true);
@@ -663,7 +843,7 @@ export default function HomePage() {
               >
                 Apply for Loan Guidance
               </button>
-              <a 
+              <a
                 href="#"
                 className="flex items-center gap-2 px-5 py-3 border border-white/20 hover:bg-white/10 text-white font-bold text-sm rounded-xl transition-all"
               >
@@ -679,30 +859,36 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* TRENDING COLLEGES */}
       <section className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">Trending Colleges in India</h2>
-            <p className="text-sm text-text_secondary">Explore high-ranking institutes based on placements and infrastructure</p>
+            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+              Trending Colleges in India
+            </h2>
+            <p className="text-sm text-text_secondary">
+              Explore high-ranking institutes based on placements and
+              infrastructure
+            </p>
           </div>
-          
+
           {/* TABS FILTER */}
           <div className="flex flex-wrap gap-2">
-            {["All", "Engineering", "Management", "Medical", "Law"].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setSelectedStream(tab)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-                  selectedStream === tab 
-                    ? "bg-primary text-white shadow-md shadow-primary/10" 
-                    : "bg-card border border-border text-text_secondary hover:bg-border/30 hover:text-text_primary"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+            {["All", "Engineering", "Management", "Medical", "Law"].map(
+              (tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setSelectedStream(tab)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                    selectedStream === tab
+                      ? "bg-primary text-white shadow-md shadow-primary/10"
+                      : "bg-card border border-border text-text_secondary hover:bg-border/30 hover:text-text_primary"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ),
+            )}
           </div>
         </div>
 
@@ -716,8 +902,8 @@ export default function HomePage() {
               <div className="relative h-48 bg-slate-100 overflow-hidden">
                 {/* College banner image with smooth zoom hover animation */}
                 {college.image ? (
-                  <img 
-                    src={college.image} 
+                  <img
+                    src={college.image}
                     alt={college.name}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     loading="lazy"
@@ -725,10 +911,10 @@ export default function HomePage() {
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-teal-500/20" />
                 )}
-                
+
                 {/* Dark gradient overlay for text contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-75" />
-                
+
                 {/* NIRF Rank absolute badge */}
                 {college.nirfRank && (
                   <div className="absolute top-4 left-4 bg-orange-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow-md shadow-orange-500/25 z-10">
@@ -747,7 +933,9 @@ export default function HomePage() {
 
               <div className="p-6 space-y-4">
                 <div>
-                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-orange-600">{college.stream}</span>
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-orange-600">
+                    {college.stream}
+                  </span>
                   <h3 className="font-outfit font-bold text-lg text-text_primary group-hover:text-orange-600 transition-colors line-clamp-1 mt-1">
                     {college.name}
                   </h3>
@@ -759,27 +947,39 @@ export default function HomePage() {
 
                 <div className="grid grid-cols-3 gap-2 py-3 px-4 bg-background border border-border rounded-xl text-center">
                   <div>
-                    <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">Highest LPA</p>
-                    <p className="font-outfit font-bold text-xs text-emerald-500 mt-0.5">{college.highestPackage}</p>
+                    <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">
+                      Highest LPA
+                    </p>
+                    <p className="font-outfit font-bold text-xs text-emerald-500 mt-0.5">
+                      {college.highestPackage}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">Average LPA</p>
-                    <p className="font-outfit font-bold text-xs text-orange-600 mt-0.5">{college.averagePackage}</p>
+                    <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">
+                      Average LPA
+                    </p>
+                    <p className="font-outfit font-bold text-xs text-orange-600 mt-0.5">
+                      {college.averagePackage}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">Course Fees</p>
-                    <p className="font-outfit font-bold text-xs text-text_primary mt-0.5">{college.averageFee}</p>
+                    <p className="text-[8px] text-text_secondary font-extrabold uppercase tracking-wider">
+                      Course Fees
+                    </p>
+                    <p className="font-outfit font-bold text-xs text-text_primary mt-0.5">
+                      {college.averageFee}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3 pt-2">
-                  <Link 
+                  <Link
                     href={`/colleges/${college.slug}`}
                     className="flex-1 px-4 py-2.5 bg-background hover:bg-slate-50 border border-border hover:border-orange-500/30 text-text_primary hover:text-orange-600 font-bold text-xs rounded-xl text-center transition-colors"
                   >
                     View Details
                   </Link>
-                  <button 
+                  <button
                     onClick={() => {
                       setFormData({ ...formData, stream: college.stream });
                       setModalType("general");
@@ -795,13 +995,16 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
       {/* FOOTER CALL-TO-ACTION COUNSELING */}
       <section className="bg-card border border-border p-8 md:p-12 rounded-3xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         <div className="lg:col-span-7 space-y-4">
-          <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">Still Confused About Your College?</h2>
+          <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+            Still Confused About Your College?
+          </h2>
           <p className="text-sm text-text_secondary max-w-lg leading-relaxed">
-            Fill in your details and let our expert advisors call you back within 15 minutes. We help you choose the best college based on your exam scores, location, and fees.
+            Fill in your details and let our expert advisors call you back
+            within 15 minutes. We help you choose the best college based on your
+            exam scores, location, and fees.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-2">
             <div className="flex items-center gap-2 text-sm text-text_primary font-bold">
@@ -818,33 +1021,45 @@ export default function HomePage() {
         <div className="lg:col-span-5 bg-background border border-border p-6 rounded-2xl shadow-sm">
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div>
-              <label className="text-xs text-text_secondary font-bold">Student Name</label>
-              <input 
+              <label className="text-xs text-text_secondary font-bold">
+                Student Name
+              </label>
+              <input
                 required
-                type="text" 
-                placeholder="Enter your full name" 
+                type="text"
+                placeholder="Enter your full name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-card text-sm text-text_primary outline-none focus:border-primary transition-colors"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-text_secondary font-bold">Mobile Number</label>
-                <input 
+                <label className="text-xs text-text_secondary font-bold">
+                  Mobile Number
+                </label>
+                <input
                   required
-                  type="tel" 
-                  placeholder="Enter 10-digit number" 
+                  type="tel"
+                  placeholder="Enter 10-digit number"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
                   className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-card text-sm text-text_primary outline-none focus:border-primary transition-colors"
                 />
               </div>
               <div>
-                <label className="text-xs text-text_secondary font-bold">Target Course</label>
-                <select 
+                <label className="text-xs text-text_secondary font-bold">
+                  Target Course
+                </label>
+                <select
                   value={formData.stream}
-                  onChange={(e) => setFormData({ ...formData, stream: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, stream: e.target.value })
+                  }
                   className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-card text-sm text-text_primary outline-none focus:border-primary transition-colors"
                 >
                   <option>Engineering</option>
@@ -854,7 +1069,7 @@ export default function HomePage() {
                 </select>
               </div>
             </div>
-            <button 
+            <button
               type="submit"
               className="w-full py-3 bg-primary hover:bg-primary_hover text-white font-bold text-sm rounded-xl active:scale-95 transition-all shadow-md shadow-primary/10 flex items-center justify-center gap-2"
             >
@@ -864,18 +1079,17 @@ export default function HomePage() {
           </form>
         </div>
       </section>
-
       {/* POPUP COUNSELING FORM MODAL */}
       <AnimatePresence>
         {showInquiryModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className="w-full max-w-md p-6 bg-card border border-border rounded-2xl relative shadow-2xl"
             >
-              <button 
+              <button
                 onClick={() => setShowInquiryModal(false)}
                 className="absolute top-4 right-4 text-text_secondary hover:text-text_primary p-1"
               >
@@ -887,48 +1101,67 @@ export default function HomePage() {
                   <div className="w-16 h-16 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mx-auto">
                     <CheckCircle className="w-10 h-10 animate-bounce" />
                   </div>
-                  <h3 className="font-outfit font-extrabold text-xl text-text_primary">Request Captured!</h3>
+                  <h3 className="font-outfit font-extrabold text-xl text-text_primary">
+                    Request Captured!
+                  </h3>
                   <p className="text-sm text-text_secondary max-w-xs mx-auto">
-                    Our educational counselor will call you shortly on **+91 {formData.phone}**.
+                    Our educational counselor will call you shortly on **+91{" "}
+                    {formData.phone}**.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <h3 className="font-outfit font-extrabold text-xl text-text_primary">
-                    {modalType === "credit-card" ? "Bihar Student Credit Card Admission Guidance" : "Apply for Admission & Free Counseling"}
+                    {modalType === "credit-card"
+                      ? "Bihar Student Credit Card Admission Guidance"
+                      : "Apply for Admission & Free Counseling"}
                   </h3>
                   <p className="text-xs text-text_secondary leading-relaxed">
-                    Provide your correct contact information. We will guide you with fees, cutoffs, admission quota, and documentation checklist.
+                    Provide your correct contact information. We will guide you
+                    with fees, cutoffs, admission quota, and documentation
+                    checklist.
                   </p>
 
                   <form onSubmit={handleFormSubmit} className="space-y-4 pt-2">
                     <div>
-                      <label className="text-xs text-text_secondary font-bold">Your Name</label>
-                      <input 
+                      <label className="text-xs text-text_secondary font-bold">
+                        Your Name
+                      </label>
+                      <input
                         required
-                        type="text" 
-                        placeholder="Enter your name" 
+                        type="text"
+                        placeholder="Enter your name"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-sm text-text_primary outline-none focus:border-primary transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-text_secondary font-bold">Mobile Number</label>
-                      <input 
+                      <label className="text-xs text-text_secondary font-bold">
+                        Mobile Number
+                      </label>
+                      <input
                         required
-                        type="tel" 
-                        placeholder="Enter 10 digit number" 
+                        type="tel"
+                        placeholder="Enter 10 digit number"
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, phone: e.target.value })
+                        }
                         className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-sm text-text_primary outline-none focus:border-primary transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-text_secondary font-bold">Desired Course/Stream</label>
-                      <select 
+                      <label className="text-xs text-text_secondary font-bold">
+                        Desired Course/Stream
+                      </label>
+                      <select
                         value={formData.stream}
-                        onChange={(e) => setFormData({ ...formData, stream: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, stream: e.target.value })
+                        }
                         className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-sm text-text_primary outline-none focus:border-primary transition-colors"
                       >
                         <option>Engineering</option>
@@ -938,15 +1171,79 @@ export default function HomePage() {
                       </select>
                     </div>
 
-                    <button 
+                    <button
                       type="submit"
                       className="w-full py-3 bg-gradient-premium hover:bg-primary text-white font-bold text-sm rounded-xl shadow-lg active:scale-95 transition-all mt-2"
                     >
-                      {modalType === "credit-card" ? "Request Credit Card Assistance" : "Submit Admission Query"}
+                      {modalType === "credit-card"
+                        ? "Request Credit Card Assistance"
+                        : "Submit Admission Query"}
                     </button>
                   </form>
                 </div>
               )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* TRENDING NOW NEWS DETAILS MODAL */}
+      <AnimatePresence>
+        {activeTrendingUpdate && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+            {/* Backdrop trigger */}
+            <div
+              className="absolute inset-0"
+              onClick={() => setActiveTrendingUpdate(null)}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative bg-white rounded-3xl w-full max-w-[520px] shadow-2xl p-6 md:p-7 flex flex-col z-10 border border-slate-100 overflow-hidden"
+            >
+              {/* Glowing top line */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-red-500" />
+
+              {/* Header Row */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-5">
+                <span className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 border border-orange-100 font-black text-[9px] uppercase tracking-widest">
+                  {activeTrendingUpdate.tag}
+                </span>
+                <button
+                  onClick={() => setActiveTrendingUpdate(null)}
+                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Title */}
+              <h3 className="font-outfit font-black text-slate-800 text-base md:text-lg leading-snug mb-3">
+                {activeTrendingUpdate.title}
+              </h3>
+
+              {/* Details News Description */}
+              <p className="text-xs text-slate-500 font-semibold leading-relaxed mb-6">
+                {activeTrendingUpdate.details}
+              </p>
+
+              {/* Action Button & Dismiss Row */}
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-50">
+                <button
+                  onClick={() => setActiveTrendingUpdate(null)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-black text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                >
+                  Dismiss
+                </button>
+                <Link
+                  href={activeTrendingUpdate.actionLink}
+                  onClick={() => setActiveTrendingUpdate(null)}
+                  className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/15 active:scale-95 cursor-pointer text-center"
+                >
+                  {activeTrendingUpdate.actionText}
+                </Link>
+              </div>
             </motion.div>
           </div>
         )}
