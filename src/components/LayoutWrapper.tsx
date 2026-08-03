@@ -47,6 +47,9 @@ export default function LayoutWrapper({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeMbaTab, setActiveMbaTab] = useState("Top Ranked Colleges");
   const [activeEngTab, setActiveEngTab] = useState("Top Ranked Colleges");
+  const [activeMedicalTab, setActiveMedicalTab] = useState(
+    "Top Ranked Colleges",
+  );
   const [authModal, setAuthModal] = useState<{
     open: boolean;
     mode: "login" | "signup";
@@ -691,6 +694,312 @@ export default function LayoutWrapper({
     "College Predictors": Compass,
     "College Reviews": Star,
     Resources: Sparkles,
+  };
+
+  const medicalTabIcons: Record<string, any> = {
+    "Top Ranked Colleges": Award,
+    "Popular Courses": BookOpen,
+    "Popular Specializations": Layers,
+    Exams: FileText,
+    "Colleges By Location": MapPin,
+    "Compare Colleges": Shuffle,
+    "College Reviews": Star,
+  };
+
+  const medicalTabs: Record<string, MegaSubCategory[]> = {
+    "Top Ranked Colleges": [
+      {
+        heading: "Colleges By Rank",
+        links: [
+          {
+            name: "Top Medical Colleges in India",
+            href: "/colleges?stream=Medical",
+          },
+          {
+            name: "Top Government MBBS Colleges",
+            href: "/colleges?stream=Medical",
+          },
+          {
+            name: "Top Private Medical Colleges",
+            href: "/colleges?stream=Medical&type=Private",
+          },
+          {
+            name: "Top Dental (BDS) Colleges",
+            href: "/colleges?stream=Medical",
+          },
+        ],
+      },
+      {
+        heading: "Colleges By State",
+        links: [
+          {
+            name: "Maharashtra MBBS Colleges",
+            href: "/colleges?stream=Medical&state=Maharashtra",
+          },
+          {
+            name: "Delhi NCR Medical Colleges",
+            href: "/colleges?stream=Medical&state=Delhi",
+          },
+          {
+            name: "Uttar Pradesh MBBS Colleges",
+            href: "/colleges?stream=Medical&state=Uttar-Pradesh",
+          },
+          {
+            name: "Karnataka Medical Colleges",
+            href: "/colleges?stream=Medical&state=Karnataka",
+          },
+          {
+            name: "Tamil Nadu Medical Colleges",
+            href: "/colleges?stream=Medical&state=Tamil-Nadu",
+          },
+        ],
+      },
+      {
+        heading: "Colleges By City",
+        links: [
+          {
+            name: "Mumbai Medical Colleges",
+            href: "/colleges?stream=Medical&state=Maharashtra",
+          },
+          {
+            name: "Bangalore Medical Colleges",
+            href: "/colleges?stream=Medical&state=Karnataka",
+          },
+          {
+            name: "Pune Medical Colleges",
+            href: "/colleges?stream=Medical&state=Maharashtra",
+          },
+          {
+            name: "Noida Medical Colleges",
+            href: "/colleges?stream=Medical&state=Uttar-Pradesh",
+          },
+          {
+            name: "Hyderabad Medical Colleges",
+            href: "/colleges?stream=Medical",
+          },
+        ],
+      },
+    ],
+    "Popular Courses": [
+      {
+        heading: "Undergraduate (UG)",
+        links: [
+          {
+            name: "MBBS (Bachelor of Medicine)",
+            href: "/colleges?stream=Medical",
+          },
+          {
+            name: "BDS (Bachelor of Dental Surgery)",
+            href: "/colleges?stream=Medical",
+          },
+          {
+            name: "BAMS (Ayurvedic Medicine)",
+            href: "/colleges?stream=Medical",
+          },
+          {
+            name: "BHMS (Homeopathic Medicine)",
+            href: "/colleges?stream=Medical",
+          },
+        ],
+      },
+      {
+        heading: "Postgraduate (PG)",
+        links: [
+          { name: "MD (Doctor of Medicine)", href: "/colleges?stream=Medical" },
+          { name: "MS (Master of Surgery)", href: "/colleges?stream=Medical" },
+          {
+            name: "MDS (Master of Dental Surgery)",
+            href: "/colleges?stream=Medical",
+          },
+        ],
+      },
+      {
+        heading: "Allied Health",
+        links: [
+          { name: "B.Sc Nursing", href: "/colleges?stream=Medical" },
+          {
+            name: "BPT (Bachelor of Physiotherapy)",
+            href: "/colleges?stream=Medical",
+          },
+          {
+            name: "MPT (Master of Physiotherapy)",
+            href: "/colleges?stream=Medical",
+          },
+        ],
+      },
+    ],
+    "Popular Specializations": [
+      {
+        heading: "Master of Surgery (MS)",
+        links: [
+          {
+            name: "MS in General Surgery",
+            href: "/colleges?stream=Medical&search=Surgery",
+          },
+          {
+            name: "MS in Orthopaedics",
+            href: "/colleges?stream=Medical&search=Orthopaedics",
+          },
+          {
+            name: "MS in Anatomy",
+            href: "/colleges?stream=Medical&search=Anatomy",
+          },
+          { name: "MS in ENT", href: "/colleges?stream=Medical&search=ENT" },
+        ],
+      },
+      {
+        heading: "Doctor of Medicine (MD)",
+        links: [
+          {
+            name: "MD in General Medicine",
+            href: "/colleges?stream=Medical&search=Medicine",
+          },
+          {
+            name: "MD in Pathology",
+            href: "/colleges?stream=Medical&search=Pathology",
+          },
+          {
+            name: "MD in Dermatology",
+            href: "/colleges?stream=Medical&search=Dermatology",
+          },
+          {
+            name: "MD in Paediatrics",
+            href: "/colleges?stream=Medical&search=Paediatrics",
+          },
+        ],
+      },
+      {
+        heading: "Other Specializations",
+        links: [
+          { name: "Diploma in Gynaecology", href: "/colleges?stream=Medical" },
+          {
+            name: "BDS Dental Specializations",
+            href: "/colleges?stream=Medical",
+          },
+        ],
+      },
+    ],
+    Exams: [
+      {
+        heading: "UG Medical Exams",
+        links: [
+          { name: "NEET UG Exam", href: "/predictor?exam=NEET" },
+          { name: "AIIMS MBBS Entrance", href: "/predictor?exam=NEET" },
+        ],
+      },
+      {
+        heading: "PG Medical Exams",
+        links: [
+          { name: "NEET PG Exam", href: "/predictor" },
+          { name: "NEET MDS Exam", href: "/predictor" },
+          { name: "AIIMS PG Entrance", href: "/predictor" },
+        ],
+      },
+      {
+        heading: "General Resources",
+        links: [
+          { name: "All Medical Exams Predictors >", href: "/predictor" },
+          { name: "Counseling Predictor", href: "/predictor" },
+        ],
+      },
+    ],
+    "Colleges By Location": [
+      {
+        heading: "Top States",
+        links: [
+          {
+            name: "Colleges in Maharashtra",
+            href: "/colleges?stream=Medical&state=Maharashtra",
+          },
+          {
+            name: "Colleges in Delhi NCR",
+            href: "/colleges?stream=Medical&state=Delhi",
+          },
+          {
+            name: "Colleges in Uttar Pradesh",
+            href: "/colleges?stream=Medical&state=Uttar-Pradesh",
+          },
+          {
+            name: "Colleges in Karnataka",
+            href: "/colleges?stream=Medical&state=Karnataka",
+          },
+        ],
+      },
+      {
+        heading: "Metro Cities",
+        links: [
+          {
+            name: "Colleges in Mumbai",
+            href: "/colleges?stream=Medical&state=Maharashtra",
+          },
+          {
+            name: "Colleges in Bangalore",
+            href: "/colleges?stream=Medical&state=Karnataka",
+          },
+          {
+            name: "Colleges in Pune",
+            href: "/colleges?stream=Medical&state=Maharashtra",
+          },
+          {
+            name: "Colleges in Noida",
+            href: "/colleges?stream=Medical&state=Uttar-Pradesh",
+          },
+        ],
+      },
+      {
+        heading: "Other Hubs",
+        links: [
+          {
+            name: "Colleges in Chennai",
+            href: "/colleges?stream=Medical&state=Tamil-Nadu",
+          },
+          { name: "Colleges in Hyderabad", href: "/colleges?stream=Medical" },
+          { name: "Colleges in Kolkata", href: "/colleges?stream=Medical" },
+          { name: "Explore All Locations >", href: "/colleges?stream=Medical" },
+        ],
+      },
+    ],
+    "Compare Colleges": [
+      {
+        heading: "Top Medical Battle",
+        links: [
+          { name: "AIIMS Delhi Vs Kasturba Medical", href: "/compare" },
+          { name: "AIIMS Rishikesh Vs AIIMS Delhi", href: "/compare" },
+        ],
+      },
+      {
+        heading: "Govt Vs Private",
+        links: [
+          { name: "CMC Vellore Vs KMC Mangalore", href: "/compare" },
+          { name: "Compare Other Medical Colleges >", href: "/compare" },
+        ],
+      },
+    ],
+    "College Reviews": [
+      {
+        heading: "AIIMS Reviews",
+        links: [
+          { name: "AIIMS New Delhi Reviews", href: "/colleges/aiims-delhi" },
+          {
+            name: "AIIMS Rishikesh Reviews",
+            href: "/colleges/aiims-rishikesh",
+          },
+        ],
+      },
+      {
+        heading: "Top Private Reviews",
+        links: [
+          {
+            name: "Kasturba Medical College Reviews",
+            href: "/colleges/kmc-mangalore",
+          },
+          {
+            name: "Christian Medical College Reviews",
+            href: "/colleges/cmc-vellore",
+          },
+        ],
+      },
+    ],
   };
 
   // Engineering Mega Menu Sub-tabs structure matching screenshot
@@ -1600,6 +1909,184 @@ export default function LayoutWrapper({
               )}
             </AnimatePresence>
 
+            {/* MEGA MENU DROPDOWN PANEL FOR MEDICAL */}
+            <AnimatePresence>
+              {activeMegaMenu === "MEDICAL" && (
+                <div
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
+                  onMouseEnter={() => setActiveMegaMenu("MEDICAL")}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                    exit={{
+                      opacity: 0,
+                      y: 10,
+                      scale: 0.97,
+                      transition: { duration: 0.15 },
+                    }}
+                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                    style={{ transformOrigin: "top center", perspective: 1000 }}
+                    className="w-full bg-white/95 backdrop-blur-xl border border-red-100/40 rounded-2xl shadow-[0_20px_50px_rgba(239,68,68,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
+                  >
+                    {/* Floating Glowing Gradient border at top */}
+                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-red-400 via-rose-500 to-red-600 shadow-[0_1px_10px_rgba(239,68,68,0.5)] z-20" />
+
+                    {/* Dynamic Animated Glass Ambient Background */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(239,68,68,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
+                      <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-red-500/8 dark:bg-red-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-rose-500/8 dark:bg-rose-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
+                    </div>
+
+                    {/* Left Column: Vertical Sub-Tabs Menu */}
+                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
+                      {Object.keys(medicalTabs).map((tabName) => {
+                        const TabIcon = medicalTabIcons[tabName] || Award;
+                        const isActive = activeMedicalTab === tabName;
+                        return (
+                          <button
+                            key={tabName}
+                            onClick={() => setActiveMedicalTab(tabName)}
+                            onMouseEnter={() => setActiveMedicalTab(tabName)}
+                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
+                              isActive
+                                ? "bg-gradient-to-r from-red-500/10 to-rose-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-red-500/5"
+                                : "text-text_secondary hover:bg-red-500/5 hover:text-text_primary hover:translate-x-0.5"
+                            }`}
+                          >
+                            <TabIcon
+                              className={`w-3.5 h-3.5 ${
+                                isActive
+                                  ? "text-primary animate-pulse"
+                                  : "text-slate-400 dark:text-slate-500"
+                              }`}
+                            />
+                            {tabName}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Middle Column: Dynamic Link Lists */}
+                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+                      <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-red-500" />
+                        {activeMedicalTab}
+                      </h4>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                        {medicalTabs[activeMedicalTab]?.map((subCat, idx) => (
+                          <div key={idx} className="space-y-3">
+                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-red-600 border-b border-red-100/50 pb-1 flex items-center gap-1">
+                              {subCat.heading}
+                            </h5>
+                            <ul className="space-y-2">
+                              {subCat.links.map((link, lIdx) => (
+                                <li key={lIdx}>
+                                  <Link
+                                    href={link.href}
+                                    onClick={() => setActiveMegaMenu(null)}
+                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                    <span className="flex-1 line-clamp-1">
+                                      {link.name}
+                                    </span>
+                                    {link.name.endsWith(">") ? null : (
+                                      <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                                    )}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Right Column: Featured Colleges */}
+                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
+                      <div>
+                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
+                          <Award className="w-3.5 h-3.5 text-red-500" />
+                          Top Medical Choices
+                        </h4>
+                        <div className="space-y-3">
+                          {[
+                            {
+                              name: "AIIMS New Delhi",
+                              rate: "5.0",
+                              rank: "NIRF #1",
+                              slug: "aiims-delhi",
+                              color: "from-red-500 to-rose-600",
+                            },
+                            {
+                              name: "CMC Vellore",
+                              rate: "4.9",
+                              rank: "NIRF #3",
+                              slug: "cmc-vellore",
+                              color: "from-blue-500 to-indigo-600",
+                            },
+                            {
+                              name: "KMC Mangalore",
+                              rate: "4.7",
+                              rank: "NIRF #23",
+                              slug: "kmc-mangalore",
+                              color: "from-emerald-500 to-teal-600",
+                            },
+                          ].map((c, idx) => (
+                            <Link
+                              key={idx}
+                              href={`/colleges/${c.slug}`}
+                              onClick={() => setActiveMegaMenu(null)}
+                              className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
+                                >
+                                  {c.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
+                                    {c.name}
+                                  </p>
+                                  <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
+                                    <span className="text-amber-500">
+                                      ★ {c.rate}
+                                    </span>
+                                    <span>•</span>
+                                    <span className="text-primary">
+                                      {c.rank}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+
+                      <Link
+                        href="/colleges?stream=Medical"
+                        onClick={() => setActiveMegaMenu(null)}
+                        className="mt-4 w-full py-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
+                      >
+                        Explore All Colleges
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
+
             {/* MEGA MENU DROPDOWN PANEL FOR ENGINEERING */}
             <AnimatePresence>
               {activeMegaMenu === "ENGINEERING" && (
@@ -1777,6 +2264,7 @@ export default function LayoutWrapper({
               {activeMegaMenu !== null &&
                 activeMegaMenu !== "MBA" &&
                 activeMegaMenu !== "ENGINEERING" &&
+                activeMegaMenu !== "MEDICAL" &&
                 megaMenus[activeMegaMenu] && (
                   <div
                     className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"
