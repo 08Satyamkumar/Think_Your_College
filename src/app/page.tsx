@@ -499,15 +499,15 @@ export default function HomePage() {
         </div>
 
         {/* Bottom Centered Glassmorphic Panel (Woxsen style overlay with Saffron highlights) */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[840px] px-4 sm:px-0 z-20">
-          <div className="grid grid-cols-3 bg-slate-950/70 backdrop-blur-xl rounded-t-3xl border-t border-x border-white/10 overflow-hidden shadow-[0_-12px_30px_rgba(0,0,0,0.15)] select-none">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1080px] px-4 sm:px-6 z-20">
+          <div className="grid grid-cols-3 bg-slate-900/40 backdrop-blur-md rounded-t-[32px] border-t border-x border-white/20 overflow-hidden shadow-[0_-15px_35px_rgba(0,0,0,0.2)] select-none">
             {/* Tab 1: Top Colleges */}
             <Link
               href="/colleges"
-              className="flex flex-col items-center justify-center py-4 px-2 hover:bg-white/5 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/5"
+              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15"
             >
               <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
-              <span className="mt-1.5 font-outfit font-black text-[9px] md:text-[10px] text-white uppercase tracking-wider">
+              <span className="mt-2 font-outfit font-black text-[9px] md:text-[10.5px] text-white uppercase tracking-widest">
                 Top Colleges
               </span>
             </Link>
@@ -515,10 +515,10 @@ export default function HomePage() {
             {/* Tab 2: Top Exams */}
             <Link
               href="/colleges"
-              className="flex flex-col items-center justify-center py-4 px-2 hover:bg-white/5 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/5"
+              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15"
             >
               <Award className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
-              <span className="mt-1.5 font-outfit font-black text-[9px] md:text-[10px] text-white uppercase tracking-wider">
+              <span className="mt-2 font-outfit font-black text-[9px] md:text-[10.5px] text-white uppercase tracking-widest">
                 Top Exams
               </span>
             </Link>
@@ -526,10 +526,10 @@ export default function HomePage() {
             {/* Tab 3: Top Courses */}
             <Link
               href="/colleges"
-              className="flex flex-col items-center justify-center py-4 px-2 hover:bg-white/5 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group"
+              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group"
             >
               <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
-              <span className="mt-1.5 font-outfit font-black text-[9px] md:text-[10px] text-white uppercase tracking-wider">
+              <span className="mt-2 font-outfit font-black text-[9px] md:text-[10.5px] text-white uppercase tracking-widest">
                 Top Courses
               </span>
             </Link>
