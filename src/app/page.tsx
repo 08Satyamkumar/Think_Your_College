@@ -92,42 +92,42 @@ const topCities = [
     name: "Pune",
     collegesCount: "677+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1601962369681-30d850785f7e?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=600&auto=format&fit=crop&q=60",
     slug: "Pune",
   },
   {
     name: "Bhopal",
     collegesCount: "242+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1627894481076-2e8f192ebfa3?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1610448721566-47369c768e70?w=600&auto=format&fit=crop&q=60",
     slug: "Bhopal",
   },
   {
     name: "Indore",
     collegesCount: "187+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1623824591963-305f8849b275?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&auto=format&fit=crop&q=60",
     slug: "Indore",
   },
   {
     name: "Nagpur",
     collegesCount: "249+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1601007879394-77ec30a6567f?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1617854818583-09e7f077a156?w=600&auto=format&fit=crop&q=60",
     slug: "Nagpur",
   },
   {
     name: "Ahmedabad",
     collegesCount: "150+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1599908608047-987cf45c195f?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?w=600&auto=format&fit=crop&q=60",
     slug: "Ahmedabad",
   },
   {
     name: "Jaipur",
     collegesCount: "210+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1477584322822-49867f1399c6?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&auto=format&fit=crop&q=60",
     slug: "Jaipur",
   },
 ];
