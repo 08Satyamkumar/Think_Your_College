@@ -553,7 +553,7 @@ export default function HomePage() {
 
         {/* Bottom Centered Glassmorphic Panel (Woxsen style overlay with Saffron highlights) */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1080px] px-4 sm:px-6 z-20">
-          <div className="grid grid-cols-3 bg-slate-900/40 backdrop-blur-md rounded-t-[32px] border-t border-x border-white/20 overflow-hidden shadow-[0_-15px_35px_rgba(0,0,0,0.2)] select-none">
+          <div className="grid grid-cols-3 bg-slate-900/40 backdrop-blur-md rounded-t-[32px] border-t border-x border-orange-500/25 overflow-hidden shadow-[0_-15px_35px_rgba(0,0,0,0.2)] select-none">
             {/* Tab 1: Top Cities */}
             <button
               onClick={(e) => {
@@ -676,7 +676,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* TRENDING NOW TICKER SECTION (Full length, Sharp edges, no blur, Mobile responsive) */}
-      <section className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl md:rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.035)] mt-6 mb-8 py-2.5 px-4 md:py-3.5 md:px-6 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 w-full">
+      <section className="relative overflow-hidden bg-white border border-orange-500/20 rounded-2xl md:rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.035)] mt-6 mb-8 py-2.5 px-4 md:py-3.5 md:px-6 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 w-full">
         {/* Left Skew Glowing Saffron Badge */}
         <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[9px] md:text-[10px] tracking-wider uppercase rounded-xl shadow-md shadow-orange-500/15 relative z-10 skew-x-[-8deg] origin-center">
           <span className="inline-block animate-pulse skew-x-[8deg]">🔥</span>
