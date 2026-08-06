@@ -307,6 +307,9 @@ export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeTrendingUpdate, setActiveTrendingUpdate] = useState<any>(null);
   const [activeExamModal, setActiveExamModal] = useState<any>(null);
+  const [activeHubTab, setActiveHubTab] = useState<
+    "cities" | "exams" | "courses"
+  >("cities");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -665,8 +668,9 @@ export default function HomePage() {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                setActiveHubTab("cities");
                 document
-                  .getElementById("top-cities-section")
+                  .getElementById("explore-hub-section")
                   ?.scrollIntoView({ behavior: "smooth", block: "center" });
               }}
               className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15 cursor-pointer"
@@ -681,8 +685,9 @@ export default function HomePage() {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                setActiveHubTab("exams");
                 document
-                  .getElementById("top-exams-section")
+                  .getElementById("explore-hub-section")
                   ?.scrollIntoView({ behavior: "smooth", block: "center" });
               }}
               className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15 cursor-pointer"
@@ -697,8 +702,9 @@ export default function HomePage() {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                setActiveHubTab("courses");
                 document
-                  .getElementById("explore-streams-section")
+                  .getElementById("explore-hub-section")
                   ?.scrollIntoView({ behavior: "smooth", block: "center" });
               }}
               className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group cursor-pointer"
@@ -711,81 +717,339 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      {/* EXPLORE TOP CITIES SECTION (Shiksha / College19 style) */}
-      <section id="top-cities-section" className="space-y-8 select-none">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      {/* CONSOLIDATED EXPLORE HUB SECTION (Dynamic Tabbed Switcher: Cities / Exams / Courses) */}
+      <section
+        id="explore-hub-section"
+        className="space-y-8 select-none scroll-mt-28"
+      >
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
-              Explore Colleges by Cities
-            </h2>
-            <p className="text-sm text-text_secondary mt-1">
-              Discover top universities in India's leading educational hubs
-            </p>
+            {activeHubTab === "cities" && (
+              <>
+                <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+                  Explore Colleges by Cities
+                </h2>
+                <p className="text-sm text-text_secondary mt-1">
+                  Discover top universities in India's leading educational hubs
+                </p>
+              </>
+            )}
+            {activeHubTab === "exams" && (
+              <>
+                <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+                  Top Entrance Exams
+                </h2>
+                <p className="text-sm text-text_secondary mt-1">
+                  Explore India's leading entrance exams and download solved
+                  question papers
+                </p>
+              </>
+            )}
+            {activeHubTab === "courses" && (
+              <>
+                <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+                  Explore Top Streams
+                </h2>
+                <p className="text-sm text-text_secondary mt-1">
+                  Filter and discover the best educational categories in India
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Local Tab Switcher Pills */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit border border-slate-200/50">
+            <button
+              onClick={() => setActiveHubTab("cities")}
+              className={`py-2 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+                activeHubTab === "cities"
+                  ? "bg-white text-slate-800 shadow-sm"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Top Cities
+            </button>
+            <button
+              onClick={() => setActiveHubTab("exams")}
+              className={`py-2 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+                activeHubTab === "exams"
+                  ? "bg-white text-slate-800 shadow-sm"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Top Exams
+            </button>
+            <button
+              onClick={() => setActiveHubTab("courses")}
+              className={`py-2 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+                activeHubTab === "courses"
+                  ? "bg-white text-slate-800 shadow-sm"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Top Courses
+            </button>
           </div>
         </div>
 
-        <div className="relative group/carousel">
-          {/* Scroll Controls */}
-          <button
-            onClick={() =>
-              document
-                .getElementById("cities-carousel-container")
-                ?.scrollBy({ left: -300, behavior: "smooth" })
-            }
-            className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-10 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+        {/* Tab Content Renderers */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeHubTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className="w-full"
           >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() =>
-              document
-                .getElementById("cities-carousel-container")
-                ?.scrollBy({ left: 300, behavior: "smooth" })
-            }
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-10 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+            {activeHubTab === "cities" && (
+              <div className="relative group/carousel">
+                {/* Scroll Controls */}
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("cities-carousel-container")
+                      ?.scrollBy({ left: -300, behavior: "smooth" })
+                  }
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-10 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("cities-carousel-container")
+                      ?.scrollBy({ left: 300, behavior: "smooth" })
+                  }
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-10 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
 
-          {/* Scrollable Carousel Container */}
-          <div
-            id="cities-carousel-container"
-            className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth"
-          >
-            {topCities.map((city, idx) => (
-              <Link
-                key={city.name}
-                href={`/colleges?city=${city.slug}`}
-                className="flex-shrink-0 w-[210px] h-[140px] md:w-[240px] md:h-[160px] rounded-3xl overflow-hidden relative group/city shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_30px_rgba(249,115,22,0.18)] border border-slate-200/80 hover:border-orange-500/50 transition-all duration-350 hover:-translate-y-1.5 hover:scale-[1.03] select-none"
-              >
-                {/* Background image */}
-                <img
-                  src={city.image}
-                  alt={city.name}
-                  className="absolute inset-0 w-full h-full object-cover group-hover/city:scale-110 transition-transform duration-500"
-                />
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/20 to-transparent group-hover/city:from-slate-950/90 transition-all duration-300" />
-
-                {/* Automatic Shimmer Sheen Reflection Overlay (Staggered animation delays) */}
+                {/* Scrollable Carousel Container */}
                 <div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
-                  style={{ animationDelay: `${idx * 0.6}s` }}
-                />
+                  id="cities-carousel-container"
+                  className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth"
+                >
+                  {topCities.map((city, idx) => (
+                    <Link
+                      key={city.name}
+                      href={`/colleges?city=${city.slug}`}
+                      className="flex-shrink-0 w-[210px] h-[140px] md:w-[240px] md:h-[160px] rounded-3xl overflow-hidden relative group/city shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_30px_rgba(249,115,22,0.18)] border border-slate-200/80 hover:border-orange-500/50 transition-all duration-350 hover:-translate-y-1.5 hover:scale-[1.03] select-none"
+                    >
+                      {/* Background image */}
+                      <img
+                        src={city.image}
+                        alt={city.name}
+                        className="absolute inset-0 w-full h-full object-cover group-hover/city:scale-110 transition-transform duration-500"
+                      />
+                      {/* Dark overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/20 to-transparent group-hover/city:from-slate-950/90 transition-all duration-300" />
 
-                {/* Content centered bottom */}
-                <div className="absolute bottom-4 left-4 right-4 text-left select-none pointer-events-none z-20">
-                  <h4 className="font-outfit font-black text-sm md:text-base text-white tracking-wide">
-                    {city.name}
-                  </h4>
-                  <p className="text-[9px] md:text-[10px] font-black text-orange-400 uppercase tracking-widest mt-0.5">
-                    {city.collegesCount}
-                  </p>
+                      {/* Automatic Shimmer Sheen Reflection Overlay */}
+                      <div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                        style={{ animationDelay: `${idx * 0.6}s` }}
+                      />
+
+                      {/* Content centered bottom */}
+                      <div className="absolute bottom-4 left-4 right-4 text-left select-none pointer-events-none z-20">
+                        <h4 className="font-outfit font-black text-sm md:text-base text-white tracking-wide">
+                          {city.name}
+                        </h4>
+                        <p className="text-[9px] md:text-[10px] font-black text-orange-400 uppercase tracking-widest mt-0.5">
+                          {city.collegesCount}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+              </div>
+            )}
+
+            {activeHubTab === "exams" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {topExams.map((exam) => (
+                  <div
+                    key={exam.name}
+                    className="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_30px_rgba(249,115,22,0.06)] hover:border-orange-500/40 transition-all duration-350 hover:-translate-y-1.5 flex flex-col relative group/exam"
+                  >
+                    {/* Online / Offline Status Badge */}
+                    <span
+                      className={`absolute top-4 right-4 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                        exam.mode.includes("Online")
+                          ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                          : "bg-orange-50 text-orange-600 border border-orange-100"
+                      }`}
+                    >
+                      {exam.mode.includes("Online") ? "Online" : "Offline"}
+                    </span>
+
+                    {/* Exam Header */}
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 group-hover/exam:bg-orange-500 group-hover/exam:text-white transition-all duration-300">
+                        <Award className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-outfit font-black text-lg text-text_primary tracking-wide">
+                          {exam.name}
+                        </h3>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                          {exam.level}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Associated Streams Pills */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {exam.courses.map((course) => (
+                        <Link
+                          key={course}
+                          href={`/colleges?stream=${exam.stream}`}
+                          className="px-2 py-0.5 bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 text-slate-600 hover:text-orange-600 rounded-md text-[9px] font-extrabold tracking-wide transition-colors"
+                        >
+                          {course}
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Details & Actions */}
+                    <div className="mt-auto space-y-2.5 pt-3 border-t border-slate-100">
+                      {/* Application Process Row */}
+                      <button
+                        onClick={() =>
+                          setActiveExamModal({ exam, tab: "process" })
+                        }
+                        className="w-full flex items-center justify-between text-[11px] font-extrabold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer"
+                      >
+                        <span className="flex items-center gap-2">
+                          <FileText className="w-3.5 h-3.5 text-slate-400" />
+                          Application Process
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/exam:translate-x-0.5 transition-transform" />
+                      </button>
+
+                      {/* Previous Year Questions Row */}
+                      <button
+                        onClick={() =>
+                          setActiveExamModal({ exam, tab: "pyqs" })
+                        }
+                        className="w-full flex items-center justify-between text-[11px] font-extrabold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer"
+                      >
+                        <span className="flex items-center gap-2">
+                          <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+                          Previous Year Questions
+                        </span>
+                        <span className="text-[8px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">
+                          {exam.pyqCount.split(" ")[0]} Yrs
+                        </span>
+                      </button>
+
+                      {/* Info Button */}
+                      <button
+                        onClick={() =>
+                          setActiveExamModal({ exam, tab: "info" })
+                        }
+                        className="w-full mt-2.5 py-2 px-4 bg-slate-950 text-white hover:bg-orange-600 transition-all rounded-xl text-[10px] font-black uppercase tracking-wider text-center cursor-pointer shadow-md shadow-black/5 hover:shadow-orange-500/15"
+                      >
+                        Exam Info
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeHubTab === "courses" && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+                {streams.map((stream, idx) => {
+                  const Icon = stream.icon;
+                  return (
+                    <motion.div
+                      key={stream.name}
+                      initial={{ opacity: 0, y: 28, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{
+                        duration: 0.45,
+                        delay: idx * 0.07,
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 22,
+                      }}
+                      whileHover={{
+                        y: -8,
+                        scale: 1.03,
+                        boxShadow: `0 20px 50px ${stream.glow}, 0 4px 16px rgba(0,0,0,0.08)`,
+                        transition: {
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 18,
+                        },
+                      }}
+                      whileTap={{ scale: 0.97 }}
+                      className={`group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br ${stream.bg} ${stream.border} transition-colors duration-300 cursor-pointer`}
+                    >
+                      {/* Shimmer sweep on hover */}
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 dark:via-white/10 to-transparent pointer-events-none z-10" />
+
+                      {/* Glow orb */}
+                      <div
+                        className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 pointer-events-none"
+                        style={{
+                          background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)`,
+                        }}
+                      />
+
+                      <div className="relative z-10 p-4 md:p-5">
+                        {/* Icon */}
+                        <motion.div
+                          whileHover={{ rotate: [0, -8, 8, 0] }}
+                          transition={{ duration: 0.5 }}
+                          className={`w-11 h-11 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${stream.gradient} flex items-center justify-center shadow-md mb-3 group-hover:shadow-lg transition-shadow duration-300`}
+                        >
+                          <Icon className="w-5 h-5 md:w-7 md:h-7 text-white drop-shadow" />
+                        </motion.div>
+
+                        {/* Text */}
+                        <h3 className="font-outfit font-extrabold text-sm md:text-[15px] text-text_primary group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">
+                          {stream.name}
+                        </h3>
+
+                        {/* Badge */}
+                        <span
+                          className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wide ${stream.badge}`}
+                        >
+                          {stream.count}
+                        </span>
+
+                        {/* Explore arrow */}
+                        <div className="mt-3 flex items-center gap-1 text-[10px] font-black text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
+                          <span>Explore</span>
+                          <motion.span
+                            animate={{ x: [0, 3, 0] }}
+                            transition={{
+                              duration: 1.5,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                              delay: idx * 0.15,
+                            }}
+                          >
+                            →
+                          </motion.span>
+                        </div>
+                      </div>
+
+                      <Link
+                        href={`/colleges?stream=${stream.name}`}
+                        className="absolute inset-0 z-20"
+                      />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </section>
       {/* TRENDING NOW TICKER SECTION (Full length, Sharp edges, no blur, Mobile responsive) */}
       <section className="relative overflow-hidden bg-white border border-orange-500/20 rounded-2xl md:rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.035)] mt-6 mb-8 py-2.5 px-4 md:py-3.5 md:px-6 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 w-full">
@@ -813,212 +1077,6 @@ export default function HomePage() {
               </button>
             ))}
           </div>
-        </div>
-      </section>
-      {/* EXPLORE TOP ENTRANCE EXAMS SECTION (StudyRiserr / College19 style) */}
-      <section id="top-exams-section" className="space-y-8 select-none">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
-              Top Entrance Exams
-            </h2>
-            <p className="text-sm text-text_secondary mt-1">
-              Explore India's leading entrance exams and download solved
-              question papers
-            </p>
-          </div>
-        </div>
-
-        {/* Exams Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {topExams.map((exam) => (
-            <div
-              key={exam.name}
-              className="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_30px_rgba(249,115,22,0.06)] hover:border-orange-500/40 transition-all duration-350 hover:-translate-y-1.5 flex flex-col relative group/exam"
-            >
-              {/* Online / Offline Status Badge */}
-              <span
-                className={`absolute top-4 right-4 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                  exam.mode.includes("Online")
-                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                    : "bg-orange-50 text-orange-600 border border-orange-100"
-                }`}
-              >
-                {exam.mode.includes("Online") ? "Online" : "Offline"}
-              </span>
-
-              {/* Exam Header */}
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 group-hover/exam:bg-orange-500 group-hover/exam:text-white transition-all duration-300">
-                  <Award className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-outfit font-black text-lg text-text_primary tracking-wide">
-                    {exam.name}
-                  </h3>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    {exam.level}
-                  </span>
-                </div>
-              </div>
-
-              {/* Associated Streams Pills */}
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {exam.courses.map((course) => (
-                  <Link
-                    key={course}
-                    href={`/colleges?stream=${exam.stream}`}
-                    className="px-2 py-0.5 bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 text-slate-600 hover:text-orange-600 rounded-md text-[9px] font-extrabold tracking-wide transition-colors"
-                  >
-                    {course}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Details & Actions */}
-              <div className="mt-auto space-y-2.5 pt-3 border-t border-slate-100">
-                {/* Application Process Row */}
-                <button
-                  onClick={() => setActiveExamModal({ exam, tab: "process" })}
-                  className="w-full flex items-center justify-between text-[11px] font-extrabold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <FileText className="w-3.5 h-3.5 text-slate-400" />
-                    Application Process
-                  </span>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/exam:translate-x-0.5 transition-transform" />
-                </button>
-
-                {/* Previous Year Questions Row */}
-                <button
-                  onClick={() => setActiveExamModal({ exam, tab: "pyqs" })}
-                  className="w-full flex items-center justify-between text-[11px] font-extrabold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <BookOpen className="w-3.5 h-3.5 text-slate-400" />
-                    Previous Year Questions
-                  </span>
-                  <span className="text-[8px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">
-                    {exam.pyqCount.split(" ")[0]} Yrs
-                  </span>
-                </button>
-
-                {/* Info Button */}
-                <button
-                  onClick={() => setActiveExamModal({ exam, tab: "info" })}
-                  className="w-full mt-2.5 py-2 px-4 bg-slate-950 text-white hover:bg-orange-600 transition-all rounded-xl text-[10px] font-black uppercase tracking-wider text-center cursor-pointer shadow-md shadow-black/5 hover:shadow-orange-500/15"
-                >
-                  Exam Info
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-      {/* STREAM GRID */}
-      <section id="explore-streams-section" className="space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary"
-            >
-              Explore Top Streams
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.08 }}
-              className="text-sm text-text_secondary mt-1"
-            >
-              Filter and discover the best educational categories in India
-            </motion.p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-          {streams.map((stream, idx) => {
-            const Icon = stream.icon;
-            return (
-              <motion.div
-                key={stream.name}
-                initial={{ opacity: 0, y: 28, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.45,
-                  delay: idx * 0.07,
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 22,
-                }}
-                whileHover={{
-                  y: -8,
-                  scale: 1.03,
-                  boxShadow: `0 20px 50px ${stream.glow}, 0 4px 16px rgba(0,0,0,0.08)`,
-                  transition: { type: "spring", stiffness: 400, damping: 18 },
-                }}
-                whileTap={{ scale: 0.97 }}
-                className={`group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br ${stream.bg} ${stream.border} transition-colors duration-300 cursor-pointer`}
-              >
-                {/* Shimmer sweep on hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 dark:via-white/10 to-transparent pointer-events-none z-10" />
-
-                {/* Glow orb */}
-                <div
-                  className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)`,
-                  }}
-                />
-
-                <div className="relative z-10 p-4 md:p-5">
-                  {/* Icon */}
-                  <motion.div
-                    whileHover={{ rotate: [0, -8, 8, 0] }}
-                    transition={{ duration: 0.5 }}
-                    className={`w-11 h-11 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${stream.gradient} flex items-center justify-center shadow-md mb-3 group-hover:shadow-lg transition-shadow duration-300`}
-                  >
-                    <Icon className="w-5 h-5 md:w-7 md:h-7 text-white drop-shadow" />
-                  </motion.div>
-
-                  {/* Text */}
-                  <h3 className="font-outfit font-extrabold text-sm md:text-[15px] text-text_primary group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">
-                    {stream.name}
-                  </h3>
-
-                  {/* Badge */}
-                  <span
-                    className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wide ${stream.badge}`}
-                  >
-                    {stream.count}
-                  </span>
-
-                  {/* Explore arrow */}
-                  <div className="mt-3 flex items-center gap-1 text-[10px] font-black text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
-                    <span>Explore</span>
-                    <motion.span
-                      animate={{ x: [0, 3, 0] }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: idx * 0.15,
-                      }}
-                    >
-                      →
-                    </motion.span>
-                  </div>
-                </div>
-
-                <Link
-                  href={`/colleges?stream=${stream.name}`}
-                  className="absolute inset-0 z-20"
-                />
-              </motion.div>
-            );
-          })}
         </div>
       </section>
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
