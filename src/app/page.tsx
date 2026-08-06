@@ -640,11 +640,11 @@ export default function HomePage() {
             id="cities-carousel-container"
             className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth"
           >
-            {topCities.map((city) => (
+            {topCities.map((city, idx) => (
               <Link
                 key={city.name}
                 href={`/colleges?city=${city.slug}`}
-                className="flex-shrink-0 w-[210px] h-[140px] md:w-[240px] md:h-[160px] rounded-3xl overflow-hidden relative group/city shadow-md hover:shadow-xl transition-all duration-350 hover:scale-[1.02] border border-slate-100"
+                className="flex-shrink-0 w-[210px] h-[140px] md:w-[240px] md:h-[160px] rounded-3xl overflow-hidden relative group/city shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_30px_rgba(249,115,22,0.18)] border border-slate-200/80 hover:border-orange-500/50 transition-all duration-350 hover:-translate-y-1.5 hover:scale-[1.03] select-none"
               >
                 {/* Background image */}
                 <img
@@ -655,8 +655,14 @@ export default function HomePage() {
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/20 to-transparent group-hover/city:from-slate-950/90 transition-all duration-300" />
 
+                {/* Automatic Shimmer Sheen Reflection Overlay (Staggered animation delays) */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: `${idx * 0.6}s` }}
+                />
+
                 {/* Content centered bottom */}
-                <div className="absolute bottom-4 left-4 right-4 text-left select-none pointer-events-none">
+                <div className="absolute bottom-4 left-4 right-4 text-left select-none pointer-events-none z-20">
                   <h4 className="font-outfit font-black text-sm md:text-base text-white tracking-wide">
                     {city.name}
                   </h4>
@@ -669,8 +675,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      {/* TRENDING NOW TICKER SECTION (Centered, Sharp edges, no blur, Mobile responsive) */}
-      <section className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl md:rounded-full shadow-[0_6px_20px_rgba(0,0,0,0.03)] mt-6 mb-8 py-2.5 px-4 md:py-3 md:px-5 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 max-w-[1000px] mx-auto w-full">
+      {/* TRENDING NOW TICKER SECTION (Full length, Sharp edges, no blur, Mobile responsive) */}
+      <section className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl md:rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.035)] mt-6 mb-8 py-2.5 px-4 md:py-3.5 md:px-6 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 w-full">
         {/* Left Skew Glowing Saffron Badge */}
         <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[9px] md:text-[10px] tracking-wider uppercase rounded-xl shadow-md shadow-orange-500/15 relative z-10 skew-x-[-8deg] origin-center">
           <span className="inline-block animate-pulse skew-x-[8deg]">🔥</span>

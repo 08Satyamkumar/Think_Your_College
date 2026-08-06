@@ -121,3 +121,17 @@
 .animate-marquee-slow:hover {
   animation-play-state: paused;
 }
+
+/* Shimmer Sheen Reflection Animation */
+@keyframes shimmer-sheen {
+  0% {
+    transform: translate3d(-200%, -50%, 0) rotate(25deg);
+  }
+  100% {
+    transform: translate3d(200%, -50%, 0) rotate(25deg);
+  }
+}
+
+.animate-shimmer-sheen {
+  animation: shimmer-sheen 4s infinite ease-in-out;
+}
