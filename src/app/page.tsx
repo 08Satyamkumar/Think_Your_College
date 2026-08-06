@@ -99,21 +99,21 @@ const topCities = [
     name: "Bhopal",
     collegesCount: "242+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1610448721566-47369c768e70?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1509216242873-7786f446f465?w=600&auto=format&fit=crop&q=60",
     slug: "Bhopal",
   },
   {
     name: "Indore",
     collegesCount: "187+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1585128792020-803d29415281?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600&auto=format&fit=crop&q=60",
     slug: "Indore",
   },
   {
     name: "Nagpur",
     collegesCount: "249+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=600&auto=format&fit=crop&q=60",
     slug: "Nagpur",
   },
   {
