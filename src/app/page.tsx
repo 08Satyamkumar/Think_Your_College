@@ -106,14 +106,14 @@ const topCities = [
     name: "Indore",
     collegesCount: "187+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1585128792020-803d29415281?w=600&auto=format&fit=crop&q=60",
     slug: "Indore",
   },
   {
     name: "Nagpur",
     collegesCount: "249+ Colleges",
     image:
-      "https://images.unsplash.com/photo-1617854818583-09e7f077a156?w=600&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?w=600&auto=format&fit=crop&q=60",
     slug: "Nagpur",
   },
   {
