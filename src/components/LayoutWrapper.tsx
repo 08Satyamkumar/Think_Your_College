@@ -265,12 +265,12 @@ export default function LayoutWrapper({
     setIsAlertSubscribed(true);
   };
 
-  // Auto-reopen alert popup if closed and not subscribed (every 7 seconds)
+  // Auto-reopen alert popup if closed and not subscribed (every 20 seconds)
   useEffect(() => {
     if (!isAlertOpen && !isAlertSubscribed) {
       const timer = setTimeout(() => {
         setIsAlertOpen(true);
-      }, 7000);
+      }, 20000);
       return () => clearTimeout(timer);
     }
   }, [isAlertOpen, isAlertSubscribed]);
