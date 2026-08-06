@@ -27,6 +27,7 @@ import {
   ChevronRight,
   Layers,
   Award,
+  ChevronLeft,
 } from "lucide-react";
 
 interface CollegeMock {
@@ -43,6 +44,58 @@ interface CollegeMock {
   image: string;
   nirfRank?: number;
 }
+
+const topCities = [
+  {
+    name: "Delhi NCR",
+    collegesCount: "650+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&auto=format&fit=crop&q=60",
+    slug: "Delhi",
+  },
+  {
+    name: "Mumbai",
+    collegesCount: "527+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=600&auto=format&fit=crop&q=60",
+    slug: "Mumbai",
+  },
+  {
+    name: "Bangalore",
+    collegesCount: "54+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&auto=format&fit=crop&q=60",
+    slug: "Bangalore",
+  },
+  {
+    name: "Chennai",
+    collegesCount: "479+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&auto=format&fit=crop&q=60",
+    slug: "Chennai",
+  },
+  {
+    name: "Kolkata",
+    collegesCount: "175+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1558431382-27e303142255?w=600&auto=format&fit=crop&q=60",
+    slug: "Kolkata",
+  },
+  {
+    name: "Hyderabad",
+    collegesCount: "12+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?w=600&auto=format&fit=crop&q=60",
+    slug: "Hyderabad",
+  },
+  {
+    name: "Pune",
+    collegesCount: "180+ Colleges",
+    image:
+      "https://images.unsplash.com/photo-1601962369681-30d850785f7e?w=600&auto=format&fit=crop&q=60",
+    slug: "Pune",
+  },
+];
 
 const trendingUpdates = [
   {
@@ -501,16 +554,21 @@ export default function HomePage() {
         {/* Bottom Centered Glassmorphic Panel (Woxsen style overlay with Saffron highlights) */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1080px] px-4 sm:px-6 z-20">
           <div className="grid grid-cols-3 bg-slate-900/40 backdrop-blur-md rounded-t-[32px] border-t border-x border-white/20 overflow-hidden shadow-[0_-15px_35px_rgba(0,0,0,0.2)] select-none">
-            {/* Tab 1: Top Colleges */}
-            <Link
-              href="/colleges"
-              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15"
+            {/* Tab 1: Top Cities */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("top-cities-section")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
+              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15 cursor-pointer"
             >
-              <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
+              <MapPin className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
               <span className="mt-2 font-outfit font-black text-[9px] md:text-[10.5px] text-white uppercase tracking-widest">
-                Top Colleges
+                Top Cities
               </span>
-            </Link>
+            </button>
 
             {/* Tab 2: Top Exams */}
             <Link
@@ -524,15 +582,20 @@ export default function HomePage() {
             </Link>
 
             {/* Tab 3: Top Courses */}
-            <Link
-              href="/colleges"
-              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group"
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("explore-streams-section")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
+              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group cursor-pointer"
             >
               <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
               <span className="mt-2 font-outfit font-black text-[9px] md:text-[10.5px] text-white uppercase tracking-widest">
                 Top Courses
               </span>
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -564,8 +627,78 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* EXPLORE TOP CITIES SECTION (Shiksha / College19 style) */}
+      <section id="top-cities-section" className="space-y-8 select-none">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+              Explore Colleges by Cities
+            </h2>
+            <p className="text-sm text-text_secondary mt-1">
+              Discover top universities in India's leading educational hubs
+            </p>
+          </div>
+        </div>
+
+        <div className="relative group/carousel">
+          {/* Scroll Controls */}
+          <button
+            onClick={() =>
+              document
+                .getElementById("cities-carousel-container")
+                ?.scrollBy({ left: -300, behavior: "smooth" })
+            }
+            className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-10 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() =>
+              document
+                .getElementById("cities-carousel-container")
+                ?.scrollBy({ left: 300, behavior: "smooth" })
+            }
+            className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-10 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Scrollable Carousel Container */}
+          <div
+            id="cities-carousel-container"
+            className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth"
+          >
+            {topCities.map((city) => (
+              <Link
+                key={city.name}
+                href={`/colleges?city=${city.slug}`}
+                className="flex-shrink-0 w-[210px] h-[140px] md:w-[240px] md:h-[160px] rounded-3xl overflow-hidden relative group/city shadow-md hover:shadow-xl transition-all duration-350 hover:scale-[1.02] border border-slate-100"
+              >
+                {/* Background image */}
+                <img
+                  src={city.image}
+                  alt={city.name}
+                  className="absolute inset-0 w-full h-full object-cover group-hover/city:scale-110 transition-transform duration-500"
+                />
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/20 to-transparent group-hover/city:from-slate-950/90 transition-all duration-300" />
+
+                {/* Content centered bottom */}
+                <div className="absolute bottom-4 left-4 right-4 text-left select-none pointer-events-none">
+                  <h4 className="font-outfit font-black text-sm md:text-base text-white tracking-wide">
+                    {city.name}
+                  </h4>
+                  <p className="text-[9px] md:text-[10px] font-black text-orange-400 uppercase tracking-widest mt-0.5">
+                    {city.collegesCount}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* STREAM GRID */}
-      <section className="space-y-8">
+      <section id="explore-streams-section" className="space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <motion.h2
