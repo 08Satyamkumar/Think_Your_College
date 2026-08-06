@@ -132,6 +132,77 @@ const topCities = [
   },
 ];
 
+const topExams = [
+  {
+    name: "JEE Main",
+    mode: "Online",
+    level: "National Level",
+    stream: "Engineering",
+    courses: ["B.Tech", "B.Arch", "B.E", "Integrated M.Tech"],
+    registrationDate: "Dec 2026 - Jan 2027",
+    examDate: "April 2027",
+    eligibility: "12th Pass with Physics, Chemistry & Mathematics (PCM)",
+    pyqCount: "15 Years Solved Papers",
+  },
+  {
+    name: "NEET UG",
+    mode: "Offline (Pen & Paper)",
+    level: "National Level",
+    stream: "Medical",
+    courses: ["MBBS", "BDS", "BAMS", "BHMS", "B.Sc Nursing"],
+    registrationDate: "Feb 2027 - March 2027",
+    examDate: "May 2027",
+    eligibility: "12th Pass with Physics, Chemistry & Biology (PCB)",
+    pyqCount: "12 Years Solved Papers",
+  },
+  {
+    name: "CAT",
+    mode: "Online",
+    level: "National Level",
+    stream: "Management",
+    courses: ["MBA", "PGDM", "Executive MBA", "FPM"],
+    registrationDate: "Aug 2026 - Sept 2026",
+    examDate: "Nov 2026",
+    eligibility: "Graduation with minimum 50% marks (45% for SC/ST)",
+    pyqCount: "18 Years Solved Papers",
+  },
+  {
+    name: "GATE",
+    mode: "Online",
+    level: "National Level",
+    stream: "Engineering",
+    courses: ["M.Tech", "M.E", "Ph.D", "Direct Fellowship"],
+    registrationDate: "Sept 2026 - Oct 2026",
+    examDate: "Feb 2027",
+    eligibility:
+      "Bachelor's Degree in Engineering/Technology or Master's in Science",
+    pyqCount: "10 Years Solved Papers",
+  },
+  {
+    name: "NEET PG",
+    mode: "Online",
+    level: "National Level",
+    stream: "Medical",
+    courses: ["MD", "MS", "MDS", "PG Diploma", "DNB"],
+    registrationDate: "April 2027 - May 2027",
+    examDate: "June 2027",
+    eligibility:
+      "MBBS Degree & completed 1 year of compulsory rotating internship",
+    pyqCount: "8 Years Solved Papers",
+  },
+  {
+    name: "CLAT",
+    mode: "Offline",
+    level: "National Level",
+    stream: "Law",
+    courses: ["BA LLB", "BBA LLB", "LLM", "Integrated Law"],
+    registrationDate: "July 2026 - Nov 2026",
+    examDate: "Dec 2026",
+    eligibility: "12th Pass with 45% marks (40% for SC/ST)",
+    pyqCount: "11 Years Solved Papers",
+  },
+];
+
 const trendingUpdates = [
   {
     id: "1",
@@ -235,6 +306,7 @@ const heroSlides = [
 export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeTrendingUpdate, setActiveTrendingUpdate] = useState<any>(null);
+  const [activeExamModal, setActiveExamModal] = useState<any>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -606,15 +678,20 @@ export default function HomePage() {
             </button>
 
             {/* Tab 2: Top Exams */}
-            <Link
-              href="/colleges"
-              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15"
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("top-exams-section")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
+              className="flex flex-col items-center justify-center py-5 px-2 hover:bg-white/10 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/15 cursor-pointer"
             >
               <Award className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
               <span className="mt-2 font-outfit font-black text-[9px] md:text-[10.5px] text-white uppercase tracking-widest">
                 Top Exams
               </span>
-            </Link>
+            </button>
 
             {/* Tab 3: Top Courses */}
             <button
@@ -736,6 +813,106 @@ export default function HomePage() {
               </button>
             ))}
           </div>
+        </div>
+      </section>
+      {/* EXPLORE TOP ENTRANCE EXAMS SECTION (StudyRiserr / College19 style) */}
+      <section id="top-exams-section" className="space-y-8 select-none">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+              Top Entrance Exams
+            </h2>
+            <p className="text-sm text-text_secondary mt-1">
+              Explore India's leading entrance exams and download solved
+              question papers
+            </p>
+          </div>
+        </div>
+
+        {/* Exams Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {topExams.map((exam) => (
+            <div
+              key={exam.name}
+              className="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_30px_rgba(249,115,22,0.06)] hover:border-orange-500/40 transition-all duration-350 hover:-translate-y-1.5 flex flex-col relative group/exam"
+            >
+              {/* Online / Offline Status Badge */}
+              <span
+                className={`absolute top-4 right-4 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                  exam.mode.includes("Online")
+                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                    : "bg-orange-50 text-orange-600 border border-orange-100"
+                }`}
+              >
+                {exam.mode.includes("Online") ? "Online" : "Offline"}
+              </span>
+
+              {/* Exam Header */}
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 group-hover/exam:bg-orange-500 group-hover/exam:text-white transition-all duration-300">
+                  <Award className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-outfit font-black text-lg text-text_primary tracking-wide">
+                    {exam.name}
+                  </h3>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    {exam.level}
+                  </span>
+                </div>
+              </div>
+
+              {/* Associated Streams Pills */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {exam.courses.map((course) => (
+                  <Link
+                    key={course}
+                    href={`/colleges?stream=${exam.stream}`}
+                    className="px-2 py-0.5 bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 text-slate-600 hover:text-orange-600 rounded-md text-[9px] font-extrabold tracking-wide transition-colors"
+                  >
+                    {course}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Details & Actions */}
+              <div className="mt-auto space-y-2.5 pt-3 border-t border-slate-100">
+                {/* Application Process Row */}
+                <button
+                  onClick={() => setActiveExamModal({ exam, tab: "process" })}
+                  className="w-full flex items-center justify-between text-[11px] font-extrabold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <FileText className="w-3.5 h-3.5 text-slate-400" />
+                    Application Process
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/exam:translate-x-0.5 transition-transform" />
+                </button>
+
+                {/* Previous Year Questions Row */}
+                <button
+                  onClick={() => setActiveExamModal({ exam, tab: "pyqs" })}
+                  className="w-full flex items-center justify-between text-[11px] font-extrabold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+                    Previous Year Questions
+                  </span>
+                  <span className="text-[8px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">
+                    {exam.pyqCount.split(" ")[0]} Yrs
+                  </span>
+                </button>
+
+                {/* Info Button */}
+                <button
+                  onClick={() => setActiveExamModal({ exam, tab: "info" })}
+                  className="w-full mt-2.5 py-2 px-4 bg-slate-950 text-white hover:bg-orange-600 transition-all rounded-xl text-[10px] font-black uppercase tracking-wider text-center cursor-pointer shadow-md shadow-black/5 hover:shadow-orange-500/15"
+                >
+                  Exam Info
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
       {/* STREAM GRID */}
@@ -1435,6 +1612,186 @@ export default function HomePage() {
                   className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/15 active:scale-95 cursor-pointer text-center"
                 >
                   {activeTrendingUpdate.actionText}
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* TOP ENTRANCE EXAM DETAILS MODAL */}
+      <AnimatePresence>
+        {activeExamModal && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+            {/* Backdrop trigger */}
+            <div
+              className="absolute inset-0"
+              onClick={() => setActiveExamModal(null)}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative bg-white rounded-3xl w-full max-w-[540px] shadow-2xl p-6 md:p-7 flex flex-col z-10 border border-slate-100 overflow-hidden"
+            >
+              {/* Glowing top line */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-red-500" />
+
+              {/* Header Row */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-5">
+                <span className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 border border-orange-100 font-black text-[9px] uppercase tracking-widest">
+                  {activeExamModal.exam.name} - {activeExamModal.exam.stream}
+                </span>
+                <button
+                  onClick={() => setActiveExamModal(null)}
+                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Modal Tabs Content based on clicked tab */}
+              {activeExamModal.tab === "info" && (
+                <div className="space-y-4">
+                  <h3 className="font-outfit font-black text-slate-800 text-base md:text-lg tracking-wide">
+                    About {activeExamModal.exam.name}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                      <span className="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-1">
+                        Exam Mode
+                      </span>
+                      <span className="font-extrabold text-slate-700">
+                        {activeExamModal.exam.mode}
+                      </span>
+                    </div>
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                      <span className="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-1">
+                        Exam Level
+                      </span>
+                      <span className="font-extrabold text-slate-700">
+                        {activeExamModal.exam.level}
+                      </span>
+                    </div>
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                      <span className="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-1">
+                        Registration Date
+                      </span>
+                      <span className="font-extrabold text-slate-700">
+                        {activeExamModal.exam.registrationDate}
+                      </span>
+                    </div>
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                      <span className="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-1">
+                        Expected Exam Date
+                      </span>
+                      <span className="font-extrabold text-slate-700 text-orange-600">
+                        {activeExamModal.exam.examDate}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
+                    <span className="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-1">
+                      Eligibility Criteria
+                    </span>
+                    <p className="font-semibold text-slate-600 leading-relaxed">
+                      {activeExamModal.exam.eligibility}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {activeExamModal.tab === "process" && (
+                <div className="space-y-4 text-xs">
+                  <h3 className="font-outfit font-black text-slate-800 text-base md:text-lg tracking-wide">
+                    Application Process
+                  </h3>
+                  <div className="bg-orange-50/50 p-3 rounded-xl border border-orange-100 text-[11px] font-semibold text-orange-800 leading-relaxed">
+                    💡 <strong>Quick Note:</strong> Ensure you have active
+                    mobile number and email id ready before applying. Keep your
+                    scanned academic documents, signature, and photograph handy.
+                  </div>
+                  <ol className="list-decimal list-inside space-y-2 text-slate-600 font-semibold pl-1">
+                    <li>
+                      Visit the official {activeExamModal.exam.name} online
+                      portal during the registration window (
+                      {activeExamModal.exam.registrationDate}).
+                    </li>
+                    <li>
+                      Click on New Registration and fill your basic details to
+                      create login credentials.
+                    </li>
+                    <li>
+                      Log in using Application Number and password, and complete
+                      the detailed form.
+                    </li>
+                    <li>
+                      Upload scanned photograph, signature, and categories
+                      certificate if required.
+                    </li>
+                    <li>
+                      Pay the examination fee online via Net Banking,
+                      Debit/Credit Card, or UPI.
+                    </li>
+                    <li>
+                      Submit the application form and download the confirmation
+                      page.
+                    </li>
+                  </ol>
+                </div>
+              )}
+
+              {activeExamModal.tab === "pyqs" && (
+                <div className="space-y-4 text-xs">
+                  <h3 className="font-outfit font-black text-slate-800 text-base md:text-lg tracking-wide">
+                    Previous Year Question Papers
+                  </h3>
+                  <p className="font-semibold text-slate-500 leading-relaxed">
+                    Download {activeExamModal.exam.pyqCount} with detailed
+                    solutions to boost your preparation.
+                  </p>
+                  <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1">
+                    {[2026, 2025, 2024, 2023, 2022].map((year) => (
+                      <div
+                        key={year}
+                        className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 rounded-xl hover:border-orange-200 transition-colors"
+                      >
+                        <span className="font-bold text-slate-700">
+                          {activeExamModal.exam.name} {year} Question Paper
+                          (Solved)
+                        </span>
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            alert(
+                              `Download started for ${activeExamModal.exam.name} ${year} Solved Paper!`,
+                            );
+                          }}
+                          className="px-2.5 py-1 bg-orange-50 hover:bg-orange-500 border border-orange-100 hover:border-orange-500 text-orange-600 hover:text-white font-black text-[9px] uppercase tracking-wider rounded-lg transition-all"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons Row */}
+              <div className="flex items-center justify-end gap-3 pt-5 border-t border-slate-100 mt-6">
+                <button
+                  onClick={() => setActiveExamModal(null)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-black text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                >
+                  Dismiss
+                </button>
+                <Link
+                  href={`/colleges?stream=${activeExamModal.exam.stream}`}
+                  onClick={() => setActiveExamModal(null)}
+                  className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/15 active:scale-95 cursor-pointer text-center"
+                >
+                  Find Colleges accepting {activeExamModal.exam.name}
                 </Link>
               </div>
             </motion.div>
