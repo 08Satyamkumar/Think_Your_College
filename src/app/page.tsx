@@ -26,6 +26,7 @@ import {
   Calendar,
   ChevronRight,
   Layers,
+  Award,
 } from "lucide-react";
 
 interface CollegeMock {
@@ -476,26 +477,10 @@ export default function HomePage() {
               }}
             />
           </AnimatePresence>
-          {/* Gradient: only bottom fade — college fully visible above */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to bottom, transparent 65%, rgba(var(--background-rgb, 248 248 252) / 0.6) 85%, var(--background) 100%)",
-            }}
-          />
-          {/* Extra crisp fade at very bottom edge */}
-          <div
-            className="absolute bottom-0 inset-x-0 h-20 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to bottom, transparent, var(--background))",
-            }}
-          />
         </div>
 
-        {/* Bottom left active slide label */}
-        <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-8 z-10 block">
+        {/* Bottom left active slide label (Moved higher to sit above the glassmorphic panel) */}
+        <div className="absolute bottom-20 left-4 sm:bottom-24 sm:left-8 z-10 block">
           <Link
             href={`/colleges/${heroSlides[activeSlide].slug}`}
             className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 hover:border-primary/50 text-[9px] sm:text-[10px] font-bold text-white tracking-wide transition-all hover:bg-slate-950 flex items-center gap-1 sm:gap-1.5 shadow-lg shadow-black/25 group/hero-lbl max-w-[90vw] sm:max-w-none"
@@ -511,6 +496,44 @@ export default function HomePage() {
               <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary group-hover/hero-lbl:translate-x-0.5 transition-transform" />
             </span>
           </Link>
+        </div>
+
+        {/* Bottom Centered Glassmorphic Panel (Woxsen style overlay with Saffron highlights) */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[840px] px-4 sm:px-0 z-20">
+          <div className="grid grid-cols-3 bg-slate-950/70 backdrop-blur-xl rounded-t-3xl border-t border-x border-white/10 overflow-hidden shadow-[0_-12px_30px_rgba(0,0,0,0.15)] select-none">
+            {/* Tab 1: Top Colleges */}
+            <Link
+              href="/colleges"
+              className="flex flex-col items-center justify-center py-4 px-2 hover:bg-white/5 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/5"
+            >
+              <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
+              <span className="mt-1.5 font-outfit font-black text-[9px] md:text-[10px] text-white uppercase tracking-wider">
+                Top Colleges
+              </span>
+            </Link>
+
+            {/* Tab 2: Top Exams */}
+            <Link
+              href="/colleges"
+              className="flex flex-col items-center justify-center py-4 px-2 hover:bg-white/5 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group border-r border-white/5"
+            >
+              <Award className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
+              <span className="mt-1.5 font-outfit font-black text-[9px] md:text-[10px] text-white uppercase tracking-wider">
+                Top Exams
+              </span>
+            </Link>
+
+            {/* Tab 3: Top Courses */}
+            <Link
+              href="/colleges"
+              className="flex flex-col items-center justify-center py-4 px-2 hover:bg-white/5 transition-all text-center border-b-[3px] border-transparent hover:border-orange-500 group"
+            >
+              <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
+              <span className="mt-1.5 font-outfit font-black text-[9px] md:text-[10px] text-white uppercase tracking-wider">
+                Top Courses
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
       {/* TRENDING NOW TICKER SECTION (Centered, Sharp edges, no blur, Mobile responsive) */}
