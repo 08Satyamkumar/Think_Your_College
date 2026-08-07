@@ -1752,20 +1752,29 @@ export default function LayoutWrapper({
         {/* ROW 1: TOP ROW (Logo, Wide Search Bar, Login/Sign Up) */}
         <div className="h-16 max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
           {/* Logo Section */}
+          {/* Logo Section (Official Brand Logo) */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 flex-shrink-0 group"
+            className="flex items-center select-none scale-90 hover:scale-95 transition-transform origin-left flex-shrink-0"
           >
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-orange-600 shadow-sm">
-              <GraduationCap className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-outfit font-black text-[13px] leading-tight tracking-tight text-white hover:text-amber-100 transition-colors uppercase">
-                College 19
-              </span>
-              <span className="font-outfit font-bold text-[7.5px] leading-none tracking-[0.14em] text-slate-300 uppercase mt-0.5">
-                Learn • Grow • Achieve
-              </span>
+            <div className="relative flex items-center">
+              {/* Left Outlined Box for "COLLEGE" */}
+              <div className="border-2 border-white rounded-[10px] py-0.5 px-2 mr-1">
+                <span className="font-outfit font-black text-xs text-white uppercase tracking-wider">
+                  COLLEGE
+                </span>
+              </div>
+              {/* Right Overlapping White Box for "19" with Graduation Cap */}
+              <div className="relative -ml-2.5 flex items-center justify-center">
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-white">
+                  <GraduationCap className="w-4 h-4 stroke-[2.5]" />
+                </div>
+                <div className="w-6.5 h-6.5 bg-white rounded-md flex items-center justify-center shadow-sm mt-0.5">
+                  <span className="font-outfit font-black text-[11px] text-orange-600">
+                    19
+                  </span>
+                </div>
+              </div>
             </div>
           </Link>
 
@@ -3337,19 +3346,30 @@ export default function LayoutWrapper({
         {/* ── BOTTOM BAR ── */}
         <div className="border-t border-slate-800 bg-slate-950">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
-            {/* Logo */}
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 text-white" />
+            {/* Logo (Official Brand Logo) */}
+            <div className="flex flex-col items-start select-none">
+              <div className="relative flex items-center">
+                {/* Left Outlined Box for "COLLEGE" */}
+                <div className="border-2 border-white rounded-[10px] py-0.5 px-2 mr-1">
+                  <span className="font-outfit font-black text-xs text-white uppercase tracking-wider">
+                    COLLEGE
+                  </span>
+                </div>
+                {/* Right Overlapping White Box for "19" with Graduation Cap */}
+                <div className="relative -ml-2.5 flex items-center justify-center">
+                  <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-white">
+                    <GraduationCap className="w-4 h-4 stroke-[2.5]" />
+                  </div>
+                  <div className="w-6.5 h-6.5 bg-white rounded-md flex items-center justify-center shadow-sm mt-0.5">
+                    <span className="font-outfit font-black text-[11px] text-orange-600">
+                      19
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="font-black text-white text-sm tracking-tight uppercase">
-                  College 19
-                </p>
-                <p className="text-[9px] text-orange-500 font-bold tracking-[0.12em] uppercase mt-0.5">
-                  Learn • Grow • Achieve
-                </p>
-              </div>
+              <span className="text-[7.5px] font-black uppercase text-slate-300 tracking-[0.15em] mt-1.5 block">
+                LEARN • GROW • ACHIEVE
+              </span>
             </div>
 
             {/* Bottom Links */}
@@ -3590,12 +3610,32 @@ export default function LayoutWrapper({
 
                 {/* Left Top Header */}
                 <div className="space-y-6 z-10">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center border border-white/20">
-                      <GraduationCap className="w-4 h-4 text-white" />
+                  {/* Official COLLEGE 19 Logo */}
+                  <div className="flex flex-col items-start select-none pb-2 scale-90 origin-left">
+                    <div className="relative flex items-center">
+                      {/* Left Outlined Box for "COLLEGE" */}
+                      <div className="border-[3px] border-white rounded-[16px] py-1 px-3 mr-1">
+                        <span className="font-outfit font-black text-base text-white uppercase tracking-wide">
+                          COLLEGE
+                        </span>
+                      </div>
+
+                      {/* Right Overlapping White Box for "19" with Graduation Cap */}
+                      <div className="relative -ml-3 flex items-center justify-center">
+                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white">
+                          <GraduationCap className="w-6 h-6 stroke-[2]" />
+                        </div>
+                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md mt-1">
+                          <span className="font-outfit font-black text-lg text-orange-600">
+                            19
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <span className="font-outfit font-black text-xs tracking-wider uppercase">
-                      College 19
+
+                    {/* Tagline */}
+                    <span className="text-[7.5px] font-black uppercase text-slate-100 tracking-[0.2em] mt-2.5 block">
+                      LEARN • GROW • ACHIEVE
                     </span>
                   </div>
 
