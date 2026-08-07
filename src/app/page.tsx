@@ -961,91 +961,125 @@ export default function HomePage() {
             )}
 
             {activeHubTab === "courses" && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-                {streams.map((stream, idx) => {
-                  const Icon = stream.icon;
-                  return (
-                    <motion.div
-                      key={stream.name}
-                      initial={{ opacity: 0, y: 28, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{
-                        duration: 0.45,
-                        delay: idx * 0.07,
-                        type: "spring",
-                        stiffness: 260,
-                        damping: 22,
-                      }}
-                      whileHover={{
-                        y: -8,
-                        scale: 1.03,
-                        boxShadow: `0 20px 50px ${stream.glow}, 0 4px 16px rgba(0,0,0,0.08)`,
-                        transition: {
+              <div className="relative group/carousel">
+                {/* Scroll Controls */}
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("streams-carousel-container")
+                      ?.scrollBy({ left: -300, behavior: "smooth" })
+                  }
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-25 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("streams-carousel-container")
+                      ?.scrollBy({ left: 300, behavior: "smooth" })
+                  }
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white transition-all z-25 opacity-0 group-hover/carousel:opacity-100 active:scale-95 cursor-pointer"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+
+                {/* Scrollable Carousel Container */}
+                <div
+                  id="streams-carousel-container"
+                  className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth"
+                >
+                  {streams.map((stream, idx) => {
+                    const Icon = stream.icon;
+                    return (
+                      <motion.div
+                        key={stream.name}
+                        initial={{ opacity: 0, y: 28, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{
+                          duration: 0.45,
+                          delay: idx * 0.07,
                           type: "spring",
-                          stiffness: 400,
-                          damping: 18,
-                        },
-                      }}
-                      whileTap={{ scale: 0.97 }}
-                      className={`group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br ${stream.bg} ${stream.border} transition-colors duration-300 cursor-pointer`}
-                    >
-                      {/* Shimmer sweep on hover */}
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 dark:via-white/10 to-transparent pointer-events-none z-10" />
-
-                      {/* Glow orb */}
-                      <div
-                        className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 pointer-events-none"
-                        style={{
-                          background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)`,
+                          stiffness: 260,
+                          damping: 22,
                         }}
-                      />
+                        whileHover={{
+                          y: -8,
+                          scale: 1.03,
+                          boxShadow: `0 20px 50px ${stream.glow}, 0 4px 16px rgba(0,0,0,0.08)`,
+                          transition: {
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 18,
+                          },
+                        }}
+                        whileTap={{ scale: 0.97 }}
+                        className={`group relative overflow-hidden rounded-[24px] border ${stream.border} bg-gradient-to-br ${stream.bg} transition-colors duration-300 cursor-pointer flex-shrink-0 w-[210px] h-[140px] md:w-[240px] md:h-[160px]`}
+                      >
+                        {/* Automatic Shimmer Sheen Reflection Overlay */}
+                        <div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                          style={{ animationDelay: `${idx * 0.6}s` }}
+                        />
 
-                      <div className="relative z-10 p-4 md:p-5">
-                        {/* Icon */}
-                        <motion.div
-                          whileHover={{ rotate: [0, -8, 8, 0] }}
-                          transition={{ duration: 0.5 }}
-                          className={`w-11 h-11 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${stream.gradient} flex items-center justify-center shadow-md mb-3 group-hover:shadow-lg transition-shadow duration-300`}
-                        >
-                          <Icon className="w-5 h-5 md:w-7 md:h-7 text-white drop-shadow" />
-                        </motion.div>
+                        {/* Shimmer sweep on hover */}
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 dark:via-white/10 to-transparent pointer-events-none z-10" />
 
-                        {/* Text */}
-                        <h3 className="font-outfit font-extrabold text-sm md:text-[15px] text-text_primary group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">
-                          {stream.name}
-                        </h3>
+                        {/* Glow orb */}
+                        <div
+                          className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 pointer-events-none"
+                          style={{
+                            background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)`,
+                          }}
+                        />
 
-                        {/* Badge */}
-                        <span
-                          className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wide ${stream.badge}`}
-                        >
-                          {stream.count}
-                        </span>
-
-                        {/* Explore arrow */}
-                        <div className="mt-3 flex items-center gap-1 text-[10px] font-black text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
-                          <span>Explore</span>
-                          <motion.span
-                            animate={{ x: [0, 3, 0] }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                              delay: idx * 0.15,
-                            }}
+                        <div className="relative z-10 p-4 md:p-5">
+                          {/* Icon */}
+                          <motion.div
+                            whileHover={{ rotate: [0, -8, 8, 0] }}
+                            transition={{ duration: 0.5 }}
+                            className={`w-11 h-11 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${stream.gradient} flex items-center justify-center shadow-md mb-3 group-hover:shadow-lg transition-shadow duration-300`}
                           >
-                            →
-                          </motion.span>
-                        </div>
-                      </div>
+                            <Icon className="w-5 h-5 md:w-7 md:h-7 text-white drop-shadow" />
+                          </motion.div>
 
-                      <Link
-                        href={`/colleges?stream=${stream.name}`}
-                        className="absolute inset-0 z-20"
-                      />
-                    </motion.div>
-                  );
-                })}
+                          {/* Text */}
+                          <h3 className="font-outfit font-extrabold text-sm md:text-[15px] text-text_primary group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">
+                            {stream.name}
+                          </h3>
+
+                          {/* Badge */}
+                          <span
+                            className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wide ${stream.badge}`}
+                          >
+                            {stream.count}
+                          </span>
+
+                          {/* Explore arrow */}
+                          <div className="mt-3 flex items-center gap-1 text-[10px] font-black text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
+                            <span>Explore</span>
+                            <motion.span
+                              animate={{ x: [0, 3, 0] }}
+                              transition={{
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: idx * 0.15,
+                              }}
+                            >
+                              →
+                            </motion.span>
+                          </div>
+                        </div>
+
+                        <Link
+                          href={`/colleges?stream=${stream.name}`}
+                          className="absolute inset-0 z-20"
+                        />
+                      </motion.div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </motion.div>
