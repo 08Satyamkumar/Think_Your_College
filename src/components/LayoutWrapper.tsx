@@ -1755,12 +1755,12 @@ export default function LayoutWrapper({
           {/* Logo Section (Official Brand Logo) */}
           <Link
             href="/"
-            className="flex items-center select-none hover:scale-[1.03] transition-transform origin-left flex-shrink-0 py-1"
+            className="flex items-center select-none hover:scale-[1.03] transition-transform origin-left flex-shrink-0"
           >
             <img
               src="/logo.png"
               alt="College 19"
-              className="h-10 md:h-12 w-auto object-contain"
+              className="h-12 md:h-14 w-auto object-contain"
             />
           </Link>
 
