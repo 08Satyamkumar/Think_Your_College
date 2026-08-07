@@ -1752,13 +1752,21 @@ export default function LayoutWrapper({
         {/* ROW 1: TOP ROW (Logo, Wide Search Bar, Login/Sign Up) */}
         <div className="h-16 max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
           {/* Logo Section */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 flex-shrink-0 group"
+          >
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-orange-600 shadow-sm">
               <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="font-outfit font-black text-base tracking-tight text-white hover:text-amber-100 transition-colors uppercase">
-              College 19
-            </span>
+            <div className="flex flex-col">
+              <span className="font-outfit font-black text-[13px] leading-tight tracking-tight text-white hover:text-amber-100 transition-colors uppercase">
+                College 19
+              </span>
+              <span className="font-outfit font-bold text-[7.5px] leading-none tracking-[0.14em] text-slate-300 uppercase mt-0.5">
+                Learn • Grow • Achieve
+              </span>
+            </div>
           </Link>
 
           {/* Wide Global Search Bar (Conjoined Input & Button) */}
@@ -3338,8 +3346,8 @@ export default function LayoutWrapper({
                 <p className="font-black text-white text-sm tracking-tight uppercase">
                   College 19
                 </p>
-                <p className="text-[9px] text-slate-500 tracking-widest">
-                  India's #1 College Discovery Platform
+                <p className="text-[9px] text-orange-500 font-bold tracking-[0.12em] uppercase mt-0.5">
+                  Learn • Grow • Achieve
                 </p>
               </div>
             </div>
