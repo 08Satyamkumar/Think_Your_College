@@ -1755,27 +1755,13 @@ export default function LayoutWrapper({
           {/* Logo Section (Official Brand Logo) */}
           <Link
             href="/"
-            className="flex items-center select-none hover:scale-[1.03] transition-transform origin-left flex-shrink-0"
+            className="flex items-center select-none hover:scale-[1.03] transition-transform origin-left flex-shrink-0 py-1"
           >
-            <div className="relative flex items-center">
-              {/* Left Outlined Box for "COLLEGE" */}
-              <div className="border-[2.5px] border-white rounded-[12px] py-1 px-3 mr-1">
-                <span className="font-outfit font-black text-sm text-white uppercase tracking-wider">
-                  COLLEGE
-                </span>
-              </div>
-              {/* Right Overlapping White Box for "19" with Graduation Cap */}
-              <div className="relative -ml-3 flex items-center justify-center">
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white">
-                  <GraduationCap className="w-5 h-5 stroke-[2.5]" />
-                </div>
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-md mt-0.5">
-                  <span className="font-outfit font-black text-sm text-brand_orange">
-                    19
-                  </span>
-                </div>
-              </div>
-            </div>
+            <img
+              src="/logo.png"
+              alt="College 19"
+              className="h-10 md:h-12 w-auto object-contain"
+            />
           </Link>
 
           {/* Wide Global Search Bar (Conjoined Input & Button) */}
@@ -3347,29 +3333,12 @@ export default function LayoutWrapper({
         <div className="border-t border-slate-800 bg-slate-950">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Logo (Official Brand Logo) */}
-            <div className="flex flex-col items-start select-none">
-              <div className="relative flex items-center">
-                {/* Left Outlined Box for "COLLEGE" */}
-                <div className="border-[2.5px] border-white rounded-[12px] py-1 px-3 mr-1">
-                  <span className="font-outfit font-black text-sm text-white uppercase tracking-wider">
-                    COLLEGE
-                  </span>
-                </div>
-                {/* Right Overlapping White Box for "19" with Graduation Cap */}
-                <div className="relative -ml-3 flex items-center justify-center">
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white">
-                    <GraduationCap className="w-5 h-5 stroke-[2.5]" />
-                  </div>
-                  <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-md mt-0.5">
-                    <span className="font-outfit font-black text-sm text-brand_orange">
-                      19
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <span className="text-[7.5px] font-black uppercase text-slate-300 tracking-[0.15em] mt-2 block">
-                LEARN • GROW • ACHIEVE
-              </span>
+            <div className="flex flex-col items-start select-none py-1">
+              <img
+                src="/logo.png"
+                alt="College 19"
+                className="h-11 md:h-12 w-auto object-contain"
+              />
             </div>
 
             {/* Bottom Links */}
@@ -3611,32 +3580,12 @@ export default function LayoutWrapper({
                 {/* Left Top Header */}
                 <div className="space-y-6 z-10">
                   {/* Official COLLEGE 19 Logo */}
-                  <div className="flex flex-col items-start select-none pb-2 scale-110 origin-left">
-                    <div className="relative flex items-center">
-                      {/* Left Outlined Box for "COLLEGE" */}
-                      <div className="border-[2.5px] border-white rounded-[12px] py-1 px-3 mr-1">
-                        <span className="font-outfit font-black text-sm text-white uppercase tracking-wider">
-                          COLLEGE
-                        </span>
-                      </div>
-
-                      {/* Right Overlapping White Box for "19" with Graduation Cap */}
-                      <div className="relative -ml-3 flex items-center justify-center">
-                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white">
-                          <GraduationCap className="w-5 h-5 stroke-[2.5]" />
-                        </div>
-                        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-md mt-0.5">
-                          <span className="font-outfit font-black text-sm text-brand_orange">
-                            19
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Tagline */}
-                    <span className="text-[7.5px] font-black uppercase text-slate-100 tracking-[0.2em] mt-2 block">
-                      LEARN • GROW • ACHIEVE
-                    </span>
+                  <div className="flex flex-col items-start select-none pb-4 scale-110 origin-left">
+                    <img
+                      src="/logo.png"
+                      alt="College 19"
+                      className="h-16 w-auto object-contain"
+                    />
                   </div>
 
                   <div className="space-y-3">
