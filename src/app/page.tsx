@@ -756,40 +756,6 @@ export default function HomePage() {
               </>
             )}
           </div>
-
-          {/* Local Tab Switcher Pills */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit border border-slate-200/50">
-            <button
-              onClick={() => setActiveHubTab("cities")}
-              className={`py-2 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-                activeHubTab === "cities"
-                  ? "bg-white text-slate-800 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              Top Cities
-            </button>
-            <button
-              onClick={() => setActiveHubTab("exams")}
-              className={`py-2 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-                activeHubTab === "exams"
-                  ? "bg-white text-slate-800 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              Top Exams
-            </button>
-            <button
-              onClick={() => setActiveHubTab("courses")}
-              className={`py-2 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-                activeHubTab === "courses"
-                  ? "bg-white text-slate-800 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              Top Courses
-            </button>
-          </div>
         </div>
 
         {/* Tab Content Renderers */}
