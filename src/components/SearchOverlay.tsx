@@ -112,7 +112,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 <GraduationCap className="w-5 h-5" />
               </div>
               <span className="font-outfit font-black text-xs md:text-sm tracking-tight text-slate-800 uppercase">
-                Think Your College
+                College 19
               </span>
             </div>
 
@@ -129,7 +129,10 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
           {/* Search Box Section */}
           <div className="w-full max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6 flex-1 flex flex-col min-w-0">
-            <form onSubmit={handleSearchSubmit} className="relative group mb-6 md:mb-8">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="relative group mb-6 md:mb-8"
+            >
               <div className="flex items-center w-full rounded-xl md:rounded-2xl border-2 border-slate-200 focus-within:border-orange-500 bg-white shadow-lg shadow-slate-100 focus-within:shadow-[0_10px_30px_rgba(249,115,22,0.12)] transition-all duration-300 h-14 md:h-18 overflow-hidden">
                 <Search className="w-5 h-5 text-slate-400 ml-4 flex-shrink-0" />
                 <input

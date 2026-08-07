@@ -209,7 +209,7 @@ const trendingUpdates = [
     tag: "Exam Update",
     title: "JEE Main 2027 Registration Portal Live - Apply before Deadline",
     details:
-      "The registration portal for JEE Main 2027 Session 1 is officially open. Aspiring candidates can fill out the application form on the official website. Check eligible engineering colleges and cutoffs on Think Your College.",
+      "The registration portal for JEE Main 2027 Session 1 is officially open. Aspiring candidates can fill out the application form on the official website. Check eligible engineering colleges and cutoffs on College 19.",
     actionText: "Search Engineering Colleges",
     actionLink: "/colleges?stream=Engineering",
   },
@@ -236,9 +236,9 @@ const trendingUpdates = [
     id: "4",
     tag: "Scholarship",
     title:
-      "Think Your College Scholarship Test (TYCST) 2026 - Win up to 100% tuition coverage",
+      "College 19 Scholarship Test (C19ST) 2026 - Win up to 100% tuition coverage",
     details:
-      "TYCST 2026 registrations are now open for students seeking admissions in MBA, Engineering, and Medical courses. Participate and win financial aid up to ₹5 Lakhs.",
+      "C19ST 2026 registrations are now open for students seeking admissions in MBA, Engineering, and Medical courses. Participate and win financial aid up to ₹5 Lakhs.",
     actionText: "Register for Scholarship",
     actionLink: "/scholarship",
   },

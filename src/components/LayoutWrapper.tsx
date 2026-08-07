@@ -176,7 +176,7 @@ export default function LayoutWrapper({
           "🌲 **Chandigarh University (Punjab)** is a massive private university:\n\n• **NIRF Rank**: Top 30 in Universities\n• **Highest Package**: ₹54.0 LPA\n• **Average Package**: ₹7.5 LPA\n• **Highlights**: Vibrant campus life, global collaborations, strong industry networking.";
       } else if (cleanText.includes("compare")) {
         responseText =
-          "⚖️ **Think Your College Comparison Tool**:\n\nAap custom colleges compare karne ke liye screen ke center-right mein floating **Compare Button (Shuffle Icon)** par click kijiye. Wahan aap categories like engineering/management select karke multiple colleges side-by-side analyze kar sakte hain.";
+          "⚖️ **College 19 Comparison Tool**:\n\nAap custom colleges compare karne ke liye screen ke center-right mein floating **Compare Button (Shuffle Icon)** par click kijiye. Wahan aap categories like engineering/management select karke multiple colleges side-by-side analyze kar sakte hain.";
       } else if (
         cleanText.includes("predictor") ||
         cleanText.includes("counseling")
@@ -1757,7 +1757,7 @@ export default function LayoutWrapper({
               <GraduationCap className="w-5 h-5" />
             </div>
             <span className="font-outfit font-black text-base tracking-tight text-white hover:text-amber-100 transition-colors uppercase">
-              Think Your College
+              College 19
             </span>
           </Link>
 
@@ -2771,7 +2771,7 @@ export default function LayoutWrapper({
                     <GraduationCap className="w-5 h-5" />
                   </div>
                   <span className="font-outfit font-black text-sm tracking-tight text-slate-950 hover:text-primary transition-colors uppercase">
-                    Think Your College
+                    College 19
                   </span>
                 </Link>
                 <button
@@ -2890,7 +2890,7 @@ export default function LayoutWrapper({
             </div>
 
             <div className="text-center text-[10px] text-text_secondary py-3.5 border-t border-border bg-slate-50 flex-shrink-0">
-              Think Your College © 2026
+              College 19 © 2026
             </div>
           </aside>
         </div>
@@ -3205,7 +3205,7 @@ export default function LayoutWrapper({
             {/* About TYC */}
             <div className="space-y-2.5">
               <h4 className="font-black text-white text-sm tracking-wide mb-4">
-                About Think Your College
+                About College 19
               </h4>
               {[
                 "About Us",
@@ -3336,7 +3336,7 @@ export default function LayoutWrapper({
               </div>
               <div>
                 <p className="font-black text-white text-sm tracking-tight uppercase">
-                  Think Your College
+                  College 19
                 </p>
                 <p className="text-[9px] text-slate-500 tracking-widest">
                   India's #1 College Discovery Platform
@@ -3365,7 +3365,7 @@ export default function LayoutWrapper({
 
             {/* Copyright */}
             <p className="text-[10px] text-slate-600 text-right">
-              © 2026 Think Your College. All rights reserved.
+              © 2026 College 19. All rights reserved.
             </p>
           </div>
         </div>
@@ -3587,7 +3587,7 @@ export default function LayoutWrapper({
                       <GraduationCap className="w-4 h-4 text-white" />
                     </div>
                     <span className="font-outfit font-black text-xs tracking-wider uppercase">
-                      Think Your College
+                      College 19
                     </span>
                   </div>
 
