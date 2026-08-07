@@ -777,7 +777,7 @@ export default function HomePage() {
                       .getElementById("cities-carousel-container")
                       ?.scrollBy({ left: -300, behavior: "smooth" })
                   }
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.6)] transition-all z-25 md:opacity-0 md:group-hover/carousel:opacity-100 opacity-90 active:scale-95 cursor-pointer"
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -787,7 +787,7 @@ export default function HomePage() {
                       .getElementById("cities-carousel-container")
                       ?.scrollBy({ left: 300, behavior: "smooth" })
                   }
-                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.6)] transition-all z-25 md:opacity-0 md:group-hover/carousel:opacity-100 opacity-90 active:scale-95 cursor-pointer"
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -842,7 +842,7 @@ export default function HomePage() {
                       .getElementById("exams-carousel-container")
                       ?.scrollBy({ left: -300, behavior: "smooth" })
                   }
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.6)] transition-all z-25 md:opacity-0 md:group-hover/carousel:opacity-100 opacity-90 active:scale-95 cursor-pointer"
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -852,7 +852,7 @@ export default function HomePage() {
                       .getElementById("exams-carousel-container")
                       ?.scrollBy({ left: 300, behavior: "smooth" })
                   }
-                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.6)] transition-all z-25 md:opacity-0 md:group-hover/carousel:opacity-100 opacity-90 active:scale-95 cursor-pointer"
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -969,7 +969,7 @@ export default function HomePage() {
                       .getElementById("streams-carousel-container")
                       ?.scrollBy({ left: -300, behavior: "smooth" })
                   }
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.6)] transition-all z-25 md:opacity-0 md:group-hover/carousel:opacity-100 opacity-90 active:scale-95 cursor-pointer"
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -979,7 +979,7 @@ export default function HomePage() {
                       .getElementById("streams-carousel-container")
                       ?.scrollBy({ left: 300, behavior: "smooth" })
                   }
-                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.6)] transition-all z-25 md:opacity-0 md:group-hover/carousel:opacity-100 opacity-90 active:scale-95 cursor-pointer"
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
