@@ -1321,48 +1321,59 @@ export default function HomePage() {
         </div>
       </section>
       {/* BIHAR STUDENT CREDIT CARD SPOTLIGHT BANNER */}
-      <section className="p-8 md:p-12 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white relative overflow-hidden shadow-xl">
+      <section className="p-6 md:p-12 rounded-[28px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white relative overflow-hidden shadow-[0_10px_35px_rgba(234,88,12,0.22)] border border-orange-500/35">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_35%)]" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+        {/* Shimmer Sheen Reflection Sweep Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
           <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-emerald-200">
-              <ShieldCheck className="w-4 h-4 text-emerald-300" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-orange-200 text-xs font-semibold">
+              <ShieldCheck className="w-4 h-4 text-orange-300" />
               Govt Scheme Admission Support
             </div>
-            <h2 className="font-outfit font-extrabold text-3xl md:text-4xl leading-tight">
+            <h2 className="font-outfit font-black text-2xl md:text-4xl leading-tight">
               Higher Studies Admission Under <br />
-              <span className="underline decoration-emerald-300 underline-offset-8">
+              <span className="underline decoration-orange-300 underline-offset-8">
                 Bihar Student Credit Card
               </span>
             </h2>
-            <p className="text-slate-100 font-sans text-sm md:text-base max-w-xl">
+            <p className="text-xs md:text-sm text-orange-50/90 max-w-xl leading-relaxed">
               Get direct counseling for medical, B.Tech, MBA, pharmacy, and
               nursing courses fully covered under the Bihar Student Credit Card
               scheme. Zero upfront self-finance tuition fee options.
             </p>
-            <div className="flex flex-wrap gap-4 pt-2">
+            <div className="flex flex-wrap gap-3 pt-2">
               <button
                 onClick={() => {
                   setModalType("credit-card");
                   setShowInquiryModal(true);
                 }}
-                className="px-6 py-3 bg-white hover:bg-emerald-50 text-emerald-700 hover:text-white font-bold text-sm rounded-xl active:scale-95 transition-all shadow-md"
+                className="px-5 py-2.5 bg-white text-orange-700 hover:bg-orange-50 font-black text-xs rounded-xl transition-all hover:scale-[1.02] shadow-lg shadow-orange-950/20 active:scale-95 cursor-pointer"
               >
                 Apply for Loan Guidance
               </button>
               <a
                 href="#"
-                className="flex items-center gap-2 px-5 py-3 border border-white/20 hover:bg-white/10 text-white font-bold text-sm rounded-xl transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 border border-white/30 hover:border-white text-white hover:bg-white/10 font-bold text-xs rounded-xl transition-all active:scale-95 cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
                 Download SCC Guidelines PDF
               </a>
             </div>
           </div>
-          <div className="lg:col-span-4 flex justify-center">
-            <div className="relative w-48 h-48 bg-white/10 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-950/20">
-              <ShieldCheck className="w-24 h-24 text-emerald-200 animate-pulse" />
+
+          {/* Mobile background watermark to shrink height */}
+          <div className="absolute right-4 bottom-2 lg:hidden opacity-[0.08] text-white z-0 pointer-events-none">
+            <ShieldCheck className="w-24 h-24 text-white" />
+          </div>
+
+          {/* Desktop visual element */}
+          <div className="hidden lg:flex lg:col-span-4 justify-center">
+            <div className="relative w-48 h-48 bg-white/10 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl shadow-orange-950/20 group/icon">
+              <div className="absolute inset-0 rounded-full bg-white/5 opacity-0 group-hover/icon:opacity-100 transition-opacity duration-300 animate-ping" />
+              <ShieldCheck className="w-24 h-24 text-orange-200 group-hover/icon:scale-110 transition-transform duration-300" />
             </div>
           </div>
         </div>
