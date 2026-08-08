@@ -1147,7 +1147,7 @@ export default function HomePage() {
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
       <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-6 lg:gap-8 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory">
         {/* WIDGET 1: COMPARE COLLEGES (INTERACTIVE WIDGET) */}
-        <div className="w-[88vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-center bg-white border border-blue-500/20 hover:border-blue-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none">
+        <div className="w-[82vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-blue-500/20 hover:border-blue-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none">
           {/* Automatic Shimmer Sheen Reflection Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
 
@@ -1236,7 +1236,7 @@ export default function HomePage() {
         </div>
 
         {/* WIDGET 2: EXAMS & COUNSELING CALENDAR */}
-        <div className="w-[88vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-center bg-white border border-emerald-500/20 hover:border-emerald-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.14)] transition-all duration-350 relative overflow-hidden group/exams select-none">
+        <div className="w-[82vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-emerald-500/20 hover:border-emerald-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.14)] transition-all duration-350 relative overflow-hidden group/exams select-none">
           {/* Automatic Shimmer Sheen Reflection Overlay */}
           <div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
