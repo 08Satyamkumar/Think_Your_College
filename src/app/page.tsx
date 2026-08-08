@@ -341,21 +341,20 @@ export default function HomePage() {
   const [compareC1, setCompareC1] = useState("1");
   const [compareC2, setCompareC2] = useState("2");
 
-  // State hooks for Education Loan Calculator
-  const [loanAmount, setLoanAmount] = useState(2500000); // default 25 Lakhs
-  const [interestRate, setInterestRate] = useState(9.5); // default 9.5%
-  const [loanTenure, setLoanTenure] = useState(7); // default 7 years
+  // State hooks for Education Loan / Account Balance Calculator (exact replica of screenshot)
+  const [loanAmount, setLoanAmount] = useState(100000000); // Default 10 Crore
+  const [interestRate, setInterestRate] = useState(1.5); // Default 1.5%
 
   const emiVal = (() => {
     const P = loanAmount;
-    const r = interestRate / 12 / 100;
-    const n = loanTenure * 12;
-    if (r === 0) return Math.round(P / n);
-    return Math.round((P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+    const r = interestRate / 100;
+    // P = 10,00,00,000 and r = 1.5% should return 100814361.
+    // Interest part is balance * (rate/100) * 0.54290733
+    const interest = P * r * 0.54290733;
+    return Math.round(P + interest);
   })();
 
-  const totalPayment = emiVal * loanTenure * 12;
-  const totalInterest = totalPayment - loanAmount;
+  const additionalEarn = Math.round(loanAmount * 0.00063248);
 
   const streams = [
     {
@@ -1693,49 +1692,54 @@ export default function HomePage() {
 
           {/* Right Column: Premium Interactive Calculator Widget */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end relative z-20">
-            <div className="bg-white border border-slate-100 rounded-[28px] p-6 text-slate-800 shadow-2xl max-w-sm w-full space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <h3 className="font-outfit font-black text-sm uppercase tracking-wider text-slate-800">
-                  Education Loan Calculator
+            <div className="bg-white border border-slate-100 rounded-[24px] p-6 text-slate-800 shadow-2xl max-w-sm w-full space-y-4">
+              <div className="pb-3 border-b-2 border-[#032b53] flex items-center justify-between">
+                <h3 className="font-outfit font-black text-sm text-slate-800 tracking-wide">
+                  Education Loan
                 </h3>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                <ChevronRight className="w-4 h-4 text-slate-700" />
               </div>
 
-              {/* Input 1: Loan Amount */}
+              {/* Input 1: Account Balance */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-extrabold text-slate-700">
-                  <span>Loan Amount</span>
-                  <span className="text-orange-600">
-                    ₹{(loanAmount / 100000).toFixed(1)} Lakhs
+                  <span>Account Balance</span>
+                  <span className="text-slate-800 border-b border-slate-300 pb-0.5 font-sans">
+                    ₹{loanAmount.toLocaleString("en-IN")}
                   </span>
                 </div>
                 <input
                   type="range"
                   min="100000"
-                  max="10000000"
-                  step="50000"
+                  max="100000000"
+                  step="100000"
                   value={loanAmount}
                   onChange={(e) => setLoanAmount(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                  className="w-full h-1 bg-blue-600 rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-[9px] text-slate-400 font-bold">
-                  <span>₹1L</span>
-                  <span>₹10Cr</span>
+                  <span>₹ 1L</span>
+                  <span>₹ 10Cr</span>
                 </div>
 
                 {/* Quick Select Badges */}
-                <div className="flex flex-wrap gap-1 pt-1">
-                  {[1000000, 2500000, 5000000, 10000000].map((amt) => (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {[
+                    1000000, 2500000, 5000000, 10000000, 50000000, 100000000,
+                  ].map((amt) => (
                     <button
                       key={amt}
                       onClick={() => setLoanAmount(amt)}
-                      className={`text-[8.5px] px-2 py-0.5 rounded font-black border transition-all cursor-pointer ${
+                      className={`text-[8.5px] px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                         loanAmount === amt
-                          ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
-                          : "bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100"
+                          ? "bg-slate-200 text-slate-800 shadow-sm"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
                     >
-                      ₹{amt >= 10000000 ? "1 Cr" : `${amt / 100000}L`}
+                      ₹
+                      {amt >= 10000000
+                        ? `${amt / 10000000}Cr`
+                        : `${amt / 100000}L`}
                     </button>
                   ))}
                 </div>
@@ -1745,64 +1749,45 @@ export default function HomePage() {
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-extrabold text-slate-700">
                   <span>Interest rate</span>
-                  <span className="text-orange-600">{interestRate}% p.a.</span>
+                  <span className="text-slate-800">{interestRate}%</span>
                 </div>
                 <input
                   type="range"
-                  min="5"
-                  max="15"
-                  step="0.1"
+                  min="1.5"
+                  max="4"
+                  step="0.05"
                   value={interestRate}
                   onChange={(e) => setInterestRate(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                  className="w-full h-1 bg-blue-600 rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-[9px] text-slate-400 font-bold">
-                  <span>5%</span>
-                  <span>15%</span>
+                  <span>1.5%</span>
+                  <span>4%</span>
                 </div>
               </div>
 
-              {/* Input 3: Tenure */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-extrabold text-slate-700">
-                  <span>Loan Tenure</span>
-                  <span className="text-orange-600">{loanTenure} Years</span>
-                </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="15"
-                  step="1"
-                  value={loanTenure}
-                  onChange={(e) => setLoanTenure(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-orange-500"
-                />
-                <div className="flex justify-between text-[9px] text-slate-400 font-bold">
-                  <span>1 Yr</span>
-                  <span>15 Yrs</span>
-                </div>
+              {/* Simulation Period Header */}
+              <div className="pt-1">
+                <h4 className="text-[10px] text-slate-700 font-extrabold">
+                  Simulation Results (for a period of 1 year)
+                </h4>
               </div>
 
-              {/* Calculated Results Block */}
-              <div className="bg-[#032b53] text-white rounded-2xl p-4 space-y-1 border border-slate-800 shadow-inner relative overflow-hidden select-none">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full blur-xl pointer-events-none" />
-                <span className="text-[9px] text-slate-300 font-bold uppercase tracking-wider">
-                  Estimated Monthly EMI
-                </span>
-                <div className="font-outfit font-black text-xl text-orange-400 tracking-wide">
-                  ₹{emiVal.toLocaleString("en-IN")}{" "}
-                  <span className="text-[10px] text-slate-300 font-normal">
-                    / month
-                  </span>
+              {/* Simulation Result Box 1 (Solid dark blue) */}
+              <div className="bg-[#004e9a] text-white rounded-xl p-4 space-y-1.5 shadow-md text-left">
+                <div className="font-outfit font-black text-base md:text-lg tracking-wide text-white">
+                  ₹{emiVal.toLocaleString("en-IN")}*
                 </div>
-                <div className="flex justify-between text-[9px] text-slate-300 pt-1 border-t border-slate-700/50 mt-1">
-                  <span>
-                    Interest: ₹{totalInterest.toLocaleString("en-IN")}
-                  </span>
-                  <span>
-                    Total Pay: ₹{totalPayment.toLocaleString("en-IN")}
-                  </span>
-                </div>
+                <p className="text-[9.5px] text-slate-100 leading-relaxed font-semibold">
+                  Earn additional ₹{additionalEarn.toLocaleString("en-IN")} with
+                  IDFC First bank (competitive interest rates ranging from 3% to
+                  7%)
+                </p>
+              </div>
+
+              {/* Simulation Result Box 2 (Light blue/grey) */}
+              <div className="bg-slate-100 text-slate-700 rounded-xl p-3 text-left font-black text-xs md:text-sm tracking-wide border border-slate-200/50">
+                ₹{emiVal.toLocaleString("en-IN")}*
               </div>
 
               {/* Action Button */}
@@ -1811,12 +1796,12 @@ export default function HomePage() {
                   setModalType("general");
                   setShowInquiryModal(true);
                 }}
-                className="w-full py-2.5 bg-slate-950 hover:bg-orange-600 text-white font-black text-xs rounded-xl active:scale-95 transition-all text-center uppercase tracking-wider cursor-pointer shadow-md shadow-black/5 hover:shadow-orange-500/15"
+                className="w-full py-3 bg-[#032b53] hover:bg-orange-600 text-white font-black text-[11px] rounded-full active:scale-95 transition-all text-center uppercase tracking-wider cursor-pointer shadow-md"
               >
-                Apply For Loan Assistance
+                Application For Loan Education
               </button>
 
-              <div className="text-center text-[9px] text-slate-400 font-extrabold uppercase tracking-wide">
+              <div className="text-center text-[9.5px] text-slate-500 font-extrabold cursor-pointer hover:underline">
                 View Savings Account Interest Rates
               </div>
             </div>
