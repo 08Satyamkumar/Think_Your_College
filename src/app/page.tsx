@@ -341,6 +341,22 @@ export default function HomePage() {
   const [compareC1, setCompareC1] = useState("1");
   const [compareC2, setCompareC2] = useState("2");
 
+  // State hooks for Education Loan Calculator
+  const [loanAmount, setLoanAmount] = useState(2500000); // default 25 Lakhs
+  const [interestRate, setInterestRate] = useState(9.5); // default 9.5%
+  const [loanTenure, setLoanTenure] = useState(7); // default 7 years
+
+  const emiVal = (() => {
+    const P = loanAmount;
+    const r = interestRate / 12 / 100;
+    const n = loanTenure * 12;
+    if (r === 0) return Math.round(P / n);
+    return Math.round((P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+  })();
+
+  const totalPayment = emiVal * loanTenure * 12;
+  const totalInterest = totalPayment - loanAmount;
+
   const streams = [
     {
       name: "Engineering",
@@ -1512,6 +1528,299 @@ export default function HomePage() {
               </div>
             </motion.div>
           ))}
+        </div>
+      </section>
+      {/* EDUCATION LOAN & PARTNER BANKS SECTION */}
+      <section className="bg-[#032b53] border border-slate-800 rounded-[32px] p-6 md:p-12 text-white relative overflow-hidden shadow-xl select-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.1),transparent_40%)]" />
+        {/* Shimmer Sheen Sweep */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          {/* Left Column: Title & Bank Logos Grid */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-4">
+              <h2 className="font-outfit font-black text-2xl md:text-4xl leading-tight tracking-wide">
+                Finance Should Never Be A Barrier To <br />
+                <span className="text-orange-400">Education</span>
+              </h2>
+              <p className="text-xs md:text-sm text-slate-300 max-w-xl leading-relaxed">
+                We'll Help You Get The Best Education Loan From Top Banks In
+                India — Hassle-Free.
+              </p>
+            </div>
+
+            {/* Bank Logos Grid (12 Premium Custom Bank Logo Cards) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+              {/* SBI */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-5 h-5 rounded-full border-[4px] border-[#00a9e0] relative flex items-center justify-center">
+                    <div className="absolute bottom-0 w-[3px] h-[7px] bg-white translate-y-[2px]" />
+                  </div>
+                  <span className="font-extrabold text-[13px] text-[#003876] tracking-tight">
+                    SBI
+                  </span>
+                </div>
+              </div>
+
+              {/* HDFC */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-1 border-t-2 border-b-2 border-[#1c3f94] px-1 py-0.5 relative">
+                    <div className="w-1.5 h-1.5 bg-[#e31e24] rounded-sm absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                    <span className="font-extrabold text-[10px] text-[#1c3f94] tracking-tighter">
+                      HDFC BANK
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Axis */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-[#861a49] transform rotate-180" />
+                  <span className="font-black text-[11px] text-[#861a49] tracking-tighter uppercase">
+                    Axis Bank
+                  </span>
+                </div>
+              </div>
+
+              {/* Kotak */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1">
+                  <span className="w-4 h-4 rounded-full bg-[#da251c] flex items-center justify-center text-white font-black text-[7px]">
+                    K
+                  </span>
+                  <span className="font-extrabold text-[12px] text-[#054381] tracking-tight">
+                    kotak
+                  </span>
+                </div>
+              </div>
+
+              {/* PNB */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1">
+                  <div className="w-5 h-5 bg-[#a32035] rounded flex items-center justify-center text-white border-b-4 border-[#f2a900]">
+                    <span className="font-black text-[8px]">pnb</span>
+                  </div>
+                  <span className="font-extrabold text-[12px] text-[#a32035] tracking-tighter">
+                    PNB
+                  </span>
+                </div>
+              </div>
+
+              {/* BOB */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1">
+                  <div className="w-5 h-5 rounded-full bg-[#f47920] flex items-center justify-center text-white font-black text-[9px]">
+                    B
+                  </div>
+                  <span className="font-extrabold text-[11px] text-[#0f2c59] tracking-tighter">
+                    Baroda
+                  </span>
+                </div>
+              </div>
+
+              {/* Canara */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex flex-col items-center">
+                  <span className="font-extrabold text-[11px] text-[#006ca7] tracking-tight">
+                    Canara Bank
+                  </span>
+                  <div className="w-8 h-1 bg-[#ffcc00] rounded-full mt-0.5" />
+                </div>
+              </div>
+
+              {/* IDFC */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex flex-col items-center">
+                  <span className="font-black text-[10px] text-[#8c2230] tracking-tight">
+                    IDFC FIRST
+                  </span>
+                  <span className="text-[7px] text-slate-400 font-extrabold uppercase tracking-widest mt-0.5">
+                    Bank
+                  </span>
+                </div>
+              </div>
+
+              {/* CBI */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1">
+                  <div className="w-5 h-5 rounded-full bg-[#0060a9] flex items-center justify-center text-white font-black text-[8px]">
+                    C
+                  </div>
+                  <span className="font-extrabold text-[11px] text-[#0060a9] tracking-tighter">
+                    Central
+                  </span>
+                </div>
+              </div>
+
+              {/* BOI */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1">
+                  <div className="w-5 h-5 bg-[#003c71] clip-star flex items-center justify-center text-white font-black text-[8px] transform rotate-12">
+                    ★
+                  </div>
+                  <span className="font-extrabold text-[11px] text-[#003c71] tracking-tighter">
+                    Bank of India
+                  </span>
+                </div>
+              </div>
+
+              {/* Union */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1">
+                  <span className="font-extrabold text-[11px] text-[#ec1c24] tracking-tighter">
+                    Union Bank
+                  </span>
+                </div>
+              </div>
+
+              {/* Indian Bank */}
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-4 h-4 rounded-full bg-[#005ba4] relative flex items-center justify-center">
+                    <span className="text-white font-black text-[7px]">I</span>
+                  </div>
+                  <span className="font-extrabold text-[11px] text-[#005ba4] tracking-tight">
+                    Indian Bank
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Premium Interactive Calculator Widget */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end relative z-20">
+            <div className="bg-white border border-slate-100 rounded-[28px] p-6 text-slate-800 shadow-2xl max-w-sm w-full space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h3 className="font-outfit font-black text-sm uppercase tracking-wider text-slate-800">
+                  Education Loan Calculator
+                </h3>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </div>
+
+              {/* Input 1: Loan Amount */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-xs font-extrabold text-slate-700">
+                  <span>Loan Amount</span>
+                  <span className="text-orange-600">
+                    ₹{(loanAmount / 100000).toFixed(1)} Lakhs
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="100000"
+                  max="10000000"
+                  step="50000"
+                  value={loanAmount}
+                  onChange={(e) => setLoanAmount(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                />
+                <div className="flex justify-between text-[9px] text-slate-400 font-bold">
+                  <span>₹1L</span>
+                  <span>₹10Cr</span>
+                </div>
+
+                {/* Quick Select Badges */}
+                <div className="flex flex-wrap gap-1 pt-1">
+                  {[1000000, 2500000, 5000000, 10000000].map((amt) => (
+                    <button
+                      key={amt}
+                      onClick={() => setLoanAmount(amt)}
+                      className={`text-[8.5px] px-2 py-0.5 rounded font-black border transition-all cursor-pointer ${
+                        loanAmount === amt
+                          ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
+                          : "bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100"
+                      }`}
+                    >
+                      ₹{amt >= 10000000 ? "1 Cr" : `${amt / 100000}L`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Input 2: Interest Rate */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-xs font-extrabold text-slate-700">
+                  <span>Interest rate</span>
+                  <span className="text-orange-600">{interestRate}% p.a.</span>
+                </div>
+                <input
+                  type="range"
+                  min="5"
+                  max="15"
+                  step="0.1"
+                  value={interestRate}
+                  onChange={(e) => setInterestRate(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                />
+                <div className="flex justify-between text-[9px] text-slate-400 font-bold">
+                  <span>5%</span>
+                  <span>15%</span>
+                </div>
+              </div>
+
+              {/* Input 3: Tenure */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-xs font-extrabold text-slate-700">
+                  <span>Loan Tenure</span>
+                  <span className="text-orange-600">{loanTenure} Years</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="15"
+                  step="1"
+                  value={loanTenure}
+                  onChange={(e) => setLoanTenure(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                />
+                <div className="flex justify-between text-[9px] text-slate-400 font-bold">
+                  <span>1 Yr</span>
+                  <span>15 Yrs</span>
+                </div>
+              </div>
+
+              {/* Calculated Results Block */}
+              <div className="bg-[#032b53] text-white rounded-2xl p-4 space-y-1 border border-slate-800 shadow-inner relative overflow-hidden select-none">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full blur-xl pointer-events-none" />
+                <span className="text-[9px] text-slate-300 font-bold uppercase tracking-wider">
+                  Estimated Monthly EMI
+                </span>
+                <div className="font-outfit font-black text-xl text-orange-400 tracking-wide">
+                  ₹{emiVal.toLocaleString("en-IN")}{" "}
+                  <span className="text-[10px] text-slate-300 font-normal">
+                    / month
+                  </span>
+                </div>
+                <div className="flex justify-between text-[9px] text-slate-300 pt-1 border-t border-slate-700/50 mt-1">
+                  <span>
+                    Interest: ₹{totalInterest.toLocaleString("en-IN")}
+                  </span>
+                  <span>
+                    Total Pay: ₹{totalPayment.toLocaleString("en-IN")}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={() => {
+                  setModalType("general");
+                  setShowInquiryModal(true);
+                }}
+                className="w-full py-2.5 bg-slate-950 hover:bg-orange-600 text-white font-black text-xs rounded-xl active:scale-95 transition-all text-center uppercase tracking-wider cursor-pointer shadow-md shadow-black/5 hover:shadow-orange-500/15"
+              >
+                Apply For Loan Assistance
+              </button>
+
+              <div className="text-center text-[9px] text-slate-400 font-extrabold uppercase tracking-wide">
+                View Savings Account Interest Rates
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       {/* FOOTER CALL-TO-ACTION COUNSELING */}
