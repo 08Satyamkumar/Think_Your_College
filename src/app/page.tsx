@@ -28,6 +28,12 @@ import {
   Layers,
   Award,
   ChevronLeft,
+  Cog,
+  Stethoscope,
+  BarChart3,
+  Scale,
+  Terminal,
+  Music,
 } from "lucide-react";
 
 interface CollegeMock {
@@ -340,6 +346,8 @@ export default function HomePage() {
       name: "Engineering",
       count: "120+ Colleges",
       icon: Building2,
+      drawing: Cog,
+      textColor: "text-blue-500",
       gradient: "from-blue-500 to-cyan-500",
       glow: "rgba(59,130,246,0.25)",
       bg: "from-blue-50 to-cyan-50 dark:from-blue-950/40 dark:to-cyan-950/30",
@@ -350,6 +358,8 @@ export default function HomePage() {
       name: "Medical",
       count: "80+ Colleges",
       icon: GraduationCap,
+      drawing: Stethoscope,
+      textColor: "text-emerald-500",
       gradient: "from-emerald-500 to-teal-500",
       glow: "rgba(16,185,129,0.25)",
       bg: "from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/30",
@@ -361,6 +371,8 @@ export default function HomePage() {
       name: "Management",
       count: "95+ Colleges",
       icon: TrendingUp,
+      drawing: BarChart3,
+      textColor: "text-purple-500",
       gradient: "from-purple-500 to-violet-500",
       glow: "rgba(139,92,246,0.25)",
       bg: "from-purple-50 to-violet-50 dark:from-purple-950/40 dark:to-violet-950/30",
@@ -372,6 +384,8 @@ export default function HomePage() {
       name: "Law",
       count: "40+ Colleges",
       icon: BookOpen,
+      drawing: Scale,
+      textColor: "text-amber-500",
       gradient: "from-amber-500 to-orange-500",
       glow: "rgba(245,158,11,0.25)",
       bg: "from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/30",
@@ -383,6 +397,8 @@ export default function HomePage() {
       name: "IT & Software",
       count: "65+ Colleges",
       icon: Code,
+      drawing: Terminal,
+      textColor: "text-indigo-500",
       gradient: "from-indigo-500 to-blue-600",
       glow: "rgba(99,102,241,0.25)",
       bg: "from-indigo-50 to-blue-50 dark:from-indigo-950/40 dark:to-blue-950/30",
@@ -394,6 +410,8 @@ export default function HomePage() {
       name: "Design",
       count: "30+ Colleges",
       icon: Palette,
+      drawing: Palette,
+      textColor: "text-pink-500",
       gradient: "from-pink-500 to-rose-500",
       glow: "rgba(236,72,153,0.25)",
       bg: "from-pink-50 to-rose-50 dark:from-pink-950/40 dark:to-rose-950/30",
@@ -404,6 +422,8 @@ export default function HomePage() {
       name: "Science",
       count: "55+ Colleges",
       icon: FlaskConical,
+      drawing: FlaskConical,
+      textColor: "text-teal-500",
       gradient: "from-teal-500 to-cyan-600",
       glow: "rgba(20,184,166,0.25)",
       bg: "from-teal-50 to-cyan-50 dark:from-teal-950/40 dark:to-cyan-950/30",
@@ -414,6 +434,8 @@ export default function HomePage() {
       name: "Arts",
       count: "45+ Colleges",
       icon: Users,
+      drawing: Music,
+      textColor: "text-orange-500",
       gradient: "from-orange-500 to-red-500",
       glow: "rgba(249,115,22,0.25)",
       bg: "from-orange-50 to-red-50 dark:from-orange-950/40 dark:to-red-950/30",
@@ -1032,6 +1054,15 @@ export default function HomePage() {
                             background: `radial-gradient(circle, ${stream.glow} 0%, transparent 70%)`,
                           }}
                         />
+
+                        {/* Large Background drawing/icon related to course */}
+                        {stream.drawing && (
+                          <div
+                            className={`absolute -right-4 -bottom-4 ${stream.textColor} opacity-[0.06] group-hover:opacity-[0.14] group-hover:scale-115 group-hover:-rotate-12 transition-all duration-500 pointer-events-none z-0`}
+                          >
+                            <stream.drawing className="w-24 h-24 md:w-28 md:h-28 stroke-[1.2]" />
+                          </div>
+                        )}
 
                         <div className="relative z-10 p-4 md:p-5">
                           {/* Icon */}
