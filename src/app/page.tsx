@@ -1145,14 +1145,19 @@ export default function HomePage() {
         </div>
       </section>
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-6 lg:gap-8 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory">
         {/* WIDGET 1: COMPARE COLLEGES (INTERACTIVE WIDGET) */}
-        <div className="lg:col-span-6 bg-card border border-border p-6 md:p-8 rounded-3xl space-y-6 shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
+        <div className="w-[88vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-center bg-white border border-blue-500/20 hover:border-blue-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none">
+          {/* Automatic Shimmer Sheen Reflection Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
 
-          <div className="space-y-2">
-            <h2 className="font-outfit font-extrabold text-xl text-text_primary flex items-center gap-2">
-              <Layers className="w-5 h-5 text-primary" />
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="space-y-2 relative z-20">
+            <h2 className="font-outfit font-black text-xl md:text-2xl text-text_primary flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-500 group-hover/compare:bg-blue-500 group-hover/compare:text-white transition-all duration-300">
+                <Layers className="w-5 h-5" />
+              </div>
               Compare Colleges Side-by-Side
             </h2>
             <p className="text-xs text-text_secondary leading-relaxed">
@@ -1162,7 +1167,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 relative z-20">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">
@@ -1171,7 +1176,7 @@ export default function HomePage() {
                 <select
                   value={compareC1}
                   onChange={(e) => setCompareC1(e.target.value)}
-                  className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-xs text-text_primary outline-none focus:border-primary font-bold"
+                  className="w-full mt-1.5 px-3.5 py-2.5 border border-slate-200/80 hover:border-blue-300 rounded-xl bg-slate-50 hover:bg-white text-xs text-text_primary outline-none focus:border-blue-500 font-bold transition-all"
                 >
                   <option value="1">IIT Delhi (Engineering)</option>
                   <option value="2">IIM Ahmedabad (Management)</option>
@@ -1193,7 +1198,7 @@ export default function HomePage() {
                 <select
                   value={compareC2}
                   onChange={(e) => setCompareC2(e.target.value)}
-                  className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-background text-xs text-text_primary outline-none focus:border-primary font-bold"
+                  className="w-full mt-1.5 px-3.5 py-2.5 border border-slate-200/80 hover:border-blue-300 rounded-xl bg-slate-50 hover:bg-white text-xs text-text_primary outline-none focus:border-blue-500 font-bold transition-all"
                 >
                   <option value="2">IIM Ahmedabad (Management)</option>
                   <option value="1">IIT Delhi (Engineering)</option>
@@ -1217,7 +1222,7 @@ export default function HomePage() {
               ) : null}
               <Link
                 href={`/compare?ids=${compareC1},${compareC2}`}
-                className={`w-full py-3 bg-primary hover:bg-primary_hover text-white font-bold text-xs rounded-xl active:scale-95 transition-all shadow-md shadow-primary/10 flex items-center justify-center gap-2 ${
+                className={`w-full py-3 bg-slate-950 hover:bg-blue-600 text-white font-black text-xs rounded-xl active:scale-95 transition-all shadow-md shadow-black/5 hover:shadow-blue-500/15 flex items-center justify-center gap-2 ${
                   compareC1 === compareC2
                     ? "pointer-events-none opacity-50"
                     : ""
@@ -1231,12 +1236,20 @@ export default function HomePage() {
         </div>
 
         {/* WIDGET 2: EXAMS & COUNSELING CALENDAR */}
-        <div className="lg:col-span-6 bg-card border border-border p-6 md:p-8 rounded-3xl space-y-6 shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl" />
+        <div className="w-[88vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-center bg-white border border-emerald-500/20 hover:border-emerald-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.14)] transition-all duration-350 relative overflow-hidden group/exams select-none">
+          {/* Automatic Shimmer Sheen Reflection Overlay */}
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+            style={{ animationDelay: "1s" }}
+          />
 
-          <div className="space-y-2">
-            <h2 className="font-outfit font-extrabold text-xl text-text_primary flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-emerald-500" />
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="space-y-2 relative z-20">
+            <h2 className="font-outfit font-black text-xl md:text-2xl text-text_primary flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-500 group-hover/exams:bg-emerald-500 group-hover/exams:text-white transition-all duration-300">
+                <Calendar className="w-5 h-5" />
+              </div>
               Entrance Exams & Counseling 2026
             </h2>
             <p className="text-xs text-text_secondary leading-relaxed">
@@ -1245,7 +1258,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 relative z-20">
             {[
               {
                 name: "JEE Main 2026",
@@ -1274,7 +1287,7 @@ export default function HomePage() {
             ].map((exam, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 bg-background border border-border rounded-xl"
+                className="flex items-center justify-between p-3 bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-xl transition-all"
               >
                 <div>
                   <h4 className="font-outfit font-bold text-xs text-text_primary">
@@ -1282,20 +1295,22 @@ export default function HomePage() {
                   </h4>
                   <p className="text-[10px] text-text_secondary font-semibold mt-0.5">
                     {exam.date} •{" "}
-                    <span className="text-primary">{exam.desc}</span>
+                    <span className="text-emerald-600 font-extrabold">
+                      {exam.desc}
+                    </span>
                   </p>
                 </div>
                 {exam.predictor ? (
                   <Link
                     href="/predictor"
-                    className="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-[9px] font-black transition-colors animate-pulse"
+                    className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-lg text-[9px] font-black tracking-wide transition-colors"
                   >
                     Predictor
                   </Link>
                 ) : (
                   <Link
                     href="/colleges"
-                    className="px-3 py-1.5 border border-border hover:bg-border/30 rounded-lg text-[9px] font-bold text-text_secondary transition-colors"
+                    className="px-3 py-1.5 border border-slate-200 hover:bg-slate-100 rounded-lg text-[9px] font-black text-slate-500 transition-colors"
                   >
                     View Details
                   </Link>
