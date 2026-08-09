@@ -2114,28 +2114,28 @@ export default function HomePage() {
           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-28 h-[360px] pointer-events-none hidden xl:block z-10">
             <div className="absolute top-4 left-0 w-14 h-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="/images/student_avatar_2.jpg"
+                src="/images/student_avatar_5.jpg"
                 alt="Student Pooja"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute top-28 right-4 w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 animate-pulse">
               <img
-                src="/images/student_avatar_1.jpg"
+                src="/images/student_avatar_6.jpg"
                 alt="Student Vikram"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-24 left-4 w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="/images/student_avatar_3.jpg"
+                src="/images/student_avatar_7.jpg"
                 alt="Student Abhishek"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-8 right-6 w-12 h-12 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="/images/student_avatar_4.jpg"
+                src="/images/student_avatar_8.jpg"
                 alt="Student Neha"
                 className="w-full h-full object-cover"
               />
