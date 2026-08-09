@@ -25,6 +25,7 @@ import {
   FlaskConical,
   Calendar,
   ChevronRight,
+  ChevronDown,
   Layers,
   Award,
   ChevronLeft,
@@ -338,6 +339,49 @@ export default function HomePage() {
     email: "",
     state: "",
   });
+
+  // Searchable State Dropdown States
+  const [showStateDropdown, setShowStateDropdown] = useState(false);
+  const [stateSearchQuery, setStateSearchQuery] = useState("");
+
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Delhi NCR",
+    "Jammu & Kashmir",
+    "Ladakh",
+    "Puducherry",
+    "Chandigarh",
+    "Andaman & Nicobar",
+    "Dadra & Nagar Haveli and Daman & Diu",
+    "Lakshadweep",
+  ];
 
   const [compareC1, setCompareC1] = useState("1");
   const [compareC2, setCompareC2] = useState("2");
@@ -2144,34 +2188,96 @@ export default function HomePage() {
                           />
                         </div>
 
-                        {/* Input 4: Select State */}
-                        <div>
-                          <select
-                            required
-                            value={formData.state}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                state: e.target.value,
-                              })
-                            }
-                            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 font-bold placeholder-slate-400 outline-none focus:border-blue-500 transition-all shadow-sm cursor-pointer appearance-none bg-[radial-gradient(circle_at_right_12px_center,transparent_4px,#475569_4px,transparent_6px)]"
+                        {/* Input 4: Searchable Custom Select State Dropdown */}
+                        <div className="relative">
+                          <label className="sr-only">Select State</label>
+                          <div
+                            onClick={() => {
+                              setShowStateDropdown(!showStateDropdown);
+                              setStateSearchQuery("");
+                            }}
+                            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 font-bold shadow-sm flex items-center justify-between cursor-pointer select-none"
                           >
-                            <option value="" disabled>
-                              Select state
-                            </option>
-                            <option>Bihar</option>
-                            <option>Delhi NCR</option>
-                            <option>Uttar Pradesh</option>
-                            <option>Jharkhand</option>
-                            <option>West Bengal</option>
-                            <option>Rajasthan</option>
-                            <option>Madhya Pradesh</option>
-                            <option>Maharashtra</option>
-                            <option>Karnataka</option>
-                            <option>Punjab</option>
-                            <option>Other State</option>
-                          </select>
+                            <span
+                              className={
+                                formData.state
+                                  ? "text-slate-800"
+                                  : "text-slate-400"
+                              }
+                            >
+                              {formData.state || "Select state"}
+                            </span>
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+                          </div>
+
+                          {showStateDropdown && (
+                            <>
+                              {/* Backdrop to dismiss */}
+                              <div
+                                className="fixed inset-0 z-40 cursor-default"
+                                onClick={() => setShowStateDropdown(false)}
+                              />
+
+                              {/* Dropdown Container */}
+                              <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden flex flex-col">
+                                {/* Search Box */}
+                                <div className="p-2 bg-slate-50 border-b border-slate-100">
+                                  <input
+                                    type="text"
+                                    placeholder="Search state..."
+                                    value={stateSearchQuery}
+                                    onChange={(e) =>
+                                      setStateSearchQuery(e.target.value)
+                                    }
+                                    className="w-full px-2.5 py-1.5 text-[11px] font-bold border border-slate-200 rounded-lg outline-none focus:border-blue-500 bg-white text-slate-800"
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                </div>
+
+                                {/* Scrollable List */}
+                                <div className="max-h-40 overflow-y-auto no-scrollbar py-1">
+                                  {indianStates.filter((state) =>
+                                    state
+                                      .toLowerCase()
+                                      .includes(stateSearchQuery.toLowerCase()),
+                                  ).length === 0 ? (
+                                    <div className="px-3.5 py-2 text-xs font-bold text-slate-400 text-center">
+                                      No states found
+                                    </div>
+                                  ) : (
+                                    indianStates
+                                      .filter((state) =>
+                                        state
+                                          .toLowerCase()
+                                          .includes(
+                                            stateSearchQuery.toLowerCase(),
+                                          ),
+                                      )
+                                      .map((state) => (
+                                        <button
+                                          key={state}
+                                          type="button"
+                                          onClick={() => {
+                                            setFormData({
+                                              ...formData,
+                                              state: state,
+                                            });
+                                            setShowStateDropdown(false);
+                                          }}
+                                          className={`w-full text-left px-3.5 py-2 text-xs font-bold transition-colors ${
+                                            formData.state === state
+                                              ? "bg-blue-50 text-blue-600"
+                                              : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                                          }`}
+                                        >
+                                          {state}
+                                        </button>
+                                      ))
+                                  )}
+                                </div>
+                              </div>
+                            </>
+                          )}
                         </div>
 
                         {/* Input 5: Select Course (Full width or grid) */}
