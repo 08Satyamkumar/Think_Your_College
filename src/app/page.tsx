@@ -2161,7 +2161,7 @@ export default function HomePage() {
       {/* FOOTER CALL-TO-ACTION COUNSELING */}
       {/* Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
-      <section className="bg-white border border-slate-100 p-8 md:p-12 rounded-[32px] grid grid-cols-1 lg:grid-cols-12 gap-10 items-center shadow-sm select-none">
+      <section className="bg-[#fff9f2] border border-orange-200/40 p-8 md:p-12 rounded-[32px] grid grid-cols-1 lg:grid-cols-12 gap-10 items-center shadow-sm select-none">
         {/* Left Column: Expert Badges and Contacts */}
         <div className="lg:col-span-6 space-y-6">
           <div className="space-y-3">
@@ -2176,7 +2176,7 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-3.5 max-w-md">
             {/* New Student */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <Phone className="w-4 h-4" />
               </div>
@@ -2189,7 +2189,7 @@ export default function HomePage() {
             </div>
 
             {/* Existing Student */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <PhoneCall className="w-4 h-4" />
               </div>
@@ -2202,7 +2202,7 @@ export default function HomePage() {
             </div>
 
             {/* For Existing Student (WhatsApp or secondary line) */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <PhoneCall className="w-4 h-4" />
               </div>
@@ -2215,7 +2215,7 @@ export default function HomePage() {
             </div>
 
             {/* Email */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <Mail className="w-4 h-4" />
               </div>
@@ -2228,7 +2228,7 @@ export default function HomePage() {
             </div>
 
             {/* Address */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <MapPin className="w-4 h-4" />
               </div>
@@ -2241,7 +2241,7 @@ export default function HomePage() {
             </div>
 
             {/* Visit Us */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <Clock className="w-4 h-4" />
               </div>
@@ -2254,7 +2254,7 @@ export default function HomePage() {
             </div>
 
             {/* Book Home Visit */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <Calendar className="w-4 h-4" />
               </div>
