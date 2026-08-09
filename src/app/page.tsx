@@ -851,6 +851,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* CONSOLIDATED EXPLORE HUB SECTION (Dynamic Tabbed Switcher: Cities / Exams / Courses) */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section
         id="explore-hub-section"
         className="space-y-8 select-none scroll-mt-28"
@@ -1256,6 +1258,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-6 lg:gap-8 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory">
         {/* WIDGET 1: COMPARE COLLEGES (INTERACTIVE WIDGET) */}
         <div className="w-[82vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-blue-500/20 hover:border-blue-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none">
@@ -1432,6 +1436,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* BIHAR STUDENT CREDIT CARD SPOTLIGHT BANNER */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="p-6 md:p-12 rounded-[28px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white relative overflow-hidden shadow-[0_10px_35px_rgba(234,88,12,0.22)] border border-orange-500/35">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_35%)]" />
 
@@ -1490,6 +1496,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* TRENDING COLLEGES */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -1626,6 +1634,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* EDUCATION LOAN & PARTNER BANKS SECTION */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="bg-[#032b53] border border-slate-800 rounded-[32px] p-6 md:p-12 text-white relative overflow-hidden shadow-xl select-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.1),transparent_40%)]" />
         {/* Shimmer Sheen Sweep */}
@@ -1956,6 +1966,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* STUDENT TESTIMONIALS SECTION */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="py-12 md:py-16 bg-white relative overflow-hidden select-none">
         {/* Quote Icon Header */}
         <div className="flex justify-center mb-3">
@@ -2147,6 +2159,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* FOOTER CALL-TO-ACTION COUNSELING */}
+      {/* Section Divider */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="bg-white border border-slate-100 p-8 md:p-12 rounded-[32px] grid grid-cols-1 lg:grid-cols-12 gap-10 items-center shadow-sm select-none">
         {/* Left Column: Expert Badges and Contacts */}
         <div className="lg:col-span-6 space-y-6">
