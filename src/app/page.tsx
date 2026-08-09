@@ -2268,11 +2268,17 @@ export default function HomePage() {
 
         {/* Right Column: Premium Generated Counseling Cartoon */}
         <div className="lg:col-span-6 flex justify-center items-center">
-          <img
-            src="/images/counseling_cartoon.jpg"
-            alt="Expert Counseling Guidance"
-            className="w-full max-w-md h-auto object-contain rounded-3xl shadow-lg hover:scale-105 transition-transform duration-500 border-4 border-slate-50"
-          />
+          <div className="relative w-full max-w-md group/img select-none">
+            {/* 3D Glow halo behind the card to integrate it into the saffron backdrop */}
+            <div className="absolute inset-2 bg-gradient-to-tr from-orange-400/20 to-amber-500/20 rounded-[32px] blur-2xl group-hover/img:scale-105 group-hover/img:blur-3xl transition-all duration-500" />
+
+            {/* The Image Card itself */}
+            <img
+              src="/images/counseling_cartoon.jpg"
+              alt="Expert Counseling Guidance"
+              className="relative z-10 w-full h-auto object-contain rounded-[24px] border border-orange-200/30 shadow-[0_15px_30px_rgba(244,121,32,0.06),0_10px_15px_-5px_rgba(0,0,0,0.04)] hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500"
+            />
+          </div>
         </div>
       </section>
       {/* POPUP COUNSELING FORM MODAL */}
