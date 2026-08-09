@@ -1968,7 +1968,7 @@ export default function HomePage() {
       {/* STUDENT TESTIMONIALS SECTION */}
       {/* Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
-      <section className="py-12 md:py-16 bg-white relative overflow-hidden select-none">
+      <section className="py-12 md:py-16 bg-gradient-to-br from-[#fff9f2] via-white to-[#fff3f0] border border-orange-150/20 rounded-[32px] shadow-sm relative overflow-hidden select-none">
         {/* Quote Icon Header */}
         <div className="flex justify-center mb-3">
           <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-serif text-xl font-bold">
