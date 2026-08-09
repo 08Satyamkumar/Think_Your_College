@@ -1549,197 +1549,193 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Bank Logos Grid (12 Premium Custom Bank Logo Cards with Interest Rates) */}
+            {/* Bank Logos Grid (12 Premium Custom Bank Logo Cards - Large & Shimmering) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
               {/* SBI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full border-[4px] border-[#00a9e0] relative flex items-center justify-center flex-shrink-0">
-                    <div className="absolute bottom-0 w-[3px] h-[7px] bg-white translate-y-[2px]" />
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "0s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="w-6 h-6 rounded-full border-[5px] border-[#00a9e0] relative flex items-center justify-center flex-shrink-0">
+                    <div className="absolute bottom-0 w-[4px] h-[8px] bg-white translate-y-[2px]" />
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[11px] text-[#003876] tracking-tight leading-none">
-                      SBI
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3% - 7%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[16px] text-[#003876] tracking-tight">
+                    SBI
+                  </span>
                 </div>
               </div>
 
               {/* HDFC */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="border-t-2 border-b-2 border-[#1c3f94] px-1 py-0.5 relative flex-shrink-0 w-8 flex justify-center">
-                    <div className="w-1 h-1 bg-[#e31e24] rounded-sm absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-                    <span className="font-extrabold text-[7px] text-[#1c3f94] tracking-tighter">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "0.2s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="border-t-[3px] border-b-[3px] border-[#1c3f94] px-1.5 py-0.5 relative flex-shrink-0 w-9 flex justify-center">
+                    <div className="w-1.5 h-1.5 bg-[#e31e24] rounded-sm absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                    <span className="font-extrabold text-[8px] text-[#1c3f94] tracking-tighter">
                       HDFC
                     </span>
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[10px] text-[#1c3f94] tracking-tight leading-none">
-                      HDFC
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3% - 7%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[13px] text-[#1c3f94] tracking-tight">
+                    HDFC BANK
+                  </span>
                 </div>
               </div>
 
               {/* Axis */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[8px] border-b-[#861a49] transform rotate-180 flex-shrink-0" />
-                  <div className="flex flex-col text-left">
-                    <span className="font-black text-[11px] text-[#861a49] tracking-tighter uppercase leading-none">
-                      Axis
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3% - 7%
-                    </span>
-                  </div>
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "0.4s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[11px] border-b-[#861a49] transform rotate-180 flex-shrink-0" />
+                  <span className="font-black text-[14px] text-[#861a49] tracking-tighter uppercase">
+                    Axis Bank
+                  </span>
                 </div>
               </div>
 
               {/* Kotak */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-4 h-4 rounded-full bg-[#da251c] flex items-center justify-center text-white font-black text-[7px] flex-shrink-0">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "0.6s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <span className="w-5 h-5 rounded-full bg-[#da251c] flex items-center justify-center text-white font-black text-[9px] flex-shrink-0">
                     K
                   </span>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[11px] text-[#054381] tracking-tight leading-none">
-                      kotak
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3.5% - 7%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[15px] text-[#054381] tracking-tight">
+                    kotak
+                  </span>
                 </div>
               </div>
 
               {/* PNB */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 bg-[#a32035] rounded flex items-center justify-center text-white border-b-2 border-[#f2a900] flex-shrink-0">
-                    <span className="font-black text-[6.5px]">pnb</span>
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "0.8s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="w-5 h-5 bg-[#a32035] rounded flex items-center justify-center text-white border-b-2 border-[#f2a900] flex-shrink-0">
+                    <span className="font-black text-[8px]">pnb</span>
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[11px] text-[#a32035] tracking-tight leading-none">
-                      PNB
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3% - 7%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[15px] text-[#a32035] tracking-tight">
+                    PNB
+                  </span>
                 </div>
               </div>
 
               {/* BOB */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 rounded-full bg-[#f47920] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "1.0s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="w-5 h-5 rounded-full bg-[#f47920] flex items-center justify-center text-white font-black text-[9px] flex-shrink-0">
                     B
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[11px] text-[#0f2c59] tracking-tight leading-none">
-                      Baroda
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3.5% - 7.25%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[14px] text-[#0f2c59] tracking-tighter">
+                    Baroda
+                  </span>
                 </div>
               </div>
 
               {/* Canara */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex flex-col text-left justify-center">
-                  <span className="font-extrabold text-[11px] text-[#006ca7] tracking-tight leading-none">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "1.2s" }}
+                />
+                <div className="flex flex-col items-center justify-center relative z-20">
+                  <span className="font-extrabold text-[14px] text-[#006ca7] tracking-tight">
                     Canara Bank
                   </span>
-                  <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                    Interest: 3% - 7.15%
-                  </span>
+                  <div className="w-10 h-1 bg-[#ffcc00] rounded-full mt-1" />
                 </div>
               </div>
 
               {/* IDFC */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex flex-col text-left justify-center">
-                  <span className="font-black text-[10px] text-[#8c2230] tracking-tight leading-none">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "1.4s" }}
+                />
+                <div className="flex flex-col items-center justify-center relative z-20">
+                  <span className="font-black text-[13px] text-[#8c2230] tracking-tight leading-none">
                     IDFC FIRST
                   </span>
-                  <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                    Interest: 3% - 7%
+                  <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest mt-1">
+                    Bank
                   </span>
                 </div>
               </div>
 
               {/* CBI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 rounded-full bg-[#0060a9] flex items-center justify-center text-white font-black text-[7px] flex-shrink-0">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "1.6s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="w-5 h-5 rounded-full bg-[#0060a9] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">
                     C
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[10px] text-[#0060a9] tracking-tight leading-none">
-                      Central
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 2.9% - 7%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[14px] text-[#0060a9] tracking-tighter">
+                    Central Bank
+                  </span>
                 </div>
               </div>
 
               {/* BOI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#003c71] font-black text-[11px] transform rotate-12 flex-shrink-0">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "1.8s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <span className="text-[#003c71] font-black text-[14px] transform rotate-12 flex-shrink-0">
                     ★
                   </span>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[10px] text-[#003c71] tracking-tighter leading-none">
-                      BOI
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 3% - 7%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[13px] text-[#003c71] tracking-tighter">
+                    Bank of India
+                  </span>
                 </div>
               </div>
 
               {/* Union */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex flex-col text-left justify-center">
-                  <span className="font-extrabold text-[11px] text-[#ec1c24] tracking-tighter leading-none">
-                    Union Bank
-                  </span>
-                  <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                    Interest: 3% - 7%
-                  </span>
-                </div>
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "2.0s" }}
+                />
+                <span className="font-extrabold text-[14px] text-[#ec1c24] tracking-tighter relative z-20">
+                  Union Bank
+                </span>
               </div>
 
               {/* Indian Bank */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-14 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 rounded-full bg-[#005ba4] relative flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-black text-[6.5px]">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                  style={{ animationDelay: "2.2s" }}
+                />
+                <div className="flex items-center gap-2 relative z-20">
+                  <div className="w-5 h-5 rounded-full bg-[#005ba4] relative flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-black text-[7.5px]">
                       I
                     </span>
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-extrabold text-[10px] text-[#005ba4] tracking-tight leading-none">
-                      Indian
-                    </span>
-                    <span className="text-[7.5px] text-slate-400 font-extrabold mt-0.5 whitespace-nowrap">
-                      Interest: 2.9% - 7.05%
-                    </span>
-                  </div>
+                  <span className="font-extrabold text-[14px] text-[#005ba4] tracking-tight">
+                    Indian Bank
+                  </span>
                 </div>
               </div>
             </div>
