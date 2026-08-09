@@ -1969,40 +1969,40 @@ export default function HomePage() {
           </h2>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 md:px-12 flex items-center justify-center">
-          {/* Left Floating Student Avatars (Visible on wide screens) */}
+        <div className="relative max-w-[95vw] sm:max-w-7xl mx-auto px-2 md:px-12 flex items-center justify-center">
+          {/* Left Floating Indian Student Avatars (Visible on wide screens) */}
           <div className="absolute left-0 top-1/2 -translate-y-1/2 w-28 h-[360px] pointer-events-none hidden xl:block z-10">
             <div className="absolute top-4 right-0 w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 animate-pulse">
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+                src="https://images.unsplash.com/photo-1597969892064-a7b26a98c335?w=150&auto=format&fit=crop&q=80"
                 alt="Student Ratri"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute top-28 left-4 w-12 h-12 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80"
-                alt="Student Amit"
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+                alt="Student Aman"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-24 right-4 w-14 h-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80"
-                alt="Student Priya"
+                src="https://images.unsplash.com/photo-1622557840137-414d9d980093?w=150&auto=format&fit=crop&q=80"
+                alt="Student Sneha"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-6 left-6 w-10 h-10 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80"
-                alt="Student Rohan"
+                src="https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?w=150&auto=format&fit=crop&q=80"
+                alt="Student Rahul"
                 className="w-full h-full object-cover"
               />
             </div>
           </div>
 
-          {/* Left Arrow (Only visible on tablet/mobile when scrolling is possible) */}
+          {/* Left Arrow */}
           <button
             onClick={() => {
               const el = document.getElementById(
@@ -2010,84 +2010,91 @@ export default function HomePage() {
               );
               if (el) el.scrollBy({ left: -340, behavior: "smooth" });
             }}
-            className="absolute left-2 z-20 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 active:bg-orange-600 active:text-white lg:hidden cursor-pointer"
+            className="absolute -left-1 sm:left-2 z-35 w-9 h-9 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:bg-orange-500 hover:text-white active:scale-95 transition-all cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          {/* Testimonials Scroll Container */}
+          {/* Testimonials Scroll Container - 10 Indian Reviews */}
           <div
             id="student-testimonials-carousel"
-            className="flex lg:grid lg:grid-cols-3 overflow-x-auto lg:overflow-x-visible no-scrollbar snap-x snap-mandatory gap-6 w-full max-w-5xl mx-auto py-2 scroll-smooth relative z-20"
+            className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-6 w-full max-w-5xl mx-auto py-4 px-4 scroll-smooth relative z-20"
           >
-            {/* Card 1 */}
-            <div className="bg-[#f0f4f8] rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-sm min-w-[290px] sm:min-w-[320px] lg:min-w-0 snap-start snap-always relative overflow-hidden select-none hover:shadow-md transition-shadow">
-              <span className="text-slate-300 font-serif text-6xl absolute -top-1 left-2 select-none pointer-events-none">
-                “
-              </span>
-              <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-semibold relative z-10 pt-4">
-                College 19 has helped me in selecting my perfect college along
-                with course. After 12 in Science with Biology and no interest in
-                the medical field, I didn't know which course to select and in
-                which college. College 19's face to face free Counselling has
-                helped me in choosing my right career path.
-              </p>
-              <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col">
-                <span className="font-outfit font-black text-xs md:text-sm text-slate-800 uppercase tracking-wide">
-                  Ratri Paul
-                </span>
-                <span className="text-[10px] text-slate-400 font-extrabold uppercase mt-0.5">
-                  B.Sc Student
-                </span>
-              </div>
-            </div>
+            {[
+              {
+                name: "Ratri Paul",
+                course: "B.Sc Student",
+                text: "College 19 has helped me in selecting my perfect college along with course. After 12 in Science with Biology and no interest in the medical field, I didn't know which course to select and in which college. College 19's face to face free Counselling has helped me in choosing my right career path.",
+              },
+              {
+                name: "Saikat Saha",
+                course: "B.Tech Aspirant",
+                text: "Being a remote student, I was clueless after class 12 in choosing my career path, but College 19's Counselling for Remote Candidates' service has helped me in sorting out my colleges and choose my course. They have also provided me with GD and PI training.",
+              },
+              {
+                name: "Ankita Mondal",
+                course: "Arts Student",
+                text: "I did my HS in Computer Science but have no interest in Engineering and also did not want to pursue an Honours course. I took College 19's face to face counselling service and got to know my strength in arts subjects. They guided me to pursue arts from a reputed college.",
+              },
+              {
+                name: "Aman Kumar",
+                course: "MBA Student",
+                text: "I was confused between PGDM and MBA. College 19 expert counselors analyzed my profile and CAT score, and guided me to select the top colleges matching my budget. The scholarship guidance they gave helped me save ₹1.5 Lakhs on fees.",
+              },
+              {
+                name: "Sneha Kumari",
+                course: "MBBS Aspirant",
+                text: "Cracking NEET was hard, but choosing the right medical college with my rank was harder. College 19's detailed seat analysis and documentation checklist made my admission in B.Sc Nursing/MBBS smooth. Truly grateful to the team.",
+              },
+              {
+                name: "Rahul Verma",
+                course: "BCA Student",
+                text: "College 19's portal helped me compare fees, placements, and hostel facilities of 10+ colleges in just 5 minutes. Their helpline answered all my questions about Bihar Student Credit Card and admission quotas.",
+              },
+              {
+                name: "Pooja Sharma",
+                course: "BBA Student",
+                text: "The counseling session with College 19 changed my perspective. They conducted a mock interview for my college entry and guided me step-by-step with the documentation and registration.",
+              },
+              {
+                name: "Vikram Singh",
+                course: "Law Student",
+                text: "I wanted to pursue law but wasn't sure about the integrated course options. College 19 counselors explained the difference between BA LLB and BBA LLB. Thanks to them, I secured admission in a top university.",
+              },
+              {
+                name: "Neha Raj",
+                course: "B.Sc Nursing Student",
+                text: "Getting admission under Bihar Student Credit Card scheme was a dream. College 19 helped me throughout the college selection, verification, and DRCC registration. Best free counseling service in India!",
+              },
+              {
+                name: "Abhishek Mishra",
+                course: "MCA Student",
+                text: "Highly professional and transparent. They didn't push any particular colleges, they actually listened to my career goals and suggested options where I got placed successfully. 100% recommended!",
+              },
+            ].map((review, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-50 border border-slate-150 p-6 md:p-7 flex flex-col justify-between w-[290px] h-[290px] sm:w-[320px] sm:h-[320px] shrink-0 snap-start snap-always relative overflow-hidden select-none rounded-xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1.5 hover:rotate-[0.5deg] hover:border-orange-500 hover:shadow-[0_10px_25px_-5px_rgba(249,115,22,0.15)] group bg-white"
+              >
+                {/* Background Shimmer sweep on card hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent w-[50%] h-[200%] pointer-events-none translate-x-[-100%] group-hover:animate-shimmer-sheen z-10" />
 
-            {/* Card 2 */}
-            <div className="bg-[#f0f4f8] rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-sm min-w-[290px] sm:min-w-[320px] lg:min-w-0 snap-start snap-always relative overflow-hidden select-none hover:shadow-md transition-shadow">
-              <span className="text-slate-300 font-serif text-6xl absolute -top-1 left-2 select-none pointer-events-none">
-                “
-              </span>
-              <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-semibold relative z-10 pt-4">
-                Being a remote student, I was clueless after class 12 in
-                choosing my career path, but College 19's Counselling for Remote
-                Candidates' service has helped me in sorting out my colleges and
-                choose my course. They have also provided me with GD and PI
-                training and have also helped me fill in the application form.
-              </p>
-              <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col">
-                <span className="font-outfit font-black text-xs md:text-sm text-slate-800 uppercase tracking-wide">
-                  Saikat Saha
+                <span className="text-slate-200 font-serif text-5xl absolute -top-1 left-2 select-none pointer-events-none">
+                  “
                 </span>
-                <span className="text-[10px] text-slate-400 font-extrabold uppercase mt-0.5">
-                  B.Tech Aspirant
-                </span>
+                <p className="text-[11.5px] sm:text-xs text-slate-600 leading-relaxed font-semibold relative z-10 pt-4 overflow-y-auto no-scrollbar max-h-[170px] sm:max-h-[190px]">
+                  {review.text}
+                </p>
+                <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col relative z-20 bg-slate-50 group-hover:bg-white/10 transition-colors">
+                  <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide">
+                    {review.name}
+                  </span>
+                  <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5">
+                    {review.course}
+                  </span>
+                </div>
               </div>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-[#f0f4f8] rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-sm min-w-[290px] sm:min-w-[320px] lg:min-w-0 snap-start snap-always relative overflow-hidden select-none hover:shadow-md transition-shadow">
-              <span className="text-slate-300 font-serif text-6xl absolute -top-1 left-2 select-none pointer-events-none">
-                “
-              </span>
-              <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-semibold relative z-10 pt-4">
-                I did my HS in Computer Science but have no interest in
-                Engineering and also did not want to pursue an Honours course. I
-                took College 19's face to face counselling service and got to
-                know my strength in arts subjects. They have also helped me in
-                choosing the right college and have guided me to pursue other
-                vocational courses by side. I am grateful for their Counselling
-                at Doorstep service as my parents also got convinced and let me
-                pursue arts from a reputed college.
-              </p>
-              <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col">
-                <span className="font-outfit font-black text-xs md:text-sm text-slate-800 uppercase tracking-wide">
-                  Ankita Mondal
-                </span>
-                <span className="text-[10px] text-slate-400 font-extrabold uppercase mt-0.5">
-                  Arts Student
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Right Arrow */}
@@ -2098,38 +2105,38 @@ export default function HomePage() {
               );
               if (el) el.scrollBy({ left: 340, behavior: "smooth" });
             }}
-            className="absolute right-2 z-20 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 active:bg-orange-600 active:text-white lg:hidden cursor-pointer"
+            className="absolute -right-1 sm:right-2 z-35 w-9 h-9 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:bg-orange-500 hover:text-white active:scale-95 transition-all cursor-pointer"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
 
-          {/* Right Floating Student Avatars (Visible on wide screens) */}
+          {/* Right Floating Indian Student Avatars (Visible on wide screens) */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-28 h-[360px] pointer-events-none hidden xl:block z-10">
             <div className="absolute top-4 left-0 w-14 h-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80"
-                alt="Student Srishti"
+                src="https://images.unsplash.com/photo-1594744803329-e58b31de215f?w=150&auto=format&fit=crop&q=80"
+                alt="Student Pooja"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute top-28 right-4 w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 animate-pulse">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
-                alt="Student Dev"
+                src="https://images.unsplash.com/photo-1589386760074-903a556c1e57?w=150&auto=format&fit=crop&q=80"
+                alt="Student Vikram"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-24 left-4 w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
-                alt="Student Sunny"
+                src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80"
+                alt="Student Abhishek"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-8 right-6 w-12 h-12 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80"
-                alt="Student Tanya"
+                src="https://images.unsplash.com/photo-1594744803329-e58b31de215f?w=150&auto=format&fit=crop&q=80"
+                alt="Student Neha"
                 className="w-full h-full object-cover"
               />
             </div>
