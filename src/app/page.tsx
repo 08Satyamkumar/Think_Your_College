@@ -2074,22 +2074,22 @@ export default function HomePage() {
             ].map((review, idx) => (
               <div
                 key={idx}
-                className="bg-slate-50 border border-slate-150 p-6 md:p-7 flex flex-col justify-between w-[290px] h-[290px] sm:w-[320px] sm:h-[320px] shrink-0 snap-start snap-always relative overflow-hidden select-none rounded-xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1.5 hover:rotate-[0.5deg] hover:border-orange-500 hover:shadow-[0_10px_25px_-5px_rgba(249,115,22,0.15)] group bg-white"
+                className="group bg-[#eef2f6] border border-slate-200/60 p-6 md:p-7 flex flex-col justify-between w-[290px] h-[290px] sm:w-[320px] sm:h-[320px] shrink-0 snap-start snap-always relative overflow-hidden select-none rounded-xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1.5 hover:rotate-[0.5deg] hover:bg-[#f47920] hover:border-orange-600 hover:shadow-[0_12px_30px_-5px_rgba(244,121,32,0.35)]"
               >
                 {/* Background Shimmer sweep on card hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent w-[50%] h-[200%] pointer-events-none translate-x-[-100%] group-hover:animate-shimmer-sheen z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-[50%] h-[200%] pointer-events-none translate-x-[-100%] group-hover:animate-shimmer-sheen z-10" />
 
-                <span className="text-slate-200 font-serif text-5xl absolute -top-1 left-2 select-none pointer-events-none">
+                <span className="text-slate-300 font-serif text-6xl absolute -top-1 left-2 select-none pointer-events-none transition-colors duration-300 group-hover:text-white/20">
                   “
                 </span>
-                <p className="text-[11.5px] sm:text-xs text-slate-600 leading-relaxed font-semibold relative z-10 pt-4 overflow-y-auto no-scrollbar max-h-[170px] sm:max-h-[190px]">
+                <p className="text-[11.5px] sm:text-xs text-slate-600 leading-relaxed font-semibold relative z-10 pt-4 overflow-y-auto no-scrollbar max-h-[170px] sm:max-h-[190px] transition-colors duration-300 group-hover:text-white">
                   {review.text}
                 </p>
-                <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col relative z-20 bg-slate-50 group-hover:bg-white/10 transition-colors">
-                  <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide">
+                <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col relative z-20 transition-all duration-300 group-hover:border-white/20">
+                  <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide transition-colors duration-300 group-hover:text-white">
                     {review.name}
                   </span>
-                  <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5">
+                  <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5 transition-colors duration-300 group-hover:text-orange-100">
                     {review.course}
                   </span>
                 </div>
