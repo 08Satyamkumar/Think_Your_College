@@ -253,6 +253,7 @@ export default function LayoutWrapper({
         },
         body: JSON.stringify({
           name: alertName,
+          email: alertEmail || null,
           phone: alertPhone,
           course_interest: `${alertStream} (${alertLevel})`,
           college_interest: "General Inquiry (Global Popup)",
