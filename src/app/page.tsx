@@ -2035,52 +2035,13 @@ export default function HomePage() {
                     </p>
 
                     {/* Premium Security / Register Illustration */}
-                    <svg
-                      viewBox="0 0 200 200"
-                      className="w-40 h-40 text-blue-600/10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="100" cy="100" r="80" fill="currentColor" />
-                      <rect
-                        x="60"
-                        y="80"
-                        width="80"
-                        height="70"
-                        rx="8"
-                        fill="white"
-                        stroke="#032b53"
-                        strokeWidth="3"
+                    <div className="w-full flex justify-center items-center pt-2">
+                      <img
+                        src="/images/register_illustration.jpg"
+                        alt="Register Guidance Illustration"
+                        className="w-full h-auto max-h-56 object-contain rounded-2xl hover:scale-105 transition-transform duration-300"
                       />
-                      <circle
-                        cx="100"
-                        cy="115"
-                        r="12"
-                        fill="#e6f9f0"
-                        stroke="#00a9e0"
-                        strokeWidth="2"
-                      />
-                      <path
-                        d="M75 80V60C75 46.19 86.19 35 100 35C113.81 35 125 46.19 125 60V80"
-                        stroke="#032b53"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                      />
-                      <circle
-                        cx="140"
-                        cy="65"
-                        r="15"
-                        fill="#f47920"
-                        className="animate-pulse"
-                      />
-                      <path
-                        d="M136 65L139 68L145 62"
-                        stroke="white"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    </div>
                   </div>
 
                   {/* Right Pane (Light Green Dynamic Form) */}
