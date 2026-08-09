@@ -26,6 +26,9 @@ import {
   Calendar,
   ChevronRight,
   ChevronDown,
+  Clock,
+  PhoneCall,
+  Mail,
   Layers,
   Award,
   ChevronLeft,
@@ -2144,87 +2147,118 @@ export default function HomePage() {
         </div>
       </section>
       {/* FOOTER CALL-TO-ACTION COUNSELING */}
-      <section className="bg-card border border-border p-8 md:p-12 rounded-3xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div className="lg:col-span-7 space-y-4">
-          <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
-            Still Confused About Your College?
-          </h2>
-          <p className="text-sm text-text_secondary max-w-lg leading-relaxed">
-            Fill in your details and let our expert advisors call you back
-            within 15 minutes. We help you choose the best college based on your
-            exam scores, location, and fees.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 pt-2">
-            <div className="flex items-center gap-2 text-sm text-text_primary font-bold">
-              <CheckCircle className="w-5 h-5 text-emerald-500" />
-              100% Free Counseling
+      <section className="bg-white border border-slate-100 p-8 md:p-12 rounded-[32px] grid grid-cols-1 lg:grid-cols-12 gap-10 items-center shadow-sm select-none">
+        {/* Left Column: Expert Badges and Contacts */}
+        <div className="lg:col-span-6 space-y-6">
+          <div className="space-y-3">
+            <h2 className="font-outfit font-black text-2xl md:text-4xl text-slate-800 leading-tight">
+              Still Confused About Your College?
+            </h2>
+            <p className="text-xs md:text-sm text-slate-400 font-extrabold uppercase tracking-wider leading-relaxed">
+              Get Personalized Guidance From Industry Experts To Help You Choose
+              The Right Course And Career Path.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3.5 max-w-md">
+            {/* New Student */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <Phone className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
+                New Student:{" "}
+                <span className="text-orange-500 font-sans">
+                  +91-9973798413
+                </span>
+              </span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-text_primary font-bold">
-              <CheckCircle className="w-5 h-5 text-emerald-500" />
-              Guaranteed Direct Admission Info
+
+            {/* Existing Student */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <PhoneCall className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
+                Existing Student:{" "}
+                <span className="text-orange-500 font-sans">
+                  +91-9973798413
+                </span>
+              </span>
+            </div>
+
+            {/* For Existing Student (WhatsApp or secondary line) */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <PhoneCall className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
+                For Existing Student:{" "}
+                <span className="text-orange-500 font-sans">
+                  +91-9973798413
+                </span>
+              </span>
+            </div>
+
+            {/* Email */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <Mail className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
+                Email:{" "}
+                <span className="text-orange-500 font-sans font-extrabold uppercase">
+                  info@thinkyourcollege.com
+                </span>
+              </span>
+            </div>
+
+            {/* Address */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide truncate">
+                Address:{" "}
+                <span className="text-slate-600">
+                  Boring Road Crossing, Patna, Bihar
+                </span>
+              </span>
+            </div>
+
+            {/* Visit Us */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <Clock className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
+                Visit Us:{" "}
+                <span className="text-slate-600 font-sans">
+                  (10 AM To 7 PM)
+                </span>
+              </span>
+            </div>
+
+            {/* Book Home Visit */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#eef2f6] border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
+              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
+                Book:{" "}
+                <span className="text-slate-600">Home Visit Guidance</span>
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-5 bg-background border border-border p-6 rounded-2xl shadow-sm">
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs text-text_secondary font-bold">
-                Student Name
-              </label>
-              <input
-                required
-                type="text"
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-card text-sm text-text_primary outline-none focus:border-primary transition-colors"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-text_secondary font-bold">
-                  Mobile Number
-                </label>
-                <input
-                  required
-                  type="tel"
-                  placeholder="Enter 10-digit number"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-card text-sm text-text_primary outline-none focus:border-primary transition-colors"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-text_secondary font-bold">
-                  Target Course
-                </label>
-                <select
-                  value={formData.stream}
-                  onChange={(e) =>
-                    setFormData({ ...formData, stream: e.target.value })
-                  }
-                  className="w-full mt-1.5 px-3.5 py-2.5 border border-border rounded-xl bg-card text-sm text-text_primary outline-none focus:border-primary transition-colors"
-                >
-                  <option>Engineering</option>
-                  <option>Medical</option>
-                  <option>Management</option>
-                  <option>Law</option>
-                </select>
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="w-full py-3 bg-primary hover:bg-primary_hover text-white font-bold text-sm rounded-xl active:scale-95 transition-all shadow-md shadow-primary/10 flex items-center justify-center gap-2"
-            >
-              <Phone className="w-4 h-4" />
-              Request Free Call Back
-            </button>
-          </form>
+        {/* Right Column: Premium Generated Counseling Cartoon */}
+        <div className="lg:col-span-6 flex justify-center items-center">
+          <img
+            src="/images/counseling_cartoon.jpg"
+            alt="Expert Counseling Guidance"
+            className="w-full max-w-md h-auto object-contain rounded-3xl shadow-lg hover:scale-105 transition-transform duration-500 border-4 border-slate-50"
+          />
         </div>
       </section>
       {/* POPUP COUNSELING FORM MODAL */}
