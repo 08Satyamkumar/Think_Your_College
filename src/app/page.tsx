@@ -1674,7 +1674,7 @@ export default function HomePage() {
           <img
             src="/logo.png"
             alt="College 19"
-            className="h-10 w-auto object-contain brightness-0 invert"
+            className="h-10 w-auto object-contain"
           />
         </div>
 
@@ -1683,7 +1683,7 @@ export default function HomePage() {
           <img
             src="/logo.png"
             alt="College 19"
-            className="h-12 w-auto object-contain brightness-0 invert"
+            className="h-12 w-auto object-contain"
           />
           <span className="text-[8px] uppercase tracking-[0.25em] font-extrabold text-white/90 mt-1.5">
             Review & Reward
