@@ -1664,74 +1664,74 @@ export default function HomePage() {
       {/* REVIEW & EARN REWARDS BANNER */}
       {/* Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
-      <section className="relative overflow-hidden rounded-[32px] border border-slate-200/40 shadow-sm flex flex-col md:flex-row items-stretch select-none bg-[#032b53] text-white min-h-[160px]">
-        {/* Diagonal Slanted Left Brand Accent (Vibrant Saffron Gradient) */}
-        <div className="absolute top-0 left-0 bottom-0 w-[32%] bg-gradient-to-br from-[#f47920] to-[#ffaa44] [clip-path:polygon(0_0,100%_0,82%_100%,0_100%)] hidden md:block z-10" />
+      <section className="relative overflow-hidden rounded-[32px] border border-slate-200/40 shadow-sm flex flex-col md:flex-row items-stretch select-none bg-[#032b53] text-white min-h-[220px] md:min-h-[260px] py-8 md:py-10">
+        {/* Diagonal Slanted Left Brand Accent (Solid Saffron matching Header Logo exactly) */}
+        <div className="absolute top-0 left-0 bottom-0 w-[35%] bg-[#f47920] [clip-path:polygon(0_0,100%_0,82%_100%,0_100%)] hidden md:block z-10" />
 
         {/* Mobile Brand Accent */}
-        <div className="w-full h-20 bg-gradient-to-r from-[#f47920] to-[#ffaa44] flex md:hidden items-center justify-center relative overflow-hidden z-10">
+        <div className="w-full h-24 bg-[#f47920] flex md:hidden items-center justify-center relative overflow-hidden z-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_60%)]" />
           <img
             src="/logo.png"
             alt="College 19"
-            className="h-10 w-auto object-contain"
+            className="h-14 w-auto object-contain"
           />
         </div>
 
         {/* Brand Logo Container on Left (Desktop) */}
-        <div className="absolute top-0 left-0 bottom-0 w-[30%] hidden md:flex flex-col items-center justify-center z-20 pl-6">
+        <div className="absolute top-0 left-0 bottom-0 w-[32%] hidden md:flex flex-col items-center justify-center z-20 pl-8">
           <img
             src="/logo.png"
             alt="College 19"
-            className="h-12 w-auto object-contain"
+            className="h-20 w-auto object-contain"
           />
-          <span className="text-[8px] uppercase tracking-[0.25em] font-extrabold text-white/90 mt-1.5">
+          <span className="text-[9px] uppercase tracking-[0.25em] font-black text-white/90 mt-2">
             Review & Reward
           </span>
         </div>
 
         {/* Right/Center Content */}
-        <div className="flex-1 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 md:pl-[35%]">
+        <div className="flex-1 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10 md:pl-[38%]">
           {/* Background ambient light */}
           <div className="absolute right-0 bottom-0 w-44 h-44 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Middle Text Details */}
-          <div className="flex-1 text-center md:text-left space-y-2">
-            <span className="inline-block px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[8.5px] font-black uppercase tracking-wider text-orange-200">
+          <div className="flex-1 text-center md:text-left space-y-3">
+            <span className="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] font-black uppercase tracking-wider text-orange-200">
               ⚡ Approval In 30 Minutes*
             </span>
-            <h3 className="font-outfit font-black text-xl md:text-2xl tracking-wide text-white leading-tight">
+            <h3 className="font-outfit font-black text-2xl md:text-3xl tracking-wide text-white leading-snug">
               Write A Review & Earn Upto{" "}
               <span className="text-yellow-300">₹1000</span>
             </h3>
 
             {/* CTA Button */}
-            <div className="pt-1.5">
+            <div className="pt-2">
               <Link
                 href="/colleges"
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white font-black text-[10px] uppercase tracking-wider rounded-xl active:scale-95 shadow-md shadow-red-500/10 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white font-black text-[11px] uppercase tracking-wider rounded-xl active:scale-95 shadow-md shadow-red-500/10 transition-all cursor-pointer"
               >
-                <FileText className="w-3.5 h-3.5" />
+                <FileText className="w-4 h-4" />
                 Write Now
               </Link>
             </div>
           </div>
 
           {/* Right Side Image/Icon (Thumbs Up & Stars) */}
-          <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 relative md:pr-4">
+          <div className="flex-shrink-0 flex flex-col items-center justify-center gap-2 relative md:pr-6">
             {/* Glowing aura */}
-            <div className="absolute inset-0 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute inset-0 bg-yellow-400/15 rounded-full blur-2xl pointer-events-none" />
 
             <div className="relative z-10 flex flex-col items-center">
               {/* Rating stars */}
-              <div className="flex gap-1 mb-1 animate-[bounce_4s_ease-in-out_infinite]">
-                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 -rotate-12 scale-90" />
-                <Star className="w-4.5 h-4.5 fill-yellow-400 text-yellow-400 scale-110" />
-                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 rotate-12 scale-90" />
+              <div className="flex gap-1.5 mb-1.5 animate-[bounce_4s_ease-in-out_infinite]">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 -rotate-12 scale-90" />
+                <Star className="w-5.5 h-5.5 fill-yellow-400 text-yellow-400 scale-110" />
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 rotate-12 scale-90" />
               </div>
               {/* Custom Thumbs Up Badges */}
-              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg backdrop-blur-md hover:scale-105 transition-transform duration-300">
-                <span className="text-2xl leading-none">👍</span>
+              <div className="w-18 h-18 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg backdrop-blur-md hover:scale-105 transition-transform duration-300">
+                <span className="text-3xl leading-none">👍</span>
               </div>
             </div>
           </div>
