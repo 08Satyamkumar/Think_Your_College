@@ -25,6 +25,11 @@ import {
   GraduationCap,
   Link as LinkIcon,
   CheckCircle,
+  Lock,
+  Unlock,
+  LogOut,
+  Edit,
+  Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -536,6 +541,156 @@ function CollegesListContent() {
   >([]);
   const [sortBy, setSortBy] = useState("popularity");
   const [shortlisted, setShortlisted] = useState<string[]>([]);
+
+  // Admin Login and Card Editing States
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminUser, setAdminUser] = useState("");
+  const [adminPass, setAdminPass] = useState("");
+  const [adminError, setAdminError] = useState("");
+  const [editingCollege, setEditingCollege] = useState<any | null>(null);
+
+  // Prefilled Edit Fields
+  const [editName, setEditName] = useState("");
+  const [editLocation, setEditLocation] = useState("");
+  const [editCity, setEditCity] = useState("");
+  const [editState, setEditState] = useState("");
+  const [editOwnership, setEditOwnership] = useState("");
+  const [editRating, setEditRating] = useState("");
+  const [editNIRFRank, setEditNIRFRank] = useState("");
+  const [editCoursesCount, setEditCoursesCount] = useState("");
+  const [editExamsAccepted, setEditExamsAccepted] = useState("");
+  const [editTuitionFees, setEditTuitionFees] = useState("");
+  const [editImageUrl, setEditImageUrl] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+
+  const [isUpdatingCollege, setIsUpdatingCollege] = useState(false);
+
+  // Initialize Admin State from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedAdmin = localStorage.getItem("think_college_admin");
+      if (savedAdmin === "true") {
+        setIsAdmin(true);
+      }
+    }
+  }, []);
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminUser === "Samrat1311" && adminPass === "1311161161") {
+      setIsAdmin(true);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("think_college_admin", "true");
+      }
+      setShowAdminLogin(false);
+      setAdminError("");
+      setAdminUser("");
+      setAdminPass("");
+    } else {
+      setAdminError("Invalid Username or Password.");
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdmin(false);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("think_college_admin");
+    }
+  };
+
+  const startEditing = (college: any) => {
+    setEditingCollege(college);
+    setEditName(college.name);
+    setEditLocation(college.location || "");
+    setEditCity(college.city || "");
+    setEditState(college.state || "");
+    setEditOwnership(college.type || "Private");
+    setEditRating(college.rating.toString());
+    setEditNIRFRank(college.nirfRank ? college.nirfRank.toString() : "");
+    setEditCoursesCount(
+      college.courses && college.courses[0] ? college.courses[0] : "",
+    );
+    setEditExamsAccepted(
+      college.exams && college.exams[0] !== "None"
+        ? college.exams.join(", ")
+        : "",
+    );
+    setEditTuitionFees(college.feeRange || "");
+    setEditImageUrl(college.image_url || "");
+    setEditDescription(college.description || "");
+  };
+
+  const handleSaveChanges = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCollege) return;
+    setIsUpdatingCollege(true);
+    try {
+      const res = await fetch("/api/colleges/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: "Samrat1311",
+          password: "1311161161",
+          slug: editingCollege.slug,
+          updatedFields: {
+            name: editName,
+            location: editLocation,
+            city: editCity,
+            state: editState,
+            ownership: editOwnership,
+            rating: editRating,
+            nirf_rank: editNIRFRank || "N/A",
+            courses_count: editCoursesCount,
+            exams_accepted: editExamsAccepted,
+            tuition_fees: editTuitionFees,
+            image_url: editImageUrl,
+            description: editDescription,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        // Mutate local state array instantly
+        setCollegesList((prevList) =>
+          prevList.map((c) => {
+            if (c.id === editingCollege.id) {
+              const examsArr = editExamsAccepted
+                ? editExamsAccepted.split(",").map((e) => e.trim())
+                : [];
+              return {
+                ...c,
+                name: editName,
+                location: editLocation,
+                city: editCity,
+                state: editState,
+                type: editOwnership,
+                rating: parseFloat(editRating) || 4.2,
+                nirfRank: editNIRFRank
+                  ? parseInt(editNIRFRank.replace(/[^0-9]/g, ""))
+                  : undefined,
+                courses: [editCoursesCount || "Courses"],
+                exams: examsArr.length > 0 ? examsArr : ["None"],
+                feeRange: editTuitionFees,
+                image_url: editImageUrl,
+                description: editDescription,
+              };
+            }
+            return c;
+          }),
+        );
+        setEditingCollege(null);
+      } else {
+        const errData = await res.json();
+        alert(errData.error || "Failed to update college details.");
+      }
+    } catch (err) {
+      console.error("Save error:", err);
+      alert("Network error updating college details.");
+    } finally {
+      setIsUpdatingCollege(false);
+    }
+  };
 
   // New filters states from GetMyUni screenshots
   const [selectedProgramModes, setSelectedProgramModes] = useState<string[]>(
@@ -6897,8 +7052,9 @@ function CollegesListContent() {
               type: c.ownership || "Private",
               description: c.description || "",
               logoText: logo || "COL",
-              slug: c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-              accreditation: "AICTE Approved",
+              slug: c.slug || c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+              accreditation: c.accreditation || "AICTE Approved",
+              image_url: c.image_url || "",
             };
           });
           setCollegesList(mapped);
@@ -7929,6 +8085,36 @@ function CollegesListContent() {
             </AnimatePresence>
           </div>
         </div>
+
+        {/* Admin Login Portal Link */}
+        <div className="pt-4 border-t border-slate-100 flex items-center justify-center select-none mt-2">
+          {isAdmin ? (
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5" />
+                Logged in as Admin
+              </span>
+              <button
+                onClick={handleAdminLogout}
+                className="text-[9px] font-black text-red-500 hover:text-red-600 uppercase tracking-widest flex items-center gap-1 hover:underline cursor-pointer"
+              >
+                <LogOut className="w-3 h-3" />
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setAdminError("");
+                setShowAdminLogin(true);
+              }}
+              className="text-[10px] font-black text-slate-400 hover:text-orange-500 uppercase tracking-widest flex items-center gap-1.5 hover:underline cursor-pointer"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              Admin Access
+            </button>
+          )}
+        </div>
       </div>
     );
   };
@@ -8198,6 +8384,19 @@ function CollegesListContent() {
                     >
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      {/* ADMIN EDIT CARD ICON TRIGGER */}
+                      {isAdmin && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startEditing(college);
+                          }}
+                          className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-orange-100 hover:bg-orange-600 text-orange-600 hover:text-white transition-all cursor-pointer shadow-sm border border-orange-200"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
+                      )}
 
                       {/* LEFT PANEL: LOGO & RANKING BADGES */}
                       <div className="col-span-12 lg:col-span-3 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-200/60 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
@@ -8591,6 +8790,308 @@ function CollegesListContent() {
                   </div>
                 </a>
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ADMIN ACCESS LOGIN MODAL */}
+      <AnimatePresence>
+        {showAdminLogin && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl relative border border-slate-100"
+            >
+              <button
+                onClick={() => setShowAdminLogin(false)}
+                className="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-50 cursor-pointer"
+              >
+                <X className="w-4.5 h-4.5" />
+              </button>
+
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div className="text-center space-y-1">
+                  <h3 className="font-outfit font-black text-xl text-slate-800">
+                    Admin Authentication
+                  </h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Provide secure console key
+                  </p>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Username
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Enter admin username"
+                      value={adminUser}
+                      onChange={(e) => setAdminUser(e.target.value)}
+                      className="w-full mt-1 px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Password
+                    </label>
+                    <input
+                      required
+                      type="password"
+                      placeholder="Enter admin password"
+                      value={adminPass}
+                      onChange={(e) => setAdminPass(e.target.value)}
+                      className="w-full mt-1 px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {adminError && (
+                  <p className="text-[10px] text-red-500 font-bold text-center mt-1">
+                    {adminError}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.99] cursor-pointer"
+                >
+                  Verify Access
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ADMIN EDIT CARD MODAL */}
+      <AnimatePresence>
+        {editingCollege && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-xl bg-white rounded-3xl p-6 shadow-2xl relative border border-slate-100 my-8 max-h-[90vh] overflow-y-auto no-scrollbar"
+            >
+              <button
+                onClick={() => setEditingCollege(null)}
+                className="absolute top-5 right-5 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-50 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <form onSubmit={handleSaveChanges} className="space-y-4">
+                <div className="border-b border-slate-100 pb-3">
+                  <h3 className="font-outfit font-black text-lg text-slate-800">
+                    Edit College Card
+                  </h3>
+                  <p className="text-[10px] font-bold text-orange-500">
+                    Updating slug: {editingCollege.slug}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      College Name *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Image URL / Path
+                    </label>
+                    <input
+                      type="text"
+                      value={editImageUrl}
+                      onChange={(e) => setEditImageUrl(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Location *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={editLocation}
+                      onChange={(e) => setEditLocation(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      City *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={editCity}
+                      onChange={(e) => setEditCity(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      State *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={editState}
+                      onChange={(e) => setEditState(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Ownership *
+                    </label>
+                    <select
+                      value={editOwnership}
+                      onChange={(e) => setEditOwnership(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    >
+                      <option value="Private">Private</option>
+                      <option value="Public">Public</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Rating *
+                    </label>
+                    <input
+                      required
+                      type="number"
+                      step="0.1"
+                      min="1"
+                      max="5"
+                      value={editRating}
+                      onChange={(e) => setEditRating(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      NIRF Rank
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 23"
+                      value={editNIRFRank}
+                      onChange={(e) => setEditNIRFRank(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Courses Count
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 5 Courses"
+                      value={editCoursesCount}
+                      onChange={(e) => setEditCoursesCount(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Exams Accepted (comma-sep)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. JEE Main, DASA"
+                      value={editExamsAccepted}
+                      onChange={(e) => setEditExamsAccepted(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Tuition Fees *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. ₹2.2 Lakhs/Yr"
+                      value={editTuitionFees}
+                      onChange={(e) => setEditTuitionFees(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                    About/Description *
+                  </label>
+                  <textarea
+                    required
+                    rows={3}
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
+                  />
+                </div>
+
+                <div className="pt-2 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setEditingCollege(null)}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isUpdatingCollege}
+                    className="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    {isUpdatingCollege ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        Save Changes
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
