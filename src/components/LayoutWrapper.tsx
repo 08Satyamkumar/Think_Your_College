@@ -235,7 +235,7 @@ export default function LayoutWrapper({
   // ══════════════════════════════════════════
   //      ADMISSION ALERTS POPUP STATE & LOGIC
   // ══════════════════════════════════════════
-  const [isAlertOpen, setIsAlertOpen] = useState(true);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertName, setAlertName] = useState("");
   const [alertEmail, setAlertEmail] = useState("");
   const [alertPhone, setAlertPhone] = useState("");
@@ -287,7 +287,8 @@ export default function LayoutWrapper({
     setIsAlertSubscribed(true);
   };
 
-  // Auto-reopen alert popup if closed and not subscribed (every 20 seconds)
+  // Auto-reopen alert popup if closed and not subscribed (disabled during development/staging)
+  /*
   useEffect(() => {
     if (!isAlertOpen && !isAlertSubscribed) {
       const timer = setTimeout(() => {
@@ -296,6 +297,7 @@ export default function LayoutWrapper({
       return () => clearTimeout(timer);
     }
   }, [isAlertOpen, isAlertSubscribed]);
+  */
 
   // MBA Mega Menu Sub-tabs structure matching screenshot (nested for multi-column grids)
   const mbaTabs: Record<string, MegaSubCategory[]> = {
