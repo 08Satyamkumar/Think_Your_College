@@ -567,6 +567,160 @@ function CollegesListContent() {
 
   const [isUpdatingCollege, setIsUpdatingCollege] = useState(false);
 
+  // States for Add College operation
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addName, setAddName] = useState("");
+  const [addLocation, setAddLocation] = useState("");
+  const [addCity, setAddCity] = useState("");
+  const [addState, setAddState] = useState("");
+  const [addOwnership, setAddOwnership] = useState("Private");
+  const [addRating, setAddRating] = useState("4.0");
+  const [addNIRFRank, setAddNIRFRank] = useState("");
+  const [addCoursesCount, setAddCoursesCount] = useState("1 Courses");
+  const [addExamsAccepted, setAddExamsAccepted] = useState("None");
+  const [addTuitionFees, setAddTuitionFees] = useState("-/-");
+  const [addImageUrl, setAddImageUrl] = useState("");
+  const [addDescription, setAddDescription] = useState("");
+  const [isAddingCollege, setIsAddingCollege] = useState(false);
+
+  const handleDeleteCollege = async (college: any) => {
+    if (
+      !window.confirm(
+        `Are you absolutely sure you want to delete ${college.name} permanently? This will remove it from Supabase.`,
+      )
+    )
+      return;
+    try {
+      const res = await fetch("/api/colleges/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: "Samrat1311",
+          password: "1311161161",
+          slug: college.slug,
+        }),
+      });
+
+      if (res.ok) {
+        setCollegesList((prevList) =>
+          prevList.filter((c) => c.id !== college.id),
+        );
+        setTotalCount((prev) => prev - 1);
+      } else {
+        const err = await res.json();
+        alert(err.error || "Failed to delete college.");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Network error deleting college.");
+    }
+  };
+
+  const handleAddCollegeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAddingCollege(true);
+
+    // Generate slug
+    const slug = addName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+    // Serialize description and accreditation
+    const serializedDesc = JSON.stringify({
+      description: addDescription,
+      accreditation: "AICTE Approved",
+    });
+
+    try {
+      const res = await fetch("/api/colleges/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: "Samrat1311",
+          password: "1311161161",
+          collegeData: {
+            name: addName,
+            location: addLocation,
+            city: addCity,
+            state: addState,
+            ownership: addOwnership,
+            rating: addRating,
+            nirf_rank: addNIRFRank || "N/A",
+            courses_count: addCoursesCount,
+            exams_accepted: addExamsAccepted,
+            tuition_fees: addTuitionFees,
+            image_url: addImageUrl,
+            description: serializedDesc,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const newCol = data.college;
+        if (newCol) {
+          const examsArr = addExamsAccepted
+            ? addExamsAccepted.split(",").map((e) => e.trim())
+            : [];
+          const logo = addName
+            .split(" ")
+            .map((w) => w[0])
+            .join("")
+            .substring(0, 3)
+            .toUpperCase();
+
+          setCollegesList((prev) => [
+            {
+              id: newCol.id,
+              name: addName,
+              location: addLocation,
+              state: addState,
+              city: addCity,
+              stream: getStreamFromCollegeName(addName),
+              courses: [addCoursesCount || "Courses"],
+              specializations: [],
+              exams: examsArr.length > 0 ? examsArr : ["None"],
+              feeRange: addTuitionFees,
+              fees: 0,
+              rating: parseFloat(addRating) || 4.0,
+              nirfRank: addNIRFRank
+                ? parseInt(addNIRFRank.replace(/[^0-9]/g, ""))
+                : undefined,
+              type: addOwnership,
+              description: addDescription,
+              logoText: logo || "COL",
+              slug: slug,
+              accreditation: "AICTE Approved",
+              image_url: addImageUrl,
+            },
+            ...prev,
+          ]);
+          setTotalCount((prev) => prev + 1);
+        }
+        setShowAddModal(false);
+        // Reset form
+        setAddName("");
+        setAddLocation("");
+        setAddCity("");
+        setAddState("");
+        setAddOwnership("Private");
+        setAddRating("4.0");
+        setAddNIRFRank("");
+        setAddCoursesCount("1 Courses");
+        setAddExamsAccepted("None");
+        setAddTuitionFees("-/-");
+        setAddImageUrl("");
+        setAddDescription("");
+      } else {
+        const err = await res.json();
+        alert(err.error || "Failed to add college.");
+      }
+    } catch (err) {
+      console.error("Add error:", err);
+      alert("Network error adding college.");
+    } finally {
+      setIsAddingCollege(false);
+    }
+  };
+
   // Initialize Admin State from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -8159,6 +8313,14 @@ function CollegesListContent() {
             <h1 className="font-outfit font-black text-2xl md:text-3xl text-slate-800 leading-tight mt-1 flex items-center gap-2">
               <Award className="w-7 h-7 text-orange-500" />
               Showing {totalCount} Colleges
+              {isAdmin && (
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="ml-3 px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-[9px] uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer flex items-center gap-1.5"
+                >
+                  ➕ Add New College
+                </button>
+              )}
             </h1>
           </div>
 
@@ -8409,17 +8571,30 @@ function CollegesListContent() {
                       {/* Premium AI Glowing Top Accent Line */}
                       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                      {/* ADMIN EDIT CARD ICON TRIGGER */}
+                      {/* ADMIN CARD CONTROL TRIGGERS */}
                       {isAdmin && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            startEditing(college);
-                          }}
-                          className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-orange-100 hover:bg-orange-600 text-orange-600 hover:text-white transition-all cursor-pointer shadow-sm border border-orange-200"
-                        >
-                          <Edit className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="absolute top-4 right-4 z-30 flex gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startEditing(college);
+                            }}
+                            className="p-2 rounded-xl bg-orange-100 hover:bg-orange-600 text-orange-600 hover:text-white transition-all cursor-pointer shadow-sm border border-orange-200"
+                            title="Edit College details"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCollege(college);
+                            }}
+                            className="p-2 rounded-xl bg-red-100 hover:bg-red-600 text-red-600 hover:text-white transition-all cursor-pointer shadow-sm border border-red-200"
+                            title="Delete College permanently"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       )}
 
                       {/* LEFT PANEL: LOGO & RANKING BADGES */}
@@ -8888,6 +9063,238 @@ function CollegesListContent() {
                 >
                   Verify Access
                 </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ADMIN ADD COLLEGE MODAL */}
+      <AnimatePresence>
+        {showAddModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-xl bg-white rounded-3xl p-6 shadow-2xl relative border border-slate-100 my-8 max-h-[90vh] overflow-y-auto no-scrollbar"
+            >
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="absolute top-5 right-5 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-50 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <form onSubmit={handleAddCollegeSubmit} className="space-y-4">
+                <div className="border-b border-slate-100 pb-3">
+                  <h3 className="font-outfit font-black text-lg text-slate-800">
+                    Add New College
+                  </h3>
+                  <p className="text-[10px] font-bold text-emerald-500">
+                    Insert record into Supabase in real-time
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      College Name *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. IIT Patna"
+                      value={addName}
+                      onChange={(e) => setAddName(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Image URL / Path
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. /images/iit-patna.jpg"
+                      value={addImageUrl}
+                      onChange={(e) => setAddImageUrl(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Location *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Patna, Bihar"
+                      value={addLocation}
+                      onChange={(e) => setAddLocation(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      City *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Patna"
+                      value={addCity}
+                      onChange={(e) => setAddCity(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      State *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Bihar"
+                      value={addState}
+                      onChange={(e) => setAddState(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Ownership *
+                    </label>
+                    <select
+                      value={addOwnership}
+                      onChange={(e) => setAddOwnership(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    >
+                      <option value="Private">Private</option>
+                      <option value="Public">Public</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Rating *
+                    </label>
+                    <input
+                      required
+                      type="number"
+                      step="0.1"
+                      min="1"
+                      max="5"
+                      value={addRating}
+                      onChange={(e) => setAddRating(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      NIRF Rank
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 52"
+                      value={addNIRFRank}
+                      onChange={(e) => setAddNIRFRank(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Courses Count
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 6 Courses"
+                      value={addCoursesCount}
+                      onChange={(e) => setAddCoursesCount(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Exams Accepted (comma-sep)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. JEE Main, JEE Advanced"
+                      value={addExamsAccepted}
+                      onChange={(e) => setAddExamsAccepted(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Tuition Fees *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. ₹2.0 Lakhs/Yr"
+                      value={addTuitionFees}
+                      onChange={(e) => setAddTuitionFees(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                    About/Description
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Describe the newly added institution..."
+                    value={addDescription}
+                    onChange={(e) => setAddDescription(e.target.value)}
+                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
+                  />
+                </div>
+
+                <div className="pt-2 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddModal(false)}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isAddingCollege}
+                    className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    {isAddingCollege ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Adding...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        Create Record
+                      </>
+                    )}
+                  </button>
+                </div>
               </form>
             </motion.div>
           </div>
