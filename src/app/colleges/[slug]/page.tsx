@@ -1344,10 +1344,9 @@ export default function CollegeDetailPage() {
 
                 <div>
                   <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                    About/Description *
+                    About/Description
                   </label>
                   <textarea
-                    required
                     rows={4}
                     value={editAboutText}
                     onChange={(e) => setEditAboutText(e.target.value)}

@@ -563,6 +563,7 @@ function CollegesListContent() {
   const [editTuitionFees, setEditTuitionFees] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [editAccreditation, setEditAccreditation] = useState("");
 
   const [isUpdatingCollege, setIsUpdatingCollege] = useState(false);
 
@@ -619,6 +620,7 @@ function CollegesListContent() {
     setEditTuitionFees(college.feeRange || "");
     setEditImageUrl(college.image_url || "");
     setEditDescription(college.description || "");
+    setEditAccreditation(college.accreditation || "AICTE Approved");
   };
 
   const handleSaveChanges = async (e: React.FormEvent) => {
@@ -626,6 +628,11 @@ function CollegesListContent() {
     if (!editingCollege) return;
     setIsUpdatingCollege(true);
     try {
+      const serializedDesc = JSON.stringify({
+        description: editDescription,
+        accreditation: editAccreditation,
+      });
+
       const res = await fetch("/api/colleges/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -645,7 +652,7 @@ function CollegesListContent() {
             exams_accepted: editExamsAccepted,
             tuition_fees: editTuitionFees,
             image_url: editImageUrl,
-            description: editDescription,
+            description: serializedDesc,
           },
         }),
       });
@@ -674,6 +681,7 @@ function CollegesListContent() {
                 feeRange: editTuitionFees,
                 image_url: editImageUrl,
                 description: editDescription,
+                accreditation: editAccreditation,
               };
             }
             return c;
@@ -7032,6 +7040,22 @@ function CollegesListContent() {
               .join("")
               .substring(0, 3)
               .toUpperCase();
+            let displayDesc = c.description || "";
+            let displayAccreditation = "AICTE Approved";
+            if (
+              displayDesc.trim().startsWith("{") &&
+              displayDesc.trim().endsWith("}")
+            ) {
+              try {
+                const parsed = JSON.parse(displayDesc);
+                displayDesc = parsed.description || parsed.about || "";
+                displayAccreditation =
+                  parsed.accreditation ||
+                  parsed.accreditation_details ||
+                  "AICTE Approved";
+              } catch (e) {}
+            }
+
             return {
               id: c.id,
               name: c.name,
@@ -7050,10 +7074,10 @@ function CollegesListContent() {
                   ? parseInt(c.nirf_rank.replace(/[^0-9]/g, ""))
                   : undefined,
               type: c.ownership || "Private",
-              description: c.description || "",
+              description: displayDesc,
               logoText: logo || "COL",
               slug: c.slug || c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-              accreditation: c.accreditation || "AICTE Approved",
+              accreditation: displayAccreditation,
               image_url: c.image_url || "",
             };
           });
@@ -9023,7 +9047,7 @@ function CollegesListContent() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
                       Exams Accepted (comma-sep)
@@ -9050,14 +9074,26 @@ function CollegesListContent() {
                       className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
                     />
                   </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Accreditation
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. AICTE APPROVED"
+                      value={editAccreditation}
+                      onChange={(e) => setEditAccreditation(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                    About/Description *
+                    About/Description
                   </label>
                   <textarea
-                    required
                     rows={3}
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
