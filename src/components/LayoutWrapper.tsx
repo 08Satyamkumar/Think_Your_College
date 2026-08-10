@@ -3586,7 +3586,7 @@ export default function LayoutWrapper({
               </button>
 
               {/* LEFT SIDE PANEL (Saffron Banner - col-span-5) */}
-              <div className="col-span-12 md:col-span-5 bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 md:p-8 flex flex-col justify-between relative overflow-hidden select-none">
+              <div className="col-span-12 md:col-span-5 bg-gradient-to-br from-[#f97e2f] to-[#ffaa66] text-white p-6 md:p-8 flex flex-col justify-between relative overflow-hidden select-none">
                 {/* Background decorative blobs */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
                 <div className="absolute -bottom-10 -left-10 w-44 h-44 bg-black/10 rounded-full blur-2xl" />
