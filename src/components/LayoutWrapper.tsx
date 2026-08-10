@@ -45,6 +45,27 @@ export default function LayoutWrapper({
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
+  const [menuHoverTimeout, setMenuHoverTimeout] =
+    useState<NodeJS.Timeout | null>(null);
+
+  const handleCategoryMouseEnter = (category: string) => {
+    if (menuHoverTimeout) clearTimeout(menuHoverTimeout);
+    if (activeMegaMenu && activeMegaMenu !== category) {
+      // If a menu is already open, apply a small hover intent delay (120ms) to prevent accidental switching
+      const timeout = setTimeout(() => {
+        setActiveMegaMenu(category);
+      }, 120);
+      setMenuHoverTimeout(timeout);
+    } else {
+      // Open immediately if no menu is open, or if it is the same category
+      setActiveMegaMenu(category);
+    }
+  };
+
+  const handleMenuMouseLeave = () => {
+    if (menuHoverTimeout) clearTimeout(menuHoverTimeout);
+    setActiveMegaMenu(null);
+  };
   const [searchQuery, setSearchQuery] = useState("");
   const [activeMbaTab, setActiveMbaTab] = useState("Top Ranked Colleges");
   const [activeEngTab, setActiveEngTab] = useState("Top Ranked Colleges");
@@ -1748,7 +1769,7 @@ export default function LayoutWrapper({
       {/* SHIKSHA SCREENSHOT MATCHING DOUBLE-ROW HEADER */}
       <header
         className="fixed top-0 left-0 right-0 bg-brand_header text-white z-40 shadow-md transition-colors border-b border-white/10"
-        onMouseLeave={() => setActiveMegaMenu(null)}
+        onMouseLeave={handleMenuMouseLeave}
       >
         {/* ROW 1: TOP ROW (Logo, Wide Search Bar, Login/Sign Up) */}
         <div className="h-16 max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
@@ -1863,7 +1884,7 @@ export default function LayoutWrapper({
                 <div
                   key={category}
                   className="h-full flex items-center"
-                  onMouseEnter={() => setActiveMegaMenu(category)}
+                  onMouseEnter={() => handleCategoryMouseEnter(category)}
                 >
                   <button
                     onClick={() =>
@@ -1896,841 +1917,687 @@ export default function LayoutWrapper({
               </div>
             </div>
           </div>
-          {/* ROW 3: SLEEK SUB-HEADER RIBBON (News, Exams, Reviews etc) */}
-          <div className="relative bg-slate-50 border-t border-b border-slate-200/80">
-            <div className="max-w-[1440px] mx-auto px-4 md:px-12 flex items-center justify-between gap-4 h-9 overflow-x-auto no-scrollbar scroll-smooth">
-              {/* Left/Center side links */}
-              <div className="flex items-center gap-1 md:gap-2 h-full min-w-max">
-                {/* Top Colleges */}
-                <Link
-                  href="/colleges"
-                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
-                >
-                  Top Colleges
-                </Link>
-                <div className="w-[1px] h-3 bg-slate-200" />
+        </div>
+        {/* ROW 3: SLEEK SUB-HEADER RIBBON (News, Exams, Reviews etc) */}
+        <div className="relative bg-slate-50 border-t border-b border-slate-200/80">
+          <div className="max-w-[1440px] mx-auto px-4 md:px-12 flex items-center justify-between gap-4 h-9 overflow-x-auto no-scrollbar scroll-smooth">
+            {/* Left/Center side links */}
+            <div className="flex items-center gap-1 md:gap-2 h-full min-w-max">
+              {/* Top Colleges */}
+              <Link
+                href="/colleges"
+                className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+              >
+                Top Colleges
+              </Link>
+              <div className="w-[1px] h-3 bg-slate-200" />
 
-                {/* Top Courses */}
-                <Link
-                  href="/colleges"
-                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
-                >
-                  Top Courses
-                </Link>
-                <div className="w-[1px] h-3 bg-slate-200" />
+              {/* Top Courses */}
+              <Link
+                href="/colleges"
+                className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+              >
+                Top Courses
+              </Link>
+              <div className="w-[1px] h-3 bg-slate-200" />
 
-                {/* Entrance Exams */}
-                <Link
-                  href="/colleges"
-                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
-                >
-                  Entrance Exams
-                </Link>
-                <div className="w-[1px] h-3 bg-slate-200" />
+              {/* Entrance Exams */}
+              <Link
+                href="/colleges"
+                className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+              >
+                Entrance Exams
+              </Link>
+              <div className="w-[1px] h-3 bg-slate-200" />
 
-                {/* Boards */}
-                <Link
-                  href="/colleges"
-                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
-                >
-                  Boards
-                </Link>
-                <div className="w-[1px] h-3 bg-slate-200" />
+              {/* Boards */}
+              <Link
+                href="/colleges"
+                className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+              >
+                Boards
+              </Link>
+              <div className="w-[1px] h-3 bg-slate-200" />
 
-                {/* Admission 2026 (Opens the Admission Alerts popup!) */}
-                <button
-                  onClick={() => setIsAlertOpen(true)}
-                  className="flex items-center gap-1.5 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap group"
-                >
-                  <span>Admission 2026</span>
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500"></span>
-                  </span>
-                </button>
-                <div className="w-[1px] h-3 bg-slate-200" />
+              {/* Admission 2026 (Opens the Admission Alerts popup!) */}
+              <button
+                onClick={() => setIsAlertOpen(true)}
+                className="flex items-center gap-1.5 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap group"
+              >
+                <span>Admission 2026</span>
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500"></span>
+                </span>
+              </button>
+              <div className="w-[1px] h-3 bg-slate-200" />
 
-                {/* News & Articles */}
-                <Link
-                  href="/colleges"
-                  className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
-                >
-                  News
-                </Link>
-              </div>
+              {/* News & Articles */}
+              <Link
+                href="/colleges"
+                className="flex items-center gap-1 px-3 h-full text-[10px] font-black tracking-wider text-slate-600 hover:text-orange-600 transition-colors uppercase whitespace-nowrap"
+              >
+                News
+              </Link>
+            </div>
 
-              {/* Right side: Write a Review button */}
-              <div className="flex items-center h-full flex-shrink-0">
-                <Link
-                  href="/colleges"
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-md border border-orange-500 hover:bg-orange-50 text-[9px] font-black tracking-wider text-orange-600 uppercase transition-all whitespace-nowrap shadow-sm hover:shadow active:scale-95"
-                >
-                  <Star className="w-2.5 h-2.5 fill-current" />
-                  Write a Review
-                </Link>
-              </div>
+            {/* Right side: Write a Review button */}
+            <div className="flex items-center h-full flex-shrink-0">
+              <Link
+                href="/colleges"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-md border border-orange-500 hover:bg-orange-50 text-[9px] font-black tracking-wider text-orange-600 uppercase transition-all whitespace-nowrap shadow-sm hover:shadow active:scale-95"
+              >
+                <Star className="w-2.5 h-2.5 fill-current" />
+                Write a Review
+              </Link>
             </div>
           </div>
+        </div>
 
-          {/* Mega Menu Dropdown Panels (Rendered outside overflow-x-auto so they pop out unclipped) */}
-          <div
-            className="relative max-w-[1440px] mx-auto"
-            onMouseLeave={() => setActiveMegaMenu(null)}
-          >
-            {/* MEGA MENU DROPDOWN PANEL FOR MBA */}
-            <AnimatePresence>
-              {activeMegaMenu === "MBA" && (
-                <div
-                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
-                  onMouseEnter={() => setActiveMegaMenu("MBA")}
+        {/* Mega Menu Dropdown Panels (Rendered outside overflow-x-auto so they pop out unclipped) */}
+        <div
+          className="relative max-w-[1440px] mx-auto"
+          onMouseLeave={handleMenuMouseLeave}
+        >
+          {/* MEGA MENU DROPDOWN PANEL FOR MBA */}
+          <AnimatePresence>
+            {activeMegaMenu === "MBA" && (
+              <div
+                className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
+                onMouseEnter={() => setActiveMegaMenu("MBA")}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                  exit={{
+                    opacity: 0,
+                    y: 10,
+                    scale: 0.97,
+                    transition: { duration: 0.15 },
+                  }}
+                  transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                  style={{ transformOrigin: "top center", perspective: 1000 }}
+                  className="w-full bg-white/95 backdrop-blur-xl border border-amber-100/40 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.15)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
                 >
-                  <motion.div
-                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
-                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                    exit={{
-                      opacity: 0,
-                      y: 10,
-                      scale: 0.97,
-                      transition: { duration: 0.15 },
-                    }}
-                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
-                    style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 backdrop-blur-xl border border-amber-100/40 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.15)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
-                  >
-                    {/* Floating Glowing Gradient border at top */}
-                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 shadow-[0_1px_10px_rgba(245,158,11,0.5)] z-20" />
+                  {/* Floating Glowing Gradient border at top */}
+                  <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 shadow-[0_1px_10px_rgba(245,158,11,0.5)] z-20" />
 
-                    {/* Dynamic Animated Glass Ambient Background */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
-                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(245,158,11,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
-                      <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-amber-500/8 dark:bg-amber-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
-                      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-indigo-500/8 dark:bg-indigo-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
-                    </div>
+                  {/* Dynamic Animated Glass Ambient Background */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(245,158,11,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
+                    <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-amber-500/8 dark:bg-amber-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                    <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-indigo-500/8 dark:bg-indigo-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
+                  </div>
 
-                    {/* Left Column: Vertical Sub-Tabs Menu */}
-                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
-                      {Object.keys(mbaTabs).map((tabName) => {
-                        const TabIcon = mbaTabIcons[tabName] || Award;
-                        const isActive = activeMbaTab === tabName;
-                        return (
-                          <button
-                            key={tabName}
-                            onClick={() => setActiveMbaTab(tabName)}
-                            onMouseEnter={() => setActiveMbaTab(tabName)}
-                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
-                              isActive
-                                ? "bg-gradient-to-r from-amber-500/10 to-orange-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-amber-500/5"
-                                : "text-text_secondary hover:bg-amber-500/5 hover:text-text_primary hover:translate-x-0.5"
-                            }`}
-                          >
-                            <TabIcon
-                              className={`w-3.5 h-3.5 ${isActive ? "text-primary animate-pulse" : "text-slate-400 dark:text-slate-500"}`}
-                            />
-                            {tabName}
-                          </button>
-                        );
-                      })}
-                    </div>
+                  {/* Left Column: Vertical Sub-Tabs Menu */}
+                  <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
+                    {Object.keys(mbaTabs).map((tabName) => {
+                      const TabIcon = mbaTabIcons[tabName] || Award;
+                      const isActive = activeMbaTab === tabName;
+                      return (
+                        <button
+                          key={tabName}
+                          onClick={() => setActiveMbaTab(tabName)}
+                          onMouseEnter={() => setActiveMbaTab(tabName)}
+                          className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
+                            isActive
+                              ? "bg-gradient-to-r from-amber-500/10 to-orange-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-amber-500/5"
+                              : "text-text_secondary hover:bg-amber-500/5 hover:text-text_primary hover:translate-x-0.5"
+                          }`}
+                        >
+                          <TabIcon
+                            className={`w-3.5 h-3.5 ${isActive ? "text-primary animate-pulse" : "text-slate-400 dark:text-slate-500"}`}
+                          />
+                          {tabName}
+                        </button>
+                      );
+                    })}
+                  </div>
 
-                    {/* Middle Column: Dynamic Link Lists */}
-                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                  {/* Middle Column: Dynamic Link Lists */}
+                  <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-                      <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                        {activeMbaTab}
-                      </h4>
+                    <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      {activeMbaTab}
+                    </h4>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
-                        {mbaTabs[activeMbaTab]?.map((subCat, idx) => (
-                          <div key={idx} className="space-y-3">
-                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-amber-600 border-b border-amber-100/50 pb-1 flex items-center gap-1">
-                              {subCat.heading}
-                            </h5>
-                            <ul className="space-y-2">
-                              {subCat.links.map((link, lIdx) => (
-                                <li key={lIdx}>
-                                  <Link
-                                    href={link.href}
-                                    onClick={() => setActiveMegaMenu(null)}
-                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
-                                  >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
-                                    <span className="flex-1 line-clamp-1">
-                                      {link.name}
-                                    </span>
-                                    {link.name.endsWith(">") ? null : (
-                                      <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
-                                    )}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right Column: Featured Colleges */}
-                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
-                      <div>
-                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
-                          <Award className="w-3.5 h-3.5 text-amber-500" />
-                          Top MBA Choices
-                        </h4>
-                        <div className="space-y-3">
-                          {[
-                            {
-                              name: "IIM Ahmedabad",
-                              rate: "4.9",
-                              rank: "NIRF #1",
-                              slug: "iim-ahmedabad",
-                              color: "from-amber-500 to-orange-600",
-                            },
-                            {
-                              name: "IIM Bangalore",
-                              rate: "4.8",
-                              rank: "NIRF #2",
-                              slug: "iim-bangalore",
-                              color: "from-indigo-500 to-purple-600",
-                            },
-                            {
-                              name: "SIBM Pune",
-                              rate: "4.6",
-                              rank: "NIRF #17",
-                              slug: "sibm-pune",
-                              color: "from-emerald-500 to-teal-600",
-                            },
-                          ].map((c, idx) => (
-                            <Link
-                              key={idx}
-                              href={`/colleges/${c.slug}`}
-                              onClick={() => setActiveMegaMenu(null)}
-                              className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
-                            >
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
-                                >
-                                  {c.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
-                                    {c.name}
-                                  </p>
-                                  <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
-                                    <span className="text-amber-500">
-                                      ★ {c.rate}
-                                    </span>
-                                    <span>•</span>
-                                    <span className="text-primary">
-                                      {c.rank}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Link
-                        href="/colleges?stream=Management"
-                        onClick={() => setActiveMegaMenu(null)}
-                        className="mt-4 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
-                      >
-                        Explore All Colleges
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                </div>
-              )}
-            </AnimatePresence>
-
-            {/* MEGA MENU DROPDOWN PANEL FOR MORE */}
-            <AnimatePresence>
-              {activeMegaMenu === "MORE" && (
-                <div
-                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
-                  onMouseEnter={() => setActiveMegaMenu("MORE")}
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
-                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                    exit={{
-                      opacity: 0,
-                      y: 10,
-                      scale: 0.97,
-                      transition: { duration: 0.15 },
-                    }}
-                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
-                    style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 backdrop-blur-xl border border-amber-100/40 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
-                  >
-                    {/* Floating Glowing Gradient border at top */}
-                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 shadow-[0_1px_10px_rgba(245,158,11,0.5)] z-20" />
-
-                    {/* Dynamic Animated Glass Ambient Background */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
-                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(245,158,11,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
-                      <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-amber-500/8 dark:bg-amber-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
-                      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-orange-500/8 dark:bg-orange-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
-                    </div>
-
-                    {/* Left Column: Vertical Sub-Tabs Menu */}
-                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
-                      {Object.keys(moreTabs).map((tabName) => {
-                        const TabIcon = Award;
-                        const isActive = activeMoreTab === tabName;
-                        return (
-                          <button
-                            key={tabName}
-                            onClick={() => setActiveMoreTab(tabName)}
-                            onMouseEnter={() => setActiveMoreTab(tabName)}
-                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
-                              isActive
-                                ? "bg-gradient-to-r from-amber-500/10 to-orange-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-amber-500/5"
-                                : "text-text_secondary hover:bg-amber-500/5 hover:text-text_primary hover:translate-x-0.5"
-                            }`}
-                          >
-                            <TabIcon
-                              className={`w-3.5 h-3.5 ${
-                                isActive
-                                  ? "text-primary animate-pulse"
-                                  : "text-slate-400 dark:text-slate-500"
-                              }`}
-                            />
-                            {tabName}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Middle Column: Dynamic Link Lists */}
-                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-                      <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                        {activeMoreTab}
-                      </h4>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
-                        {moreTabs[activeMoreTab]?.map((subCat, idx) => (
-                          <div key={idx} className="space-y-3">
-                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-orange-600 border-b border-orange-100/50 pb-1 flex items-center gap-1">
-                              {subCat.heading}
-                            </h5>
-                            <ul className="space-y-2">
-                              {subCat.links.map((link, lIdx) => (
-                                <li key={lIdx}>
-                                  <Link
-                                    href={link.href}
-                                    onClick={() => setActiveMegaMenu(null)}
-                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
-                                  >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
-                                    <span className="flex-1 line-clamp-1">
-                                      {link.name}
-                                    </span>
-                                    {link.name.endsWith(">") ? null : (
-                                      <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
-                                    )}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right Column: Featured Colleges */}
-                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
-                      <div>
-                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
-                          <Award className="w-3.5 h-3.5 text-amber-500" />
-                          Top Choice Streams
-                        </h4>
-                        <div className="space-y-3">
-                          {[
-                            {
-                              name: "B.Pharm (Pharmacy)",
-                              desc: "Top Pharmacy Colleges",
-                              slug: "Pharmacy",
-                              color: "from-emerald-500 to-teal-600",
-                            },
-                            {
-                              name: "BA LLB (Law School)",
-                              desc: "National Law Schools",
-                              slug: "Law",
-                              color: "from-blue-500 to-indigo-600",
-                            },
-                            {
-                              name: "B.Des (Design Inst.)",
-                              desc: "NIFT & NID Colleges",
-                              slug: "Design",
-                              color: "from-rose-500 to-red-600",
-                            },
-                          ].map((c, idx) => (
-                            <Link
-                              key={idx}
-                              href={`/colleges?stream=${c.slug}`}
-                              onClick={() => setActiveMegaMenu(null)}
-                              className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
-                            >
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
-                                >
-                                  {c.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
-                                    {c.name}
-                                  </p>
-                                  <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
-                                    <span className="text-primary">
-                                      {c.desc}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Link
-                        href="/colleges"
-                        onClick={() => setActiveMegaMenu(null)}
-                        className="mt-4 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
-                      >
-                        Explore All Streams
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                </div>
-              )}
-            </AnimatePresence>
-
-            {/* MEGA MENU DROPDOWN PANEL FOR MEDICAL */}
-            <AnimatePresence>
-              {activeMegaMenu === "MEDICAL" && (
-                <div
-                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
-                  onMouseEnter={() => setActiveMegaMenu("MEDICAL")}
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
-                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                    exit={{
-                      opacity: 0,
-                      y: 10,
-                      scale: 0.97,
-                      transition: { duration: 0.15 },
-                    }}
-                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
-                    style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 backdrop-blur-xl border border-red-100/40 rounded-2xl shadow-[0_20px_50px_rgba(239,68,68,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
-                  >
-                    {/* Floating Glowing Gradient border at top */}
-                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-red-400 via-rose-500 to-red-600 shadow-[0_1px_10px_rgba(239,68,68,0.5)] z-20" />
-
-                    {/* Dynamic Animated Glass Ambient Background */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
-                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(239,68,68,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
-                      <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-red-500/8 dark:bg-red-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
-                      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-rose-500/8 dark:bg-rose-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
-                    </div>
-
-                    {/* Left Column: Vertical Sub-Tabs Menu */}
-                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
-                      {Object.keys(medicalTabs).map((tabName) => {
-                        const TabIcon = medicalTabIcons[tabName] || Award;
-                        const isActive = activeMedicalTab === tabName;
-                        return (
-                          <button
-                            key={tabName}
-                            onClick={() => setActiveMedicalTab(tabName)}
-                            onMouseEnter={() => setActiveMedicalTab(tabName)}
-                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
-                              isActive
-                                ? "bg-gradient-to-r from-red-500/10 to-rose-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-red-500/5"
-                                : "text-text_secondary hover:bg-red-500/5 hover:text-text_primary hover:translate-x-0.5"
-                            }`}
-                          >
-                            <TabIcon
-                              className={`w-3.5 h-3.5 ${
-                                isActive
-                                  ? "text-primary animate-pulse"
-                                  : "text-slate-400 dark:text-slate-500"
-                              }`}
-                            />
-                            {tabName}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Middle Column: Dynamic Link Lists */}
-                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-                      <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-red-500" />
-                        {activeMedicalTab}
-                      </h4>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
-                        {medicalTabs[activeMedicalTab]?.map((subCat, idx) => (
-                          <div key={idx} className="space-y-3">
-                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-red-600 border-b border-red-100/50 pb-1 flex items-center gap-1">
-                              {subCat.heading}
-                            </h5>
-                            <ul className="space-y-2">
-                              {subCat.links.map((link, lIdx) => (
-                                <li key={lIdx}>
-                                  <Link
-                                    href={link.href}
-                                    onClick={() => setActiveMegaMenu(null)}
-                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
-                                  >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
-                                    <span className="flex-1 line-clamp-1">
-                                      {link.name}
-                                    </span>
-                                    {link.name.endsWith(">") ? null : (
-                                      <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
-                                    )}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right Column: Featured Colleges */}
-                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
-                      <div>
-                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
-                          <Award className="w-3.5 h-3.5 text-red-500" />
-                          Top Medical Choices
-                        </h4>
-                        <div className="space-y-3">
-                          {[
-                            {
-                              name: "AIIMS New Delhi",
-                              rate: "5.0",
-                              rank: "NIRF #1",
-                              slug: "aiims-delhi",
-                              color: "from-red-500 to-rose-600",
-                            },
-                            {
-                              name: "CMC Vellore",
-                              rate: "4.9",
-                              rank: "NIRF #3",
-                              slug: "cmc-vellore",
-                              color: "from-blue-500 to-indigo-600",
-                            },
-                            {
-                              name: "KMC Mangalore",
-                              rate: "4.7",
-                              rank: "NIRF #23",
-                              slug: "kmc-mangalore",
-                              color: "from-emerald-500 to-teal-600",
-                            },
-                          ].map((c, idx) => (
-                            <Link
-                              key={idx}
-                              href={`/colleges/${c.slug}`}
-                              onClick={() => setActiveMegaMenu(null)}
-                              className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
-                            >
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
-                                >
-                                  {c.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
-                                    {c.name}
-                                  </p>
-                                  <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
-                                    <span className="text-amber-500">
-                                      ★ {c.rate}
-                                    </span>
-                                    <span>•</span>
-                                    <span className="text-primary">
-                                      {c.rank}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Link
-                        href="/colleges?stream=Medical"
-                        onClick={() => setActiveMegaMenu(null)}
-                        className="mt-4 w-full py-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
-                      >
-                        Explore All Colleges
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                </div>
-              )}
-            </AnimatePresence>
-
-            {/* MEGA MENU DROPDOWN PANEL FOR ENGINEERING */}
-            <AnimatePresence>
-              {activeMegaMenu === "ENGINEERING" && (
-                <div
-                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
-                  onMouseEnter={() => setActiveMegaMenu("ENGINEERING")}
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
-                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                    exit={{
-                      opacity: 0,
-                      y: 10,
-                      scale: 0.97,
-                      transition: { duration: 0.15 },
-                    }}
-                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
-                    style={{ transformOrigin: "top center", perspective: 1000 }}
-                    className="w-full bg-white/95 backdrop-blur-xl border border-blue-100/40 rounded-2xl shadow-[0_20px_50px_rgba(59,130,246,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
-                  >
-                    {/* Floating Glowing Gradient border at top */}
-                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 shadow-[0_1px_10px_rgba(99,102,241,0.5)] z-20" />
-
-                    {/* Dynamic Animated Glass Ambient Background */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
-                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(139,92,246,0.04),transparent_40%)] animate-[spin_28s_linear_infinite]" />
-                      <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-blue-500/8 dark:bg-blue-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
-                      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-purple-500/8 dark:bg-purple-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3.5s]" />
-                    </div>
-
-                    {/* Left Column: Vertical Sub-Tabs Menu */}
-                    <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
-                      {Object.keys(engTabs).map((tabName) => {
-                        const TabIcon = engTabIcons[tabName] || Award;
-                        const isActive = activeEngTab === tabName;
-                        return (
-                          <button
-                            key={tabName}
-                            onClick={() => setActiveEngTab(tabName)}
-                            onMouseEnter={() => setActiveEngTab(tabName)}
-                            className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
-                              isActive
-                                ? "bg-gradient-to-r from-blue-500/10 to-indigo-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-blue-500/5"
-                                : "text-text_secondary hover:bg-blue-500/5 hover:text-text_primary hover:translate-x-0.5"
-                            }`}
-                          >
-                            <TabIcon
-                              className={`w-3.5 h-3.5 ${isActive ? "text-primary animate-pulse" : "text-slate-400 dark:text-slate-500"}`}
-                            />
-                            {tabName}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Middle Column: Dynamic Link Lists */}
-                    <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-                      <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-                        {activeEngTab}
-                      </h4>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
-                        {engTabs[activeEngTab]?.map((subCat, idx) => (
-                          <div key={idx} className="space-y-3">
-                            <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-blue-600 border-b border-blue-100/50 pb-1 flex items-center gap-1">
-                              {subCat.heading}
-                            </h5>
-                            <ul className="space-y-2">
-                              {subCat.links.map((link, lIdx) => (
-                                <li key={lIdx}>
-                                  <Link
-                                    href={link.href}
-                                    onClick={() => setActiveMegaMenu(null)}
-                                    className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
-                                  >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
-                                    <span className="flex-1 line-clamp-1">
-                                      {link.name}
-                                    </span>
-                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right Column: Featured Colleges */}
-                    <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
-                      <div>
-                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
-                          <Award className="w-3.5 h-3.5 text-blue-500" />
-                          Top Engineering Choices
-                        </h4>
-                        <div className="space-y-3">
-                          {[
-                            {
-                              name: "IIT Delhi",
-                              rate: "4.9",
-                              rank: "NIRF #2",
-                              slug: "iit-delhi",
-                              color: "from-blue-500 to-indigo-600",
-                            },
-                            {
-                              name: "IIT Bombay",
-                              rate: "4.9",
-                              rank: "NIRF #3",
-                              slug: "iit-bombay",
-                              color: "from-indigo-500 to-purple-600",
-                            },
-                            {
-                              name: "RVCE Bangalore",
-                              rate: "4.4",
-                              rank: "NIRF #85",
-                              slug: "rv-college-of-engineering",
-                              color: "from-amber-500 to-orange-600",
-                            },
-                          ].map((c, idx) => (
-                            <Link
-                              key={idx}
-                              href={`/colleges/${c.slug}`}
-                              onClick={() => setActiveMegaMenu(null)}
-                              className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
-                            >
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
-                                >
-                                  {c.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
-                                    {c.name}
-                                  </p>
-                                  <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
-                                    <span className="text-amber-500">
-                                      ★ {c.rate}
-                                    </span>
-                                    <span>•</span>
-                                    <span className="text-primary">
-                                      {c.rank}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Link
-                        href="/colleges?stream=Engineering"
-                        onClick={() => setActiveMegaMenu(null)}
-                        className="mt-4 w-full py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
-                      >
-                        Explore All Colleges
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                </div>
-              )}
-            </AnimatePresence>
-
-            {/* MEGA MENU DROPDOWN PANEL FOR OTHER CHANNELS */}
-            <AnimatePresence>
-              {activeMegaMenu !== null &&
-                activeMegaMenu !== "MBA" &&
-                activeMegaMenu !== "ENGINEERING" &&
-                activeMegaMenu !== "MEDICAL" &&
-                activeMegaMenu !== "MORE" &&
-                megaMenus[activeMegaMenu] && (
-                  <div
-                    className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"
-                    onMouseEnter={() => setActiveMegaMenu(activeMegaMenu)}
-                  >
-                    <motion.div
-                      key={activeMegaMenu}
-                      initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
-                      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                      exit={{
-                        opacity: 0,
-                        y: 10,
-                        scale: 0.97,
-                        transition: { duration: 0.15 },
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 26,
-                      }}
-                      style={{
-                        transformOrigin: "top center",
-                        perspective: 1000,
-                      }}
-                      className="w-full bg-white/95 backdrop-blur-xl border border-teal-100/40 rounded-2xl shadow-[0_20px_50px_rgba(20,184,166,0.12)] p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
-                    >
-                      {/* Floating Glowing Gradient border at top */}
-                      <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-emerald-400 via-teal-500 to-indigo-500 shadow-[0_1px_10px_rgba(16,185,129,0.3)] z-20" />
-
-                      {/* Dynamic Animated Glass Ambient Background */}
-                      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
-                        <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(16,185,129,0.04),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_24s_linear_infinite]" />
-                        <div className="absolute top-[10%] right-[10%] w-[180px] h-[180px] bg-emerald-500/8 dark:bg-emerald-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
-                        <div className="absolute bottom-[10%] left-[10%] w-[180px] h-[180px] bg-teal-500/8 dark:bg-teal-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_2.5s]" />
-                      </div>
-
-                      {megaMenus[activeMegaMenu].map((section, idx) => (
-                        <div key={idx} className="space-y-3 relative z-10">
-                          <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-1.5 flex items-center gap-1">
-                            <Sparkles className="w-3.5 h-3.5 text-teal-500" />
-                            {section.category}
-                          </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                      {mbaTabs[activeMbaTab]?.map((subCat, idx) => (
+                        <div key={idx} className="space-y-3">
+                          <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-amber-600 border-b border-amber-100/50 pb-1 flex items-center gap-1">
+                            {subCat.heading}
+                          </h5>
                           <ul className="space-y-2">
-                            {section.links.map((link, lIdx) => (
+                            {subCat.links.map((link, lIdx) => (
                               <li key={lIdx}>
                                 <Link
                                   href={link.href}
                                   onClick={() => setActiveMegaMenu(null)}
-                                  className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1 py-0.5 hover:translate-x-0.5 duration-200"
+                                  className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
                                 >
-                                  <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
-                                  <span className="flex-1">{link.name}</span>
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                  <span className="flex-1 line-clamp-1">
+                                    {link.name}
+                                  </span>
+                                  {link.name.endsWith(">") ? null : (
+                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Featured Colleges */}
+                  <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
+                    <div>
+                      <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5 text-amber-500" />
+                        Top MBA Choices
+                      </h4>
+                      <div className="space-y-3">
+                        {[
+                          {
+                            name: "IIM Ahmedabad",
+                            rate: "4.9",
+                            rank: "NIRF #1",
+                            slug: "iim-ahmedabad",
+                            color: "from-amber-500 to-orange-600",
+                          },
+                          {
+                            name: "IIM Bangalore",
+                            rate: "4.8",
+                            rank: "NIRF #2",
+                            slug: "iim-bangalore",
+                            color: "from-indigo-500 to-purple-600",
+                          },
+                          {
+                            name: "SIBM Pune",
+                            rate: "4.6",
+                            rank: "NIRF #17",
+                            slug: "sibm-pune",
+                            color: "from-emerald-500 to-teal-600",
+                          },
+                        ].map((c, idx) => (
+                          <Link
+                            key={idx}
+                            href={`/colleges/${c.slug}`}
+                            onClick={() => setActiveMegaMenu(null)}
+                            className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
+                              >
+                                {c.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
+                                  {c.name}
+                                </p>
+                                <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
+                                  <span className="text-amber-500">
+                                    ★ {c.rate}
+                                  </span>
+                                  <span>•</span>
+                                  <span className="text-primary">{c.rank}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/colleges?stream=Management"
+                      onClick={() => setActiveMegaMenu(null)}
+                      className="mt-4 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
+                    >
+                      Explore All Colleges
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* MEGA MENU DROPDOWN PANEL FOR MORE */}
+          <AnimatePresence>
+            {activeMegaMenu === "MORE" && (
+              <div
+                className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
+                onMouseEnter={() => setActiveMegaMenu("MORE")}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                  exit={{
+                    opacity: 0,
+                    y: 10,
+                    scale: 0.97,
+                    transition: { duration: 0.15 },
+                  }}
+                  transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                  style={{ transformOrigin: "top center", perspective: 1000 }}
+                  className="w-full bg-white/95 backdrop-blur-xl border border-amber-100/40 rounded-2xl shadow-[0_20px_50px_rgba(245,158,11,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
+                >
+                  {/* Floating Glowing Gradient border at top */}
+                  <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 shadow-[0_1px_10px_rgba(245,158,11,0.5)] z-20" />
+
+                  {/* Dynamic Animated Glass Ambient Background */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(245,158,11,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
+                    <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-amber-500/8 dark:bg-amber-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                    <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-orange-500/8 dark:bg-orange-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
+                  </div>
+
+                  {/* Left Column: Vertical Sub-Tabs Menu */}
+                  <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
+                    {Object.keys(moreTabs).map((tabName) => {
+                      const TabIcon = Award;
+                      const isActive = activeMoreTab === tabName;
+                      return (
+                        <button
+                          key={tabName}
+                          onClick={() => setActiveMoreTab(tabName)}
+                          onMouseEnter={() => setActiveMoreTab(tabName)}
+                          className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
+                            isActive
+                              ? "bg-gradient-to-r from-amber-500/10 to-orange-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-amber-500/5"
+                              : "text-text_secondary hover:bg-amber-500/5 hover:text-text_primary hover:translate-x-0.5"
+                          }`}
+                        >
+                          <TabIcon
+                            className={`w-3.5 h-3.5 ${
+                              isActive
+                                ? "text-primary animate-pulse"
+                                : "text-slate-400 dark:text-slate-500"
+                            }`}
+                          />
+                          {tabName}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Middle Column: Dynamic Link Lists */}
+                  <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+                    <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      {activeMoreTab}
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                      {moreTabs[activeMoreTab]?.map((subCat, idx) => (
+                        <div key={idx} className="space-y-3">
+                          <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-orange-600 border-b border-orange-100/50 pb-1 flex items-center gap-1">
+                            {subCat.heading}
+                          </h5>
+                          <ul className="space-y-2">
+                            {subCat.links.map((link, lIdx) => (
+                              <li key={lIdx}>
+                                <Link
+                                  href={link.href}
+                                  onClick={() => setActiveMegaMenu(null)}
+                                  className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
+                                >
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                  <span className="flex-1 line-clamp-1">
+                                    {link.name}
+                                  </span>
+                                  {link.name.endsWith(">") ? null : (
+                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Featured Colleges */}
+                  <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
+                    <div>
+                      <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5 text-amber-500" />
+                        Top Choice Streams
+                      </h4>
+                      <div className="space-y-3">
+                        {[
+                          {
+                            name: "B.Pharm (Pharmacy)",
+                            desc: "Top Pharmacy Colleges",
+                            slug: "Pharmacy",
+                            color: "from-emerald-500 to-teal-600",
+                          },
+                          {
+                            name: "BA LLB (Law School)",
+                            desc: "National Law Schools",
+                            slug: "Law",
+                            color: "from-blue-500 to-indigo-600",
+                          },
+                          {
+                            name: "B.Des (Design Inst.)",
+                            desc: "NIFT & NID Colleges",
+                            slug: "Design",
+                            color: "from-rose-500 to-red-600",
+                          },
+                        ].map((c, idx) => (
+                          <Link
+                            key={idx}
+                            href={`/colleges?stream=${c.slug}`}
+                            onClick={() => setActiveMegaMenu(null)}
+                            className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
+                              >
+                                {c.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
+                                  {c.name}
+                                </p>
+                                <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
+                                  <span className="text-primary">{c.desc}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/colleges"
+                      onClick={() => setActiveMegaMenu(null)}
+                      className="mt-4 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
+                    >
+                      Explore All Streams
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* MEGA MENU DROPDOWN PANEL FOR MEDICAL */}
+          <AnimatePresence>
+            {activeMegaMenu === "MEDICAL" && (
+              <div
+                className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
+                onMouseEnter={() => setActiveMegaMenu("MEDICAL")}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                  exit={{
+                    opacity: 0,
+                    y: 10,
+                    scale: 0.97,
+                    transition: { duration: 0.15 },
+                  }}
+                  transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                  style={{ transformOrigin: "top center", perspective: 1000 }}
+                  className="w-full bg-white/95 backdrop-blur-xl border border-red-100/40 rounded-2xl shadow-[0_20px_50px_rgba(239,68,68,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
+                >
+                  {/* Floating Glowing Gradient border at top */}
+                  <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-red-400 via-rose-500 to-red-600 shadow-[0_1px_10px_rgba(239,68,68,0.5)] z-20" />
+
+                  {/* Dynamic Animated Glass Ambient Background */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(239,68,68,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_25s_linear_infinite]" />
+                    <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-red-500/8 dark:bg-red-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                    <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-rose-500/8 dark:bg-rose-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3s]" />
+                  </div>
+
+                  {/* Left Column: Vertical Sub-Tabs Menu */}
+                  <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
+                    {Object.keys(medicalTabs).map((tabName) => {
+                      const TabIcon = medicalTabIcons[tabName] || Award;
+                      const isActive = activeMedicalTab === tabName;
+                      return (
+                        <button
+                          key={tabName}
+                          onClick={() => setActiveMedicalTab(tabName)}
+                          onMouseEnter={() => setActiveMedicalTab(tabName)}
+                          className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
+                            isActive
+                              ? "bg-gradient-to-r from-red-500/10 to-rose-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-red-500/5"
+                              : "text-text_secondary hover:bg-red-500/5 hover:text-text_primary hover:translate-x-0.5"
+                          }`}
+                        >
+                          <TabIcon
+                            className={`w-3.5 h-3.5 ${
+                              isActive
+                                ? "text-primary animate-pulse"
+                                : "text-slate-400 dark:text-slate-500"
+                            }`}
+                          />
+                          {tabName}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Middle Column: Dynamic Link Lists */}
+                  <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+                    <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-red-500" />
+                      {activeMedicalTab}
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                      {medicalTabs[activeMedicalTab]?.map((subCat, idx) => (
+                        <div key={idx} className="space-y-3">
+                          <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-red-600 border-b border-red-100/50 pb-1 flex items-center gap-1">
+                            {subCat.heading}
+                          </h5>
+                          <ul className="space-y-2">
+                            {subCat.links.map((link, lIdx) => (
+                              <li key={lIdx}>
+                                <Link
+                                  href={link.href}
+                                  onClick={() => setActiveMegaMenu(null)}
+                                  className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
+                                >
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                  <span className="flex-1 line-clamp-1">
+                                    {link.name}
+                                  </span>
+                                  {link.name.endsWith(">") ? null : (
+                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Featured Colleges */}
+                  <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
+                    <div>
+                      <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5 text-red-500" />
+                        Top Medical Choices
+                      </h4>
+                      <div className="space-y-3">
+                        {[
+                          {
+                            name: "AIIMS New Delhi",
+                            rate: "5.0",
+                            rank: "NIRF #1",
+                            slug: "aiims-delhi",
+                            color: "from-red-500 to-rose-600",
+                          },
+                          {
+                            name: "CMC Vellore",
+                            rate: "4.9",
+                            rank: "NIRF #3",
+                            slug: "cmc-vellore",
+                            color: "from-blue-500 to-indigo-600",
+                          },
+                          {
+                            name: "KMC Mangalore",
+                            rate: "4.7",
+                            rank: "NIRF #23",
+                            slug: "kmc-mangalore",
+                            color: "from-emerald-500 to-teal-600",
+                          },
+                        ].map((c, idx) => (
+                          <Link
+                            key={idx}
+                            href={`/colleges/${c.slug}`}
+                            onClick={() => setActiveMegaMenu(null)}
+                            className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
+                              >
+                                {c.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
+                                  {c.name}
+                                </p>
+                                <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
+                                  <span className="text-amber-500">
+                                    ★ {c.rate}
+                                  </span>
+                                  <span>•</span>
+                                  <span className="text-primary">{c.rank}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/colleges?stream=Medical"
+                      onClick={() => setActiveMegaMenu(null)}
+                      className="mt-4 w-full py-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
+                    >
+                      Explore All Colleges
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* MEGA MENU DROPDOWN PANEL FOR ENGINEERING */}
+          <AnimatePresence>
+            {activeMegaMenu === "ENGINEERING" && (
+              <div
+                className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[1020px] z-50 pointer-events-auto"
+                onMouseEnter={() => setActiveMegaMenu("ENGINEERING")}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                  exit={{
+                    opacity: 0,
+                    y: 10,
+                    scale: 0.97,
+                    transition: { duration: 0.15 },
+                  }}
+                  transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                  style={{ transformOrigin: "top center", perspective: 1000 }}
+                  className="w-full bg-white/95 backdrop-blur-xl border border-blue-100/40 rounded-2xl shadow-[0_20px_50px_rgba(59,130,246,0.12)] flex flex-col md:flex-row text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
+                >
+                  {/* Floating Glowing Gradient border at top */}
+                  <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 shadow-[0_1px_10px_rgba(99,102,241,0.5)] z-20" />
+
+                  {/* Dynamic Animated Glass Ambient Background */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.05),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(139,92,246,0.04),transparent_40%)] animate-[spin_28s_linear_infinite]" />
+                    <div className="absolute top-[10%] right-[10%] w-[200px] h-[200px] bg-blue-500/8 dark:bg-blue-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                    <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-purple-500/8 dark:bg-purple-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_3.5s]" />
+                  </div>
+
+                  {/* Left Column: Vertical Sub-Tabs Menu */}
+                  <div className="w-full md:w-[240px] bg-slate-50/40 border-b md:border-b-0 md:border-r border-border/60 p-3 flex md:flex-col overflow-x-auto md:overflow-visible gap-1 md:space-y-1.5 pt-3 md:pt-4 relative z-10 no-scrollbar flex-shrink-0">
+                    {Object.keys(engTabs).map((tabName) => {
+                      const TabIcon = engTabIcons[tabName] || Award;
+                      const isActive = activeEngTab === tabName;
+                      return (
+                        <button
+                          key={tabName}
+                          onClick={() => setActiveEngTab(tabName)}
+                          onMouseEnter={() => setActiveEngTab(tabName)}
+                          className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10.5px] font-extrabold tracking-wide transition-all duration-200 whitespace-nowrap ${
+                            isActive
+                              ? "bg-gradient-to-r from-blue-500/10 to-indigo-600/10 text-primary border-l-4 border-primary pl-3 shadow-sm shadow-blue-500/5"
+                              : "text-text_secondary hover:bg-blue-500/5 hover:text-text_primary hover:translate-x-0.5"
+                          }`}
+                        >
+                          <TabIcon
+                            className={`w-3.5 h-3.5 ${isActive ? "text-primary animate-pulse" : "text-slate-400 dark:text-slate-500"}`}
+                          />
+                          {tabName}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Middle Column: Dynamic Link Lists */}
+                  <div className="flex-1 p-4 md:p-6 relative pt-5 md:pt-7 z-10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+                    <h4 className="text-[10.5px] uppercase tracking-wider font-black text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+                      {activeEngTab}
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10">
+                      {engTabs[activeEngTab]?.map((subCat, idx) => (
+                        <div key={idx} className="space-y-3">
+                          <h5 className="text-[10px] uppercase tracking-wider font-extrabold text-blue-600 border-b border-blue-100/50 pb-1 flex items-center gap-1">
+                            {subCat.heading}
+                          </h5>
+                          <ul className="space-y-2">
+                            {subCat.links.map((link, lIdx) => (
+                              <li key={lIdx}>
+                                <Link
+                                  href={link.href}
+                                  onClick={() => setActiveMegaMenu(null)}
+                                  className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1.5 py-0.5 hover:translate-x-1 duration-200"
+                                >
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                  <span className="flex-1 line-clamp-1">
+                                    {link.name}
+                                  </span>
                                   <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
                                 </Link>
                               </li>
@@ -2738,11 +2605,157 @@ export default function LayoutWrapper({
                           </ul>
                         </div>
                       ))}
-                    </motion.div>
+                    </div>
                   </div>
-                )}
-            </AnimatePresence>
-          </div>
+
+                  {/* Right Column: Featured Colleges */}
+                  <div className="w-full md:w-[220px] bg-slate-50/30 p-4 md:p-6 border-t md:border-t-0 md:border-l border-border/60 flex flex-col justify-between pt-5 md:pt-7 relative z-10">
+                    <div>
+                      <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-2 mb-4 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5 text-blue-500" />
+                        Top Engineering Choices
+                      </h4>
+                      <div className="space-y-3">
+                        {[
+                          {
+                            name: "IIT Delhi",
+                            rate: "4.9",
+                            rank: "NIRF #2",
+                            slug: "iit-delhi",
+                            color: "from-blue-500 to-indigo-600",
+                          },
+                          {
+                            name: "IIT Bombay",
+                            rate: "4.9",
+                            rank: "NIRF #3",
+                            slug: "iit-bombay",
+                            color: "from-indigo-500 to-purple-600",
+                          },
+                          {
+                            name: "RVCE Bangalore",
+                            rate: "4.4",
+                            rank: "NIRF #85",
+                            slug: "rv-college-of-engineering",
+                            color: "from-amber-500 to-orange-600",
+                          },
+                        ].map((c, idx) => (
+                          <Link
+                            key={idx}
+                            href={`/colleges/${c.slug}`}
+                            onClick={() => setActiveMegaMenu(null)}
+                            className="group/feat block p-2 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-border/60 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-8 h-8 rounded-lg bg-gradient-to-br ${c.color} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}
+                              >
+                                {c.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-text_primary group-hover/feat:text-primary transition-colors truncate">
+                                  {c.name}
+                                </p>
+                                <div className="flex items-center gap-1.5 text-[8px] font-bold text-text_secondary mt-0.5">
+                                  <span className="text-amber-500">
+                                    ★ {c.rate}
+                                  </span>
+                                  <span>•</span>
+                                  <span className="text-primary">{c.rank}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/colleges?stream=Engineering"
+                      onClick={() => setActiveMegaMenu(null)}
+                      className="mt-4 w-full py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-center font-bold text-[9px] uppercase tracking-wider rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm shadow-primary/10"
+                    >
+                      Explore All Colleges
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* MEGA MENU DROPDOWN PANEL FOR OTHER CHANNELS */}
+          <AnimatePresence>
+            {activeMegaMenu !== null &&
+              activeMegaMenu !== "MBA" &&
+              activeMegaMenu !== "ENGINEERING" &&
+              activeMegaMenu !== "MEDICAL" &&
+              activeMegaMenu !== "MORE" &&
+              megaMenus[activeMegaMenu] && (
+                <div
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-[94vw] md:w-[720px] z-50 pointer-events-auto"
+                  onMouseEnter={() => setActiveMegaMenu(activeMegaMenu)}
+                >
+                  <motion.div
+                    key={activeMegaMenu}
+                    initial={{ opacity: 0, y: 15, scale: 0.95, rotateX: -6 }}
+                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                    exit={{
+                      opacity: 0,
+                      y: 10,
+                      scale: 0.97,
+                      transition: { duration: 0.15 },
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 26,
+                    }}
+                    style={{
+                      transformOrigin: "top center",
+                      perspective: 1000,
+                    }}
+                    className="w-full bg-white/95 backdrop-blur-xl border border-teal-100/40 rounded-2xl shadow-[0_20px_50px_rgba(20,184,166,0.12)] p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 text-text_primary overflow-hidden max-h-[75vh] md:max-h-none overflow-y-auto md:overflow-visible"
+                  >
+                    {/* Floating Glowing Gradient border at top */}
+                    <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-emerald-400 via-teal-500 to-indigo-500 shadow-[0_1px_10px_rgba(16,185,129,0.3)] z-20" />
+
+                    {/* Dynamic Animated Glass Ambient Background */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 rounded-2xl">
+                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_30%,rgba(16,185,129,0.04),transparent_40%),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.04),transparent_40%)] animate-[spin_24s_linear_infinite]" />
+                      <div className="absolute top-[10%] right-[10%] w-[180px] h-[180px] bg-emerald-500/8 dark:bg-emerald-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+                      <div className="absolute bottom-[10%] left-[10%] w-[180px] h-[180px] bg-teal-500/8 dark:bg-teal-500/4 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite_2.5s]" />
+                    </div>
+
+                    {megaMenus[activeMegaMenu].map((section, idx) => (
+                      <div key={idx} className="space-y-3 relative z-10">
+                        <h4 className="text-[10px] uppercase tracking-wider font-extrabold text-primary border-b border-border/60 pb-1.5 flex items-center gap-1">
+                          <Sparkles className="w-3.5 h-3.5 text-teal-500" />
+                          {section.category}
+                        </h4>
+                        <ul className="space-y-2">
+                          {section.links.map((link, lIdx) => (
+                            <li key={lIdx}>
+                              <Link
+                                href={link.href}
+                                onClick={() => setActiveMegaMenu(null)}
+                                className="group/link text-xs font-semibold text-text_secondary hover:text-primary transition-all flex items-center gap-1 py-0.5 hover:translate-x-0.5 duration-200"
+                              >
+                                <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700 group-hover/link:bg-primary transition-colors flex-shrink-0" />
+                                <span className="flex-1">{link.name}</span>
+                                <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all text-primary flex-shrink-0" />
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              )}
+          </AnimatePresence>
         </div>
 
         {/* BACKDROP OVERLAY WHEN MEGA MENU IS OPEN (Mobile only to avoid blocking hover on desktop) */}
