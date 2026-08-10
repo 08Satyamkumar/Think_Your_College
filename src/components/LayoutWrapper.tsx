@@ -1984,7 +1984,7 @@ export default function LayoutWrapper({
             {/* Right side: Write a Review button */}
             <div className="flex items-center h-full flex-shrink-0">
               <Link
-                href="/colleges"
+                href="/write-review"
                 className="flex items-center gap-1.5 px-3 py-1 rounded-md border border-orange-500 hover:bg-orange-50 text-[9px] font-black tracking-wider text-orange-600 uppercase transition-all whitespace-nowrap shadow-sm hover:shadow active:scale-95"
               >
                 <Star className="w-2.5 h-2.5 fill-current" />

@@ -1708,7 +1708,7 @@ export default function HomePage() {
             {/* CTA Button */}
             <div className="pt-2">
               <Link
-                href="/colleges"
+                href="/write-review"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white font-black text-[11px] uppercase tracking-wider rounded-xl active:scale-95 shadow-md shadow-red-500/10 transition-all cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
