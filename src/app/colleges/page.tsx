@@ -8740,7 +8740,7 @@ function CollegesListContent() {
                               {/* Logo and Ranking Group */}
                               <div className="flex items-center lg:flex-col gap-3 lg:gap-2.5 text-center">
                                 {/* Logo Box */}
-                                <div className="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-base lg:text-lg font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300 overflow-hidden relative flex-shrink-0">
+                                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-xl lg:text-2xl font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300 overflow-hidden relative flex-shrink-0">
                                   {college.image_url ? (
                                     <>
                                       <img
