@@ -596,6 +596,7 @@ function CollegesListContent() {
   const [addAccreditation, setAddAccreditation] = useState("AICTE Approved");
   const [isAddingCollege, setIsAddingCollege] = useState(false);
   const [hiddenAds, setHiddenAds] = useState<number[]>([]);
+  const [closedGoogleAds, setClosedGoogleAds] = useState<number[]>([]);
 
   const handleDeleteCollege = async (college: any) => {
     if (
@@ -8894,47 +8895,143 @@ function CollegesListContent() {
                       </motion.div>
 
                       {/* Dynamic Ad Banner after every 4 colleges */}
-                      {(idx + 1) % 4 === 0 && !hiddenAds.includes(idx) && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.25 }}
-                          className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col p-4 md:p-5 max-w-[600px] lg:mx-0 w-full select-none cursor-pointer mt-2 mb-6"
-                        >
-                          {/* Sponsored label and close triggers */}
-                          <div className="absolute top-3.5 right-3.5 z-30 flex items-center gap-2">
-                            <span className="px-2 py-0.5 rounded bg-slate-100/95 text-slate-400 border border-slate-200/60 font-black text-[8px] tracking-wider uppercase">
-                              Sponsored
-                            </span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                setHiddenAds((prev) => [...prev, idx]);
-                              }}
-                              className="p-1 rounded-full bg-slate-100 hover:bg-red-500 hover:text-white border border-slate-200 text-slate-500 hover:border-red-600 transition-all cursor-pointer flex items-center justify-center"
-                              title="Close Ad"
-                            >
-                              <X className="w-2.5 h-2.5" />
-                            </button>
-                          </div>
+                      {(idx + 1) % 4 === 0 && (
+                        <React.Fragment>
+                          {/* Alternating Ad Slots: Odd slots show real UPES Ad, Even slots show Google Ad placeholder */}
+                          {Math.floor((idx + 1) / 4) % 2 === 1 ? (
+                            // Real UPES Ad Slot
+                            !hiddenAds.includes(idx) ? (
+                              <motion.div
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ duration: 0.25 }}
+                                className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col p-4 md:p-5 max-w-[600px] lg:mx-0 w-full select-none cursor-pointer mt-2 mb-6"
+                              >
+                                {/* Sponsored label and close triggers */}
+                                <div className="absolute top-3.5 right-3.5 z-30 flex items-center gap-2">
+                                  <span className="px-2 py-0.5 rounded bg-slate-100/95 text-slate-400 border border-slate-200/60 font-black text-[8px] tracking-wider uppercase">
+                                    Sponsored
+                                  </span>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      e.preventDefault();
+                                      setHiddenAds((prev) => [...prev, idx]);
+                                    }}
+                                    className="p-1 rounded-full bg-slate-100 hover:bg-red-500 hover:text-white border border-slate-200 text-slate-500 hover:border-red-600 transition-all cursor-pointer flex items-center justify-center"
+                                    title="Close Ad"
+                                  >
+                                    <X className="w-2.5 h-2.5" />
+                                  </button>
+                                </div>
 
-                          <a
-                            href="https://www.upes.ac.in/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full block"
-                          >
-                            <div className="w-full h-[150px] md:h-[130px] overflow-hidden flex items-center justify-center bg-slate-50/30 rounded-xl md:rounded-2xl border border-slate-100">
-                              <img
-                                src="/upes_ad.png"
-                                alt="UPES Admission Ad"
-                                className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.006]"
-                              />
-                            </div>
-                          </a>
-                        </motion.div>
+                                <a
+                                  href="https://www.upes.ac.in/"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="w-full block"
+                                >
+                                  <div className="w-full h-[150px] md:h-[130px] overflow-hidden flex items-center justify-center bg-slate-50/30 rounded-xl md:rounded-2xl border border-slate-100">
+                                    <img
+                                      src="/upes_ad.png"
+                                      alt="UPES Admission Ad"
+                                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.006]"
+                                    />
+                                  </div>
+                                </a>
+                              </motion.div>
+                            ) : (
+                              // Google Closed Screen replacement overlay for UPES Ad
+                              <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="bg-slate-50/80 border border-slate-200 rounded-2xl md:rounded-3xl p-6 text-center shadow-sm max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex flex-col items-center justify-center gap-3"
+                              >
+                                <p className="text-xs text-slate-400 font-bold">
+                                  Ad closed by Google
+                                </p>
+                                <button
+                                  onClick={() =>
+                                    setHiddenAds((prev) =>
+                                      prev.filter((id) => id !== idx),
+                                    )
+                                  }
+                                  className="text-[11px] font-black text-orange-500 hover:underline uppercase tracking-wider"
+                                >
+                                  Undo
+                                </button>
+                              </motion.div>
+                            )
+                          ) : // Google Ad Placeholder Slot (Even indices)
+                          !closedGoogleAds.includes(idx) ? (
+                            <motion.div
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.25 }}
+                              className="bg-slate-50/40 border border-slate-300 md:border-slate-200/80 rounded-2xl md:rounded-3xl p-6 shadow-[0_6px_16px_rgba(0,0,0,0.015)] relative flex flex-col items-center justify-center gap-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 min-h-[140px] md:min-h-[120px]"
+                            >
+                              {/* Left Back Arrow indicator */}
+                              <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                                ←
+                              </div>
+
+                              <div className="flex flex-col items-center gap-2">
+                                <p className="text-[11px] md:text-xs text-slate-400 font-black uppercase tracking-wider flex items-center gap-1.5 select-none">
+                                  Ad served by{" "}
+                                  <span className="text-slate-600 font-black">
+                                    Google
+                                  </span>
+                                </p>
+                              </div>
+
+                              <div className="flex flex-wrap items-center justify-center gap-2.5">
+                                <button
+                                  onClick={() =>
+                                    setClosedGoogleAds((prev) => [...prev, idx])
+                                  }
+                                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg shadow-sm border border-blue-500 transition-all cursor-pointer"
+                                >
+                                  Stop seeing this ad
+                                </button>
+                                <a
+                                  href="https://support.google.com/adspolicy/answer/6023676"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-500 font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg border border-slate-200 shadow-sm transition-all flex items-center gap-1"
+                                >
+                                  Why this ad?
+                                  <span className="w-3.5 h-3.5 rounded-full bg-slate-100 flex items-center justify-center text-[9px] text-slate-400 font-bold border border-slate-200">
+                                    i
+                                  </span>
+                                </a>
+                              </div>
+                            </motion.div>
+                          ) : (
+                            // Google Closed State replacement overlay for Placeholder Slot
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="bg-slate-50/80 border border-slate-200 rounded-2xl md:rounded-3xl p-6 text-center shadow-sm max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex flex-col items-center justify-center gap-3"
+                            >
+                              <p className="text-xs text-slate-400 font-bold">
+                                Ad hidden by Google. We will try not to show it
+                                again.
+                              </p>
+                              <button
+                                onClick={() =>
+                                  setClosedGoogleAds((prev) =>
+                                    prev.filter((id) => id !== idx),
+                                  )
+                                }
+                                className="text-[11px] font-black text-orange-500 hover:underline uppercase tracking-wider"
+                              >
+                                Undo
+                              </button>
+                            </motion.div>
+                          )}
+                        </React.Fragment>
                       )}
                     </React.Fragment>
                   );
