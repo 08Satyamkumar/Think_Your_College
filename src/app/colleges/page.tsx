@@ -8906,25 +8906,18 @@ function CollegesListContent() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 transition={{ duration: 0.25 }}
-                                className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col p-4 md:p-5 max-w-[600px] lg:mx-0 w-full select-none cursor-pointer mt-2 mb-6"
+                                className="relative w-full max-w-[600px] lg:mx-0 select-none mt-2 mb-6 flex items-center justify-center group"
                               >
-                                {/* Sponsored label and close triggers */}
-                                <div className="absolute top-3.5 right-3.5 z-30 flex items-center gap-2">
-                                  <span className="px-2 py-0.5 rounded bg-slate-100/95 text-slate-400 border border-slate-200/60 font-black text-[8px] tracking-wider uppercase">
-                                    Sponsored
-                                  </span>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      e.preventDefault();
-                                      setHiddenAds((prev) => [...prev, idx]);
-                                    }}
-                                    className="p-1 rounded-full bg-slate-100 hover:bg-red-500 hover:text-white border border-slate-200 text-slate-500 hover:border-red-600 transition-all cursor-pointer flex items-center justify-center"
-                                    title="Close Ad"
-                                  >
-                                    <X className="w-2.5 h-2.5" />
-                                  </button>
-                                </div>
+                                {/* Invisible Close Trigger Overlay aligned exactly to the [x] in the image */}
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setHiddenAds((prev) => [...prev, idx]);
+                                  }}
+                                  className="absolute top-[2px] right-[2px] w-[30px] h-[30px] bg-transparent cursor-pointer z-30 border-0 outline-none"
+                                  title="Close Ad"
+                                />
 
                                 <a
                                   href="https://www.upes.ac.in/"
@@ -8932,35 +8925,52 @@ function CollegesListContent() {
                                   rel="noopener noreferrer"
                                   className="w-full block"
                                 >
-                                  <div className="w-full h-[150px] md:h-[130px] overflow-hidden flex items-center justify-center bg-slate-50/30 rounded-xl md:rounded-2xl border border-slate-100">
+                                  <div className="w-full h-auto overflow-hidden flex items-center justify-center bg-transparent rounded-lg">
                                     <img
                                       src="/upes_ad.png"
                                       alt="UPES Admission Ad"
-                                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.006]"
+                                      className="w-full h-auto object-contain max-h-[140px] md:max-h-[120px] transition-transform duration-300 group-hover:scale-[1.002]"
                                     />
                                   </div>
                                 </a>
                               </motion.div>
                             ) : (
-                              // Google Closed Screen replacement overlay for UPES Ad
+                              // Google Closed Screen replacement overlay for UPES Ad (Matches Google Adsense Closed UI)
                               <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="bg-slate-50/80 border border-slate-200 rounded-2xl md:rounded-3xl p-6 text-center shadow-sm max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex flex-col items-center justify-center gap-3"
+                                className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex items-center justify-center gap-4 relative min-h-[90px]"
                               >
-                                <p className="text-xs text-slate-400 font-bold">
-                                  Ad closed by Google
-                                </p>
-                                <button
-                                  onClick={() =>
-                                    setHiddenAds((prev) =>
-                                      prev.filter((id) => id !== idx),
-                                    )
-                                  }
-                                  className="text-[11px] font-black text-orange-500 hover:underline uppercase tracking-wider"
-                                >
-                                  Undo
-                                </button>
+                                {/* Left Back Arrow */}
+                                <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                                  ←
+                                </div>
+                                <div className="flex flex-col items-center gap-1.5 mx-auto">
+                                  <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+                                    Ad served by{" "}
+                                    <span className="text-slate-600 font-black">
+                                      Google
+                                    </span>
+                                  </p>
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      disabled
+                                      className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] uppercase tracking-wider rounded border border-blue-500 opacity-60"
+                                    >
+                                      Stop seeing this ad
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        setHiddenAds((prev) =>
+                                          prev.filter((id) => id !== idx),
+                                        )
+                                      }
+                                      className="px-3 py-1.5 bg-white text-orange-500 border border-slate-200 hover:bg-slate-50 font-black text-[9px] uppercase tracking-wider rounded transition-all cursor-pointer"
+                                    >
+                                      Undo
+                                    </button>
+                                  </div>
+                                </div>
                               </motion.div>
                             )
                           ) : // Google Ad Placeholder Slot (Even indices)
@@ -8970,14 +8980,14 @@ function CollegesListContent() {
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, scale: 0.95 }}
                               transition={{ duration: 0.25 }}
-                              className="bg-slate-50/40 border border-slate-300 md:border-slate-200/80 rounded-2xl md:rounded-3xl p-6 shadow-[0_6px_16px_rgba(0,0,0,0.015)] relative flex flex-col items-center justify-center gap-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 min-h-[140px] md:min-h-[120px]"
+                              className="bg-slate-50/50 border border-slate-200/80 rounded-xl p-5 relative flex flex-col items-center justify-center gap-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 min-h-[140px] md:min-h-[120px]"
                             >
                               {/* Left Back Arrow indicator */}
                               <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
                                 ←
                               </div>
 
-                              <div className="flex flex-col items-center gap-2">
+                              <div className="flex flex-col items-center gap-1">
                                 <p className="text-[11px] md:text-xs text-slate-400 font-black uppercase tracking-wider flex items-center gap-1.5 select-none">
                                   Ad served by{" "}
                                   <span className="text-slate-600 font-black">
@@ -9013,22 +9023,38 @@ function CollegesListContent() {
                             <motion.div
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
-                              className="bg-slate-50/80 border border-slate-200 rounded-2xl md:rounded-3xl p-6 text-center shadow-sm max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex flex-col items-center justify-center gap-3"
+                              className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex items-center justify-center gap-4 relative min-h-[90px]"
                             >
-                              <p className="text-xs text-slate-400 font-bold">
-                                Ad hidden by Google. We will try not to show it
-                                again.
-                              </p>
-                              <button
-                                onClick={() =>
-                                  setClosedGoogleAds((prev) =>
-                                    prev.filter((id) => id !== idx),
-                                  )
-                                }
-                                className="text-[11px] font-black text-orange-500 hover:underline uppercase tracking-wider"
-                              >
-                                Undo
-                              </button>
+                              {/* Left Back Arrow */}
+                              <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                                ←
+                              </div>
+                              <div className="flex flex-col items-center gap-1.5 mx-auto">
+                                <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+                                  Ad served by{" "}
+                                  <span className="text-slate-600 font-black">
+                                    Google
+                                  </span>
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    disabled
+                                    className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] uppercase tracking-wider rounded border border-blue-500 opacity-60"
+                                  >
+                                    Stop seeing this ad
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      setClosedGoogleAds((prev) =>
+                                        prev.filter((id) => id !== idx),
+                                      )
+                                    }
+                                    className="px-3 py-1.5 bg-white text-orange-500 border border-slate-200 hover:bg-slate-50 font-black text-[9px] uppercase tracking-wider rounded transition-all cursor-pointer"
+                                  >
+                                    Undo
+                                  </button>
+                                </div>
+                              </div>
                             </motion.div>
                           )}
                         </React.Fragment>
