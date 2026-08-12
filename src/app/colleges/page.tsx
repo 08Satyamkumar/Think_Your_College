@@ -525,6 +525,15 @@ const mockColleges: College[] = [
   },
 ];
 
+const toTitleCase = (str: string): string => {
+  if (!str) return "";
+  return str
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
 function CollegesListContent() {
   const searchParams = useSearchParams();
 
@@ -533,6 +542,9 @@ function CollegesListContent() {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedStreams, setSelectedStreams] = useState<string[]>([]);
+  const [discoveredCities, setDiscoveredCities] = useState<string[]>([]);
+  const [discoveredStates, setDiscoveredStates] = useState<string[]>([]);
+  const [discoveredStreams, setDiscoveredStreams] = useState<string[]>([]);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isContactDrawerOpen, setIsContactDrawerOpen] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
@@ -581,6 +593,7 @@ function CollegesListContent() {
   const [addTuitionFees, setAddTuitionFees] = useState("-/-");
   const [addImageUrl, setAddImageUrl] = useState("");
   const [addDescription, setAddDescription] = useState("");
+  const [addAccreditation, setAddAccreditation] = useState("AICTE Approved");
   const [isAddingCollege, setIsAddingCollege] = useState(false);
 
   const handleDeleteCollege = async (college: any) => {
@@ -620,13 +633,18 @@ function CollegesListContent() {
     e.preventDefault();
     setIsAddingCollege(true);
 
+    const formattedName = addName.trim();
+    const formattedLocation = toTitleCase(addLocation);
+    const formattedCity = toTitleCase(addCity);
+    const formattedState = toTitleCase(addState);
+
     // Generate slug
-    const slug = addName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const slug = formattedName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
     // Serialize description and accreditation
     const serializedDesc = JSON.stringify({
       description: addDescription,
-      accreditation: "AICTE Approved",
+      accreditation: addAccreditation,
     });
 
     try {
@@ -637,10 +655,10 @@ function CollegesListContent() {
           username: "Samrat1311",
           password: "1311161161",
           collegeData: {
-            name: addName,
-            location: addLocation,
-            city: addCity,
-            state: addState,
+            name: formattedName,
+            location: formattedLocation,
+            city: formattedCity,
+            state: formattedState,
             ownership: addOwnership,
             rating: addRating,
             nirf_rank: addNIRFRank || "N/A",
@@ -660,7 +678,7 @@ function CollegesListContent() {
           const examsArr = addExamsAccepted
             ? addExamsAccepted.split(",").map((e) => e.trim())
             : [];
-          const logo = addName
+          const logo = formattedName
             .split(" ")
             .map((w) => w[0])
             .join("")
@@ -670,11 +688,11 @@ function CollegesListContent() {
           setCollegesList((prev) => [
             {
               id: newCol.id,
-              name: addName,
-              location: addLocation,
-              state: addState,
-              city: addCity,
-              stream: getStreamFromCollegeName(addName),
+              name: formattedName,
+              location: formattedLocation,
+              state: formattedState,
+              city: formattedCity,
+              stream: getStreamFromCollegeName(formattedName),
               courses: [addCoursesCount || "Courses"],
               specializations: [],
               exams: examsArr.length > 0 ? examsArr : ["None"],
@@ -688,7 +706,7 @@ function CollegesListContent() {
               description: addDescription,
               logoText: logo || "COL",
               slug: slug,
-              accreditation: "AICTE Approved",
+              accreditation: addAccreditation,
               image_url: addImageUrl,
             },
             ...prev,
@@ -709,6 +727,7 @@ function CollegesListContent() {
         setAddTuitionFees("-/-");
         setAddImageUrl("");
         setAddDescription("");
+        setAddAccreditation("AICTE Approved");
       } else {
         const err = await res.json();
         alert(err.error || "Failed to add college.");
@@ -781,6 +800,12 @@ function CollegesListContent() {
     e.preventDefault();
     if (!editingCollege) return;
     setIsUpdatingCollege(true);
+
+    const formattedName = editName.trim();
+    const formattedLocation = toTitleCase(editLocation);
+    const formattedCity = toTitleCase(editCity);
+    const formattedState = toTitleCase(editState);
+
     try {
       const serializedDesc = JSON.stringify({
         description: editDescription,
@@ -795,10 +820,10 @@ function CollegesListContent() {
           password: "1311161161",
           slug: editingCollege.slug,
           updatedFields: {
-            name: editName,
-            location: editLocation,
-            city: editCity,
-            state: editState,
+            name: formattedName,
+            location: formattedLocation,
+            city: formattedCity,
+            state: formattedState,
             ownership: editOwnership,
             rating: editRating,
             nirf_rank: editNIRFRank || "N/A",
@@ -821,10 +846,10 @@ function CollegesListContent() {
                 : [];
               return {
                 ...c,
-                name: editName,
-                location: editLocation,
-                city: editCity,
-                state: editState,
+                name: formattedName,
+                location: formattedLocation,
+                city: formattedCity,
+                state: formattedState,
                 type: editOwnership,
                 rating: parseFloat(editRating) || 4.2,
                 nirfRank: editNIRFRank
@@ -957,11 +982,15 @@ function CollegesListContent() {
       n.includes("planning")
     )
       return "Architecture";
-    if (n.includes("hotel") || n.includes("hospitality")) return "Hospitality";
-    if (n.includes("veterinary")) return "Veterinary Science";
+    if (n.includes("hotel") || n.includes("hospitality")) return "Hotel Management";
+    if (n.includes("veterinary")) return "Veterinary";
+    if (n.includes("commerce") || n.includes("bcom") || n.includes("mcom") || n.includes("b.com") || n.includes("m.com"))
+      return "Commerce";
+    if (n.includes("science") || n.includes("bsc") || n.includes("msc") || n.includes("b.sc") || n.includes("m.sc"))
+      return "Science";
     if (n.includes("arts") || n.includes("fine arts")) return "Arts";
     if (n.includes("computer") || n.includes("mca"))
-      return "Computer Application";
+      return "Computer";
     if (n.includes("dental") || n.includes("bds")) return "Dental";
     if (n.includes("education") || n.includes("b.ed")) return "Education";
     return "Engineering"; // default fallback
@@ -1459,7 +1488,7 @@ function CollegesListContent() {
     { name: "More than 5 Lakhs", count: 1053 },
   ];
 
-  const stateOptions = [
+  const STATIC_stateOptions = [
     { name: "Maharashtra", count: 1698 },
     { name: "Tamil Nadu", count: 1299 },
     { name: "Uttar Pradesh", count: 1294 },
@@ -1494,7 +1523,7 @@ function CollegesListContent() {
     { name: "Andaman and Nicobar Islands", count: 3 },
   ];
 
-  const cityOptions = [
+  const STATIC_cityOptions = [
     { name: "Pune", count: 473 },
     { name: "Delhi", count: 393 },
     { name: "Hyderabad", count: 390 },
@@ -1547,7 +1576,7 @@ function CollegesListContent() {
     { name: "Kanyakumari", count: 52 },
   ];
 
-  const streamOptions = [
+  const STATIC_streamOptions = [
     { name: "Arts", count: 4581 },
     { name: "Management", count: 5481 },
     { name: "Engineering", count: 4140 },
@@ -1570,6 +1599,39 @@ function CollegesListContent() {
     { name: "Agriculture", count: 3 },
     { name: "Aviation", count: 3 },
   ];
+
+  const stateOptions: { name: string; count: number }[] = useMemo(() => {
+    const map = new globalThis.Map<string, number>();
+    STATIC_stateOptions.forEach((opt) => map.set(toTitleCase(opt.name), opt.count));
+    discoveredStates.forEach((st) => {
+      if (!map.has(st)) {
+        map.set(st, 1);
+      }
+    });
+    return Array.from(map.keys()).map((name) => ({ name, count: map.get(name) || 1 }));
+  }, [discoveredStates]);
+
+  const cityOptions: { name: string; count: number }[] = useMemo(() => {
+    const map = new globalThis.Map<string, number>();
+    STATIC_cityOptions.forEach((opt) => map.set(toTitleCase(opt.name), opt.count));
+    discoveredCities.forEach((ct) => {
+      if (!map.has(ct)) {
+        map.set(ct, 1);
+      }
+    });
+    return Array.from(map.keys()).map((name) => ({ name, count: map.get(name) || 1 }));
+  }, [discoveredCities]);
+
+  const streamOptions: { name: string; count: number }[] = useMemo(() => {
+    const map = new globalThis.Map<string, number>();
+    STATIC_streamOptions.forEach((opt) => map.set(opt.name, opt.count));
+    discoveredStreams.forEach((str) => {
+      if (!map.has(str)) {
+        map.set(str, 1);
+      }
+    });
+    return Array.from(map.keys()).map((name) => ({ name, count: map.get(name) || 1 }));
+  }, [discoveredStreams]);
 
   const courseOptions = [
     { name: "MBA", count: 3635 },
@@ -7257,6 +7319,33 @@ function CollegesListContent() {
     sortBy,
   ]);
 
+  // Discover dynamic custom filter values (cities, states, streams) from loaded colleges
+  useEffect(() => {
+    if (collegesList.length > 0) {
+      const citiesToAdd = collegesList
+        .map((c) => toTitleCase(c.city))
+        .filter((c) => c && !STATIC_cityOptions.some((opt) => toTitleCase(opt.name) === c));
+      
+      const statesToAdd = collegesList
+        .map((c) => toTitleCase(c.state))
+        .filter((s) => s && !STATIC_stateOptions.some((opt) => toTitleCase(opt.name) === s));
+
+      const streamsToAdd = collegesList
+        .map((c) => c.stream)
+        .filter((s) => s && !STATIC_streamOptions.some((opt) => opt.name === s));
+
+      if (citiesToAdd.length > 0) {
+        setDiscoveredCities((prev) => Array.from(new Set([...prev, ...citiesToAdd])));
+      }
+      if (statesToAdd.length > 0) {
+        setDiscoveredStates((prev) => Array.from(new Set([...prev, ...statesToAdd])));
+      }
+      if (streamsToAdd.length > 0) {
+        setDiscoveredStreams((prev) => Array.from(new Set([...prev, ...streamsToAdd])));
+      }
+    }
+  }, [collegesList]);
+
   // Reset page when filters change
   useEffect(() => {
     setPage(1);
@@ -9227,7 +9316,7 @@ function CollegesListContent() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
                       Exams Accepted (comma-sep)
@@ -9251,6 +9340,19 @@ function CollegesListContent() {
                       placeholder="e.g. ₹2.0 Lakhs/Yr"
                       value={addTuitionFees}
                       onChange={(e) => setAddTuitionFees(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
+                      Accreditation
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. AICTE Approved"
+                      value={addAccreditation}
+                      onChange={(e) => setAddAccreditation(e.target.value)}
                       className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
                     />
                   </div>
