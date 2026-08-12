@@ -8893,17 +8893,17 @@ function CollegesListContent() {
                         </div>
                       </motion.div>
 
-                      {/* Dynamic Ad Banner after every 5 colleges */}
-                      {(idx + 1) % 5 === 0 && !hiddenAds.includes(idx) && (
+                      {/* Dynamic Ad Banner after every 4 colleges */}
+                      {(idx + 1) % 4 === 0 && !hiddenAds.includes(idx) && (
                         <motion.div
                           initial={{ opacity: 0, y: 15 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95 }}
                           transition={{ duration: 0.25 }}
-                          className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col p-2 max-w-[600px] lg:mx-0 w-full select-none cursor-pointer"
+                          className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col p-4 md:p-5 max-w-[600px] lg:mx-0 w-full select-none cursor-pointer mt-2 mb-6"
                         >
                           {/* Sponsored label and close triggers */}
-                          <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
+                          <div className="absolute top-3.5 right-3.5 z-30 flex items-center gap-2">
                             <span className="px-2 py-0.5 rounded bg-slate-100/95 text-slate-400 border border-slate-200/60 font-black text-[8px] tracking-wider uppercase">
                               Sponsored
                             </span>
@@ -8926,11 +8926,13 @@ function CollegesListContent() {
                             rel="noopener noreferrer"
                             className="w-full block"
                           >
-                            <img
-                              src="/upes_ad.png"
-                              alt="UPES Admission Ad"
-                              className="w-full h-auto object-cover max-h-[140px] md:max-h-[120px] rounded-xl md:rounded-2xl transition-transform duration-300 group-hover:scale-[1.006]"
-                            />
+                            <div className="w-full h-[150px] md:h-[130px] overflow-hidden flex items-center justify-center bg-slate-50/30 rounded-xl md:rounded-2xl border border-slate-100">
+                              <img
+                                src="/upes_ad.png"
+                                alt="UPES Admission Ad"
+                                className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.006]"
+                              />
+                            </div>
                           </a>
                         </motion.div>
                       )}
