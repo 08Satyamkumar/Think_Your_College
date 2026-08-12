@@ -597,6 +597,8 @@ function CollegesListContent() {
   const [isAddingCollege, setIsAddingCollege] = useState(false);
   const [hiddenAds, setHiddenAds] = useState<number[]>([]);
   const [closedGoogleAds, setClosedGoogleAds] = useState<number[]>([]);
+  const [isFlipkartAdClosed, setIsFlipkartAdClosed] = useState(false);
+  const [closedFlipkartGoogleAd, setClosedFlipkartGoogleAd] = useState(false);
 
   const handleDeleteCollege = async (college: any) => {
     if (
@@ -8676,463 +8678,563 @@ function CollegesListContent() {
 
           {/* RIGHT SIDE: COLLEGES CARDS LIST (Loads first on mobile) */}
           <main className="order-1 lg:order-2 lg:col-span-9 lg:h-[3200px] lg:overflow-y-auto lg:pr-4 custom-filter-scrollbar space-y-6">
-            <AnimatePresence mode="popLayout">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
-                  <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">
-                    Loading colleges from database...
-                  </p>
-                </div>
-              ) : filteredColleges.length > 0 ? (
-                filteredColleges.map((college, idx) => {
-                  const isExpanded = expandedDescriptions.includes(college.id);
-                  const isShortlisted = shortlisted.includes(college.id);
-                  return (
-                    <React.Fragment key={college.id}>
-                      <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.25 }}
-                        whileHover={{ scale: 1.01, y: -3 }}
-                        whileTap={{ scale: 0.99 }}
-                        className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-4 md:p-6 lg:p-7 max-w-[600px] lg:mx-0 w-full"
-                      >
-                        {/* Premium AI Glowing Top Accent Line */}
-                        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                        {/* ADMIN CARD CONTROL TRIGGERS */}
-                        {isAdmin && (
-                          <div className="absolute top-4 right-4 z-30 flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                startEditing(college);
-                              }}
-                              className="p-2 rounded-xl bg-orange-100 hover:bg-orange-600 text-orange-600 hover:text-white transition-all cursor-pointer shadow-sm border border-orange-200"
-                              title="Edit College details"
-                            >
-                              <Edit className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteCollege(college);
-                              }}
-                              className="p-2 rounded-xl bg-red-100 hover:bg-red-600 text-red-600 hover:text-white transition-all cursor-pointer shadow-sm border border-red-200"
-                              title="Delete College permanently"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        )}
-
-                        {/* LEFT PANEL: LOGO & RANKING BADGES */}
-                        <div className="col-span-12 lg:col-span-3 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-200/60 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
-                          {/* Logo and Ranking Group */}
-                          <div className="flex items-center lg:flex-col gap-3 lg:gap-2.5 text-center">
-                            {/* Logo Box */}
-                            <div className="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-base lg:text-lg font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300 overflow-hidden relative flex-shrink-0">
-                              {college.image_url ? (
-                                <>
-                                  <img
-                                    src={college.image_url}
-                                    alt={college.name}
-                                    className="w-full h-full object-contain p-0.5 bg-white absolute inset-0"
-                                    id={`img-${college.id}`}
-                                    onError={(e) => {
-                                      e.currentTarget.style.display = "none";
-                                      const txt = document.getElementById(
-                                        `txt-${college.id}`,
-                                      );
-                                      if (txt) txt.style.display = "block";
-                                    }}
-                                  />
-                                  <span
-                                    id={`txt-${college.id}`}
-                                    style={{ display: "none" }}
-                                  >
-                                    {college.logoText}
-                                  </span>
-                                </>
-                              ) : (
-                                college.logoText
-                              )}
-                            </div>
-
-                            {/* Rank indicator (Shiksha style) */}
-                            {college.nirfRank ? (
-                              <div className="text-left lg:text-center">
-                                <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
-                                  #{college.nirfRank}
-                                </span>
-                                <span className="block text-[8px] font-black text-orange-600 uppercase tracking-widest">
-                                  NIRF Rank
-                                </span>
-                              </div>
-                            ) : (
-                              <div className="text-left lg:text-center">
-                                <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
-                                  ★ {college.rating}
-                                </span>
-                                <span className="block text-[8px] font-black text-amber-600 uppercase tracking-widest">
-                                  Rating
-                                </span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Mobile view Rating/NIRF fallback badge */}
-                          <div className="lg:hidden flex items-center gap-2">
-                            <span className="bg-amber-50 text-amber-700 border border-amber-100/50 px-2 py-0.5 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5">
-                              ★ {college.rating}
-                            </span>
-                            <span className="bg-orange-50 text-orange-700 border border-orange-100/50 px-2 py-0.5 rounded-lg text-[9px] font-extrabold">
-                              {college.accreditation}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* CENTER PANEL: COLLEGE DETAILS (Shiksha + GetMyUni style hybrid) */}
-                        <div className="col-span-12 lg:col-span-6 flex flex-col space-y-3 mt-4 lg:mt-0">
-                          {/* Title and Location */}
-                          <div className="space-y-1">
-                            <Link
-                              href={`/colleges/${college.slug}`}
-                              className="font-outfit font-black text-sm md:text-base text-slate-800 hover:text-orange-500 hover:underline leading-snug transition-colors line-clamp-1"
-                            >
-                              {college.name}
-                            </Link>
-
-                            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold text-slate-500">
-                              <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
-                                <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
-                                {college.location}
-                              </span>
-                              <span>•</span>
-                              <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[8px] uppercase tracking-wider font-extrabold">
-                                {college.type}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Short Description */}
-                          <p
-                            className={`text-[11px] text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Colleges cards list (Takes 8 cols) */}
+              <div className="lg:col-span-8 space-y-6">
+                <AnimatePresence mode="popLayout">
+                  {loading ? (
+                    <div className="flex flex-col items-center justify-center py-32 bg-white border border-slate-200/80 rounded-3xl gap-4">
+                      <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">
+                        Loading colleges from database...
+                      </p>
+                    </div>
+                  ) : filteredColleges.length > 0 ? (
+                    filteredColleges.map((college, idx) => {
+                      const isExpanded = expandedDescriptions.includes(
+                        college.id,
+                      );
+                      const isShortlisted = shortlisted.includes(college.id);
+                      return (
+                        <React.Fragment key={college.id}>
+                          <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.25 }}
+                            whileHover={{ scale: 1.01, y: -3 }}
+                            whileTap={{ scale: 0.99 }}
+                            className="group bg-white border border-slate-300 md:border-slate-200/80 hover:border-orange-500 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_6px_16px_rgba(0,0,0,0.025)] hover:shadow-[0_20px_40px_rgba(249,115,22,0.16)] transition-all duration-300 ease-out relative flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 p-4 md:p-6 lg:p-7 max-w-[600px] lg:mx-0 w-full"
                           >
-                            {college.description}
-                          </p>
+                            {/* Premium AI Glowing Top Accent Line */}
+                            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                          {/* Metadata Grid (GetMyUni inspired, custom modern border box) */}
-                          <div className="grid grid-cols-2 gap-2 md:gap-3.5 select-none">
-                            {/* Courses */}
-                            <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
-                              <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
-                                Courses
-                              </p>
-                              <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-700 uppercase line-clamp-1">
-                                {college.courses.join(", ")}
-                              </p>
-                            </div>
-
-                            {/* Exams */}
-                            <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
-                              <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
-                                Exams Accepted
-                              </p>
-                              <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-700 line-clamp-1">
-                                {college.exams.join(", ")}
-                              </p>
-                            </div>
-
-                            {/* Fees */}
-                            <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
-                              <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
-                                Tuition Fees
-                              </p>
-                              <p className="font-outfit font-black text-[9px] md:text-[10px] text-orange-600 line-clamp-1">
-                                {college.feeRange}
-                              </p>
-                            </div>
-
-                            {/* Accreditation */}
-                            <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
-                              <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
-                                Accreditation
-                              </p>
-                              <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-600 uppercase line-clamp-1">
-                                {college.accreditation}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* RIGHT PANEL: ACTIONS CTA (Stacked Vertically on Desktop) */}
-                        <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-2.5 md:gap-3 lg:pl-4 lg:border-l lg:border-slate-200/60 mt-3 md:mt-4 lg:mt-0 w-full">
-                          {/* Read More button as secondary details trigger */}
-                          <button
-                            onClick={() => toggleDescription(college.id)}
-                            className="hidden lg:block text-[9px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest hover:underline transition-colors mr-auto"
-                          >
-                            {isExpanded ? "Hide Details" : "Show Details"}
-                          </button>
-
-                          {/* Shortlist Toggle */}
-                          <button
-                            onClick={() => {
-                              const loggedInUser = checkUserAuth();
-                              if (!loggedInUser) return;
-                              if (isShortlisted) {
-                                setShortlisted((prev) =>
-                                  prev.filter((id) => id !== college.id),
-                                );
-                              } else {
-                                setShortlisted((prev) => [...prev, college.id]);
-                              }
-                            }}
-                            className={`flex items-center justify-center gap-1.5 px-4 py-2 md:py-2.5 border rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
-                              isShortlisted
-                                ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
-                                : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                            }`}
-                          >
-                            <Heart
-                              className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`}
-                            />
-                            {isShortlisted ? "Shortlisted" : "Shortlist"}
-                          </button>
-
-                          {/* Apply / Brochure CTA */}
-                          <button
-                            onClick={() => {
-                              const loggedInUser = checkUserAuth();
-                              if (!loggedInUser) return;
-                              openInquiryModal(college.stream);
-                            }}
-                            className="flex items-center justify-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
-                          >
-                            <FileText className="w-3.5 h-3.5" />
-                            Apply / Brochure
-                          </button>
-                        </div>
-                      </motion.div>
-
-                      {/* Dynamic Ad Banner after every 4 colleges */}
-                      {(idx + 1) % 4 === 0 && (
-                        <React.Fragment>
-                          {/* Alternating Ad Slots: Odd slots show real UPES Ad, Even slots show Google Ad placeholder */}
-                          {Math.floor((idx + 1) / 4) % 2 === 1 ? (
-                            // Real UPES Ad Slot
-                            !hiddenAds.includes(idx) ? (
-                              <motion.div
-                                initial={{ opacity: 0, y: 15 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.25 }}
-                                className="relative w-full max-w-[600px] lg:mx-0 select-none mt-2 mb-6 flex items-center justify-center group"
-                              >
-                                {/* Invisible Close Trigger Overlay aligned exactly to the [x] in the image */}
+                            {/* ADMIN CARD CONTROL TRIGGERS */}
+                            {isAdmin && (
+                              <div className="absolute top-4 right-4 z-30 flex gap-2">
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    e.preventDefault();
-                                    setHiddenAds((prev) => [...prev, idx]);
+                                    startEditing(college);
                                   }}
-                                  className="absolute top-[2px] right-[2px] w-[30px] h-[30px] bg-transparent cursor-pointer z-30 border-0 outline-none"
-                                  title="Close Ad"
-                                />
-
-                                <a
-                                  href="https://www.upes.ac.in/"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="w-full block"
+                                  className="p-2 rounded-xl bg-orange-100 hover:bg-orange-600 text-orange-600 hover:text-white transition-all cursor-pointer shadow-sm border border-orange-200"
+                                  title="Edit College details"
                                 >
-                                  <div className="w-full h-auto overflow-hidden flex items-center justify-center bg-transparent rounded-lg">
-                                    <img
-                                      src="/upes_ad.png"
-                                      alt="UPES Admission Ad"
-                                      className="w-full h-auto object-contain max-h-[140px] md:max-h-[120px] transition-transform duration-300 group-hover:scale-[1.002]"
-                                    />
-                                  </div>
-                                </a>
-                              </motion.div>
-                            ) : (
-                              // Google Closed Screen replacement overlay for UPES Ad (Matches Google Adsense Closed UI)
-                              <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex items-center justify-center gap-4 relative min-h-[90px]"
-                              >
-                                {/* Left Back Arrow */}
-                                <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
-                                  ←
+                                  <Edit className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteCollege(college);
+                                  }}
+                                  className="p-2 rounded-xl bg-red-100 hover:bg-red-600 text-red-600 hover:text-white transition-all cursor-pointer shadow-sm border border-red-200"
+                                  title="Delete College permanently"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            )}
+
+                            {/* LEFT PANEL: LOGO & RANKING BADGES */}
+                            <div className="col-span-12 lg:col-span-3 flex flex-row lg:flex-col items-center justify-between lg:justify-center lg:border-r lg:border-slate-200/60 lg:pr-4 gap-4 flex-shrink-0 select-none pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-100">
+                              {/* Logo and Ranking Group */}
+                              <div className="flex items-center lg:flex-col gap-3 lg:gap-2.5 text-center">
+                                {/* Logo Box */}
+                                <div className="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200/60 flex items-center justify-center text-base lg:text-lg font-black text-slate-800 uppercase tracking-widest shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:border-orange-500/30 group-hover:from-orange-50/40 group-hover:to-orange-100/10 transition-all duration-300 overflow-hidden relative flex-shrink-0">
+                                  {college.image_url ? (
+                                    <>
+                                      <img
+                                        src={college.image_url}
+                                        alt={college.name}
+                                        className="w-full h-full object-contain p-0.5 bg-white absolute inset-0"
+                                        id={`img-${college.id}`}
+                                        onError={(e) => {
+                                          e.currentTarget.style.display =
+                                            "none";
+                                          const txt = document.getElementById(
+                                            `txt-${college.id}`,
+                                          );
+                                          if (txt) txt.style.display = "block";
+                                        }}
+                                      />
+                                      <span
+                                        id={`txt-${college.id}`}
+                                        style={{ display: "none" }}
+                                      >
+                                        {college.logoText}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    college.logoText
+                                  )}
                                 </div>
-                                <div className="flex flex-col items-center gap-1.5 mx-auto">
-                                  <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
-                                    Ad served by{" "}
-                                    <span className="text-slate-600 font-black">
-                                      Google
+
+                                {/* Rank indicator (Shiksha style) */}
+                                {college.nirfRank ? (
+                                  <div className="text-left lg:text-center">
+                                    <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
+                                      #{college.nirfRank}
                                     </span>
+                                    <span className="block text-[8px] font-black text-orange-600 uppercase tracking-widest">
+                                      NIRF Rank
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="text-left lg:text-center">
+                                    <span className="block font-outfit font-black text-base lg:text-lg text-slate-800 leading-tight">
+                                      ★ {college.rating}
+                                    </span>
+                                    <span className="block text-[8px] font-black text-amber-600 uppercase tracking-widest">
+                                      Rating
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Mobile view Rating/NIRF fallback badge */}
+                              <div className="lg:hidden flex items-center gap-2">
+                                <span className="bg-amber-50 text-amber-700 border border-amber-100/50 px-2 py-0.5 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5">
+                                  ★ {college.rating}
+                                </span>
+                                <span className="bg-orange-50 text-orange-700 border border-orange-100/50 px-2 py-0.5 rounded-lg text-[9px] font-extrabold">
+                                  {college.accreditation}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* CENTER PANEL: COLLEGE DETAILS (Shiksha + GetMyUni style hybrid) */}
+                            <div className="col-span-12 lg:col-span-6 flex flex-col space-y-3 mt-4 lg:mt-0">
+                              {/* Title and Location */}
+                              <div className="space-y-1">
+                                <Link
+                                  href={`/colleges/${college.slug}`}
+                                  className="font-outfit font-black text-sm md:text-base text-slate-800 hover:text-orange-500 hover:underline leading-snug transition-colors line-clamp-1"
+                                >
+                                  {college.name}
+                                </Link>
+
+                                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold text-slate-500">
+                                  <span className="flex items-center gap-1 text-slate-600 group-hover:text-slate-700 transition-colors">
+                                    <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
+                                    {college.location}
+                                  </span>
+                                  <span>•</span>
+                                  <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md text-[8px] uppercase tracking-wider font-extrabold">
+                                    {college.type}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Short Description */}
+                              <p
+                                className={`text-[11px] text-slate-500 leading-relaxed font-semibold ${isExpanded ? "" : "line-clamp-2"}`}
+                              >
+                                {college.description}
+                              </p>
+
+                              {/* Metadata Grid (GetMyUni inspired, custom modern border box) */}
+                              <div className="grid grid-cols-2 gap-2 md:gap-3.5 select-none">
+                                {/* Courses */}
+                                <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                                  <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                                    Courses
                                   </p>
-                                  <div className="flex items-center gap-2">
+                                  <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-700 uppercase line-clamp-1">
+                                    {college.courses.join(", ")}
+                                  </p>
+                                </div>
+
+                                {/* Exams */}
+                                <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                                  <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                                    Exams Accepted
+                                  </p>
+                                  <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-700 line-clamp-1">
+                                    {college.exams.join(", ")}
+                                  </p>
+                                </div>
+
+                                {/* Fees */}
+                                <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                                  <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                                    Tuition Fees
+                                  </p>
+                                  <p className="font-outfit font-black text-[9px] md:text-[10px] text-orange-600 line-clamp-1">
+                                    {college.feeRange}
+                                  </p>
+                                </div>
+
+                                {/* Accreditation */}
+                                <div className="p-2 md:p-3 bg-slate-50/60 border border-slate-100 rounded-xl md:rounded-2xl hover:bg-white hover:border-orange-500/35 hover:shadow-[0_8px_20px_rgba(249,115,22,0.04)] hover:scale-[1.01] transition-all duration-300 space-y-0.5 md:space-y-1">
+                                  <p className="text-[7px] md:text-[7.5px] text-slate-400 font-black uppercase tracking-widest">
+                                    Accreditation
+                                  </p>
+                                  <p className="font-outfit font-black text-[9px] md:text-[10px] text-slate-600 uppercase line-clamp-1">
+                                    {college.accreditation}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* RIGHT PANEL: ACTIONS CTA (Stacked Vertically on Desktop) */}
+                            <div className="col-span-12 lg:col-span-3 flex lg:flex-col items-center justify-between lg:justify-center gap-2.5 md:gap-3 lg:pl-4 lg:border-l lg:border-slate-200/60 mt-3 md:mt-4 lg:mt-0 w-full">
+                              {/* Read More button as secondary details trigger */}
+                              <button
+                                onClick={() => toggleDescription(college.id)}
+                                className="hidden lg:block text-[9px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest hover:underline transition-colors mr-auto"
+                              >
+                                {isExpanded ? "Hide Details" : "Show Details"}
+                              </button>
+
+                              {/* Shortlist Toggle */}
+                              <button
+                                onClick={() => {
+                                  const loggedInUser = checkUserAuth();
+                                  if (!loggedInUser) return;
+                                  if (isShortlisted) {
+                                    setShortlisted((prev) =>
+                                      prev.filter((id) => id !== college.id),
+                                    );
+                                  } else {
+                                    setShortlisted((prev) => [
+                                      ...prev,
+                                      college.id,
+                                    ]);
+                                  }
+                                }}
+                                className={`flex items-center justify-center gap-1.5 px-4 py-2 md:py-2.5 border rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all w-1/2 lg:w-full ${
+                                  isShortlisted
+                                    ? "bg-orange-50 border-orange-200 text-orange-600 shadow-sm"
+                                    : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                                }`}
+                              >
+                                <Heart
+                                  className={`w-3.5 h-3.5 ${isShortlisted ? "fill-orange-500 text-orange-500" : ""}`}
+                                />
+                                {isShortlisted ? "Shortlisted" : "Shortlist"}
+                              </button>
+
+                              {/* Apply / Brochure CTA */}
+                              <button
+                                onClick={() => {
+                                  const loggedInUser = checkUserAuth();
+                                  if (!loggedInUser) return;
+                                  openInquiryModal(college.stream);
+                                }}
+                                className="flex items-center justify-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/10 active:scale-95 cursor-pointer w-1/2 lg:w-full text-center hover:shadow-[0_4px_15px_rgba(249,115,22,0.25)]"
+                              >
+                                <FileText className="w-3.5 h-3.5" />
+                                Apply / Brochure
+                              </button>
+                            </div>
+                          </motion.div>
+
+                          {/* Dynamic Ad Banner after every 4 colleges */}
+                          {(idx + 1) % 4 === 0 && (
+                            <React.Fragment>
+                              {/* Alternating Ad Slots: Odd slots show real UPES Ad, Even slots show Google Ad placeholder */}
+                              {Math.floor((idx + 1) / 4) % 2 === 1 ? (
+                                // Real UPES Ad Slot
+                                !hiddenAds.includes(idx) ? (
+                                  <motion.div
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    transition={{ duration: 0.25 }}
+                                    className="relative w-full max-w-[600px] lg:mx-0 select-none mt-2 mb-6 flex items-center justify-center group"
+                                  >
+                                    {/* Invisible Close Trigger Overlay aligned exactly to the [x] in the image */}
                                     <button
-                                      disabled
-                                      className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] uppercase tracking-wider rounded border border-blue-500 opacity-60"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        setHiddenAds((prev) => [...prev, idx]);
+                                      }}
+                                      className="absolute top-[2px] right-[2px] w-[30px] h-[30px] bg-transparent cursor-pointer z-30 border-0 outline-none"
+                                      title="Close Ad"
+                                    />
+
+                                    <a
+                                      href="https://www.upes.ac.in/"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="w-full block"
+                                    >
+                                      <div className="w-full h-auto overflow-hidden flex items-center justify-center bg-transparent rounded-lg">
+                                        <img
+                                          src="/upes_ad.png"
+                                          alt="UPES Admission Ad"
+                                          className="w-full h-auto object-contain max-h-[140px] md:max-h-[120px] transition-transform duration-300 group-hover:scale-[1.002]"
+                                        />
+                                      </div>
+                                    </a>
+                                  </motion.div>
+                                ) : (
+                                  // Google Closed Screen replacement overlay for UPES Ad (Matches Google Adsense Closed UI)
+                                  <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex items-center justify-center gap-4 relative min-h-[90px]"
+                                  >
+                                    {/* Left Back Arrow */}
+                                    <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                                      ←
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1.5 mx-auto">
+                                      <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+                                        Ad served by{" "}
+                                        <span className="text-slate-600 font-black">
+                                          Google
+                                        </span>
+                                      </p>
+                                      <div className="flex items-center gap-2">
+                                        <button
+                                          disabled
+                                          className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] uppercase tracking-wider rounded border border-blue-500 opacity-60"
+                                        >
+                                          Stop seeing this ad
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            setHiddenAds((prev) =>
+                                              prev.filter((id) => id !== idx),
+                                            )
+                                          }
+                                          className="px-3 py-1.5 bg-white text-orange-500 border border-slate-200 hover:bg-slate-50 font-black text-[9px] uppercase tracking-wider rounded transition-all cursor-pointer"
+                                        >
+                                          Undo
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )
+                              ) : // Google Ad Placeholder Slot (Even indices)
+                              !closedGoogleAds.includes(idx) ? (
+                                <motion.div
+                                  initial={{ opacity: 0, y: 15 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95 }}
+                                  transition={{ duration: 0.25 }}
+                                  className="bg-slate-50/50 border border-slate-200/80 rounded-xl p-5 relative flex flex-col items-center justify-center gap-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 min-h-[140px] md:min-h-[120px]"
+                                >
+                                  {/* Left Back Arrow indicator */}
+                                  <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                                    ←
+                                  </div>
+
+                                  <div className="flex flex-col items-center gap-1">
+                                    <p className="text-[11px] md:text-xs text-slate-400 font-black uppercase tracking-wider flex items-center gap-1.5 select-none">
+                                      Ad served by{" "}
+                                      <span className="text-slate-600 font-black">
+                                        Google
+                                      </span>
+                                    </p>
+                                  </div>
+
+                                  <div className="flex flex-wrap items-center justify-center gap-2.5">
+                                    <button
+                                      onClick={() =>
+                                        setClosedGoogleAds((prev) => [
+                                          ...prev,
+                                          idx,
+                                        ])
+                                      }
+                                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg shadow-sm border border-blue-500 transition-all cursor-pointer"
                                     >
                                       Stop seeing this ad
                                     </button>
-                                    <button
-                                      onClick={() =>
-                                        setHiddenAds((prev) =>
-                                          prev.filter((id) => id !== idx),
-                                        )
-                                      }
-                                      className="px-3 py-1.5 bg-white text-orange-500 border border-slate-200 hover:bg-slate-50 font-black text-[9px] uppercase tracking-wider rounded transition-all cursor-pointer"
+                                    <a
+                                      href="https://support.google.com/adspolicy/answer/6023676"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-500 font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg border border-slate-200 shadow-sm transition-all flex items-center gap-1"
                                     >
-                                      Undo
-                                    </button>
+                                      Why this ad?
+                                      <span className="w-3.5 h-3.5 rounded-full bg-slate-100 flex items-center justify-center text-[9px] text-slate-400 font-bold border border-slate-200">
+                                        i
+                                      </span>
+                                    </a>
                                   </div>
-                                </div>
-                              </motion.div>
-                            )
-                          ) : // Google Ad Placeholder Slot (Even indices)
-                          !closedGoogleAds.includes(idx) ? (
-                            <motion.div
-                              initial={{ opacity: 0, y: 15 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.95 }}
-                              transition={{ duration: 0.25 }}
-                              className="bg-slate-50/50 border border-slate-200/80 rounded-xl p-5 relative flex flex-col items-center justify-center gap-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 min-h-[140px] md:min-h-[120px]"
-                            >
-                              {/* Left Back Arrow indicator */}
-                              <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
-                                ←
-                              </div>
-
-                              <div className="flex flex-col items-center gap-1">
-                                <p className="text-[11px] md:text-xs text-slate-400 font-black uppercase tracking-wider flex items-center gap-1.5 select-none">
-                                  Ad served by{" "}
-                                  <span className="text-slate-600 font-black">
-                                    Google
-                                  </span>
-                                </p>
-                              </div>
-
-                              <div className="flex flex-wrap items-center justify-center gap-2.5">
-                                <button
-                                  onClick={() =>
-                                    setClosedGoogleAds((prev) => [...prev, idx])
-                                  }
-                                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg shadow-sm border border-blue-500 transition-all cursor-pointer"
+                                </motion.div>
+                              ) : (
+                                // Google Closed State replacement overlay for Placeholder Slot
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex items-center justify-center gap-4 relative min-h-[90px]"
                                 >
-                                  Stop seeing this ad
-                                </button>
-                                <a
-                                  href="https://support.google.com/adspolicy/answer/6023676"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-500 font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg border border-slate-200 shadow-sm transition-all flex items-center gap-1"
-                                >
-                                  Why this ad?
-                                  <span className="w-3.5 h-3.5 rounded-full bg-slate-100 flex items-center justify-center text-[9px] text-slate-400 font-bold border border-slate-200">
-                                    i
-                                  </span>
-                                </a>
-                              </div>
-                            </motion.div>
-                          ) : (
-                            // Google Closed State replacement overlay for Placeholder Slot
-                            <motion.div
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center max-w-[600px] lg:mx-0 w-full mt-2 mb-6 flex items-center justify-center gap-4 relative min-h-[90px]"
-                            >
-                              {/* Left Back Arrow */}
-                              <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
-                                ←
-                              </div>
-                              <div className="flex flex-col items-center gap-1.5 mx-auto">
-                                <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
-                                  Ad served by{" "}
-                                  <span className="text-slate-600 font-black">
-                                    Google
-                                  </span>
-                                </p>
-                                <div className="flex items-center gap-2">
-                                  <button
-                                    disabled
-                                    className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] uppercase tracking-wider rounded border border-blue-500 opacity-60"
-                                  >
-                                    Stop seeing this ad
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      setClosedGoogleAds((prev) =>
-                                        prev.filter((id) => id !== idx),
-                                      )
-                                    }
-                                    className="px-3 py-1.5 bg-white text-orange-500 border border-slate-200 hover:bg-slate-50 font-black text-[9px] uppercase tracking-wider rounded transition-all cursor-pointer"
-                                  >
-                                    Undo
-                                  </button>
-                                </div>
-                              </div>
-                            </motion.div>
+                                  {/* Left Back Arrow */}
+                                  <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                                    ←
+                                  </div>
+                                  <div className="flex flex-col items-center gap-1.5 mx-auto">
+                                    <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+                                      Ad served by{" "}
+                                      <span className="text-slate-600 font-black">
+                                        Google
+                                      </span>
+                                    </p>
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        disabled
+                                        className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] uppercase tracking-wider rounded border border-blue-500 opacity-60"
+                                      >
+                                        Stop seeing this ad
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          setClosedGoogleAds((prev) =>
+                                            prev.filter((id) => id !== idx),
+                                          )
+                                        }
+                                        className="px-3 py-1.5 bg-white text-orange-500 border border-slate-200 hover:bg-slate-50 font-black text-[9px] uppercase tracking-wider rounded transition-all cursor-pointer"
+                                      >
+                                        Undo
+                                      </button>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </React.Fragment>
                           )}
                         </React.Fragment>
-                      )}
-                    </React.Fragment>
-                  );
-                })
-              ) : (
-                <div className="py-16 px-4 bg-white border border-slate-200 rounded-3xl text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 mx-auto">
-                    <HelpCircle className="w-8 h-8" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-outfit font-black text-lg text-slate-800">
-                      No Colleges Found
-                    </h3>
-                    <p className="text-xs text-slate-500 font-semibold leading-relaxed">
-                      We couldn't find any colleges matching your active
-                      filters. Try adjusting or clearing filters to browse
-                      others.
-                    </p>
-                  </div>
-                  <button
-                    onClick={clearAllFilters}
-                    className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-95"
-                  >
-                    Clear All Filters
-                  </button>
-                </div>
-              )}
-            </AnimatePresence>
+                      );
+                    })
+                  ) : (
+                    <div className="py-16 px-4 bg-white border border-slate-200 rounded-3xl text-center space-y-4">
+                      <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 mx-auto">
+                        <HelpCircle className="w-8 h-8" />
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className="font-outfit font-black text-lg text-slate-800">
+                          No Colleges Found
+                        </h3>
+                        <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                          We couldn't find any colleges matching your active
+                          filters. Try adjusting or clearing filters to browse
+                          others.
+                        </p>
+                      </div>
+                      <button
+                        onClick={clearAllFilters}
+                        className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-95"
+                      >
+                        Clear All Filters
+                      </button>
+                    </div>
+                  )}
+                </AnimatePresence>
 
-            {/* PAGINATION CONTROLS */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between bg-white border border-slate-200/80 px-6 py-4 rounded-3xl shadow-sm mt-8">
-                <button
-                  disabled={page === 1}
-                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
-                >
-                  Previous
-                </button>
-                <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
-                  Page {page} of {totalPages}
-                </span>
-                <button
-                  disabled={page === totalPages}
-                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
-                >
-                  Next
-                </button>
+                {/* PAGINATION CONTROLS */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-between bg-white border border-slate-200/80 px-6 py-4 rounded-3xl shadow-sm mt-8">
+                    <button
+                      disabled={page === 1}
+                      onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                      className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                      Page {page} of {totalPages}
+                    </span>
+                    <button
+                      disabled={page === totalPages}
+                      onClick={() =>
+                        setPage((p) => Math.min(p + 1, totalPages))
+                      }
+                      className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer active:scale-95"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
+
+              {/* Right Sidebar Ad slot (Takes 4 cols, only visible on desktop view) */}
+              <div className="hidden lg:block lg:col-span-4 sticky top-4 select-none">
+                {!isFlipkartAdClosed ? (
+                  // Active Flipkart Ad Banner
+                  <div className="relative w-full overflow-hidden rounded-2xl flex flex-col items-center justify-center group bg-white shadow-sm border border-slate-200/50 p-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setIsFlipkartAdClosed(true);
+                      }}
+                      className="absolute top-[6px] right-[6px] w-[28px] h-[28px] bg-transparent cursor-pointer z-30 border-0 outline-none"
+                      title="Close Ad"
+                    />
+
+                    <a
+                      href="https://www.flipkart.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full block"
+                    >
+                      <img
+                        src="/flipkart_ad.png"
+                        alt="Flipkart Smart Shop Ad"
+                        className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-[1.002] rounded-xl"
+                      />
+                    </a>
+                  </div>
+                ) : // Google Ad placeholder or closed state if closed
+                !closedFlipkartGoogleAd ? (
+                  <div className="bg-slate-50/50 border border-slate-200/80 rounded-xl p-5 relative flex flex-col items-center justify-center gap-4 text-center w-full min-h-[200px]">
+                    {/* Left Back Arrow */}
+                    <div className="absolute left-4 text-slate-300 text-sm select-none pointer-events-none">
+                      ←
+                    </div>
+
+                    <div className="flex flex-col items-center gap-1">
+                      <p className="text-[11px] text-slate-400 font-black uppercase tracking-wider select-none">
+                        Ad served by{" "}
+                        <span className="text-slate-600 font-black">
+                          Google
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-2 w-full px-2">
+                      <button
+                        onClick={() => setClosedFlipkartGoogleAd(true)}
+                        className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg shadow-sm border border-blue-500 transition-all cursor-pointer"
+                      >
+                        Stop seeing this ad
+                      </button>
+                      <a
+                        href="https://support.google.com/adspolicy/answer/6023676"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-2 bg-white hover:bg-slate-50 text-slate-500 font-black text-[10px] md:text-xs uppercase tracking-wider rounded-lg border border-slate-200 shadow-sm transition-all flex items-center justify-center gap-1"
+                      >
+                        Why this ad?
+                        <span className="w-3.5 h-3.5 rounded-full bg-slate-100 flex items-center justify-center text-[9px] text-slate-400 font-bold border border-slate-200">
+                          i
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  // Closed Confirmation State
+                  <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center w-full flex flex-col items-center justify-center gap-2 relative min-h-[100px]">
+                    <p className="text-[10px] text-slate-400 font-bold leading-normal px-4">
+                      Ad hidden by Google. We will try not to show it again.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setClosedFlipkartGoogleAd(false);
+                        setIsFlipkartAdClosed(false);
+                      }}
+                      className="text-[10px] font-black text-orange-500 hover:underline uppercase tracking-wider"
+                    >
+                      Undo
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </main>
         </div>
       </div>
