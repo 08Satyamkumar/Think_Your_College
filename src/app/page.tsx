@@ -298,8 +298,9 @@ const heroSlides = [
   {
     name: "IIT Delhi Campus",
     location: "Hauz Khas, New Delhi",
-    image: "/images/iitdelhi.png",
+    image: "/images/iitdelhi_real.jpg",
     slug: "iit-delhi",
+    position: "center 45%",
   },
   {
     name: "AIIMS Rishikesh Campus",
