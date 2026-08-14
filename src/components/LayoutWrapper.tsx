@@ -1783,7 +1783,7 @@ export default function LayoutWrapper({
             className="flex items-center select-none hover:scale-[1.03] transition-transform origin-left flex-shrink-0"
           >
             <img
-              src="/logo.png"
+              src="/logo.png?v=2"
               alt="College 19"
               className="h-12 md:h-14 w-auto object-contain"
             />
@@ -3379,7 +3379,7 @@ export default function LayoutWrapper({
             {/* Logo (Official Brand Logo) */}
             <div className="flex flex-col items-start select-none py-1">
               <img
-                src="/logo.png"
+                src="/logo.png?v=2"
                 alt="College 19"
                 className="h-11 md:h-12 w-auto object-contain"
               />
@@ -3626,7 +3626,7 @@ export default function LayoutWrapper({
                   {/* Official COLLEGE 19 Logo */}
                   <div className="flex flex-col items-start select-none pb-4 scale-110 origin-left">
                     <img
-                      src="/logo.png"
+                      src="/logo.png?v=2"
                       alt="College 19"
                       className="h-16 w-auto object-contain"
                     />
