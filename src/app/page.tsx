@@ -280,19 +280,22 @@ const heroSlides = [
     image: "/images/amity_real.png?v=2",
     slug: "amity-university",
     position: "center 20%",
+    color: "#ffc107", // Amity Saffron/Gold
   },
   {
     name: "Chandigarh University",
     location: "Gharuan, Punjab",
-    image: "/images/chandigarh_real.webp?v=2",
+    image: "/images/chandigarh_real.jpg?v=2",
     slug: "chandigarh-university",
     position: "center 20%",
+    color: "#f43f5e", // Chandigarh Rose/Crimson
   },
   {
     name: "Galgotias University Campus",
     location: "Greater Noida, Uttar Pradesh",
     image: "/images/galgotias_real.jpg?v=2",
     slug: "galgotias-university",
+    color: "#ff7a00", // Galgotias Orange
   },
 
   {
@@ -301,12 +304,14 @@ const heroSlides = [
     image: "/images/iitdelhi_real.jpg?v=2",
     slug: "iit-delhi",
     position: "center 45%",
+    color: "#3b82f6", // IIT Blue
   },
   {
     name: "AIIMS Rishikesh Campus",
     location: "Rishikesh, Uttarakhand",
     image: "/images/aiimsrishikesh.webp",
     slug: "aiims-rishikesh",
+    color: "#10b981", // AIIMS Emerald
   },
 ];
 
@@ -771,6 +776,26 @@ export default function HomePage() {
               }}
             />
           </AnimatePresence>
+        </div>
+
+        {/* Main Hero Title Overlay */}
+        <div className="absolute top-[22%] left-6 md:left-12 z-10 max-w-2xl select-none pointer-events-none">
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-white/95 block mb-1.5 drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.8)]">
+            🌟 Top Ranked Campus
+          </span>
+          <h2 
+            className="text-3xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-none uppercase"
+            style={{ 
+              color: (heroSlides[activeSlide] as any).color || "#ffffff",
+              filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.9))"
+            }}
+          >
+            {heroSlides[activeSlide].name}
+          </h2>
+          <p className="mt-2.5 text-xs md:text-base font-bold text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] flex items-center gap-1.5">
+            <span className="inline-block w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+            {heroSlides[activeSlide].location}
+          </p>
         </div>
 
         {/* Bottom left active slide label (Moved higher to sit above the glassmorphic panel) */}
