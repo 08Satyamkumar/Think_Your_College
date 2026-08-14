@@ -287,15 +287,9 @@ const heroSlides = [
     slug: "chandigarh-university",
   },
   {
-    name: "Galgotias University (Academic Block)",
+    name: "Galgotias University Campus",
     location: "Greater Noida, Uttar Pradesh",
-    image: "/images/galgotias_lego_1.png",
-    slug: "galgotias-university",
-  },
-  {
-    name: "Galgotias University (Campus Entrance)",
-    location: "Greater Noida, Uttar Pradesh",
-    image: "/images/galgotias_lego_5.png",
+    image: "/images/galgotias_real.jpg",
     slug: "galgotias-university",
   },
 
