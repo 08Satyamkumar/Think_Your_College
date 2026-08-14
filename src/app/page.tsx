@@ -1672,7 +1672,7 @@ export default function HomePage() {
         <div className="w-full h-24 bg-[#f47920] flex md:hidden items-center justify-center relative overflow-hidden z-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_60%)]" />
           <img
-            src="/logo.png?v=2"
+            src="/logo.png?v=3"
             alt="College 19"
             className="h-14 w-auto object-contain"
           />
@@ -1681,7 +1681,7 @@ export default function HomePage() {
         {/* Brand Logo Container on Left (Desktop) */}
         <div className="absolute top-0 left-0 bottom-0 w-[32%] hidden md:flex flex-col items-center justify-center z-20 pl-8">
           <img
-            src="/logo.png?v=2"
+            src="/logo.png?v=3"
             alt="College 19"
             className="h-20 w-auto object-contain"
           />
