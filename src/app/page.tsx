@@ -779,12 +779,12 @@ export default function HomePage() {
         </div>
 
         {/* Main Hero Title Overlay */}
-        <div className="absolute top-[22%] left-6 md:left-12 z-10 max-w-2xl select-none pointer-events-none">
-          <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-white/95 block mb-1.5 drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.8)]">
+        <div className="absolute top-[8%] left-6 md:left-12 z-10 max-w-2xl select-none pointer-events-none">
+          <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-white/95 block mb-1 drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.8)]">
             🌟 Top Ranked Campus
           </span>
           <h2 
-            className="text-3xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-none uppercase"
+            className="text-lg md:text-3xl lg:text-4xl font-extrabold font-outfit tracking-tight leading-none uppercase"
             style={{ 
               color: (heroSlides[activeSlide] as any).color || "#ffffff",
               filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.9))"
@@ -792,8 +792,8 @@ export default function HomePage() {
           >
             {heroSlides[activeSlide].name}
           </h2>
-          <p className="mt-2.5 text-xs md:text-base font-bold text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] flex items-center gap-1.5">
-            <span className="inline-block w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+          <p className="mt-1.5 text-[10px] md:text-sm font-bold text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] flex items-center gap-1.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
             {heroSlides[activeSlide].location}
           </p>
         </div>
