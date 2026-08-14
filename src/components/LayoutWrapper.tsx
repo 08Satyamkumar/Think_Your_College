@@ -3379,7 +3379,7 @@ export default function LayoutWrapper({
             {/* Logo (Official Brand Logo) */}
             <div className="flex flex-col items-start select-none py-1">
               <img
-                src="/logo.png?v=3"
+                src="/logo-footer.png?v=3"
                 alt="College 19"
                 className="h-11 md:h-12 w-auto object-contain"
               />
