@@ -277,7 +277,7 @@ const heroSlides = [
   {
     name: "Amity University",
     location: "Noida, Uttar Pradesh",
-    image: "/images/amity_real.png?v=2",
+    image: "/images/amity_real.jpg?v=3",
     slug: "amity-university",
     position: "center 20%",
     color: "#ffc107", // Amity Saffron/Gold
