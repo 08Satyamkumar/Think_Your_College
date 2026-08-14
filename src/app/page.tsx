@@ -664,7 +664,7 @@ export default function HomePage() {
       type: "Private",
       slug: "galgotias-university",
       stream: "Engineering",
-      image: "/images/galgotias_lego_1.png",
+      image: "/images/galgotias_real.jpg",
       nirfRank: 95,
     },
     {
