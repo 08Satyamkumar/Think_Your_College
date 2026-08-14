@@ -26,6 +26,7 @@ const config: Config = {
       fontFamily: {
         outfit: ["var(--font-outfit)", "sans-serif"],
         sans: ["var(--font-sans)", "sans-serif"],
+        poppins: ["var(--font-poppins)", "sans-serif"],
       },
       boxShadow: {
         premium: "0 8px 30px rgba(0, 0, 0, 0.04)",

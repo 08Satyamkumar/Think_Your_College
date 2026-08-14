@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --font-outfit: 'Outfit', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-poppins: 'Poppins', sans-serif;
     --primary: hsl(230, 80%, 55%);
     --primary-hover: hsl(230, 80%, 48%);
     --secondary: hsl(160, 84%, 39%);

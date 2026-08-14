@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Poppins } from "next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Smartphone, 
@@ -22,12 +21,6 @@ import {
   ChevronRight,
   Eye
 } from "lucide-react";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-});
 
 // Mock emergency contacts for Screen 2
 const contactAvatars = [
@@ -70,7 +63,7 @@ export default function SafeAxisOnboarding() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#0F172A] text-slate-100 p-4 md:p-8 flex flex-col items-center justify-center ${poppins.variable} font-sans`}>
+    <div className="min-h-screen bg-[#0F172A] text-slate-100 p-4 md:p-8 flex flex-col items-center justify-center font-poppins">
       {/* Background Decorative Mesh Gradients */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px]" />
