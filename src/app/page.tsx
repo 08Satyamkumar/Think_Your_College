@@ -283,8 +283,9 @@ const heroSlides = [
   {
     name: "Chandigarh University",
     location: "Gharuan, Punjab",
-    image: "/images/chandigarh.png",
+    image: "/images/chandigarh_real.webp",
     slug: "chandigarh-university",
+    position: "center 20%",
   },
   {
     name: "Galgotias University Campus",
@@ -757,13 +758,14 @@ export default function HomePage() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSlide}
-              initial={{ opacity: 0, scale: 1.05 }}
+              initial={{ opacity: 0, scale: 1.01 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover"
               style={{
                 backgroundImage: `url(${heroSlides[activeSlide].image})`,
+                backgroundPosition: (heroSlides[activeSlide] as any).position || "center",
               }}
             />
           </AnimatePresence>
