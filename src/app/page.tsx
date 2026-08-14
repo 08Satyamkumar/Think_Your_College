@@ -277,8 +277,9 @@ const heroSlides = [
   {
     name: "Amity University",
     location: "Noida, Uttar Pradesh",
-    image: "/images/amity.png",
+    image: "/images/amity_real.png",
     slug: "amity-university",
+    position: "center 20%",
   },
   {
     name: "Chandigarh University",
