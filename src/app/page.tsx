@@ -277,28 +277,28 @@ const heroSlides = [
   {
     name: "Amity University",
     location: "Noida, Uttar Pradesh",
-    image: "/images/amity_real.png",
+    image: "/images/amity_real.png?v=2",
     slug: "amity-university",
     position: "center 20%",
   },
   {
     name: "Chandigarh University",
     location: "Gharuan, Punjab",
-    image: "/images/chandigarh_real.webp",
+    image: "/images/chandigarh_real.webp?v=2",
     slug: "chandigarh-university",
     position: "center 20%",
   },
   {
     name: "Galgotias University Campus",
     location: "Greater Noida, Uttar Pradesh",
-    image: "/images/galgotias_real.jpg",
+    image: "/images/galgotias_real.jpg?v=2",
     slug: "galgotias-university",
   },
 
   {
     name: "IIT Delhi Campus",
     location: "Hauz Khas, New Delhi",
-    image: "/images/iitdelhi_real.jpg",
+    image: "/images/iitdelhi_real.jpg?v=2",
     slug: "iit-delhi",
     position: "center 45%",
   },
@@ -667,7 +667,7 @@ export default function HomePage() {
       type: "Private",
       slug: "galgotias-university",
       stream: "Engineering",
-      image: "/images/galgotias_real.jpg",
+      image: "/images/galgotias_real.jpg?v=2",
       nirfRank: 95,
     },
     {
