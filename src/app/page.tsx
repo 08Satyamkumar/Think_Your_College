@@ -383,7 +383,7 @@ function AdBannersRow() {
   }, []);
 
   return (
-    <div className="w-full select-none !mt-2 mb-1">
+    <div className="w-full select-none !mt-0 mb-1">
       {/* Desktop Layout: Fixed Side-by-Side Grid with Zero Inner Padding */}
       <div className="hidden lg:grid lg:grid-cols-5 lg:gap-2">
         {adBanners.map((ad, idx) => {
@@ -927,7 +927,7 @@ export default function HomePage() {
     <div className="space-y-12">
       {" "}
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-2 h-[380px] md:h-[560px] text-white flex flex-col justify-end">
+      <section className="relative overflow-hidden -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-0.5 h-[380px] md:h-[560px] text-white flex flex-col justify-end">
         {/* Slideshow background layer */}
         <div className="absolute inset-0 z-0">
           <AnimatePresence mode="wait">
