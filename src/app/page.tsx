@@ -335,7 +335,7 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_2_a.png",
     imageB: "/images/ads/ad_2_b.png",
-    link: "#",
+    link: "https://apply.atmaaims.com/?utm_source=mbauniverse&utm_medium=atma&utm_campaign=july_2026",
     alt: "AIMS ATMA",
     glowColor: "#0d9488",
   },
@@ -429,6 +429,8 @@ function AdBannersRow() {
             <a
               key={idx}
               href={ad.link}
+              target={ad.link === "#" ? undefined : "_blank"}
+              rel={ad.link === "#" ? undefined : "noopener noreferrer"}
               onClick={(e) => {
                 if (ad.link === "#") e.preventDefault();
               }}
@@ -477,6 +479,8 @@ function AdBannersRow() {
               <a
                 key={idx}
                 href={ad.link}
+                target={ad.link === "#" ? undefined : "_blank"}
+                rel={ad.link === "#" ? undefined : "noopener noreferrer"}
                 onClick={(e) => {
                   if (ad.link === "#") e.preventDefault();
                 }}
