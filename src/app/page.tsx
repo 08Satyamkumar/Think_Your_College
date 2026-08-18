@@ -552,6 +552,20 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
+  const counselingSlides = [
+    "/images/counseling_cartoon_1.jpg",
+    "/images/counseling_cartoon_2.jpg",
+    "/images/counseling_cartoon_3.jpg"
+  ];
+  const [activeCounselingSlide, setActiveCounselingSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCounselingSlide((prev) => (prev + 1) % counselingSlides.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStream, setSelectedStream] = useState("All");
   const [showInquiryModal, setShowInquiryModal] = useState(false);
@@ -2647,16 +2661,23 @@ export default function HomePage() {
 
         {/* Right Column: Premium Generated Counseling Cartoon */}
         <div className="lg:col-span-6 flex justify-center items-center">
-          <div className="relative w-full max-w-md group/img select-none">
+          <div className="relative w-full max-w-md aspect-square group/img select-none">
             {/* 3D Glow halo behind the card to integrate it into the saffron backdrop */}
             <div className="absolute inset-2 bg-gradient-to-tr from-orange-400/20 to-amber-500/20 rounded-[32px] blur-2xl group-hover/img:scale-105 group-hover/img:blur-3xl transition-all duration-500" />
 
-            {/* The Image Card itself */}
-            <img
-              src="/images/counseling_cartoon.jpg"
-              alt="Expert Counseling Guidance"
-              className="relative z-10 w-full h-auto object-contain rounded-[24px] border border-orange-200/30 shadow-[0_15px_30px_rgba(244,121,32,0.06),0_10px_15px_-5px_rgba(0,0,0,0.04)] hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500"
-            />
+            {/* Stacking the images for a smooth crossfade effect */}
+            {counselingSlides.map((slide, idx) => (
+              <img
+                key={slide}
+                src={slide}
+                alt={`Expert Counseling Guidance ${idx + 1}`}
+                className={`absolute inset-0 w-full h-full object-contain rounded-[24px] border border-orange-200/30 shadow-[0_15px_30px_rgba(244,121,32,0.06),0_10px_15px_-5px_rgba(0,0,0,0.04)] transition-all duration-1000 ease-in-out hover:scale-[1.02] hover:-translate-y-1 ${
+                  idx === activeCounselingSlide 
+                    ? "opacity-100 z-10" 
+                    : "opacity-0 z-0 pointer-events-none"
+                }`}
+              />
+            ))}
           </div>
         </div>
       </section>
