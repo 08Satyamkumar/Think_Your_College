@@ -328,7 +328,7 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_1_a.png",
     imageB: "/images/ads/ad_1_b.png",
-    link: "#",
+    link: "https://admissions.mdi.ac.in/mdi-pgdm-online-form?utm_source=mbauniverse&utm_medium=mdi_gurgaon&utm_campaign=pgdm_online_2026",
     alt: "MDI Gurgaon",
     glowColor: "#0284c7",
   },
