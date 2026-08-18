@@ -1479,7 +1479,7 @@ export default function HomePage() {
         </AnimatePresence>
       </section>
       {/* TRENDING NOW TICKER SECTION (Full length, Sharp edges, no blur, Mobile responsive) */}
-      <section className="relative overflow-hidden bg-white border border-orange-500/20 rounded-2xl md:rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.035)] mt-6 mb-8 py-2.5 px-4 md:py-3.5 md:px-6 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 w-full">
+      <section className="relative overflow-hidden bg-white border border-orange-500/20 rounded-2xl md:rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.035)] mt-6 mb-1.5 py-2.5 px-4 md:py-3.5 md:px-6 flex flex-col sm:flex-row items-center select-none gap-3 md:gap-4 w-full">
         {/* Left Skew Glowing Saffron Badge */}
         <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[9px] md:text-[10px] tracking-wider uppercase rounded-xl shadow-md shadow-orange-500/15 relative z-10 skew-x-[-8deg] origin-center">
           <span className="inline-block animate-pulse skew-x-[8deg]">🔥</span>
@@ -1508,8 +1508,8 @@ export default function HomePage() {
       </section>
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
       {/* Section Divider */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
-      <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-6 lg:gap-8 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory">
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent !mt-0 !mb-1.5" />
+      <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-6 lg:gap-8 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory !mt-0">
         {/* WIDGET 1: COMPARE COLLEGES (INTERACTIVE WIDGET) */}
         <div className="w-[82vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-blue-500/20 hover:border-blue-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none">
           {/* Automatic Shimmer Sheen Reflection Overlay */}
