@@ -342,9 +342,9 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_3_a.png",
     imageB: "/images/ads/ad_3_b.png",
-    link: "#",
-    alt: "CIMP Patna",
-    glowColor: "#6366f1",
+    link: "https://cgcuet.cgcuniversity.in/?utm_source=shiksha&utm_medium=CM-Da1&utm_campaign=CGC_2026",
+    alt: "CGC Mohali",
+    glowColor: "#2563eb",
   },
   {
     imageA: "/images/ads/ad_4_a.png",
@@ -434,7 +434,7 @@ function AdBannersRow() {
               onClick={(e) => {
                 if (ad.link === "#") e.preventDefault();
               }}
-              className={`relative rounded-md border bg-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-center aspect-[204/96] ${
+              className={`relative block rounded-md border bg-white overflow-hidden transition-all duration-500 ease-in-out aspect-[204/96] ${
                 isGlowing 
                   ? "z-10" 
                   : "hover:scale-[1.01] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:-translate-y-0.5"
@@ -446,22 +446,20 @@ function AdBannersRow() {
                   : "0 1.5px 4px rgba(0,0,0,0.02)",
               }}
             >
-              <div className="relative w-full h-full">
-                <img
-                  src={ad.imageA}
-                  alt={ad.alt}
-                  className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                    isFlipped ? "opacity-0" : "opacity-100"
-                  }`}
-                />
-                <img
-                  src={ad.imageB}
-                  alt={ad.alt}
-                  className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                    isFlipped ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-              </div>
+              <img
+                src={ad.imageA}
+                alt={ad.alt}
+                className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                  isFlipped ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <img
+                src={ad.imageB}
+                alt={ad.alt}
+                className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                  isFlipped ? "opacity-100" : "opacity-0"
+                }`}
+              />
             </a>
           );
         })}
@@ -484,7 +482,7 @@ function AdBannersRow() {
                 onClick={(e) => {
                   if (ad.link === "#") e.preventDefault();
                 }}
-                className="relative inline-flex items-center justify-center rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out w-[160px] h-[75px] flex-shrink-0"
+                className="relative block rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out w-[160px] h-[75px] flex-shrink-0"
                 style={{
                   borderColor: isGlowing ? ad.glowColor : "#e2e8f0",
                   boxShadow: isGlowing 
@@ -492,22 +490,20 @@ function AdBannersRow() {
                     : "0 1px 3px rgba(0,0,0,0.02)",
                 }}
               >
-                <div className="relative w-full h-full">
-                  <img
-                    src={ad.imageA}
-                    alt={ad.alt}
-                    className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                      isFlipped ? "opacity-0" : "opacity-100"
-                    }`}
-                  />
-                  <img
-                    src={ad.imageB}
-                    alt={ad.alt}
-                    className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                      isFlipped ? "opacity-100" : "opacity-0"
-                    }`}
-                  />
-                </div>
+                <img
+                  src={ad.imageA}
+                  alt={ad.alt}
+                  className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                    isFlipped ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+                <img
+                  src={ad.imageB}
+                  alt={ad.alt}
+                  className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                    isFlipped ? "opacity-100" : "opacity-0"
+                  }`}
+                />
               </a>
             );
           })}
