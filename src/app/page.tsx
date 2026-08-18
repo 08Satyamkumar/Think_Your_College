@@ -1712,7 +1712,7 @@ export default function HomePage() {
                 className="flex items-center gap-2 px-5 py-2.5 border border-white/30 hover:border-white text-white hover:bg-white/10 font-bold text-xs rounded-xl transition-all active:scale-95 cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
-                Download SCC Guidelines PDF
+                Download BSCC Guidelines PDF
               </a>
               <Link
                 href="/credit-card"
