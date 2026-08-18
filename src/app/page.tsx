@@ -363,20 +363,57 @@ const adBanners: AdBanner[] = [
 ];
 
 function AdBannersRow() {
-  const [showStateB, setShowStateB] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [flipped, setFlipped] = useState<boolean[]>([false, false, false, false, false]);
+  const [glowing, setGlowing] = useState<boolean[]>([false, false, false, false, false]);
 
   useEffect(() => {
-    // Synchronously flip all ad banners together every 3.5 seconds
+    // Mixed dynamic interval: triggers every 2.8 seconds
     const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setShowStateB((prev) => !prev);
-      
-      // Keep the glowing transition effect active for 1000ms during the cross-fade
+      const randType = Math.random();
+      let targetIndices: number[] = [];
+
+      if (randType < 0.6) {
+        // Option A: Flip exactly ONE random card
+        const idx = Math.floor(Math.random() * adBanners.length);
+        targetIndices = [idx];
+      } else if (randType < 0.8) {
+        // Option B: Flip MULTIPLE random cards (2 or 3)
+        while (targetIndices.length < 2) {
+          for (let i = 0; i < adBanners.length; i++) {
+            if (Math.random() > 0.5 && !targetIndices.includes(i)) {
+              targetIndices.push(i);
+            }
+          }
+        }
+      } else {
+        // Option C: Flip ALL cards together
+        targetIndices = [0, 1, 2, 3, 4];
+      }
+
+      // 1. Highlight target indices with border glow
+      setGlowing((prev) => {
+        const next = [false, false, false, false, false];
+        targetIndices.forEach(idx => {
+          next[idx] = true;
+        });
+        return next;
+      });
+
+      // 2. Perform the flip transition
+      setFlipped((prev) => {
+        const next = [...prev];
+        targetIndices.forEach(idx => {
+          next[idx] = !next[idx];
+        });
+        return next;
+      });
+
+      // 3. Clear glow state after 1 second (cross-fade transition duration)
       setTimeout(() => {
-        setIsTransitioning(false);
+        setGlowing([false, false, false, false, false]);
       }, 1000);
-    }, 3500);
+
+    }, 2800);
 
     return () => clearInterval(interval);
   }, []);
@@ -386,18 +423,20 @@ function AdBannersRow() {
       {/* Desktop Layout: Fixed Side-by-Side Grid with Zero Inner Padding */}
       <div className="hidden lg:grid lg:grid-cols-5 lg:gap-2">
         {adBanners.map((ad, idx) => {
+          const isFlipped = flipped[idx];
+          const isGlowing = glowing[idx];
           return (
             <a
               key={idx}
               href={ad.link}
               className={`relative rounded-md border bg-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-center aspect-[204/96] ${
-                isTransitioning 
-                  ? "z-10 scale-[1.012]" 
+                isGlowing 
+                  ? "z-10" 
                   : "hover:scale-[1.01] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:-translate-y-0.5"
               }`}
               style={{
-                borderColor: isTransitioning ? ad.glowColor : "#e2e8f0",
-                boxShadow: isTransitioning 
+                borderColor: isGlowing ? ad.glowColor : "#e2e8f0",
+                boxShadow: isGlowing 
                   ? `0 0 14px ${ad.glowColor}50, inset 0 0 8px ${ad.glowColor}10` 
                   : "0 1.5px 4px rgba(0,0,0,0.02)",
               }}
@@ -407,14 +446,14 @@ function AdBannersRow() {
                   src={ad.imageA}
                   alt={ad.alt}
                   className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                    showStateB ? "opacity-0" : "opacity-100"
+                    isFlipped ? "opacity-0" : "opacity-100"
                   }`}
                 />
                 <img
                   src={ad.imageB}
                   alt={ad.alt}
                   className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                    showStateB ? "opacity-100" : "opacity-0"
+                    isFlipped ? "opacity-100" : "opacity-0"
                   }`}
                 />
               </div>
@@ -429,16 +468,16 @@ function AdBannersRow() {
           {/* Double the array for infinite seamless looping */}
           {[...adBanners, ...adBanners].map((ad, idx) => {
             const actualIdx = idx % adBanners.length;
+            const isFlipped = flipped[actualIdx];
+            const isGlowing = glowing[actualIdx];
             return (
               <a
                 key={idx}
                 href={ad.link}
-                className={`relative inline-flex items-center justify-center rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out w-[160px] h-[75px] flex-shrink-0 ${
-                  isTransitioning ? "scale-[1.01]" : ""
-                }`}
+                className="relative inline-flex items-center justify-center rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out w-[160px] h-[75px] flex-shrink-0"
                 style={{
-                  borderColor: isTransitioning ? ad.glowColor : "#e2e8f0",
-                  boxShadow: isTransitioning 
+                  borderColor: isGlowing ? ad.glowColor : "#e2e8f0",
+                  boxShadow: isGlowing 
                     ? `0 0 10px ${ad.glowColor}50` 
                     : "0 1px 3px rgba(0,0,0,0.02)",
                 }}
@@ -448,14 +487,14 @@ function AdBannersRow() {
                     src={ad.imageA}
                     alt={ad.alt}
                     className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                      showStateB ? "opacity-0" : "opacity-100"
+                      isFlipped ? "opacity-0" : "opacity-100"
                     }`}
                   />
                   <img
                     src={ad.imageB}
                     alt={ad.alt}
                     className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
-                      showStateB ? "opacity-100" : "opacity-0"
+                      isFlipped ? "opacity-100" : "opacity-0"
                     }`}
                   />
                 </div>
