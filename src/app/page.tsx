@@ -328,7 +328,7 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_1_a.png",
     imageB: "/images/ads/ad_1_b.png",
-    link: "/colleges/mdi-gurgaon",
+    link: "#",
     alt: "MDI Gurgaon",
     glowColor: "#0284c7",
   },
@@ -342,14 +342,14 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_3_a.png",
     imageB: "/images/ads/ad_3_b.png",
-    link: "/colleges/cimp-patna",
+    link: "#",
     alt: "CIMP Patna",
     glowColor: "#6366f1",
   },
   {
     imageA: "/images/ads/ad_4_a.png",
     imageB: "/images/ads/ad_4_b.png",
-    link: "/colleges/iba-bangalore",
+    link: "#",
     alt: "IBA Bangalore",
     glowColor: "#d97706",
   },
@@ -429,6 +429,9 @@ function AdBannersRow() {
             <a
               key={idx}
               href={ad.link}
+              onClick={(e) => {
+                if (ad.link === "#") e.preventDefault();
+              }}
               className={`relative rounded-md border bg-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-center aspect-[204/96] ${
                 isGlowing 
                   ? "z-10" 
@@ -474,6 +477,9 @@ function AdBannersRow() {
               <a
                 key={idx}
                 href={ad.link}
+                onClick={(e) => {
+                  if (ad.link === "#") e.preventDefault();
+                }}
                 className="relative inline-flex items-center justify-center rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out w-[160px] h-[75px] flex-shrink-0"
                 style={{
                   borderColor: isGlowing ? ad.glowColor : "#e2e8f0",
