@@ -1707,12 +1707,20 @@ export default function HomePage() {
                 Apply for Loan Guidance
               </button>
               <a
-                href="#"
+                href="/bihar-student-credit-card-guidelines.pdf"
+                download="bihar-student-credit-card-guidelines.pdf"
                 className="flex items-center gap-2 px-5 py-2.5 border border-white/30 hover:border-white text-white hover:bg-white/10 font-bold text-xs rounded-xl transition-all active:scale-95 cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
                 Download SCC Guidelines PDF
               </a>
+              <Link
+                href="/credit-card"
+                className="flex items-center gap-2 px-5 py-2.5 bg-orange-500/30 hover:bg-orange-500/50 border border-orange-400/40 hover:border-orange-400 text-white font-bold text-xs rounded-xl transition-all active:scale-95 cursor-pointer"
+              >
+                <GraduationCap className="w-4 h-4 text-orange-200" />
+                View Scheme Details
+              </Link>
             </div>
           </div>
 
