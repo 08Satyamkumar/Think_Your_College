@@ -533,7 +533,8 @@ export default function HomePage() {
 
   const biharBgs = [
     { src: "/images/bihar/bihar_bg_1.jpg", position: "bg-[right_bottom_20%]" },
-    { src: "/images/bihar/bihar_bg_2.jpg", position: "bg-[center_35%]" }
+    { src: "/images/bihar/bihar_bg_2.jpg", position: "bg-[center_35%]" },
+    { src: "/images/bihar/bihar_bg_3.jpg", position: "bg-center" }
   ];
   const [activeBiharBg, setActiveBiharBg] = useState(0);
 
