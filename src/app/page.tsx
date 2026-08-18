@@ -349,9 +349,9 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_4_a.png",
     imageB: "/images/ads/ad_4_b.png",
-    link: "#",
-    alt: "IBA Bangalore",
-    glowColor: "#d97706",
+    link: "https://cucet.cuchd.in/index.aspx?utm_source=Shiksha&utm_medium=t1&utm_campaign=CUPB",
+    alt: "CUCET Chandigarh",
+    glowColor: "#f43f5e",
   },
   {
     imageA: "/images/ads/ad_5_a.png",
