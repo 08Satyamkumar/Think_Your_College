@@ -532,8 +532,8 @@ export default function HomePage() {
   >("cities");
 
   const biharBgs = [
-    "/images/bihar/bihar_bg_1.jpg",
-    "/images/bihar/bihar_bg_2.jpg"
+    { src: "/images/bihar/bihar_bg_1.jpg", position: "bg-[right_bottom_20%]" },
+    { src: "/images/bihar/bihar_bg_2.jpg", position: "bg-[center_35%]" }
   ];
   const [activeBiharBg, setActiveBiharBg] = useState(0);
 
@@ -1690,11 +1690,11 @@ export default function HomePage() {
         {/* Background Landmark Image Layer */}
         {biharBgs.map((bg, idx) => (
           <div 
-            key={bg}
-            className={`absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-1000 ease-in-out z-0 ${
+            key={bg.src}
+            className={`absolute inset-0 bg-cover bg-no-repeat pointer-events-none transition-opacity duration-1000 ease-in-out z-0 ${bg.position} ${
               idx === activeBiharBg ? "opacity-[0.25]" : "opacity-0"
             }`}
-            style={{ backgroundImage: `url('${bg}')` }}
+            style={{ backgroundImage: `url('${bg.src}')` }}
           />
         ))}
         
