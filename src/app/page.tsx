@@ -393,23 +393,34 @@ function AdBannersRow() {
             <a
               key={idx}
               href={ad.link}
-              className={`relative rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-center aspect-[204/96] ${
+              className={`relative rounded-md border bg-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-center aspect-[204/96] ${
                 isGlowing 
                   ? "z-10 scale-[1.015]" 
-                  : "hover:scale-[1.01]"
+                  : "hover:scale-[1.01] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:-translate-y-0.5"
               }`}
               style={{
-                borderColor: isGlowing ? ad.glowColor : "#cbd5e1",
+                borderColor: isGlowing ? ad.glowColor : "#e2e8f0",
                 boxShadow: isGlowing 
-                  ? `0 0 15px ${ad.glowColor}60, inset 0 0 8px ${ad.glowColor}10` 
-                  : "none",
+                  ? `0 0 14px ${ad.glowColor}50, inset 0 0 8px ${ad.glowColor}10` 
+                  : "0 1.5px 4px rgba(0,0,0,0.02)",
               }}
             >
-              <img
-                src={isFlipped ? ad.imageB : ad.imageA}
-                alt={ad.alt}
-                className="w-full h-full object-fill select-none pointer-events-none"
-              />
+              <div className="relative w-full h-full">
+                <img
+                  src={ad.imageA}
+                  alt={ad.alt}
+                  className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                    isFlipped ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+                <img
+                  src={ad.imageB}
+                  alt={ad.alt}
+                  className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                    isFlipped ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              </div>
             </a>
           );
         })}
@@ -431,17 +442,28 @@ function AdBannersRow() {
                   isGlowing ? "scale-[1.01]" : ""
                 }`}
                 style={{
-                  borderColor: isGlowing ? ad.glowColor : "#cbd5e1",
+                  borderColor: isGlowing ? ad.glowColor : "#e2e8f0",
                   boxShadow: isGlowing 
                     ? `0 0 10px ${ad.glowColor}50` 
-                    : "none",
+                    : "0 1px 3px rgba(0,0,0,0.02)",
                 }}
               >
-                <img
-                  src={isFlipped ? ad.imageB : ad.imageA}
-                  alt={ad.alt}
-                  className="w-full h-full object-fill select-none pointer-events-none"
-                />
+                <div className="relative w-full h-full">
+                  <img
+                    src={ad.imageA}
+                    alt={ad.alt}
+                    className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                      isFlipped ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                  <img
+                    src={ad.imageB}
+                    alt={ad.alt}
+                    className={`absolute inset-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-700 ease-in-out ${
+                      isFlipped ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                </div>
               </a>
             );
           })}
@@ -905,7 +927,7 @@ export default function HomePage() {
     <div className="space-y-12">
       {" "}
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-12 h-[380px] md:h-[560px] text-white flex flex-col justify-end">
+      <section className="relative overflow-hidden -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-2 h-[380px] md:h-[560px] text-white flex flex-col justify-end">
         {/* Slideshow background layer */}
         <div className="absolute inset-0 z-0">
           <AnimatePresence mode="wait">
