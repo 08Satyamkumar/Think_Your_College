@@ -356,9 +356,9 @@ const adBanners: AdBanner[] = [
   {
     imageA: "/images/ads/ad_5_a.png",
     imageB: "/images/ads/ad_5_b.png",
-    link: "#",
-    alt: "IMS Learning",
-    glowColor: "#e11d48",
+    link: "https://apply.upes.ac.in/courses/mba?utm_source=shiksha_branding&utm_medium=BrandCamp&utm_campaign=AY2026",
+    alt: "UPES MBA",
+    glowColor: "#ff7a00",
   },
 ];
 
