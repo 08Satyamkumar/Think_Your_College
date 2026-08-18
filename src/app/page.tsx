@@ -1674,10 +1674,19 @@ export default function HomePage() {
       {/* Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="p-6 md:p-12 rounded-[28px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white relative overflow-hidden shadow-[0_10px_35px_rgba(234,88,12,0.22)] border border-orange-500/35">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_35%)]" />
+        {/* Background Landmark Image Layer */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.25] pointer-events-none z-0"
+          style={{ backgroundImage: "url('/images/bihar/bihar_bg_1.jpg')" }}
+        />
+        
+        {/* Dark radial glow layer on left to ensure high text contrast */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(0,0,0,0.35),transparent_60%)] z-0" />
+        
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_35%)] z-0" />
 
         {/* Shimmer Sheen Reflection Sweep Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
           <div className="lg:col-span-8 space-y-4">
@@ -1724,16 +1733,20 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Mobile background watermark to shrink height */}
-          <div className="absolute right-4 bottom-2 lg:hidden opacity-[0.08] text-white z-0 pointer-events-none">
-            <ShieldCheck className="w-24 h-24 text-white" />
-          </div>
-
-          {/* Desktop visual element */}
-          <div className="hidden lg:flex lg:col-span-4 justify-center">
-            <div className="relative w-48 h-48 bg-white/10 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl shadow-orange-950/20 group/icon">
+          {/* Right Visual block containing Shield and Premium BIHAR text */}
+          <div className="lg:col-span-4 flex flex-col items-center lg:items-end justify-center gap-4 pt-6 lg:pt-0 border-t border-white/10 lg:border-t-0">
+            <div className="relative w-32 h-32 bg-white/10 backdrop-blur-md border border-white/15 rounded-full flex items-center justify-center shadow-xl shadow-orange-950/20 group/icon">
               <div className="absolute inset-0 rounded-full bg-white/5 opacity-0 group-hover/icon:opacity-100 transition-opacity duration-300 animate-ping" />
-              <ShieldCheck className="w-24 h-24 text-orange-200 group-hover/icon:scale-110 transition-transform duration-300" />
+              <ShieldCheck className="w-14 h-14 text-orange-200 group-hover/icon:scale-110 transition-transform duration-300" />
+            </div>
+            <div className="text-center lg:text-right space-y-0.5">
+              <span className="block font-outfit text-[9px] font-black uppercase tracking-[0.35em] text-orange-200/80">
+                STATE OF
+              </span>
+              <span className="block font-outfit text-2xl font-black uppercase tracking-[0.2em] text-white drop-shadow-[0_2px_10px_rgba(234,88,12,0.65)]">
+                BIHAR
+              </span>
+              <div className="h-0.5 w-12 bg-orange-400 mx-auto lg:ml-auto lg:mr-0 rounded-full mt-1.5" />
             </div>
           </div>
         </div>
