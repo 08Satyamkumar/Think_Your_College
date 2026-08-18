@@ -316,189 +316,145 @@ const heroSlides = [
   },
 ];
 
-interface AdCard {
-  title: string;
-  subtitle: string;
-  badge: string;
+interface AdBanner {
+  imageA: string;
+  imageB: string;
   link: string;
-  brandColor: string;
-  logoText: string;
-  description: string;
-  ctaText: string;
-  logoBg: string;
+  alt: string;
+  glowColor: string;
 }
 
-const adBanners: AdCard[] = [
+const adBanners: AdBanner[] = [
   {
-    title: "MDI Gurgaon",
-    subtitle: "PGDM-Online",
-    badge: "Apply Now",
+    imageA: "/images/ads/ad_1_a.png",
+    imageB: "/images/ads/ad_1_b.png",
     link: "/colleges/mdi-gurgaon",
-    brandColor: "#0284c7",
-    logoText: "MDI",
-    description: "Professional experience of 2+ years required.",
-    ctaText: "Admissions Open",
-    logoBg: "bg-gradient-to-br from-sky-500 to-blue-700",
+    alt: "MDI Gurgaon",
+    glowColor: "#0284c7",
   },
   {
-    title: "AIMS ATMA",
-    subtitle: "Management Admissions",
-    badge: "Register Now",
+    imageA: "/images/ads/ad_2_a.png",
+    imageB: "/images/ads/ad_2_b.png",
     link: "#",
-    brandColor: "#0d9488",
-    logoText: "AIMS",
-    description: "National Entrance Exam: 12th July 2026.",
-    ctaText: "Registration Live",
-    logoBg: "bg-gradient-to-br from-teal-400 to-emerald-600",
+    alt: "AIMS ATMA",
+    glowColor: "#0d9488",
   },
   {
-    title: "CIMP Patna",
-    subtitle: "AICTE Approved PGDM",
-    badge: "CIMP 2026",
+    imageA: "/images/ads/ad_3_a.png",
+    imageB: "/images/ads/ad_3_b.png",
     link: "/colleges/cimp-patna",
-    brandColor: "#6366f1",
-    logoText: "CIMP",
-    description: "NBA Accredited, equivalent to MBA degree.",
-    ctaText: "Apply Online",
-    logoBg: "bg-gradient-to-br from-indigo-500 to-violet-700",
+    alt: "CIMP Patna",
+    glowColor: "#6366f1",
   },
   {
-    title: "IBA Bangalore",
-    subtitle: "PGDM 2026-28 Batch",
-    badge: "Top 1% B-School",
+    imageA: "/images/ads/ad_4_a.png",
+    imageB: "/images/ads/ad_4_b.png",
     link: "/colleges/iba-bangalore",
-    brandColor: "#d97706",
-    logoText: "IBA",
-    description: "Two Years Full Time Residential Program.",
-    ctaText: "26th Batch Open",
-    logoBg: "bg-gradient-to-br from-amber-400 to-orange-600",
+    alt: "IBA Bangalore",
+    glowColor: "#d97706",
   },
   {
-    title: "IMS Learning",
-    subtitle: "Trusted for Success",
-    badge: "Join Course",
+    imageA: "/images/ads/ad_5_a.png",
+    imageB: "/images/ads/ad_5_b.png",
     link: "#",
-    brandColor: "#e11d48",
-    logoText: "IMS",
-    description: "Outperform in exams and interview prep.",
-    ctaText: "Outperform Now",
-    logoBg: "bg-gradient-to-br from-rose-500 to-red-700",
+    alt: "IMS Learning",
+    glowColor: "#e11d48",
   },
 ];
 
 function AdBannersRow() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [toggleText, setToggleText] = useState(false);
+  const [flipped, setFlipped] = useState<boolean[]>([false, false, false, false, false]);
+  const [glowIdx, setGlowIdx] = useState<number | null>(null);
 
   useEffect(() => {
-    const adInterval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % adBanners.length);
-    }, 4000);
+    // Organically flip one random ad banner every 2.5 seconds to show state A vs B
+    const interval = setInterval(() => {
+      const idx = Math.floor(Math.random() * adBanners.length);
+      setFlipped((prev) => {
+        const next = [...prev];
+        next[idx] = !next[idx];
+        return next;
+      });
+      setGlowIdx(idx);
+      setTimeout(() => setGlowIdx(null), 850);
+    }, 2500);
 
-    const textInterval = setInterval(() => {
-      setToggleText((prev) => !prev);
-    }, 2000);
-
-    return () => {
-      clearInterval(adInterval);
-      clearInterval(textInterval);
-    };
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="w-full select-none mb-6 mt-4">
-      <div className="flex items-center gap-2 mb-3 px-1">
-        <span className="w-1.5 h-3.5 rounded-full bg-orange-500" />
-        <h3 className="font-outfit font-black text-[10.5px] uppercase tracking-widest text-slate-400 flex items-center gap-2">
-          Featured B-Schools & Entrance Prep
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-500 text-[8px] font-black uppercase tracking-wider animate-pulse">
-            <Sparkles className="w-2 h-2" /> Live Ads
-          </span>
-        </h3>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+    <div className="w-full select-none !mt-2 mb-1">
+      {/* Desktop Layout: Fixed Side-by-Side Grid with Zero Inner Padding */}
+      <div className="hidden lg:grid lg:grid-cols-5 lg:gap-2">
         {adBanners.map((ad, idx) => {
-          const isActive = idx === activeIndex;
+          const isFlipped = flipped[idx];
+          const isGlowing = idx === glowIdx;
           return (
             <a
               key={idx}
               href={ad.link}
-              className={`relative overflow-hidden p-3.5 rounded-2xl border bg-slate-900/40 backdrop-blur-sm hover:bg-slate-900/70 transition-all duration-500 flex items-center gap-3 group h-[92px] ${
-                isActive ? "scale-[1.01]" : "hover:scale-[1.01]"
+              className={`relative rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-center aspect-[204/96] ${
+                isGlowing 
+                  ? "z-10 scale-[1.015]" 
+                  : "hover:scale-[1.01]"
               }`}
               style={{
-                borderColor: isActive ? ad.brandColor : "rgba(255, 255, 255, 0.08)",
-                boxShadow: isActive 
-                  ? `0 0 15px -2px ${ad.brandColor}40, inset 0 0 12px ${ad.brandColor}10` 
+                borderColor: isGlowing ? ad.glowColor : "#cbd5e1",
+                boxShadow: isGlowing 
+                  ? `0 0 15px ${ad.glowColor}60, inset 0 0 8px ${ad.glowColor}10` 
                   : "none",
               }}
             >
-              {isActive && (
-                <div 
-                  className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-500"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${ad.brandColor}, transparent)`,
-                    backgroundSize: "200% 100%",
-                    animation: "shimmer 3s infinite linear"
-                  }}
-                />
-              )}
-
-              <div className={`w-10 h-10 rounded-xl ${ad.logoBg} flex items-center justify-center text-white font-extrabold text-[11px] shadow-md group-hover:scale-105 transition-transform duration-300 flex-shrink-0`}>
-                {ad.logoText}
-              </div>
-
-              <div className="flex-1 min-w-0 flex flex-col justify-center h-full">
-                <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <span className="font-outfit font-black text-[9.5px] text-slate-200 truncate uppercase tracking-wider group-hover:text-white transition-colors">
-                    {ad.title}
-                  </span>
-                  <span 
-                    className="text-[7.5px] font-black uppercase px-1 py-0.5 rounded tracking-wide font-sans flex-shrink-0"
-                    style={{ 
-                      backgroundColor: `${ad.brandColor}15`, 
-                      color: ad.brandColor 
-                    }}
-                  >
-                    {ad.badge}
-                  </span>
-                </div>
-
-                <div className="relative h-9 overflow-hidden">
-                  <div 
-                    className={`absolute inset-0 flex flex-col justify-center transition-all duration-500 ${
-                      isActive && toggleText ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
-                    }`}
-                  >
-                    <span className="text-[9.5px] font-medium text-slate-400 leading-snug line-clamp-2">
-                      {ad.description}
-                    </span>
-                  </div>
-
-                  <div 
-                    className={`absolute inset-0 flex flex-col justify-center transition-all duration-500 ${
-                      isActive && toggleText ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-                    }`}
-                  >
-                    <span 
-                      className="text-[10px] font-extrabold leading-none flex items-center gap-1 group-hover:underline"
-                      style={{ color: ad.brandColor }}
-                    >
-                      {ad.ctaText}
-                      <ArrowRight className="w-2.5 h-2.5 animate-pulse" />
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <img
+                src={isFlipped ? ad.imageB : ad.imageA}
+                alt={ad.alt}
+                className="w-full h-full object-fill select-none pointer-events-none"
+              />
             </a>
           );
         })}
       </div>
+
+      {/* Mobile/Tablet Layout: Smooth Infinite Auto-Scrolling Marquee Ticker */}
+      <div className="lg:hidden w-full overflow-hidden relative bg-white border-y border-slate-200/80 py-1">
+        <div className="flex gap-2.5 w-max animate-marquee hover:[animation-play-state:paused] active:[animation-play-state:paused] whitespace-nowrap">
+          {/* Double the array for infinite seamless looping */}
+          {[...adBanners, ...adBanners].map((ad, idx) => {
+            const actualIdx = idx % adBanners.length;
+            const isFlipped = flipped[actualIdx];
+            const isGlowing = actualIdx === glowIdx;
+            return (
+              <a
+                key={idx}
+                href={ad.link}
+                className={`relative inline-flex items-center justify-center rounded border bg-white overflow-hidden transition-all duration-500 ease-in-out w-[160px] h-[75px] flex-shrink-0 ${
+                  isGlowing ? "scale-[1.01]" : ""
+                }`}
+                style={{
+                  borderColor: isGlowing ? ad.glowColor : "#cbd5e1",
+                  boxShadow: isGlowing 
+                    ? `0 0 10px ${ad.glowColor}50` 
+                    : "none",
+                }}
+              >
+                <img
+                  src={isFlipped ? ad.imageB : ad.imageA}
+                  alt={ad.alt}
+                  className="w-full h-full object-fill select-none pointer-events-none"
+                />
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
       <style>{`
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 25s linear infinite;
         }
       `}</style>
     </div>
@@ -1069,10 +1025,10 @@ export default function HomePage() {
 
       {/* CONSOLIDATED EXPLORE HUB SECTION (Dynamic Tabbed Switcher: Cities / Exams / Courses) */}
       {/* Section Divider */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent !mt-2 mb-2" />
       <section
         id="explore-hub-section"
-        className="space-y-8 select-none scroll-mt-28"
+        className="space-y-8 select-none scroll-mt-28 !mt-3"
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
