@@ -531,10 +531,23 @@ export default function HomePage() {
     "cities" | "exams" | "courses"
   >("cities");
 
+  const biharBgs = [
+    "/images/bihar/bihar_bg_1.jpg",
+    "/images/bihar/bihar_bg_2.jpg"
+  ];
+  const [activeBiharBg, setActiveBiharBg] = useState(0);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % heroSlides.length);
     }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveBiharBg((prev) => (prev + 1) % biharBgs.length);
+    }, 2000);
     return () => clearInterval(timer);
   }, []);
 
@@ -1675,10 +1688,15 @@ export default function HomePage() {
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
       <section className="p-6 md:p-12 rounded-[28px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white relative overflow-hidden shadow-[0_10px_35px_rgba(234,88,12,0.22)] border border-orange-500/35">
         {/* Background Landmark Image Layer */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.25] pointer-events-none z-0"
-          style={{ backgroundImage: "url('/images/bihar/bihar_bg_1.jpg')" }}
-        />
+        {biharBgs.map((bg, idx) => (
+          <div 
+            key={bg}
+            className={`absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-1000 ease-in-out z-0 ${
+              idx === activeBiharBg ? "opacity-[0.25]" : "opacity-0"
+            }`}
+            style={{ backgroundImage: `url('${bg}')` }}
+          />
+        ))}
         
         {/* Dark radial glow layer on left to ensure high text contrast */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(0,0,0,0.35),transparent_60%)] z-0" />
