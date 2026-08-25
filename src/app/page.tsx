@@ -562,7 +562,7 @@ export default function HomePage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveCounselingSlide((prev) => (prev + 1) % counselingSlides.length);
-    }, 2000);
+    }, 3500);
     return () => clearInterval(timer);
   }, []);
 
@@ -2671,7 +2671,7 @@ export default function HomePage() {
                 key={slide}
                 src={slide}
                 alt="Expert Counseling Guidance"
-                className={`absolute inset-0 w-full h-full object-contain rounded-[24px] border border-orange-200/30 shadow-[0_15px_30px_rgba(244,121,32,0.06),0_10px_15px_-5px_rgba(0,0,0,0.04)] hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-in-out ${
+                className={`absolute inset-0 w-full h-full object-contain rounded-[24px] border border-orange-200/30 shadow-[0_15px_30px_rgba(244,121,32,0.06),0_10px_15px_-5px_rgba(0,0,0,0.04)] transition-opacity duration-[800ms] ease-in-out ${
                   idx === activeCounselingSlide ? "z-20 opacity-100" : "z-10 opacity-0"
                 }`}
               />
