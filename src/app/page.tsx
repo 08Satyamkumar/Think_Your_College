@@ -2607,23 +2607,6 @@ export default function HomePage() {
               </span>
             </div>
 
-            {/* Address 1 - Patna */}
-            <a
-              href="https://www.google.com/maps/search/Boring+Road+Crossing,+Patna,+Bihar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200 cursor-pointer no-underline"
-            >
-              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
-                <MapPin className="w-4 h-4" />
-              </div>
-              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide truncate">
-                Address:{" "}
-                <span className="text-slate-600 hover:text-orange-500 transition-colors">
-                  Boring Road Crossing, Patna, Bihar
-                </span>
-              </span>
-            </a>
 
             {/* Address 2 - Greater Noida */}
             <a
