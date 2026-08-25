@@ -2432,51 +2432,61 @@ export default function HomePage() {
               {
                 name: "Ratri Paul",
                 course: "B.Sc Student",
+                avatar: "/images/student_avatar_2.jpg",
                 text: "College 19 has helped me in selecting my perfect college along with course. After 12 in Science with Biology and no interest in the medical field, I didn't know which course to select and in which college. College 19's face to face free Counselling has helped me in choosing my right career path.",
               },
               {
                 name: "Saikat Saha",
                 course: "B.Tech Aspirant",
+                avatar: "/images/student_avatar_1.jpg",
                 text: "Being a remote student, I was clueless after class 12 in choosing my career path, but College 19's Counselling for Remote Candidates' service has helped me in sorting out my colleges and choose my course. They have also provided me with GD and PI training.",
               },
               {
                 name: "Ankita Mondal",
                 course: "Arts Student",
+                avatar: "/images/student_avatar_3.jpg",
                 text: "I did my HS in Computer Science but have no interest in Engineering and also did not want to pursue an Honours course. I took College 19's face to face counselling service and got to know my strength in arts subjects. They guided me to pursue arts from a reputed college.",
               },
               {
                 name: "Aman Kumar",
                 course: "MBA Student",
+                avatar: "/images/student_avatar_4.jpg",
                 text: "I was confused between PGDM and MBA. College 19 expert counselors analyzed my profile and CAT score, and guided me to select the top colleges matching my budget. The scholarship guidance they gave helped me save ₹1.5 Lakhs on fees.",
               },
               {
                 name: "Sneha Kumari",
                 course: "MBBS Aspirant",
+                avatar: "/images/student_avatar_5.jpg",
                 text: "Cracking NEET was hard, but choosing the right medical college with my rank was harder. College 19's detailed seat analysis and documentation checklist made my admission in B.Sc Nursing/MBBS smooth. Truly grateful to the team.",
               },
               {
                 name: "Rahul Verma",
                 course: "BCA Student",
+                avatar: "/images/student_avatar_6.jpg",
                 text: "College 19's portal helped me compare fees, placements, and hostel facilities of 10+ colleges in just 5 minutes. Their helpline answered all my questions about Bihar Student Credit Card and admission quotas.",
               },
               {
                 name: "Pooja Sharma",
                 course: "BBA Student",
+                avatar: "/images/student_avatar_7.jpg",
                 text: "The counseling session with College 19 changed my perspective. They conducted a mock interview for my college entry and guided me step-by-step with the documentation and registration.",
               },
               {
                 name: "Vikram Singh",
                 course: "Law Student",
+                avatar: "/images/student_avatar_8.jpg",
                 text: "I wanted to pursue law but wasn't sure about the integrated course options. College 19 counselors explained the difference between BA LLB and BBA LLB. Thanks to them, I secured admission in a top university.",
               },
               {
                 name: "Neha Raj",
                 course: "B.Sc Nursing Student",
+                avatar: "/images/student_avatar_3.jpg",
                 text: "Getting admission under Bihar Student Credit Card scheme was a dream. College 19 helped me throughout the college selection, verification, and DRCC registration. Best free counseling service in India!",
               },
               {
                 name: "Abhishek Mishra",
                 course: "MCA Student",
+                avatar: "/images/student_avatar_1.jpg",
                 text: "Highly professional and transparent. They didn't push any particular colleges, they actually listened to my career goals and suggested options where I got placed successfully. 100% recommended!",
               },
             ].map((review, idx) => (
@@ -2488,18 +2498,28 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-[50%] h-[200%] pointer-events-none translate-x-[-100%] group-hover:animate-shimmer-sheen z-10" />
 
                 <span className="text-slate-300 font-serif text-6xl absolute -top-1 left-2 select-none pointer-events-none transition-colors duration-300 group-hover:text-white/20">
-                  “
+                  "
                 </span>
                 <p className="text-[11.5px] sm:text-xs text-slate-600 leading-relaxed font-semibold relative z-10 pt-4 overflow-y-auto no-scrollbar max-h-[170px] sm:max-h-[190px] transition-colors duration-300 group-hover:text-white">
                   {review.text}
                 </p>
-                <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col relative z-20 transition-all duration-300 group-hover:border-white/20">
-                  <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide transition-colors duration-300 group-hover:text-white">
-                    {review.name}
-                  </span>
-                  <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5 transition-colors duration-300 group-hover:text-orange-100">
-                    {review.course}
-                  </span>
+                <div className="mt-4 pt-3.5 border-t border-slate-200 flex items-center justify-between relative z-20 transition-all duration-300 group-hover:border-white/20">
+                  <div className="flex flex-col">
+                    <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide transition-colors duration-300 group-hover:text-white">
+                      {review.name}
+                    </span>
+                    <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5 transition-colors duration-300 group-hover:text-orange-100">
+                      {review.course}
+                    </span>
+                  </div>
+                  {/* Student Avatar */}
+                  <div className="w-10 h-10 rounded-full border-2 border-white shadow-md overflow-hidden shrink-0 transition-all duration-300 group-hover:border-orange-200">
+                    <img
+                      src={review.avatar}
+                      alt={review.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
