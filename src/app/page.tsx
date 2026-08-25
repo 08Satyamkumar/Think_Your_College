@@ -2503,23 +2503,13 @@ export default function HomePage() {
                 <p className="text-[11.5px] sm:text-xs text-slate-600 leading-relaxed font-semibold relative z-10 pt-4 overflow-y-auto no-scrollbar max-h-[170px] sm:max-h-[190px] transition-colors duration-300 group-hover:text-white">
                   {review.text}
                 </p>
-                <div className="mt-4 pt-3.5 border-t border-slate-200 flex items-center justify-between relative z-20 transition-all duration-300 group-hover:border-white/20">
-                  <div className="flex flex-col">
-                    <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide transition-colors duration-300 group-hover:text-white">
-                      {review.name}
-                    </span>
-                    <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5 transition-colors duration-300 group-hover:text-orange-100">
-                      {review.course}
-                    </span>
-                  </div>
-                  {/* Student Avatar */}
-                  <div className="w-10 h-10 rounded-full border-2 border-white shadow-md overflow-hidden shrink-0 transition-all duration-300 group-hover:border-orange-200">
-                    <img
-                      src={review.avatar}
-                      alt={review.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col relative z-20 transition-all duration-300 group-hover:border-white/20">
+                  <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wide transition-colors duration-300 group-hover:text-white">
+                    {review.name}
+                  </span>
+                  <span className="text-[9.5px] text-slate-400 font-extrabold uppercase mt-0.5 transition-colors duration-300 group-hover:text-orange-100">
+                    {review.course}
+                  </span>
                 </div>
               </div>
             ))}
