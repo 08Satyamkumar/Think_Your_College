@@ -2568,39 +2568,26 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col gap-3.5 max-w-md">
-            {/* New Student */}
+            {/* Admissions Helpline */}
             <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <Phone className="w-4 h-4" />
               </div>
               <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
-                New Student:{" "}
+                Admissions Helpline:{" "}
                 <span className="text-orange-500 font-sans">
                   +91-9973798413
                 </span>
               </span>
             </div>
 
-            {/* Existing Student */}
+            {/* Student Support */}
             <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
               <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
                 <PhoneCall className="w-4 h-4" />
               </div>
               <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
-                Existing Student:{" "}
-                <span className="text-orange-500 font-sans">
-                  +91-9973798413
-                </span>
-              </span>
-            </div>
-
-            {/* For Existing Student (WhatsApp or secondary line) */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200/50 rounded-full shadow-sm hover:scale-[1.01] hover:border-orange-400 transition-all duration-200">
-              <div className="w-8 h-8 rounded-full bg-[#032b53] flex items-center justify-center text-white shrink-0">
-                <PhoneCall className="w-4 h-4" />
-              </div>
-              <span className="text-xs sm:text-sm font-black text-slate-800 tracking-wide">
-                For Existing Student:{" "}
+                Student Support:{" "}
                 <span className="text-orange-500 font-sans">
                   +91-9973798413
                 </span>
