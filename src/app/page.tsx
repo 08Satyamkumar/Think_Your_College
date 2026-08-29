@@ -1785,6 +1785,44 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* SPONSORED LEADERBOARD DISPLAY AD (GoDaddy / Google AdChoices) */}
+      <div className="w-full my-2.5">
+        <div className="relative group/ad w-full overflow-hidden rounded-2xl bg-black border border-slate-800 shadow-md hover:shadow-xl transition-all duration-300">
+          <a
+            href="https://www.godaddy.com/offers/email/professional-email"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GoDaddy - Get email that looks as professional as your business is"
+            className="block relative w-full overflow-hidden cursor-pointer"
+          >
+            <img
+              src="/images/ads/godaddy_banner.png"
+              alt="GoDaddy - Professional Business Email & Domains"
+              className="w-full h-auto object-cover sm:object-contain select-none group-hover/ad:scale-[1.006] transition-transform duration-500 ease-out"
+            />
+            {/* Subtle Programmatic Shine on Hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-[40%] h-full pointer-events-none -translate-x-full group-hover/ad:translate-x-[300%] transition-transform duration-1000 ease-in-out" />
+          </a>
+
+          {/* Real Google AdChoices / Info Badge */}
+          <div className="absolute top-1.5 right-1.5 z-20 flex items-center bg-white/95 backdrop-blur-sm rounded px-1.5 py-0.5 shadow text-[9px] font-sans text-slate-600 gap-1 border border-slate-200/80 select-none pointer-events-auto">
+            <span className="text-[8px] font-bold text-slate-500 tracking-tight">Ad</span>
+            <a
+              href="https://adssettings.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="AdChoices"
+              className="text-[#00a3e0] hover:text-[#0077a8] transition-colors flex items-center"
+            >
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* TRENDING COLLEGES */}
       {/* Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
