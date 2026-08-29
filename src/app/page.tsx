@@ -255,9 +255,9 @@ const trendingUpdates = [
   },
   {
     id: "5",
-    tag: "TYC Feature",
+    tag: "College 19 Feature",
     title:
-      "TYC College Predictor 2026 Launched: Predict your dream campus in seconds",
+      "College 19 Predictor 2026 Launched: Predict your dream campus in seconds",
     details:
       "Get rank-based AI recommendations for IITs, NITs, AIIMS, and top private universities based on your JEE, NEET, or CAT exam scores.",
     actionText: "Open College Predictor",
@@ -266,7 +266,7 @@ const trendingUpdates = [
   {
     id: "6",
     tag: "Student Cards",
-    title: "Get Student-friendly Credit Cards via TYC - Zero Annual Charges",
+    title: "Get Student-friendly Credit Cards via College 19 - Zero Annual Charges",
     details:
       "Apply for custom credit cards designed for university students to cover tuition fees, books, and living expenses with interest-free semesters.",
     actionText: "Apply for Student Card",
