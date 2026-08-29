@@ -2010,32 +2010,42 @@ export default function HomePage() {
         </a>
       </div>
 
-      {/* TRENDING COLLEGES */}
-      {/* Section Divider */}
+      {/* MASTER COLLEGE SHOWCASE BOX (World-Class Glowing Unified Container) */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent !mt-3.5 !mb-2.5" />
-      <section className="space-y-6 !mt-0">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-b from-white via-orange-50/15 to-white border border-slate-200/90 shadow-[0_12px_45px_rgba(0,0,0,0.04)] p-5 sm:p-7 md:p-8 space-y-6 !mt-0 select-none">
+        {/* Subtle Ambient Radial Backlight Glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.08),transparent_60%)] pointer-events-none z-0" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.05),transparent_60%)] pointer-events-none z-0" />
+
+        {/* Header with Title & Filter Tabs */}
+        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 text-[10px] font-black uppercase tracking-wider mb-2">
+              <Sparkles className="w-3 h-3 text-orange-500 animate-pulse" />
+              <span>Verified Top Campuses 2026-27</span>
+            </div>
             <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
-              Trending Colleges in India
+              Trending & Top Featured Colleges in India
             </h2>
-            <p className="text-sm text-text_secondary">
-              Explore high-ranking institutes based on placements and
-              infrastructure
+            <p className="text-sm text-text_secondary mt-0.5">
+              Explore premier government & private institutes ranked for top placements, global faculty & infrastructure
             </p>
           </div>
 
-          {/* TABS FILTER */}
+          {/* Single Unified Tabs Filter */}
           <div className="flex flex-wrap gap-2">
             {["All", "Engineering", "Management", "Medical", "Law"].map(
               (tab) => (
                 <button
                   key={tab}
-                  onClick={() => setSelectedStream(tab)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  onClick={() => {
+                    setSelectedStream(tab);
+                    setSelectedFeaturedStream(tab);
+                  }}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     selectedStream === tab
-                      ? "bg-primary text-white shadow-md shadow-primary/10"
-                      : "bg-card border border-border text-text_secondary hover:bg-border/30 hover:text-text_primary"
+                      ? "bg-primary text-white shadow-md shadow-primary/20 scale-[1.02]"
+                      : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >
                   {tab}
@@ -2045,15 +2055,15 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative group/carousel select-none">
-          {/* Scroll Controls */}
+        {/* Row 1: Flagship Institutes & Premier Universities Carousel */}
+        <div className="relative group/carousel select-none z-10">
           <button
             onClick={() =>
               document
                 .getElementById("trending-colleges-carousel-container")
                 ?.scrollBy({ left: -360, behavior: "smooth" })
             }
-            className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
+            className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:scale-95 transition-all z-30 opacity-90 hover:opacity-100 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -2063,23 +2073,22 @@ export default function HomePage() {
                 .getElementById("trending-colleges-carousel-container")
                 ?.scrollBy({ left: 360, behavior: "smooth" })
             }
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
+            className="absolute -right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:scale-95 transition-all z-30 opacity-90 hover:opacity-100 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Scrollable Carousel Container */}
           <div
             id="trending-colleges-carousel-container"
-            className="flex overflow-x-auto no-scrollbar gap-6 py-4 scroll-smooth snap-x snap-mandatory"
+            className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth snap-x snap-mandatory"
           >
             {filteredColleges.map((college) => (
               <motion.div
                 layout
                 key={college.id}
-                className="group snap-start w-[280px] sm:w-[295px] md:w-[310px] flex-shrink-0 flex flex-col justify-between bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-[22px] overflow-hidden shadow-sm hover:shadow-[0_16px_36px_-6px_rgba(249,115,22,0.18)] hover:-translate-y-1.5 transition-all duration-350 select-none relative"
+                className="group snap-start w-[280px] sm:w-[295px] md:w-[305px] flex-shrink-0 flex flex-col justify-between bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-[22px] overflow-hidden shadow-xs hover:shadow-[0_16px_36px_-6px_rgba(249,115,22,0.18)] hover:-translate-y-1.5 transition-all duration-350 select-none relative"
               >
-                {/* 1. Top Campus Banner Image */}
+                {/* Image */}
                 <div className="relative h-[120px] bg-slate-100 overflow-hidden">
                   <img
                     src={college.image || "/images/galgotias_real.jpg"}
@@ -2090,10 +2099,8 @@ export default function HomePage() {
                       (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80";
                     }}
                   />
-                  {/* Subtle dark gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                  {/* Top-Left: NIRF Badge */}
                   {college.nirfRank && (
                     <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full text-[8.5px] font-black shadow-md shadow-orange-500/25 z-10 flex items-center gap-1">
                       <Award className="w-2.5 h-2.5" />
@@ -2101,19 +2108,17 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  {/* Top-Right: Rating Badge */}
                   <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm text-[9.5px] font-black text-slate-800 z-10">
                     <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                     <span>{college.rating}</span>
                   </div>
 
-                  {/* Bottom-Right on Image: Govt/Private Pill */}
                   <div className="absolute bottom-2 right-2.5 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-bold text-white z-10">
                     {college.type}
                   </div>
                 </div>
 
-                {/* 2. Floating Overlapping College Logo + Stream Tag */}
+                {/* Floating Logo + Stream */}
                 <div className="relative -mt-6 px-3.5 z-20 flex items-center justify-between">
                   <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow relative">
                     {college.logo ? (
@@ -2141,7 +2146,7 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* 3. Card Body: Name, Location & Metrics */}
+                {/* Body */}
                 <div className="p-3.5 pt-1.5 flex-1 flex flex-col justify-between gap-2.5">
                   <div>
                     <h3 className="font-outfit font-black text-[13.5px] leading-snug text-slate-800 group-hover:text-orange-600 transition-colors line-clamp-1">
@@ -2153,35 +2158,21 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  {/* 3-Pill Key Metrics Box */}
                   <div className="grid grid-cols-3 gap-1 py-1.5 px-2 bg-slate-50 border border-slate-100 rounded-xl text-center">
                     <div>
-                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
-                        Highest
-                      </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-emerald-600 mt-0.5 truncate">
-                        {college.highestPackage}
-                      </p>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">Highest</p>
+                      <p className="font-outfit font-bold text-[10.5px] text-emerald-600 mt-0.5 truncate">{college.highestPackage}</p>
                     </div>
                     <div className="border-x border-slate-200/60">
-                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
-                        Average
-                      </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5 truncate">
-                        {college.averagePackage}
-                      </p>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">Average</p>
+                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5 truncate">{college.averagePackage}</p>
                     </div>
                     <div>
-                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
-                        Fees
-                      </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-slate-700 mt-0.5 truncate">
-                        {college.averageFee}
-                      </p>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">Fees</p>
+                      <p className="font-outfit font-bold text-[10.5px] text-slate-700 mt-0.5 truncate">{college.averageFee}</p>
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="flex gap-2 pt-0.5">
                     <Link
                       href={`/colleges/${college.slug}`}
@@ -2205,50 +2196,19 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
 
-      {/* SECTION 2: TOP FEATURED & POPULAR UNIVERSITIES (Compact Gap) */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/70 to-transparent !my-2" />
-      <section className="space-y-6 !mt-0">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
-              Top Featured Universities in India
-            </h2>
-            <p className="text-sm text-text_secondary">
-              Discover premier private & government universities with stellar placement records
-            </p>
-          </div>
+        {/* Clean Single Divider Line Between Rows */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent !my-3" />
 
-          {/* TABS FILTER FOR SECTION 2 */}
-          <div className="flex flex-wrap gap-2">
-            {["All", "Engineering", "Management", "Medical", "Law"].map(
-              (tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setSelectedFeaturedStream(tab)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-                    selectedFeaturedStream === tab
-                      ? "bg-primary text-white shadow-md shadow-primary/10"
-                      : "bg-card border border-border text-text_secondary hover:bg-border/30 hover:text-text_primary"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ),
-            )}
-          </div>
-        </div>
-
-        <div className="relative group/carousel select-none">
-          {/* Scroll Controls */}
+        {/* Row 2: Top Ranked & Emerging Universities Carousel */}
+        <div className="relative group/carousel select-none z-10">
           <button
             onClick={() =>
               document
                 .getElementById("featured-colleges-carousel-container")
                 ?.scrollBy({ left: -360, behavior: "smooth" })
             }
-            className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
+            className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:scale-95 transition-all z-30 opacity-90 hover:opacity-100 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -2258,23 +2218,22 @@ export default function HomePage() {
                 .getElementById("featured-colleges-carousel-container")
                 ?.scrollBy({ left: 360, behavior: "smooth" })
             }
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
+            className="absolute -right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:scale-95 transition-all z-30 opacity-90 hover:opacity-100 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Scrollable Carousel Container */}
           <div
             id="featured-colleges-carousel-container"
-            className="flex overflow-x-auto no-scrollbar gap-6 py-4 scroll-smooth snap-x snap-mandatory"
+            className="flex overflow-x-auto no-scrollbar gap-5 py-2 scroll-smooth snap-x snap-mandatory"
           >
             {filteredFeaturedColleges.map((college) => (
               <motion.div
                 layout
                 key={college.id}
-                className="group snap-start w-[280px] sm:w-[295px] md:w-[310px] flex-shrink-0 flex flex-col justify-between bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-[22px] overflow-hidden shadow-sm hover:shadow-[0_16px_36px_-6px_rgba(249,115,22,0.18)] hover:-translate-y-1.5 transition-all duration-350 select-none relative"
+                className="group snap-start w-[280px] sm:w-[295px] md:w-[305px] flex-shrink-0 flex flex-col justify-between bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-[22px] overflow-hidden shadow-xs hover:shadow-[0_16px_36px_-6px_rgba(249,115,22,0.18)] hover:-translate-y-1.5 transition-all duration-350 select-none relative"
               >
-                {/* 1. Top Campus Banner Image */}
+                {/* Image */}
                 <div className="relative h-[120px] bg-slate-100 overflow-hidden">
                   <img
                     src={college.image || "/images/galgotias_real.jpg"}
@@ -2287,7 +2246,6 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                  {/* Top-Left: NIRF Badge */}
                   {college.nirfRank && (
                     <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full text-[8.5px] font-black shadow-md shadow-orange-500/25 z-10 flex items-center gap-1">
                       <Award className="w-2.5 h-2.5" />
@@ -2295,19 +2253,17 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  {/* Top-Right: Rating Badge */}
                   <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm text-[9.5px] font-black text-slate-800 z-10">
                     <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                     <span>{college.rating}</span>
                   </div>
 
-                  {/* Bottom-Right on Image: Govt/Private Pill */}
                   <div className="absolute bottom-2 right-2.5 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-bold text-white z-10">
                     {college.type}
                   </div>
                 </div>
 
-                {/* 2. Floating Overlapping College Logo + Stream Tag */}
+                {/* Floating Logo + Stream */}
                 <div className="relative -mt-6 px-3.5 z-20 flex items-center justify-between">
                   <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow relative">
                     {college.logo ? (
@@ -2335,7 +2291,7 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* 3. Card Body: Name, Location & Metrics */}
+                {/* Body */}
                 <div className="p-3.5 pt-1.5 flex-1 flex flex-col justify-between gap-2.5">
                   <div>
                     <h3 className="font-outfit font-black text-[13.5px] leading-snug text-slate-800 group-hover:text-orange-600 transition-colors line-clamp-1">
@@ -2347,35 +2303,21 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  {/* 3-Pill Key Metrics Box */}
                   <div className="grid grid-cols-3 gap-1 py-1.5 px-2 bg-slate-50 border border-slate-100 rounded-xl text-center">
                     <div>
-                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
-                        Highest
-                      </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-emerald-600 mt-0.5 truncate">
-                        {college.highestPackage}
-                      </p>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">Highest</p>
+                      <p className="font-outfit font-bold text-[10.5px] text-emerald-600 mt-0.5 truncate">{college.highestPackage}</p>
                     </div>
                     <div className="border-x border-slate-200/60">
-                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
-                        Average
-                      </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5 truncate">
-                        {college.averagePackage}
-                      </p>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">Average</p>
+                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5 truncate">{college.averagePackage}</p>
                     </div>
                     <div>
-                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
-                        Fees
-                      </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-slate-700 mt-0.5 truncate">
-                        {college.averageFee}
-                      </p>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">Fees</p>
+                      <p className="font-outfit font-bold text-[10.5px] text-slate-700 mt-0.5 truncate">{college.averageFee}</p>
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="flex gap-2 pt-0.5">
                     <Link
                       href={`/colleges/${college.slug}`}
