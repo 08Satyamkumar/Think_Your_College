@@ -573,6 +573,7 @@ export default function HomePage() {
     "general" | "credit-card" | "loan"
   >("general");
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [selectedBank, setSelectedBank] = useState<{ name: string; url: string } | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -2048,157 +2049,38 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Bank Logos Grid */}
+            {/* Bank Logos Grid — each card clickable with loan link */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-              {/* SBI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "0s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-6 h-6 rounded-full border-[5px] border-[#00a9e0] relative flex items-center justify-center flex-shrink-0">
-                    <div className="absolute bottom-0 w-[4px] h-[8px] bg-white translate-y-[2px]" />
-                  </div>
-                  <span className="font-extrabold text-[16px] text-[#003876] tracking-tight">SBI</span>
-                </div>
-              </div>
-
-              {/* HDFC */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "0.2s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="border-t-[3px] border-b-[3px] border-[#1c3f94] px-1.5 py-0.5 relative flex-shrink-0 w-9 flex justify-center">
-                    <div className="w-1.5 h-1.5 bg-[#e31e24] rounded-sm absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-                    <span className="font-extrabold text-[8px] text-[#1c3f94] tracking-tighter">HDFC</span>
-                  </div>
-                  <span className="font-extrabold text-[13px] text-[#1c3f94] tracking-tight">HDFC BANK</span>
-                </div>
-              </div>
-
-              {/* Axis */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "0.4s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[11px] border-b-[#861a49] transform rotate-180 flex-shrink-0" />
-                  <span className="font-black text-[14px] text-[#861a49] tracking-tighter uppercase">Axis Bank</span>
-                </div>
-              </div>
-
-              {/* Kotak */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "0.6s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <span className="w-5 h-5 rounded-full bg-[#da251c] flex items-center justify-center text-white font-black text-[9px] flex-shrink-0">K</span>
-                  <span className="font-extrabold text-[15px] text-[#054381] tracking-tight">kotak</span>
-                </div>
-              </div>
-
-              {/* ICICI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "0.7s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-sm bg-[#f58220] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">I</div>
-                  <span className="font-extrabold text-[14px] text-[#c0392b] tracking-tight">ICICI Bank</span>
-                </div>
-              </div>
-
-              {/* PNB */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "0.8s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 bg-[#a32035] rounded flex items-center justify-center text-white border-b-2 border-[#f2a900] flex-shrink-0">
-                    <span className="font-black text-[8px]">pnb</span>
-                  </div>
-                  <span className="font-extrabold text-[15px] text-[#a32035] tracking-tight">PNB</span>
-                </div>
-              </div>
-
-              {/* BOB */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.0s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-full bg-[#f47920] flex items-center justify-center text-white font-black text-[9px] flex-shrink-0">B</div>
-                  <span className="font-extrabold text-[14px] text-[#0f2c59] tracking-tighter">Baroda</span>
-                </div>
-              </div>
-
-              {/* Canara */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.2s" }} />
-                <div className="flex flex-col items-center justify-center relative z-20">
-                  <span className="font-extrabold text-[14px] text-[#006ca7] tracking-tight">Canara Bank</span>
-                  <div className="w-10 h-1 bg-[#ffcc00] rounded-full mt-1" />
-                </div>
-              </div>
-
-              {/* IDFC */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.4s" }} />
-                <div className="flex flex-col items-center justify-center relative z-20">
-                  <span className="font-black text-[13px] text-[#8c2230] tracking-tight leading-none">IDFC FIRST</span>
-                  <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest mt-1">Bank</span>
-                </div>
-              </div>
-
-              {/* Yes Bank */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.5s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-full bg-[#00205b] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">Y</div>
-                  <span className="font-extrabold text-[14px] text-[#00205b] tracking-tight">Yes Bank</span>
-                </div>
-              </div>
-
-              {/* CBI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.6s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-full bg-[#0060a9] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">C</div>
-                  <span className="font-extrabold text-[14px] text-[#0060a9] tracking-tighter">Central Bank</span>
-                </div>
-              </div>
-
-              {/* IndusInd */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.7s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-sm bg-[#007dc5] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">II</div>
-                  <span className="font-extrabold text-[12px] text-[#007dc5] tracking-tighter">IndusInd</span>
-                </div>
-              </div>
-
-              {/* BOI */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "1.8s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <span className="text-[#003c71] font-black text-[14px] transform rotate-12 flex-shrink-0">★</span>
-                  <span className="font-extrabold text-[13px] text-[#003c71] tracking-tighter">Bank of India</span>
-                </div>
-              </div>
-
-              {/* Union */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "2.0s" }} />
-                <span className="font-extrabold text-[14px] text-[#ec1c24] tracking-tighter relative z-20">Union Bank</span>
-              </div>
-
-              {/* Federal Bank */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "2.1s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">F</div>
-                  <span className="font-extrabold text-[13px] text-[#1e3a8a] tracking-tighter">Federal Bank</span>
-                </div>
-              </div>
-
-              {/* Indian Bank */}
-              <div className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] transition-transform select-none relative overflow-hidden group/bank">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" style={{ animationDelay: "2.2s" }} />
-                <div className="flex items-center gap-2 relative z-20">
-                  <div className="w-5 h-5 rounded-full bg-[#005ba4] relative flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-black text-[7.5px]">I</span>
-                  </div>
-                  <span className="font-extrabold text-[14px] text-[#005ba4] tracking-tight">Indian Bank</span>
-                </div>
-              </div>
+              {[
+                { name: "SBI", url: "https://www.sbi.co.in/web/personal-banking/loans/education-loans", delay: "0s", logo: (<div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full border-[5px] border-[#00a9e0] relative flex items-center justify-center flex-shrink-0"><div className="absolute bottom-0 w-[4px] h-[8px] bg-white translate-y-[2px]" /></div><span className="font-extrabold text-[16px] text-[#003876] tracking-tight">SBI</span></div>) },
+                { name: "HDFC Bank", url: "https://www.hdfcbank.com/personal/borrow/popular-loans/educational-loan", delay: "0.2s", logo: (<div className="flex items-center gap-2"><div className="border-t-[3px] border-b-[3px] border-[#1c3f94] px-1.5 py-0.5 relative flex-shrink-0 w-9 flex justify-center"><div className="w-1.5 h-1.5 bg-[#e31e24] rounded-sm absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" /><span className="font-extrabold text-[8px] text-[#1c3f94] tracking-tighter">HDFC</span></div><span className="font-extrabold text-[13px] text-[#1c3f94] tracking-tight">HDFC BANK</span></div>) },
+                { name: "Axis Bank", url: "https://www.axisbank.com/retail/loans/education-loan", delay: "0.4s", logo: (<div className="flex items-center gap-2"><div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[11px] border-b-[#861a49] transform rotate-180 flex-shrink-0" /><span className="font-black text-[14px] text-[#861a49] tracking-tighter uppercase">Axis Bank</span></div>) },
+                { name: "Kotak Mahindra Bank", url: "https://www.kotak.com/en/personal/loans/education-loan.html", delay: "0.6s", logo: (<div className="flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-[#da251c] flex items-center justify-center text-white font-black text-[9px] flex-shrink-0">K</span><span className="font-extrabold text-[15px] text-[#054381] tracking-tight">kotak</span></div>) },
+                { name: "ICICI Bank", url: "https://www.icicibank.com/personal-banking/loans/education-loan", delay: "0.7s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-sm bg-[#f58220] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">I</div><span className="font-extrabold text-[14px] text-[#c0392b] tracking-tight">ICICI Bank</span></div>) },
+                { name: "PNB", url: "https://www.pnbindia.in/education-loan.html", delay: "0.8s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 bg-[#a32035] rounded flex items-center justify-center text-white border-b-2 border-[#f2a900] flex-shrink-0"><span className="font-black text-[8px]">pnb</span></div><span className="font-extrabold text-[15px] text-[#a32035] tracking-tight">PNB</span></div>) },
+                { name: "Bank of Baroda", url: "https://www.bankofbaroda.in/personal-banking/loans/education-loans", delay: "1.0s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-full bg-[#f47920] flex items-center justify-center text-white font-black text-[9px] flex-shrink-0">B</div><span className="font-extrabold text-[14px] text-[#0f2c59] tracking-tighter">Baroda</span></div>) },
+                { name: "Canara Bank", url: "https://canarabank.com/english/pages/educationloan.aspx", delay: "1.2s", logo: (<div className="flex flex-col items-center justify-center"><span className="font-extrabold text-[14px] text-[#006ca7] tracking-tight">Canara Bank</span><div className="w-10 h-1 bg-[#ffcc00] rounded-full mt-1" /></div>) },
+                { name: "IDFC FIRST Bank", url: "https://www.idfcfirstbank.com/personal-banking/loans/education-loan", delay: "1.4s", logo: (<div className="flex flex-col items-center justify-center"><span className="font-black text-[13px] text-[#8c2230] tracking-tight leading-none">IDFC FIRST</span><span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest mt-1">Bank</span></div>) },
+                { name: "Yes Bank", url: "https://www.yesbank.in/personal-banking/yes-individual/borrowing/education-loan", delay: "1.5s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-full bg-[#00205b] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">Y</div><span className="font-extrabold text-[14px] text-[#00205b] tracking-tight">Yes Bank</span></div>) },
+                { name: "Central Bank of India", url: "https://www.centralbankofindia.co.in/en/education-loan", delay: "1.6s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-full bg-[#0060a9] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">C</div><span className="font-extrabold text-[14px] text-[#0060a9] tracking-tighter">Central Bank</span></div>) },
+                { name: "IndusInd Bank", url: "https://www.indusind.com/in/en/personal/loans/education-loan.html", delay: "1.7s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-sm bg-[#007dc5] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">II</div><span className="font-extrabold text-[12px] text-[#007dc5] tracking-tighter">IndusInd</span></div>) },
+                { name: "Bank of India", url: "https://bankofindia.co.in/education-loan", delay: "1.8s", logo: (<div className="flex items-center gap-2"><span className="text-[#003c71] font-black text-[14px] transform rotate-12 flex-shrink-0">★</span><span className="font-extrabold text-[13px] text-[#003c71] tracking-tighter">Bank of India</span></div>) },
+                { name: "Union Bank of India", url: "https://www.unionbankofindia.co.in/english/education-loan.aspx", delay: "2.0s", logo: (<span className="font-extrabold text-[14px] text-[#ec1c24] tracking-tighter">Union Bank</span>) },
+                { name: "Federal Bank", url: "https://www.federalbank.co.in/education-loans", delay: "2.1s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white font-black text-[8px] flex-shrink-0">F</div><span className="font-extrabold text-[13px] text-[#1e3a8a] tracking-tighter">Federal Bank</span></div>) },
+                { name: "Indian Bank", url: "https://www.indianbank.in/departments/education-loan/", delay: "2.2s", logo: (<div className="flex items-center gap-2"><div className="w-5 h-5 rounded-full bg-[#005ba4] relative flex items-center justify-center flex-shrink-0"><span className="text-white font-black text-[7.5px]">I</span></div><span className="font-extrabold text-[14px] text-[#005ba4] tracking-tight">Indian Bank</span></div>) },
+              ].map((bank) => (
+                <button
+                  key={bank.name}
+                  onClick={() => setSelectedBank({ name: bank.name, url: bank.url })}
+                  className="bg-white rounded-xl p-3 flex items-center justify-center h-16 shadow-sm border border-slate-100 hover:scale-[1.03] hover:border-orange-400 hover:shadow-md transition-all duration-200 cursor-pointer select-none relative overflow-hidden group/bank w-full"
+                >
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
+                    style={{ animationDelay: bank.delay }}
+                  />
+                  <div className="relative z-20">{bank.logo}</div>
+                </button>
+              ))}
             </div>
           </div>
 
@@ -2644,6 +2526,65 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* BANK LOAN REDIRECT MODAL */}
+      <AnimatePresence>
+        {selectedBank && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedBank(null)}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-7 flex flex-col items-center gap-5 relative border border-slate-100"
+            >
+              {/* Close */}
+              <button onClick={() => setSelectedBank(null)} className="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors">
+                <X className="w-3.5 h-3.5" />
+              </button>
+
+              {/* Icon */}
+              <div className="w-14 h-14 rounded-2xl bg-[#032b53] flex items-center justify-center shadow-lg">
+                <span className="text-2xl">🏦</span>
+              </div>
+
+              {/* Text */}
+              <div className="text-center space-y-1.5">
+                <h3 className="font-outfit font-black text-lg text-slate-800">
+                  {selectedBank.name} Education Loan
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  You are about to visit <span className="font-bold text-slate-700">{selectedBank.name}</span>'s official education loan page. Apply directly or get free guidance from College 19 first.
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-col gap-3 w-full">
+                <a
+                  href={selectedBank.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setSelectedBank(null)}
+                  className="w-full bg-[#032b53] text-white text-sm font-black rounded-xl py-3 text-center hover:bg-[#054381] transition-colors flex items-center justify-center gap-2"
+                >
+                  Apply on {selectedBank.name} ↗
+                </a>
+                <button
+                  onClick={() => { setSelectedBank(null); setShowInquiryModal(true); setModalType("loan"); }}
+                  className="w-full border-2 border-orange-400 text-orange-500 text-sm font-black rounded-xl py-3 hover:bg-orange-50 transition-colors"
+                >
+                  Get Free Guidance from College 19 🎓
+                </button>
+              </div>
+
+              <p className="text-[10px] text-slate-400 text-center">
+                College 19 is not affiliated with {selectedBank.name}. Links redirect to official bank websites.
+              </p>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* POPUP COUNSELING FORM MODAL */}
       <AnimatePresence>
         {showInquiryModal && (
