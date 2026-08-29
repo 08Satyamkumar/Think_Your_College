@@ -1787,7 +1787,7 @@ export default function HomePage() {
       </section>
 
       {/* SPONSORED LEADERBOARD DISPLAY AD (GoDaddy / Google AdChoices) */}
-      <div className="w-full my-2.5">
+      <div className="w-full !mt-3.5 !mb-0">
         <div className="relative group/ad w-full overflow-hidden rounded-2xl bg-black border border-slate-800 shadow-md hover:shadow-xl transition-all duration-300">
           <a
             href="https://www.godaddy.com/offers/email/professional-email"
@@ -1825,8 +1825,8 @@ export default function HomePage() {
 
       {/* TRENDING COLLEGES */}
       {/* Section Divider */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent my-2" />
-      <section className="space-y-6">
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent !mt-3.5 !mb-2.5" />
+      <section className="space-y-6 !mt-0">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
