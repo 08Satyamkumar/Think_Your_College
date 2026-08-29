@@ -53,6 +53,7 @@ interface CollegeMock {
   slug: string;
   stream: string;
   image: string;
+  logo?: string;
   nirfRank?: number;
 }
 
@@ -759,27 +760,12 @@ export default function HomePage() {
       type: "Government",
       slug: "iim-ahmedabad",
       stream: "Management",
-      image:
-        "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/iimahmedabad.png",
       nirfRank: 1,
     },
     {
       id: "2",
-      name: "IIM Bangalore - Indian Institute of Management",
-      location: "Bangalore, Karnataka",
-      rating: 4.8,
-      highestPackage: "55.0 LPA",
-      averagePackage: "30.5 LPA",
-      averageFee: "₹11.8 Lakhs/Yr",
-      type: "Government",
-      slug: "iim-bangalore",
-      stream: "Management",
-      image:
-        "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 2,
-    },
-    {
-      id: "3",
       name: "IIT Delhi - Indian Institute of Technology",
       location: "New Delhi, Delhi",
       rating: 4.9,
@@ -789,8 +775,23 @@ export default function HomePage() {
       type: "Government",
       slug: "iit-delhi",
       stream: "Engineering",
-      image:
-        "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "/images/iitdelhi_real.jpg?v=2",
+      logo: "/images/iitdelhi.png",
+      nirfRank: 2,
+    },
+    {
+      id: "3",
+      name: "IIM Bangalore - Indian Institute of Management",
+      location: "Bangalore, Karnataka",
+      rating: 4.8,
+      highestPackage: "55.0 LPA",
+      averagePackage: "30.5 LPA",
+      averageFee: "₹11.8 Lakhs/Yr",
+      type: "Government",
+      slug: "iim-bangalore",
+      stream: "Management",
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Indian_Institute_of_Management_Bangalore_Logo.svg/240px-Indian_Institute_of_Management_Bangalore_Logo.svg.png",
       nirfRank: 2,
     },
     {
@@ -804,8 +805,8 @@ export default function HomePage() {
       type: "Government",
       slug: "iit-bombay",
       stream: "Engineering",
-      image:
-        "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/IIT_Bombay_Logo.svg/240px-IIT_Bombay_Logo.svg.png",
       nirfRank: 3,
     },
     {
@@ -819,12 +820,27 @@ export default function HomePage() {
       type: "Government",
       slug: "aiims-delhi",
       stream: "Medical",
-      image:
-        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "/images/aiimsrishikesh.webp",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/All_India_Institute_of_Medical_Sciences%2C_New_Delhi_logo.png/220px-All_India_Institute_of_Medical_Sciences%2C_New_Delhi_logo.png",
       nirfRank: 1,
     },
     {
       id: "6",
+      name: "Galgotias University",
+      location: "Greater Noida, Uttar Pradesh",
+      rating: 4.3,
+      highestPackage: "35.0 LPA",
+      averagePackage: "8.5 LPA",
+      averageFee: "₹1.6 Lakhs/Yr",
+      type: "Private",
+      slug: "galgotias-university",
+      stream: "Engineering",
+      image: "/images/galgotias_real.jpg?v=2",
+      logo: "/images/galgotias.png",
+      nirfRank: 95,
+    },
+    {
+      id: "7",
       name: "NLSIU Bangalore - National Law School of India",
       location: "Bangalore, Karnataka",
       rating: 4.8,
@@ -834,12 +850,12 @@ export default function HomePage() {
       type: "Government",
       slug: "nlsiu-bangalore",
       stream: "Law",
-      image:
-        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/9/91/National_Law_School_of_India_University_logo.png",
       nirfRank: 1,
     },
     {
-      id: "7",
+      id: "8",
       name: "SIBM Pune - Symbiosis Institute of Business Management",
       location: "Pune, Maharashtra",
       rating: 4.6,
@@ -849,12 +865,12 @@ export default function HomePage() {
       type: "Private",
       slug: "sibm-pune",
       stream: "Management",
-      image:
-        "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Symbiosis_International_University_Logo.svg/240px-Symbiosis_International_University_Logo.svg.png",
       nirfRank: 17,
     },
     {
-      id: "8",
+      id: "9",
       name: "CMC Vellore - Christian Medical College",
       location: "Vellore, Tamil Nadu",
       rating: 4.8,
@@ -864,56 +880,27 @@ export default function HomePage() {
       type: "Private",
       slug: "cmc-vellore",
       stream: "Medical",
-      image:
-        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Christian_Medical_College%2C_Vellore_logo.png/220px-Christian_Medical_College%2C_Vellore_logo.png",
       nirfRank: 3,
-    },
-    {
-      id: "9",
-      name: "KMC Mangalore - Kasturba Medical College",
-      location: "Mangalore, Karnataka",
-      rating: 4.7,
-      highestPackage: "22.0 LPA",
-      averagePackage: "12.0 LPA",
-      averageFee: "₹17.8 Lakhs/Yr",
-      type: "Private",
-      slug: "kmc-mangalore",
-      stream: "Medical",
-      image:
-        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-      nirfRank: 21,
     },
     {
       id: "10",
       name: "BIT Mesra Patna Campus",
       location: "Patna, Bihar",
-      rating: 4.1,
+      rating: 4.2,
       highestPackage: "18.5 LPA",
       averagePackage: "10.0 LPA",
       averageFee: "₹2.8 Lakhs/Yr",
       type: "Private",
       slug: "bit-mesra-patna",
       stream: "Engineering",
-      image:
-        "https://images.unsplash.com/photo-1525920980995-f8a382bf42c5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1525920980995-f8a382bf42c5?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/90/Birla_Institute_of_Technology_Mesra_logo.png/220px-Birla_Institute_of_Technology_Mesra_logo.png",
       nirfRank: 60,
     },
     {
       id: "11",
-      name: "Galgotias University",
-      location: "Greater Noida, Uttar Pradesh",
-      rating: 4.2,
-      highestPackage: "35.0 LPA",
-      averagePackage: "8.5 LPA",
-      averageFee: "₹1.6 Lakhs/Yr",
-      type: "Private",
-      slug: "galgotias-university",
-      stream: "Engineering",
-      image: "/images/galgotias_real.jpg?v=2",
-      nirfRank: 95,
-    },
-    {
-      id: "12",
       name: "CNLU Patna - Chanakya National Law University",
       location: "Patna, Bihar",
       rating: 4.3,
@@ -923,8 +910,8 @@ export default function HomePage() {
       type: "Government",
       slug: "cnlu-patna",
       stream: "Law",
-      image:
-        "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+      image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=80",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Chanakya_National_Law_University_logo.png/220px-Chanakya_National_Law_University_logo.png",
       nirfRank: 25,
     },
   ];
@@ -1946,85 +1933,108 @@ export default function HomePage() {
               <motion.div
                 layout
                 key={college.id}
-                className="group snap-start w-[85vw] sm:w-[320px] md:w-[360px] aspect-square flex-shrink-0 flex flex-col justify-between bg-card border border-border/80 hover:border-orange-500/40 rounded-[24px] overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(249,115,22,0.12)] hover:-translate-y-1.5 transition-all duration-350 ease-out"
+                className="group snap-start w-[280px] sm:w-[295px] md:w-[310px] flex-shrink-0 flex flex-col justify-between bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-[22px] overflow-hidden shadow-sm hover:shadow-[0_16px_36px_-6px_rgba(249,115,22,0.18)] hover:-translate-y-1.5 transition-all duration-350 select-none relative"
               >
-                <div className="relative h-[45%] bg-slate-100 overflow-hidden">
-                  {/* College banner image with smooth zoom hover animation */}
-                  {college.image ? (
-                    <img
-                      src={college.image}
-                      alt={college.name}
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-teal-500/20" />
-                  )}
+                {/* 1. Top Campus Banner Image */}
+                <div className="relative h-[120px] bg-slate-100 overflow-hidden">
+                  <img
+                    src={college.image || "/images/galgotias_real.jpg"}
+                    alt={college.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80";
+                    }}
+                  />
+                  {/* Subtle dark gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                  {/* Dark gradient overlay for text contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-75" />
-
-                  {/* NIRF Rank absolute badge */}
+                  {/* Top-Left: NIRF Badge */}
                   {college.nirfRank && (
-                    <div className="absolute top-3 left-3 bg-orange-500 text-white px-2 py-0.5 rounded-md text-[9px] font-bold shadow-md shadow-orange-500/25 z-10">
-                      NIRF #{college.nirfRank}
+                    <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full text-[8.5px] font-black shadow-md shadow-orange-500/25 z-10 flex items-center gap-1">
+                      <Award className="w-2.5 h-2.5" />
+                      <span>NIRF #{college.nirfRank}</span>
                     </div>
                   )}
 
-                  <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2 py-0.5 rounded-md flex items-center gap-1 shadow-sm text-[10px] font-bold text-slate-800 z-10">
+                  {/* Top-Right: Rating Badge */}
+                  <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm text-[9.5px] font-black text-slate-800 z-10">
                     <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                    {college.rating}
+                    <span>{college.rating}</span>
                   </div>
-                  <div className="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] font-semibold text-white z-10">
+
+                  {/* Bottom-Right on Image: Govt/Private Pill */}
+                  <div className="absolute bottom-2 right-2.5 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-bold text-white z-10">
                     {college.type}
                   </div>
                 </div>
 
-                <div className="p-4 flex-1 flex flex-col justify-between gap-2.5">
+                {/* 2. Floating Overlapping College Logo + Stream Tag */}
+                <div className="relative -mt-6 px-3.5 z-20 flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow">
+                    {college.logo ? (
+                      <img
+                        src={college.logo}
+                        alt={`${college.name} logo`}
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <Building2 className="w-6 h-6 text-orange-500" />
+                    )}
+                  </div>
+                  <span className="text-[8.5px] uppercase tracking-wider font-extrabold px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-600 border border-orange-200/70 shadow-xs">
+                    {college.stream}
+                  </span>
+                </div>
+
+                {/* 3. Card Body: Name, Location & Metrics */}
+                <div className="p-3.5 pt-1.5 flex-1 flex flex-col justify-between gap-2.5">
                   <div>
-                    <span className="text-[9px] uppercase tracking-wider font-extrabold text-orange-600">
-                      {college.stream}
-                    </span>
-                    <h3 className="font-outfit font-black text-sm md:text-base text-text_primary group-hover:text-orange-600 transition-colors line-clamp-1 mt-0.5">
+                    <h3 className="font-outfit font-black text-[13.5px] leading-snug text-slate-800 group-hover:text-orange-600 transition-colors line-clamp-1">
                       {college.name}
                     </h3>
-                    <p className="flex items-center gap-1 text-[10px] text-text_secondary mt-0.5">
+                    <p className="flex items-center gap-1 text-[10.5px] text-slate-500 mt-0.5">
                       <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
                       <span className="truncate">{college.location}</span>
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-1 py-2 px-3 bg-background border border-border rounded-xl text-center">
+                  {/* 3-Pill Key Metrics Box */}
+                  <div className="grid grid-cols-3 gap-1 py-1.5 px-2 bg-slate-50 border border-slate-100 rounded-xl text-center">
                     <div>
-                      <p className="text-[7.5px] text-text_secondary font-extrabold uppercase tracking-wider">
-                        Highest LPA
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
+                        Highest
                       </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-emerald-500 mt-0.5">
+                      <p className="font-outfit font-bold text-[10.5px] text-emerald-600 mt-0.5 truncate">
                         {college.highestPackage}
                       </p>
                     </div>
-                    <div>
-                      <p className="text-[7.5px] text-text_secondary font-extrabold uppercase tracking-wider">
-                        Average LPA
+                    <div className="border-x border-slate-200/60">
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
+                        Average
                       </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5">
+                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5 truncate">
                         {college.averagePackage}
                       </p>
                     </div>
                     <div>
-                      <p className="text-[7.5px] text-text_secondary font-extrabold uppercase tracking-wider">
-                        Course Fees
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
+                        Fees
                       </p>
-                      <p className="font-outfit font-bold text-[10.5px] text-text_primary mt-0.5">
+                      <p className="font-outfit font-bold text-[10.5px] text-slate-700 mt-0.5 truncate">
                         {college.averageFee}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-2.5 pt-1">
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-0.5">
                     <Link
                       href={`/colleges/${college.slug}`}
-                      className="flex-1 px-3 py-2 bg-background hover:bg-slate-50 border border-border hover:border-orange-500/30 text-text_primary hover:text-orange-600 font-bold text-[11px] rounded-lg text-center transition-all"
+                      className="flex-1 py-2 px-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-orange-400 text-slate-700 hover:text-orange-600 font-bold text-[11px] rounded-xl text-center transition-all shadow-xs"
                     >
                       View Details
                     </Link>
@@ -2034,7 +2044,7 @@ export default function HomePage() {
                         setModalType("general");
                         setShowInquiryModal(true);
                       }}
-                      className="flex-1 px-3 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-[11px] rounded-lg transition-all shadow-md shadow-orange-500/10 active:scale-95"
+                      className="flex-1 py-2 px-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-[11px] rounded-xl transition-all shadow-md shadow-orange-500/15 active:scale-95 text-center cursor-pointer"
                     >
                       Apply Now
                     </button>
