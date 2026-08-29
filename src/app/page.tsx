@@ -1786,41 +1786,97 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SPONSORED LEADERBOARD DISPLAY AD (GoDaddy / Google AdChoices) */}
+      {/* SPONSORED CINEMATIC LEADERBOARD DISPLAY AD (GoDaddy Programmatic) */}
       <div className="w-full !mt-3.5 !mb-0">
-        <div className="relative group/ad w-full overflow-hidden rounded-2xl bg-black border border-slate-800 shadow-md hover:shadow-xl transition-all duration-300">
-          <a
-            href="https://www.godaddy.com/offers/email/professional-email"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="GoDaddy - Get email that looks as professional as your business is"
-            className="block relative w-full overflow-hidden cursor-pointer"
-          >
-            <img
-              src="/images/ads/godaddy_banner.png"
-              alt="GoDaddy - Professional Business Email & Domains"
-              className="w-full h-auto object-cover sm:object-contain select-none group-hover/ad:scale-[1.006] transition-transform duration-500 ease-out"
-            />
-            {/* Subtle Programmatic Shine on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-[40%] h-full pointer-events-none -translate-x-full group-hover/ad:translate-x-[300%] transition-transform duration-1000 ease-in-out" />
-          </a>
+        <a
+          href="https://www.godaddy.com/offers/email/professional-email"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="GoDaddy - Get email that looks as professional as your business is"
+          className="group/ad block relative w-full overflow-hidden rounded-2xl bg-[#090b0e] border border-[#00dfd8]/30 hover:border-[#00dfd8]/80 shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_25px_rgba(0,223,216,0.08)] hover:shadow-[0_12px_40px_rgba(0,223,216,0.18)] transition-all duration-500 cursor-pointer select-none"
+        >
+          {/* Movie-Style Ambient Atmospheric Cyan & Amber Backlight */}
+          <div className="absolute top-1/2 -left-10 -translate-y-1/2 w-64 h-64 bg-[#00dfd8]/15 rounded-full blur-3xl pointer-events-none group-hover/ad:bg-[#00dfd8]/25 transition-all duration-700" />
+          <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 h-72 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#06080a] via-[#0a0d11] to-[#040608] opacity-90 z-0" />
 
-          {/* Real Google AdChoices / Info Badge */}
-          <div className="absolute top-1.5 right-1.5 z-20 flex items-center bg-white/95 backdrop-blur-sm rounded px-1.5 py-0.5 shadow text-[9px] font-sans text-slate-600 gap-1 border border-slate-200/80 select-none pointer-events-auto">
-            <span className="text-[8px] font-bold text-slate-500 tracking-tight">Ad</span>
+          {/* Cinematic Shimmer Light Ray Sweep (Periodic) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent w-[35%] h-full pointer-events-none -translate-x-full group-hover/ad:translate-x-[350%] transition-transform duration-1000 ease-in-out z-20" />
+
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-4 items-center px-4 py-4 md:px-7 md:py-3.5 min-h-[96px]">
+            {/* 1. GoDaddy Logo Brand Block (Left) */}
+            <div className="md:col-span-3 flex items-center gap-2.5">
+              <div className="relative flex-shrink-0 w-9 h-9 md:w-11 md:h-11 rounded-full bg-[#00dfd8]/10 border border-[#00dfd8]/30 flex items-center justify-center shadow-[0_0_15px_rgba(0,223,216,0.25)] group-hover/ad:scale-105 group-hover/ad:border-[#00dfd8] transition-all duration-300">
+                {/* Iconic Interlocking GoDaddy Heart Glyph */}
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-[#00dfd8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  <path d="M12 5v14" className="opacity-40" />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-outfit font-black text-lg md:text-2xl tracking-tight text-[#00dfd8] drop-shadow-[0_0_10px_rgba(0,223,216,0.3)]">
+                  GoDaddy
+                </span>
+                <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-widest -mt-1 hidden sm:block">
+                  Domains & Email
+                </span>
+              </div>
+            </div>
+
+            {/* 2. Main High-Impact Cinematic Copy (Center-Left) */}
+            <div className="md:col-span-5 space-y-0.5 text-left">
+              <h4 className="font-outfit font-bold text-sm sm:text-base md:text-lg leading-tight text-[#00dfd8] group-hover/ad:text-white transition-colors duration-300">
+                Get email that looks as professional as your business is.
+              </h4>
+              <p className="text-[11px] text-slate-300 font-medium hidden sm:block">
+                Custom domain email addresses with 99.9% uptime & 24/7 expert support.
+              </p>
+            </div>
+
+            {/* 3. Floating Interactive Mockup Card + Customer Profile (Center-Right to Right) */}
+            <div className="md:col-span-4 flex items-center justify-between md:justify-end gap-3.5">
+              {/* Floating Mini Email Mockup Card */}
+              <div className="hidden lg:flex items-center gap-2 bg-white/95 text-slate-800 rounded-xl p-2 px-2.5 shadow-lg border border-slate-100/90 transform group-hover/ad:-translate-y-0.5 transition-transform duration-300">
+                <div className="w-5 h-5 rounded-lg bg-[#00dfd8]/20 flex items-center justify-center text-[#00a39e]">
+                  <Mail className="w-3 h-3" />
+                </div>
+                <div className="flex flex-col leading-none text-left">
+                  <span className="text-[9px] font-black text-slate-800">Inbox (1)</span>
+                  <span className="text-[7.5px] font-semibold text-slate-500">info@yourbrand.com</span>
+                </div>
+              </div>
+
+              {/* Customer domain badge & CTA */}
+              <div className="flex items-center gap-2.5">
+                <div className="text-right hidden sm:block">
+                  <span className="block text-[10px] font-bold text-slate-200">Yuribdia Montoya</span>
+                  <span className="block text-[9px] font-black tracking-wider text-[#00dfd8]">UVAROVITAHOME.COM</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#00dfd8] to-[#00b4d8] text-slate-950 font-black text-xs shadow-md shadow-[#00dfd8]/20 group-hover/ad:scale-105 group-hover/ad:shadow-[#00dfd8]/40 transition-all flex items-center gap-1">
+                  <span>Get Started</span>
+                  <span className="text-[10px]">→</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Real Google AdChoices / Info Tag */}
+          <div className="absolute top-1.5 right-1.5 z-30 flex items-center bg-black/80 backdrop-blur-md rounded px-1.5 py-0.5 shadow border border-slate-700/60 text-[9px] font-sans text-slate-300 gap-1 select-none pointer-events-auto">
+            <span className="text-[8px] font-bold text-slate-400">Ad</span>
             <a
               href="https://adssettings.google.com"
               target="_blank"
               rel="noopener noreferrer"
               title="AdChoices"
-              className="text-[#00a3e0] hover:text-[#0077a8] transition-colors flex items-center"
+              onClick={(e) => e.stopPropagation()}
+              className="text-[#00dfd8] hover:text-white transition-colors flex items-center"
             >
               <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
               </svg>
             </a>
           </div>
-        </div>
+        </a>
       </div>
 
       {/* TRENDING COLLEGES */}
