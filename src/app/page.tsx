@@ -569,6 +569,7 @@ export default function HomePage() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStream, setSelectedStream] = useState("All");
+  const [selectedFeaturedStream, setSelectedFeaturedStream] = useState("All");
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [modalType, setModalType] = useState<
     "general" | "credit-card" | "loan"
@@ -974,10 +975,153 @@ export default function HomePage() {
     }
   };
 
+  const featuredColleges: CollegeMock[] = [
+    {
+      id: "f1",
+      name: "Amity University",
+      location: "Noida, Uttar Pradesh",
+      rating: 4.5,
+      highestPackage: "61.75 LPA",
+      averagePackage: "8.5 LPA",
+      averageFee: "₹2.5 Lakhs/Yr",
+      type: "Private",
+      slug: "amity-university",
+      stream: "Engineering",
+      image: "/images/amity_real.jpg?v=3",
+      logo: "/images/amity.png",
+      nirfRank: 35,
+    },
+    {
+      id: "f2",
+      name: "Chandigarh University",
+      location: "Gharuan, Punjab",
+      rating: 4.6,
+      highestPackage: "54.75 LPA",
+      averagePackage: "9.2 LPA",
+      averageFee: "₹1.8 Lakhs/Yr",
+      type: "Private",
+      slug: "chandigarh-university",
+      stream: "Engineering",
+      image: "/images/chandigarh_real.jpg?v=2",
+      logo: "/images/chandigarh.png",
+      nirfRank: 27,
+    },
+    {
+      id: "f3",
+      name: "BITS Pilani - Birla Institute of Technology",
+      location: "Pilani, Rajasthan",
+      rating: 4.9,
+      highestPackage: "60.7 LPA",
+      averagePackage: "20.5 LPA",
+      averageFee: "₹5.4 Lakhs/Yr",
+      type: "Private",
+      slug: "bits-pilani",
+      stream: "Engineering",
+      image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/iitdelhi.png",
+      nirfRank: 20,
+    },
+    {
+      id: "f4",
+      name: "AIIMS Rishikesh - All India Institute of Medical Sciences",
+      location: "Rishikesh, Uttarakhand",
+      rating: 4.9,
+      highestPackage: "36.0 LPA",
+      averagePackage: "16.5 LPA",
+      averageFee: "₹2,500/Yr",
+      type: "Government",
+      slug: "aiims-rishikesh",
+      stream: "Medical",
+      image: "/images/aiimsrishikesh.webp",
+      logo: "/images/galgotias.png",
+      nirfRank: 22,
+    },
+    {
+      id: "f5",
+      name: "XLRI Xavier School of Management",
+      location: "Jamshedpur, Jharkhand",
+      rating: 4.8,
+      highestPackage: "75.0 LPA",
+      averagePackage: "32.7 LPA",
+      averageFee: "₹14.5 Lakhs/Yr",
+      type: "Private",
+      slug: "xlri-jamshedpur",
+      stream: "Management",
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/iimahmedabad.png",
+      nirfRank: 9,
+    },
+    {
+      id: "f6",
+      name: "DTU - Delhi Technological University",
+      location: "Rohini, New Delhi",
+      rating: 4.7,
+      highestPackage: "82.0 LPA",
+      averagePackage: "15.5 LPA",
+      averageFee: "₹2.2 Lakhs/Yr",
+      type: "Government",
+      slug: "dtu-delhi",
+      stream: "Engineering",
+      image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/iitdelhi.png",
+      nirfRank: 29,
+    },
+    {
+      id: "f7",
+      name: "Symbiosis Law School (SLS)",
+      location: "Pune, Maharashtra",
+      rating: 4.6,
+      highestPackage: "18.0 LPA",
+      averagePackage: "11.0 LPA",
+      averageFee: "₹3.8 Lakhs/Yr",
+      type: "Private",
+      slug: "sls-pune",
+      stream: "Law",
+      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/galgotias.png",
+      nirfRank: 6,
+    },
+    {
+      id: "f8",
+      name: "MAHE - Manipal Academy of Higher Education",
+      location: "Manipal, Karnataka",
+      rating: 4.7,
+      highestPackage: "54.0 LPA",
+      averagePackage: "12.5 LPA",
+      averageFee: "₹4.5 Lakhs/Yr",
+      type: "Private",
+      slug: "manipal-university",
+      stream: "Medical",
+      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/chandigarh.png",
+      nirfRank: 16,
+    },
+    {
+      id: "f9",
+      name: "NALSAR University of Law",
+      location: "Hyderabad, Telangana",
+      rating: 4.8,
+      highestPackage: "24.0 LPA",
+      averagePackage: "15.5 LPA",
+      averageFee: "₹2.6 Lakhs/Yr",
+      type: "Government",
+      slug: "nalsar-hyderabad",
+      stream: "Law",
+      image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=80",
+      logo: "/images/galgotias.png",
+      nirfRank: 3,
+    },
+  ];
+
   const filteredColleges =
     selectedStream === "All"
       ? trendingColleges
       : trendingColleges.filter((col) => col.stream === selectedStream);
+
+  const filteredFeaturedColleges =
+    selectedFeaturedStream === "All"
+      ? featuredColleges
+      : featuredColleges.filter((col) => col.stream === selectedFeaturedStream);
 
   return (
     <div className="space-y-12">
@@ -1971,19 +2115,220 @@ export default function HomePage() {
 
                 {/* 2. Floating Overlapping College Logo + Stream Tag */}
                 <div className="relative -mt-6 px-3.5 z-20 flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow">
+                  <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow relative">
                     {college.logo ? (
                       <img
                         src={college.logo}
                         alt={`${college.name} logo`}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain relative z-10"
                         onError={(e) => {
-                          (e.target as HTMLElement).style.display = "none";
+                          const target = e.target as HTMLElement;
+                          target.style.display = "none";
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = "flex";
                         }}
                       />
-                    ) : (
-                      <Building2 className="w-6 h-6 text-orange-500" />
-                    )}
+                    ) : null}
+                    <div
+                      style={{ display: college.logo ? "none" : "flex" }}
+                      className="w-full h-full rounded-lg bg-gradient-to-br from-orange-500/15 to-amber-500/15 border border-orange-200/60 text-orange-600 font-black text-[10px] items-center justify-center text-center uppercase tracking-tight"
+                    >
+                      {college.name.split(" ")[0].slice(0, 4)}
+                    </div>
+                  </div>
+                  <span className="text-[8.5px] uppercase tracking-wider font-extrabold px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-600 border border-orange-200/70 shadow-xs">
+                    {college.stream}
+                  </span>
+                </div>
+
+                {/* 3. Card Body: Name, Location & Metrics */}
+                <div className="p-3.5 pt-1.5 flex-1 flex flex-col justify-between gap-2.5">
+                  <div>
+                    <h3 className="font-outfit font-black text-[13.5px] leading-snug text-slate-800 group-hover:text-orange-600 transition-colors line-clamp-1">
+                      {college.name}
+                    </h3>
+                    <p className="flex items-center gap-1 text-[10.5px] text-slate-500 mt-0.5">
+                      <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                      <span className="truncate">{college.location}</span>
+                    </p>
+                  </div>
+
+                  {/* 3-Pill Key Metrics Box */}
+                  <div className="grid grid-cols-3 gap-1 py-1.5 px-2 bg-slate-50 border border-slate-100 rounded-xl text-center">
+                    <div>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
+                        Highest
+                      </p>
+                      <p className="font-outfit font-bold text-[10.5px] text-emerald-600 mt-0.5 truncate">
+                        {college.highestPackage}
+                      </p>
+                    </div>
+                    <div className="border-x border-slate-200/60">
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
+                        Average
+                      </p>
+                      <p className="font-outfit font-bold text-[10.5px] text-orange-600 mt-0.5 truncate">
+                        {college.averagePackage}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[7px] text-slate-400 font-extrabold uppercase tracking-wider">
+                        Fees
+                      </p>
+                      <p className="font-outfit font-bold text-[10.5px] text-slate-700 mt-0.5 truncate">
+                        {college.averageFee}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-0.5">
+                    <Link
+                      href={`/colleges/${college.slug}`}
+                      className="flex-1 py-2 px-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-orange-400 text-slate-700 hover:text-orange-600 font-bold text-[11px] rounded-xl text-center transition-all shadow-xs"
+                    >
+                      View Details
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setFormData({ ...formData, stream: college.stream });
+                        setModalType("general");
+                        setShowInquiryModal(true);
+                      }}
+                      className="flex-1 py-2 px-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-[11px] rounded-xl transition-all shadow-md shadow-orange-500/15 active:scale-95 text-center cursor-pointer"
+                    >
+                      Apply Now
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2: TOP FEATURED & POPULAR UNIVERSITIES (Compact Gap) */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/70 to-transparent !my-2" />
+      <section className="space-y-6 !mt-0">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
+              Top Featured Universities in India
+            </h2>
+            <p className="text-sm text-text_secondary">
+              Discover premier private & government universities with stellar placement records
+            </p>
+          </div>
+
+          {/* TABS FILTER FOR SECTION 2 */}
+          <div className="flex flex-wrap gap-2">
+            {["All", "Engineering", "Management", "Medical", "Law"].map(
+              (tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setSelectedFeaturedStream(tab)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                    selectedFeaturedStream === tab
+                      ? "bg-primary text-white shadow-md shadow-primary/10"
+                      : "bg-card border border-border text-text_secondary hover:bg-border/30 hover:text-text_primary"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ),
+            )}
+          </div>
+        </div>
+
+        <div className="relative group/carousel select-none">
+          {/* Scroll Controls */}
+          <button
+            onClick={() =>
+              document
+                .getElementById("featured-colleges-carousel-container")
+                ?.scrollBy({ left: -360, behavior: "smooth" })
+            }
+            className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() =>
+              document
+                .getElementById("featured-colleges-carousel-container")
+                ?.scrollBy({ left: 360, behavior: "smooth" })
+            }
+            className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 active:bg-orange-600 active:text-white active:border-orange-600 active:shadow-[0_0_15px_rgba(249,115,22,0.7)] transition-all z-30 opacity-100 active:scale-95 cursor-pointer"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Scrollable Carousel Container */}
+          <div
+            id="featured-colleges-carousel-container"
+            className="flex overflow-x-auto no-scrollbar gap-6 py-4 scroll-smooth snap-x snap-mandatory"
+          >
+            {filteredFeaturedColleges.map((college) => (
+              <motion.div
+                layout
+                key={college.id}
+                className="group snap-start w-[280px] sm:w-[295px] md:w-[310px] flex-shrink-0 flex flex-col justify-between bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-[22px] overflow-hidden shadow-sm hover:shadow-[0_16px_36px_-6px_rgba(249,115,22,0.18)] hover:-translate-y-1.5 transition-all duration-350 select-none relative"
+              >
+                {/* 1. Top Campus Banner Image */}
+                <div className="relative h-[120px] bg-slate-100 overflow-hidden">
+                  <img
+                    src={college.image || "/images/galgotias_real.jpg"}
+                    alt={college.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80";
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                  {/* Top-Left: NIRF Badge */}
+                  {college.nirfRank && (
+                    <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full text-[8.5px] font-black shadow-md shadow-orange-500/25 z-10 flex items-center gap-1">
+                      <Award className="w-2.5 h-2.5" />
+                      <span>NIRF #{college.nirfRank}</span>
+                    </div>
+                  )}
+
+                  {/* Top-Right: Rating Badge */}
+                  <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm text-[9.5px] font-black text-slate-800 z-10">
+                    <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                    <span>{college.rating}</span>
+                  </div>
+
+                  {/* Bottom-Right on Image: Govt/Private Pill */}
+                  <div className="absolute bottom-2 right-2.5 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-bold text-white z-10">
+                    {college.type}
+                  </div>
+                </div>
+
+                {/* 2. Floating Overlapping College Logo + Stream Tag */}
+                <div className="relative -mt-6 px-3.5 z-20 flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow relative">
+                    {college.logo ? (
+                      <img
+                        src={college.logo}
+                        alt={`${college.name} logo`}
+                        className="w-full h-full object-contain relative z-10"
+                        onError={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.display = "none";
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = "flex";
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      style={{ display: college.logo ? "none" : "flex" }}
+                      className="w-full h-full rounded-lg bg-gradient-to-br from-orange-500/15 to-amber-500/15 border border-orange-200/60 text-orange-600 font-black text-[10px] items-center justify-center text-center uppercase tracking-tight"
+                    >
+                      {college.name.split(" ")[0].slice(0, 4)}
+                    </div>
                   </div>
                   <span className="text-[8.5px] uppercase tracking-wider font-extrabold px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-600 border border-orange-200/70 shadow-xs">
                     {college.stream}
