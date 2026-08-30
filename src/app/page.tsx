@@ -1123,6 +1123,109 @@ export default function HomePage() {
       ? featuredColleges
       : featuredColleges.filter((col) => col.stream === selectedFeaturedStream);
 
+  const popularComparisons = [
+    {
+      c1: {
+        id: "igdtuw",
+        name: "IGDTUW Delhi",
+        fullName: "Indira Gandhi Delhi Technical University for Women",
+        course: "B.Tech Computer Science & IT",
+        rating: 4.5,
+        reviews: 44,
+        logo: "https://images.careerindia.com/img/2013/05/22-iiit-delhi.jpg",
+      },
+      c2: {
+        id: "jmi",
+        name: "Jamia Millia Islamia",
+        fullName: "Jamia Millia Islamia (JMI)",
+        course: "B.Tech Computer Engineering",
+        rating: 4.6,
+        reviews: 68,
+        logo: "https://www.jobsgyan.in/wp-content/uploads/2023/05/Jamia-Millia-Islamia-Logo.jpg",
+      },
+    },
+    {
+      c1: {
+        id: "nit-delhi",
+        name: "NIT Delhi",
+        fullName: "National Institute of Technology Delhi",
+        course: "B.Tech Computer Science",
+        rating: 4.4,
+        reviews: 52,
+        logo: "https://static.pw.live/5eb393ee95fab7468a79d189/GLOBAL_CMS/238f2312-1d90-42e9-a8d0-1df90efbffe5.webp",
+      },
+      c2: {
+        id: "iiit-delhi",
+        name: "IIIT Delhi",
+        fullName: "Indraprastha Institute of Information Technology",
+        course: "B.Tech Computer Science & AI",
+        rating: 4.6,
+        reviews: 76,
+        logo: "https://www.careerindia.com/img/2014/04/28-iiitdelhi.jpg",
+      },
+    },
+    {
+      c1: {
+        id: "dtu",
+        name: "DTU Delhi",
+        fullName: "Delhi Technological University",
+        course: "B.Tech Computer Engineering",
+        rating: 4.7,
+        reviews: 118,
+        logo: "https://cdn.rm.dcedtu.in/images/dtu.png",
+      },
+      c2: {
+        id: "nsut",
+        name: "NSUT Delhi",
+        fullName: "Netaji Subhas University of Technology",
+        course: "B.Tech Computer Science",
+        rating: 4.6,
+        reviews: 92,
+        logo: "https://tse3.mm.bing.net/th/id/OIP.pRuDP23vlNjtzZ1EvNp-jgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+      },
+    },
+    {
+      c1: {
+        id: "1",
+        name: "IIT Delhi",
+        fullName: "Indian Institute of Technology Delhi",
+        course: "B.Tech Computer Science",
+        rating: 4.9,
+        reviews: 215,
+        logo: "https://www.iitbbs.ac.in/wp-content/uploads/2023/07/iit_delhi.png",
+      },
+      c2: {
+        id: "iit-bombay",
+        name: "IIT Bombay",
+        fullName: "Indian Institute of Technology Bombay",
+        course: "B.Tech Computer Science",
+        rating: 4.9,
+        reviews: 230,
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Indian_Institute_of_Technology_Bombay_Logo.svg/220px-Indian_Institute_of_Technology_Bombay_Logo.svg.png",
+      },
+    },
+    {
+      c1: {
+        id: "amity-noida",
+        name: "Amity University",
+        fullName: "Amity University, Noida",
+        course: "B.Tech CSE",
+        rating: 4.5,
+        reviews: 88,
+        logo: "https://clicktranscripts.com/new/wp-content/uploads/2022/05/Amity-University.png",
+      },
+      c2: {
+        id: "3",
+        name: "Galgotias University",
+        fullName: "Galgotias University, Greater Noida",
+        course: "B.Tech Computer Science",
+        rating: 4.2,
+        reviews: 96,
+        logo: "/images/galgotias.png",
+      },
+    },
+  ];
+
   return (
     <div className="space-y-12">
       {" "}
@@ -1741,6 +1844,156 @@ export default function HomePage() {
                 Compare Selected Colleges
                 <ArrowRight className="w-4 h-4" />
               </Link>
+            </div>
+
+            {/* POPULAR HEAD-TO-HEAD COLLEGE COMPARISONS (From User Database) */}
+            <div className="pt-3 border-t border-slate-100 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-700 font-outfit">
+                    Popular Comparisons
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document
+                        .getElementById("popular-vs-carousel-container")
+                        ?.scrollBy({ left: -250, behavior: "smooth" });
+                    }}
+                    className="w-6 h-6 rounded-full bg-slate-100 hover:bg-orange-500 hover:text-white flex items-center justify-center text-slate-600 transition-all cursor-pointer shadow-xs active:scale-95"
+                    title="Previous"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document
+                        .getElementById("popular-vs-carousel-container")
+                        ?.scrollBy({ left: 250, behavior: "smooth" });
+                    }}
+                    className="w-6 h-6 rounded-full bg-slate-100 hover:bg-orange-500 hover:text-white flex items-center justify-center text-slate-600 transition-all cursor-pointer shadow-xs active:scale-95"
+                    title="Next"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Scrollable Popular VS Matchups Carousel */}
+              <div
+                id="popular-vs-carousel-container"
+                className="flex overflow-x-auto no-scrollbar gap-3 pb-1 scroll-smooth snap-x snap-mandatory"
+              >
+                {popularComparisons.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="snap-start w-[240px] sm:w-[250px] md:w-[260px] flex-shrink-0 bg-gradient-to-b from-white to-slate-50/80 border border-slate-200/90 hover:border-orange-500/50 rounded-2xl p-3 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group/vscard select-none"
+                  >
+                    {/* Top: 2 Logos with central circular VS badge */}
+                    <div className="relative flex items-center justify-between px-1 py-1">
+                      {/* College 1 Logo Box */}
+                      <div className="w-[44%] h-13 rounded-xl bg-white border border-slate-200/90 p-1 flex items-center justify-center shadow-xs overflow-hidden relative">
+                        {item.c1.logo ? (
+                          <img
+                            src={item.c1.logo}
+                            alt={item.c1.name}
+                            className="max-h-full max-w-full object-contain relative z-10"
+                            onError={(e) => {
+                              const target = e.target as HTMLElement;
+                              target.style.display = "none";
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = "flex";
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          style={{ display: item.c1.logo ? "none" : "flex" }}
+                          className="w-full h-full rounded-lg bg-orange-50 text-orange-600 font-extrabold text-[9.5px] items-center justify-center text-center uppercase"
+                        >
+                          {item.c1.name.slice(0, 4)}
+                        </div>
+                      </div>
+
+                      {/* Central VS Badge */}
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-900 text-white font-black text-[9px] flex items-center justify-center border-2 border-white shadow-md z-20">
+                        VS
+                      </div>
+
+                      {/* College 2 Logo Box */}
+                      <div className="w-[44%] h-13 rounded-xl bg-white border border-slate-200/90 p-1 flex items-center justify-center shadow-xs overflow-hidden relative">
+                        {item.c2.logo ? (
+                          <img
+                            src={item.c2.logo}
+                            alt={item.c2.name}
+                            className="max-h-full max-w-full object-contain relative z-10"
+                            onError={(e) => {
+                              const target = e.target as HTMLElement;
+                              target.style.display = "none";
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = "flex";
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          style={{ display: item.c2.logo ? "none" : "flex" }}
+                          className="w-full h-full rounded-lg bg-blue-50 text-blue-600 font-extrabold text-[9.5px] items-center justify-center text-center uppercase"
+                        >
+                          {item.c2.name.slice(0, 4)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Middle: 2-Column Names, Course & Ratings */}
+                    <div className="grid grid-cols-2 gap-2 text-left pt-2 pb-2 border-b border-slate-100">
+                      {/* Left Column */}
+                      <div className="space-y-0.5">
+                        <h4 className="font-outfit font-bold text-[11px] text-slate-800 leading-tight line-clamp-2 min-h-[26px]">
+                          {item.c1.name}
+                        </h4>
+                        <p className="text-[9px] text-slate-500 line-clamp-1">
+                          {item.c1.course}
+                        </p>
+                        <div className="flex items-center gap-1 text-[9.5px] text-slate-700 font-bold pt-0.5">
+                          <span>{item.c1.rating}</span>
+                          <span className="text-amber-400 text-[10px]">★</span>
+                          <span className="text-[8px] text-slate-400 font-normal">
+                            ({item.c1.reviews})
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Right Column */}
+                      <div className="space-y-0.5 pl-1.5 border-l border-slate-100">
+                        <h4 className="font-outfit font-bold text-[11px] text-slate-800 leading-tight line-clamp-2 min-h-[26px]">
+                          {item.c2.name}
+                        </h4>
+                        <p className="text-[9px] text-slate-500 line-clamp-1">
+                          {item.c2.course}
+                        </p>
+                        <div className="flex items-center gap-1 text-[9.5px] text-slate-700 font-bold pt-0.5">
+                          <span>{item.c2.rating}</span>
+                          <span className="text-amber-400 text-[10px]">★</span>
+                          <span className="text-[8px] text-slate-400 font-normal">
+                            ({item.c2.reviews})
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom CTA Button */}
+                    <Link
+                      href={`/compare?ids=${item.c1.id},${item.c2.id}`}
+                      className="w-full mt-2 py-1.5 px-3 bg-[#f26522] hover:bg-[#d9531e] active:bg-[#c04312] text-white font-bold text-[11px] rounded-lg text-center shadow-xs hover:shadow transition-all duration-200 cursor-pointer block"
+                    >
+                      Compare
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -41,7 +41,15 @@ const mockColleges: College[] = [
   { id: "5", name: "RV College of Engineering", location: "Bangalore", state: "Karnataka", stream: "Engineering", type: "Private", fees: 2.5, feesLabel: "₹2.5 Lakhs/Yr", highestPackage: 48.5, highestPackageLabel: "48.5 Lakhs PA", rating: 4.4, slug: "rv-college-of-engineering", logo: "RVCE" },
   { id: "6", name: "KMC Mangalore - Kasturba Medical College", location: "Mangalore", state: "Karnataka", stream: "Medical", type: "Private", fees: 17.8, feesLabel: "₹17.8 Lakhs/Yr", highestPackage: 15.0, highestPackageLabel: "15.0 Lakhs PA", rating: 4.7, slug: "kmc-mangalore", logo: "KMC" },
   { id: "7", name: "NLSIU - National Law School of India University", location: "Bangalore", state: "Karnataka", stream: "Law", type: "Government", fees: 2.1, feesLabel: "₹2.1 Lakhs/Yr", highestPackage: 22.0, highestPackageLabel: "22.0 Lakhs PA", rating: 4.8, slug: "nlsiu-bangalore", logo: "NLSIU" },
-  { id: "8", name: "AIIMS Delhi - All India Institute of Medical Sciences", location: "New Delhi", state: "Delhi", stream: "Medical", type: "Government", fees: 0.02, feesLabel: "₹1,628/Yr", highestPackage: 30.0, highestPackageLabel: "30.0 Lakhs PA", rating: 5.0, slug: "aiims-delhi", logo: "AIIMS" }
+  { id: "8", name: "AIIMS Delhi - All India Institute of Medical Sciences", location: "New Delhi", state: "Delhi", stream: "Medical", type: "Government", fees: 0.02, feesLabel: "₹1,628/Yr", highestPackage: 30.0, highestPackageLabel: "30.0 Lakhs PA", rating: 5.0, slug: "aiims-delhi", logo: "AIIMS" },
+  { id: "igdtuw", name: "IGDTUW (Indira Gandhi Delhi Technical University for Women)", location: "Kashmere Gate", state: "Delhi", stream: "Engineering", type: "Government", fees: 1.25, feesLabel: "₹1.25 Lakhs/Yr", highestPackage: 82.0, highestPackageLabel: "82.0 Lakhs PA", rating: 4.5, slug: "10-igdtuw-indira-gandhi-delhi-technical-university-for-women-", logo: "IGDTUW" },
+  { id: "jmi", name: "Jamia Millia Islamia (JMI)", location: "Jamia Nagar", state: "Delhi", stream: "Engineering", type: "Government", fees: 0.77, feesLabel: "₹76,900/Yr", highestPackage: 32.0, highestPackageLabel: "32.0 Lakhs PA", rating: 4.6, slug: "jamia-millia-islamia-jmi-", logo: "JMI" },
+  { id: "nit-delhi", name: "NIT Delhi - National Institute of Technology", location: "Narela", state: "Delhi", stream: "Engineering", type: "Government", fees: 1.8, feesLabel: "₹1.8 Lakhs/Yr", highestPackage: 82.0, highestPackageLabel: "82.0 Lakhs PA", rating: 4.4, slug: "nit-delhi", logo: "NITD" },
+  { id: "iiit-delhi", name: "IIIT Delhi - Indraprastha Institute of Information Technology", location: "Okhla", state: "Delhi", stream: "Engineering", type: "Government", fees: 4.5, feesLabel: "₹4.5 Lakhs/Yr", highestPackage: 51.0, highestPackageLabel: "51.0 Lakhs PA", rating: 4.6, slug: "iiit-delhi", logo: "IIITD" },
+  { id: "dtu", name: "DTU - Delhi Technological University", location: "Rohini", state: "Delhi", stream: "Engineering", type: "Government", fees: 2.2, feesLabel: "₹2.2 Lakhs/Yr", highestPackage: 82.5, highestPackageLabel: "82.5 Lakhs PA", rating: 4.7, slug: "-delhi-technological-university-dtu-", logo: "DTU" },
+  { id: "nsut", name: "NSUT - Netaji Subhas University of Technology", location: "Dwarka", state: "Delhi", stream: "Engineering", type: "Government", fees: 2.3, feesLabel: "₹2.3 Lakhs/Yr", highestPackage: 64.0, highestPackageLabel: "64.0 Lakhs PA", rating: 4.6, slug: "nsut-netaji-subhas-university-of-technology", logo: "NSUT" },
+  { id: "amity-noida", name: "Amity University, Noida", location: "Noida", state: "Uttar Pradesh", stream: "Engineering", type: "Private", fees: 3.1, feesLabel: "₹3.1 Lakhs/Yr", highestPackage: 61.7, highestPackageLabel: "61.7 Lakhs PA", rating: 4.5, slug: "amity-university-noida", logo: "AU" },
+  { id: "iit-bombay", name: "IIT Bombay - Indian Institute of Technology", location: "Mumbai", state: "Maharashtra", stream: "Engineering", type: "Government", fees: 2.3, feesLabel: "₹2.3 Lakhs/Yr", highestPackage: 168.0, highestPackageLabel: "1.68 Cr PA", rating: 4.9, slug: "iit-bombay", logo: "IITB" }
 ];
 
 function CompareContent() {
@@ -53,7 +61,7 @@ function CompareContent() {
   useEffect(() => {
     if (idsParam) {
       const ids = idsParam.split(",");
-      const colleges = mockColleges.filter(c => ids.includes(c.id));
+      const colleges = mockColleges.filter(c => ids.includes(c.id) || ids.includes(c.slug));
       setComparedColleges(colleges);
     } else {
       setComparedColleges([]);
