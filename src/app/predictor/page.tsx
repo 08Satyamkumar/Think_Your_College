@@ -928,14 +928,14 @@ function PredictorContent() {
   ]);
 
   return (
-    <div className="min-h-screen pb-16 space-y-6 select-none max-w-7xl mx-auto px-4 sm:px-6">
-      {/* 1. TOP HEADER BANNER (World-Class Clean Shiksha Style) */}
-      <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-r from-[#032b53] via-[#094175] to-[#f26522] p-6 sm:p-8 md:p-10 text-white shadow-xl shadow-blue-950/15">
+    <div className="min-h-screen pb-16 select-none -mx-6 -mt-6 md:-mx-8 md:-mt-8">
+      {/* 1. TOP HEADER BANNER (Full-Bleed Seamless Background, No Card Gaps/Borders) */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#032b53] via-[#094175] to-[#f26522] text-white">
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_top_right,rgba(242,101,34,0.35),transparent_60%)] pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_60%)] pointer-events-none" />
 
-        <div className="relative z-10 max-w-3xl space-y-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-9 relative z-10 space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-orange-200 text-xs font-black uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-orange-300 animate-pulse" />
             <span>Official Counseling Cutoff Engine 2026</span>
@@ -952,697 +952,702 @@ function PredictorContent() {
         </div>
       </div>
 
+      {/* Needle-Thin Divider Line */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-orange-400/40 to-transparent" />
+
       {/* 2. MAIN WIZARD OR RESULTS DASHBOARD */}
-      {!showResults ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* LEFT VERTICAL STEPPER SIDEBAR (Shiksha UI Pattern) */}
-          <div className="lg:col-span-3 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
-              Prediction Steps
-            </h3>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+        {!showResults ? (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* LEFT VERTICAL STEPPER SIDEBAR (Shiksha UI Pattern) */}
+            <div className="lg:col-span-3 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-4">
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                Prediction Steps
+              </h3>
 
-            <div className="space-y-3">
-              {[
-                {
-                  stepNum: 1,
-                  title: "Select a Course",
-                  subtitle: selectedStream,
-                  icon: GraduationCap,
-                },
-                {
-                  stepNum: 2,
-                  title: "Select Exam(s)",
-                  subtitle: `${selectedExams.length} Exam${
-                    selectedExams.length > 1 ? "s" : ""
-                  } Selected`,
-                  icon: Layers,
-                },
-                {
-                  stepNum: 3,
-                  title: "Enter Score Details",
-                  subtitle: userScoreInput
-                    ? `${activeExamObj.scoreType}: ${userScoreInput}`
-                    : "Rank / Score / Category",
-                  icon: Award,
-                },
-              ].map((s) => {
-                const isActive = currentStep === s.stepNum;
-                const isCompleted = currentStep > s.stepNum;
-                const Icon = s.icon;
+              <div className="space-y-3">
+                {[
+                  {
+                    stepNum: 1,
+                    title: "Select a Course",
+                    subtitle: selectedStream,
+                    icon: GraduationCap,
+                  },
+                  {
+                    stepNum: 2,
+                    title: "Select Exam(s)",
+                    subtitle: `${selectedExams.length} Exam${
+                      selectedExams.length > 1 ? "s" : ""
+                    } Selected`,
+                    icon: Layers,
+                  },
+                  {
+                    stepNum: 3,
+                    title: "Enter Score Details",
+                    subtitle: userScoreInput
+                      ? `${activeExamObj.scoreType}: ${userScoreInput}`
+                      : "Rank / Score / Category",
+                    icon: Award,
+                  },
+                ].map((s) => {
+                  const isActive = currentStep === s.stepNum;
+                  const isCompleted = currentStep > s.stepNum;
+                  const Icon = s.icon;
 
-                return (
-                  <button
-                    key={s.stepNum}
-                    type="button"
-                    onClick={() => {
-                      if (s.stepNum <= currentStep || currentStep > s.stepNum) {
-                        setCurrentStep(s.stepNum);
-                      }
-                    }}
-                    className={`w-full flex items-center gap-3.5 p-3 rounded-xl transition-all text-left ${
-                      isActive
-                        ? "bg-orange-50 border border-orange-200 text-orange-950 shadow-xs"
-                        : isCompleted
-                        ? "hover:bg-slate-50 text-slate-800"
-                        : "opacity-60 text-slate-400 cursor-not-allowed"
-                    }`}
-                  >
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-colors flex-shrink-0 ${
-                        isCompleted
-                          ? "bg-emerald-500 text-white"
-                          : isActive
-                          ? "bg-orange-500 text-white shadow-md shadow-orange-500/20"
-                          : "bg-slate-100 text-slate-500 border border-slate-200"
+                  return (
+                    <button
+                      key={s.stepNum}
+                      type="button"
+                      onClick={() => {
+                        if (s.stepNum <= currentStep || currentStep > s.stepNum) {
+                          setCurrentStep(s.stepNum);
+                        }
+                      }}
+                      className={`w-full flex items-center gap-3.5 p-3 rounded-xl transition-all text-left ${
+                        isActive
+                          ? "bg-orange-50 border border-orange-200 text-orange-950 shadow-xs"
+                          : isCompleted
+                          ? "hover:bg-slate-50 text-slate-800"
+                          : "opacity-60 text-slate-400 cursor-not-allowed"
                       }`}
                     >
-                      {isCompleted ? <Check className="w-4 h-4" /> : s.stepNum}
-                    </div>
-
-                    <div className="overflow-hidden">
-                      <p
-                        className={`text-xs font-bold font-outfit truncate ${
-                          isActive ? "text-orange-600 font-extrabold" : ""
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-colors flex-shrink-0 ${
+                          isCompleted
+                            ? "bg-emerald-500 text-white"
+                            : isActive
+                            ? "bg-orange-500 text-white shadow-md shadow-orange-500/20"
+                            : "bg-slate-100 text-slate-500 border border-slate-200"
                         }`}
                       >
-                        {s.title}
-                      </p>
-                      <p className="text-[10.5px] text-slate-500 truncate mt-0.5">
-                        {s.subtitle}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                        {isCompleted ? <Check className="w-4 h-4" /> : s.stepNum}
+                      </div>
 
-            <div className="pt-4 border-t border-slate-100 space-y-2">
-              <div className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>100% Free & Verified Cutoffs</span>
+                      <div className="overflow-hidden">
+                        <p
+                          className={`text-xs font-bold font-outfit truncate ${
+                            isActive ? "text-orange-600 font-extrabold" : ""
+                          }`}
+                        >
+                          {s.title}
+                        </p>
+                        <p className="text-[10.5px] text-slate-500 truncate mt-0.5">
+                          {s.subtitle}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-              <div className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold">
-                <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                <span>Used by 50,000+ Aspirants</span>
-              </div>
-            </div>
-          </div>
 
-          {/* RIGHT STEP CONTENT AREA */}
-          <div className="lg:col-span-9 bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-7 md:p-8 shadow-xs min-h-[460px] flex flex-col justify-between relative overflow-hidden">
-            {isAnalyzing ? (
-              <div className="my-auto py-16 text-center space-y-4">
-                <div className="relative w-16 h-16 mx-auto">
-                  <div className="w-16 h-16 rounded-full border-4 border-orange-500/20 border-t-orange-500 animate-spin" />
-                  <Sparkles className="w-6 h-6 text-orange-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+              <div className="pt-4 border-t border-slate-100 space-y-2">
+                <div className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>100% Free & Verified Cutoffs</span>
                 </div>
-                <div className="space-y-1">
-                  <h3 className="font-outfit font-black text-xl text-slate-900">
-                    Analyzing JoSAA, JAC & State Cutoffs...
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Evaluating reservation quotas, home state weightage & seat
-                    allocation algorithms
-                  </p>
+                <div className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold">
+                  <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <span>Used by 50,000+ Aspirants</span>
                 </div>
               </div>
-            ) : (
-              <AnimatePresence mode="wait">
-                {/* STEP 1: SELECT A COURSE */}
-                {currentStep === 1 && (
-                  <motion.div
-                    key="step1"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="space-y-5"
-                  >
-                    <div>
-                      <h2 className="font-outfit font-black text-xl text-slate-900">
-                        Step 1: Select Your Target Course / Stream
-                      </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        Choose your discipline to display eligible entrance exams
-                        and seat allotment matrices.
-                      </p>
-                    </div>
+            </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 pt-2">
-                      {[
-                        {
-                          stream: "Engineering",
-                          title: "Engineering (B.Tech / B.E)",
-                          desc: "JEE Main, Adv, BITSAT, State CETs",
-                          icon: GraduationCap,
-                          color: "from-blue-500/10 to-indigo-500/10 border-blue-200 text-blue-600",
-                        },
-                        {
-                          stream: "Management",
-                          title: "Management (MBA / PGDM)",
-                          desc: "CAT, XAT, MAT, SNAP, CMAT",
-                          icon: Briefcase,
-                          color: "from-amber-500/10 to-orange-500/10 border-amber-200 text-amber-600",
-                        },
-                        {
-                          stream: "Medical",
-                          title: "Medical (MBBS / BDS / AYUSH)",
-                          desc: "NEET UG, INI CET, AIIMS",
-                          icon: Stethoscope,
-                          color: "from-emerald-500/10 to-teal-500/10 border-emerald-200 text-emerald-600",
-                        },
-                        {
-                          stream: "Law",
-                          title: "Law (BA LLB / BBA LLB / LLM)",
-                          desc: "CLAT, AILET, SLAT, NLU Admissions",
-                          icon: Scale,
-                          color: "from-purple-500/10 to-indigo-500/10 border-purple-200 text-purple-600",
-                        },
-                        {
-                          stream: "Design",
-                          title: "Design & Architecture",
-                          desc: "UCEED, NID, NATA, JEE Paper 2",
-                          icon: Palette,
-                          color: "from-pink-500/10 to-rose-500/10 border-pink-200 text-pink-600",
-                        },
-                      ].map((card) => {
-                        const isSelected = selectedStream === card.stream;
-                        const Icon = card.icon;
-
-                        return (
-                          <button
-                            key={card.stream}
-                            type="button"
-                            onClick={() => {
-                              setSelectedStream(
-                                card.stream as
-                                  | "Engineering"
-                                  | "Management"
-                                  | "Medical"
-                                  | "Law"
-                                  | "Design"
-                              );
-                              // Auto-select first exam of stream
-                              const firstOfStream = ALL_EXAMS.find(
-                                (e) => e.stream === card.stream
-                              );
-                              if (firstOfStream) {
-                                setSelectedExams([firstOfStream.id]);
-                              }
-                            }}
-                            className={`p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between h-[130px] relative cursor-pointer ${
-                              isSelected
-                                ? "bg-gradient-to-br border-orange-500 ring-2 ring-orange-500/20 bg-orange-50/60 shadow-sm"
-                                : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div
-                                className={`w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br ${card.color}`}
-                              >
-                                <Icon className="w-5 h-5" />
-                              </div>
-                              {isSelected && (
-                                <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center">
-                                  <Check className="w-3.5 h-3.5" />
-                                </div>
-                              )}
-                            </div>
-
-                            <div>
-                              <h4 className="font-outfit font-extrabold text-xs sm:text-sm text-slate-800 leading-tight">
-                                {card.title}
-                              </h4>
-                              <p className="text-[10px] text-slate-500 mt-1 line-clamp-1">
-                                {card.desc}
-                              </p>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 2: SELECT EXAMS WITH OFFICIAL LOGOS (Exact Shiksha Grid Format) */}
-                {currentStep === 2 && (
-                  <motion.div
-                    key="step2"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="space-y-4"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            {/* RIGHT STEP CONTENT AREA */}
+            <div className="lg:col-span-9 bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-7 md:p-8 shadow-xs min-h-[460px] flex flex-col justify-between relative overflow-hidden">
+              {isAnalyzing ? (
+                <div className="my-auto py-16 text-center space-y-4">
+                  <div className="relative w-16 h-16 mx-auto">
+                    <div className="w-16 h-16 rounded-full border-4 border-orange-500/20 border-t-orange-500 animate-spin" />
+                    <Sparkles className="w-6 h-6 text-orange-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-outfit font-black text-xl text-slate-900">
+                      Analyzing JoSAA, JAC & State Cutoffs...
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Evaluating reservation quotas, home state weightage & seat
+                      allocation algorithms
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <AnimatePresence mode="wait">
+                  {/* STEP 1: SELECT A COURSE */}
+                  {currentStep === 1 && (
+                    <motion.div
+                      key="step1"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="space-y-5"
+                    >
                       <div>
                         <h2 className="font-outfit font-black text-xl text-slate-900">
-                          Select exams you have taken
+                          Step 1: Select Your Target Course / Stream
                         </h2>
                         <p className="text-xs text-slate-500 mt-0.5">
-                          You can select multiple exams to predict across all
-                          counselings simultaneously.
+                          Choose your discipline to display eligible entrance exams
+                          and seat allotment matrices.
                         </p>
                       </div>
 
-                      {/* Search Bar for Exams */}
-                      <div className="relative w-full sm:w-64">
-                        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                        <input
-                          type="text"
-                          value={examSearchQuery}
-                          onChange={(e) => setExamSearchQuery(e.target.value)}
-                          placeholder="Search exam (e.g. JEE, BITSAT)..."
-                          className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-xl text-xs bg-slate-50 focus:bg-white focus:border-orange-500 outline-none font-medium"
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 pt-2">
+                        {[
+                          {
+                            stream: "Engineering",
+                            title: "Engineering (B.Tech / B.E)",
+                            desc: "JEE Main, Adv, BITSAT, State CETs",
+                            icon: GraduationCap,
+                            color: "from-blue-500/10 to-indigo-500/10 border-blue-200 text-blue-600",
+                          },
+                          {
+                            stream: "Management",
+                            title: "Management (MBA / PGDM)",
+                            desc: "CAT, XAT, MAT, SNAP, CMAT",
+                            icon: Briefcase,
+                            color: "from-amber-500/10 to-orange-500/10 border-amber-200 text-amber-600",
+                          },
+                          {
+                            stream: "Medical",
+                            title: "Medical (MBBS / BDS / AYUSH)",
+                            desc: "NEET UG, INI CET, AIIMS",
+                            icon: Stethoscope,
+                            color: "from-emerald-500/10 to-teal-500/10 border-emerald-200 text-emerald-600",
+                          },
+                          {
+                            stream: "Law",
+                            title: "Law (BA LLB / BBA LLB / LLM)",
+                            desc: "CLAT, AILET, SLAT, NLU Admissions",
+                            icon: Scale,
+                            color: "from-purple-500/10 to-indigo-500/10 border-purple-200 text-purple-600",
+                          },
+                          {
+                            stream: "Design",
+                            title: "Design & Architecture",
+                            desc: "UCEED, NID, NATA, JEE Paper 2",
+                            icon: Palette,
+                            color: "from-pink-500/10 to-rose-500/10 border-pink-200 text-pink-600",
+                          },
+                        ].map((card) => {
+                          const isSelected = selectedStream === card.stream;
+                          const Icon = card.icon;
+
+                          return (
+                            <button
+                              key={card.stream}
+                              type="button"
+                              onClick={() => {
+                                setSelectedStream(
+                                  card.stream as
+                                    | "Engineering"
+                                    | "Management"
+                                    | "Medical"
+                                    | "Law"
+                                    | "Design"
+                                );
+                                // Auto-select first exam of stream
+                                const firstOfStream = ALL_EXAMS.find(
+                                  (e) => e.stream === card.stream
+                                );
+                                if (firstOfStream) {
+                                  setSelectedExams([firstOfStream.id]);
+                                }
+                              }}
+                              className={`p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between h-[130px] relative cursor-pointer ${
+                                isSelected
+                                  ? "bg-gradient-to-br border-orange-500 ring-2 ring-orange-500/20 bg-orange-50/60 shadow-sm"
+                                  : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div
+                                  className={`w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br ${card.color}`}
+                                >
+                                  <Icon className="w-5 h-5" />
+                                </div>
+                                {isSelected && (
+                                  <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center">
+                                    <Check className="w-3.5 h-3.5" />
+                                  </div>
+                                )}
+                              </div>
+
+                              <div>
+                                <h4 className="font-outfit font-extrabold text-xs sm:text-sm text-slate-800 leading-tight">
+                                  {card.title}
+                                </h4>
+                                <p className="text-[10px] text-slate-500 mt-1 line-clamp-1">
+                                  {card.desc}
+                                </p>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 2: SELECT EXAMS WITH OFFICIAL LOGOS (Exact Shiksha Grid Format) */}
+                  {currentStep === 2 && (
+                    <motion.div
+                      key="step2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="space-y-4"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                          <h2 className="font-outfit font-black text-xl text-slate-900">
+                            Select exams you have taken
+                          </h2>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            You can select multiple exams to predict across all
+                            counselings simultaneously.
+                          </p>
+                        </div>
+
+                        {/* Search Bar for Exams */}
+                        <div className="relative w-full sm:w-64">
+                          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                          <input
+                            type="text"
+                            value={examSearchQuery}
+                            onChange={(e) => setExamSearchQuery(e.target.value)}
+                            placeholder="Search exam (e.g. JEE, BITSAT)..."
+                            className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-xl text-xs bg-slate-50 focus:bg-white focus:border-orange-500 outline-none font-medium"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Rich Grid of Official Exam Cards (Shiksha Image 3 Format) */}
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 max-h-[380px] overflow-y-auto pr-1 py-1 no-scrollbar">
+                        {visibleExams.map((exam) => {
+                          const isSelected = selectedExams.includes(exam.id);
+
+                          return (
+                            <div
+                              key={exam.id}
+                              onClick={() => toggleExamSelection(exam.id)}
+                              className={`group relative flex flex-col items-center justify-between p-2.5 rounded-xl border transition-all duration-200 cursor-pointer bg-white ${
+                                isSelected
+                                  ? "border-orange-500 ring-2 ring-orange-500/20 bg-orange-50/20 shadow-xs"
+                                  : "border-slate-200/90 hover:border-orange-300 hover:shadow-xs"
+                              }`}
+                            >
+                              {/* Selected Checkmark Badge */}
+                              {isSelected && (
+                                <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-orange-500 text-white flex items-center justify-center z-20">
+                                  <Check className="w-2.5 h-2.5" />
+                                </div>
+                              )}
+
+                              {/* State / Tag Pill */}
+                              {exam.stateTag && (
+                                <div className="absolute top-1.5 left-1.5 text-[7.5px] font-extrabold uppercase px-1 py-0.2 rounded bg-slate-100 text-slate-600">
+                                  {exam.stateTag}
+                                </div>
+                              )}
+
+                              {/* Center Logo Box */}
+                              <div className="w-14 h-14 mt-3.5 mb-1 rounded-xl bg-white border border-slate-100 p-1 flex items-center justify-center shadow-2xs overflow-hidden relative">
+                                {exam.logo ? (
+                                  <img
+                                    src={exam.logo}
+                                    alt={exam.name}
+                                    className="max-h-full max-w-full object-contain relative z-10"
+                                    onError={(e) => {
+                                      (e.target as HTMLElement).style.display =
+                                        "none";
+                                    }}
+                                  />
+                                ) : null}
+                                <div className="w-full h-full rounded-lg bg-orange-50 text-orange-600 font-black text-[10px] flex items-center justify-center uppercase">
+                                  {exam.shortName.slice(0, 4)}
+                                </div>
+                              </div>
+
+                              {/* Exam Name */}
+                              <p className="font-outfit font-bold text-[11px] text-slate-800 text-center leading-tight line-clamp-2 min-h-[26px]">
+                                {exam.shortName}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 3: ENTER SCORE & DEMOGRAPHIC PREFERENCES */}
+                  {currentStep === 3 && (
+                    <motion.div
+                      key="step3"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <h2 className="font-outfit font-black text-xl text-slate-900">
+                          Step 3: Enter Your Scores & Category
+                        </h2>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Please provide accurate details for precise category &
+                          home-state cutoff allotment.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                        {/* Score / Rank Input */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
+                            <span>
+                              Enter {activeExamObj.name} {activeExamObj.scoreType}
+                            </span>
+                            {activeExamObj.maxScore && (
+                              <span className="text-[10px] text-slate-400">
+                                (Max: {activeExamObj.maxScore})
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={userScoreInput}
+                            onChange={(e) => setUserScoreInput(e.target.value)}
+                            placeholder={
+                              activeExamObj.scoreType === "Percentile"
+                                ? "e.g. 98.45"
+                                : activeExamObj.scoreType === "Marks"
+                                ? "e.g. 280"
+                                : "e.g. 12500"
+                            }
+                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-extrabold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
+                          />
+                        </div>
+
+                        {/* Quota Category */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold text-slate-700">
+                            Reservation Category / Quota
+                          </label>
+                          <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
+                          >
+                            <option value="General">General / Open (CRL)</option>
+                            <option value="OBC-NCL">OBC-NCL</option>
+                            <option value="EWS">GEN-EWS (Economically Weaker)</option>
+                            <option value="SC">SC (Scheduled Caste)</option>
+                            <option value="ST">ST (Scheduled Tribe)</option>
+                            <option value="PwD">PwD (Persons with Disabilities)</option>
+                          </select>
+                        </div>
+
+                        {/* Gender Pool (Critical for NITs/IITs/IGDTUW) */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold text-slate-700">
+                            Gender Pool
+                          </label>
+                          <select
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
+                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
+                          >
+                            <option value="Gender-Neutral">Gender-Neutral (All)</option>
+                            <option value="Female-Only">Female-Only (Supernumerary Seats)</option>
+                          </select>
+                        </div>
+
+                        {/* Home State Eligibility (JoSAA 50% Home State Quota) */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold text-slate-700">
+                            Home State Eligibility (12th Board State)
+                          </label>
+                          <select
+                            value={homeState}
+                            onChange={(e) => setHomeState(e.target.value)}
+                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
+                          >
+                            <option value="Delhi NCT">Delhi NCT (85% State Quota)</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Punjab / Haryana">Punjab / Haryana</option>
+                            <option value="Other States">Other States / UTs</option>
+                          </select>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              )}
+
+              {/* BOTTOM STEP CONTROLS & NAVIGATION BAR */}
+              {!isAnalyzing && (
+                <div className="flex items-center justify-between pt-6 mt-6 border-t border-slate-100">
+                  <button
+                    type="button"
+                    disabled={currentStep === 1}
+                    onClick={() => setCurrentStep(currentStep - 1)}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 active:scale-95 transition-all ${
+                      currentStep === 1 ? "opacity-0 pointer-events-none" : ""
+                    }`}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span>Previous</span>
+                  </button>
+
+                  {currentStep < 3 ? (
+                    <button
+                      type="button"
+                      onClick={() => setCurrentStep(currentStep + 1)}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-[#f26522] hover:bg-[#d9531e] text-white text-xs font-black rounded-xl shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer"
+                    >
+                      <span>
+                        {currentStep === 2
+                          ? `Next (${selectedExams.length} Selected)`
+                          : "Next Step"}
+                      </span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleStartPrediction}
+                      className="flex items-center gap-2 px-7 py-2.5 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white text-xs font-black rounded-xl shadow-lg shadow-orange-500/25 active:scale-95 transition-all cursor-pointer"
+                    >
+                      <span>Predict My Colleges</span>
+                      <Sparkles className="w-4 h-4 animate-pulse" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* 3. COMPREHENSIVE PREDICTION RESULTS DASHBOARD */
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            {/* USER INPUT SUMMARY PILLS & RECALCULATE CTA */}
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
+                <span className="px-3 py-1 bg-orange-50 text-orange-700 font-extrabold rounded-lg border border-orange-200/60">
+                  Exam: {activeExamObj.name}
+                </span>
+                <span className="px-3 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg border border-slate-200">
+                  {activeExamObj.scoreType}: <strong>{userScoreInput}</strong>
+                </span>
+                <span className="px-3 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg border border-slate-200">
+                  Category: <strong>{category}</strong>
+                </span>
+                <span className="px-3 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg border border-slate-200">
+                  Home State: <strong>{homeState}</strong>
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleResetWizard}
+                className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-orange-600 text-white font-bold text-xs rounded-xl active:scale-95 transition-all self-start md:self-auto cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Modify Details</span>
+              </button>
+            </div>
+
+            {/* FILTER TOOLBAR: PROBABILITY TABS & DROPDOWNS */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5">
+              {/* Probability Category Tabs */}
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { id: "All", label: "All Predicted", color: "" },
+                  { id: "High", label: "🟢 High Chance (Safe)", color: "text-emerald-700" },
+                  { id: "Medium", label: "🟡 Medium Chance (Likely)", color: "text-amber-700" },
+                  { id: "Low", label: "🔴 Low Chance (Ambitious)", color: "text-red-700" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setResultsFilterChance(tab.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      resultsFilterChance === tab.id
+                        ? "bg-white border border-slate-300 text-slate-900 shadow-xs scale-[1.02]"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Location & Ownership Filters */}
+              <div className="flex items-center gap-2">
+                <select
+                  value={resultsFilterState}
+                  onChange={(e) => setResultsFilterState(e.target.value)}
+                  className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-bold bg-white text-slate-700 outline-none"
+                >
+                  <option value="All">All Locations</option>
+                  <option value="Delhi NCT">Delhi NCT</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                </select>
+
+                <select
+                  value={resultsFilterType}
+                  onChange={(e) => setResultsFilterType(e.target.value)}
+                  className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-bold bg-white text-slate-700 outline-none"
+                >
+                  <option value="All">All Institutes</option>
+                  <option value="Government">Government Only</option>
+                  <option value="Private">Private Only</option>
+                </select>
+              </div>
+            </div>
+
+            {/* RESULTS COLLEGE CARDS GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredPredictions.map((college) => (
+                <motion.div
+                  layout
+                  key={college.id}
+                  className="group bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-2xl p-4 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+                >
+                  <div className="space-y-3">
+                    {/* Card Header: Chance Badge & NIRF */}
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                          college.chance === "High"
+                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                            : college.chance === "Medium"
+                            ? "bg-amber-50 text-amber-700 border border-amber-200"
+                            : "bg-red-50 text-red-700 border border-red-200"
+                        }`}
+                      >
+                        {college.chance === "High"
+                          ? "High Probability"
+                          : college.chance === "Medium"
+                          ? "Medium Probability"
+                          : "Competitive / Dream"}
+                      </span>
+
+                      {college.nirfRank && (
+                        <span className="text-[9px] font-extrabold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
+                          NIRF #{college.nirfRank}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* College Identity: Logo + Name + Branch */}
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xs">
+                        {college.logo ? (
+                          <img
+                            src={college.logo}
+                            alt={college.name}
+                            className="max-h-full max-w-full object-contain"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                        ) : null}
+                        <Building2 className="w-6 h-6 text-orange-500" />
+                      </div>
+
+                      <div className="overflow-hidden">
+                        <h4 className="font-outfit font-black text-sm text-slate-900 leading-snug group-hover:text-orange-600 transition-colors line-clamp-1">
+                          {college.name}
+                        </h4>
+                        <p className="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                          <span className="truncate">{college.location}</span>
+                        </p>
                       </div>
                     </div>
 
-                    {/* Rich Grid of Official Exam Cards (Shiksha Image 3 Format) */}
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 max-h-[380px] overflow-y-auto pr-1 py-1 no-scrollbar">
-                      {visibleExams.map((exam) => {
-                        const isSelected = selectedExams.includes(exam.id);
-
-                        return (
-                          <div
-                            key={exam.id}
-                            onClick={() => toggleExamSelection(exam.id)}
-                            className={`group relative flex flex-col items-center justify-between p-2.5 rounded-xl border transition-all duration-200 cursor-pointer bg-white ${
-                              isSelected
-                                ? "border-orange-500 ring-2 ring-orange-500/20 bg-orange-50/20 shadow-xs"
-                                : "border-slate-200/90 hover:border-orange-300 hover:shadow-xs"
-                            }`}
-                          >
-                            {/* Selected Checkmark Badge */}
-                            {isSelected && (
-                              <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-orange-500 text-white flex items-center justify-center z-20">
-                                <Check className="w-2.5 h-2.5" />
-                              </div>
-                            )}
-
-                            {/* State / Tag Pill */}
-                            {exam.stateTag && (
-                              <div className="absolute top-1.5 left-1.5 text-[7.5px] font-extrabold uppercase px-1 py-0.2 rounded bg-slate-100 text-slate-600">
-                                {exam.stateTag}
-                              </div>
-                            )}
-
-                            {/* Center Logo Box */}
-                            <div className="w-14 h-14 mt-3.5 mb-1 rounded-xl bg-white border border-slate-100 p-1 flex items-center justify-center shadow-2xs overflow-hidden relative">
-                              {exam.logo ? (
-                                <img
-                                  src={exam.logo}
-                                  alt={exam.name}
-                                  className="max-h-full max-w-full object-contain relative z-10"
-                                  onError={(e) => {
-                                    (e.target as HTMLElement).style.display =
-                                      "none";
-                                  }}
-                                />
-                              ) : null}
-                              <div className="w-full h-full rounded-lg bg-orange-50 text-orange-600 font-black text-[10px] flex items-center justify-center uppercase">
-                                {exam.shortName.slice(0, 4)}
-                              </div>
-                            </div>
-
-                            {/* Exam Name */}
-                            <p className="font-outfit font-bold text-[11px] text-slate-800 text-center leading-tight line-clamp-2 min-h-[26px]">
-                              {exam.shortName}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 3: ENTER SCORE & DEMOGRAPHIC PREFERENCES */}
-                {currentStep === 3 && (
-                  <motion.div
-                    key="step3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="space-y-6"
-                  >
-                    <div>
-                      <h2 className="font-outfit font-black text-xl text-slate-900">
-                        Step 3: Enter Your Scores & Category
-                      </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        Please provide accurate details for precise category &
-                        home-state cutoff allotment.
+                    {/* Predicted Branch */}
+                    <div className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-100">
+                      <p className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider">
+                        Predicted Course / Branch
+                      </p>
+                      <p className="font-outfit font-bold text-xs text-slate-800 mt-0.5 truncate">
+                        {college.branch}
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-                      {/* Score / Rank Input */}
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
-                          <span>
-                            Enter {activeExamObj.name} {activeExamObj.scoreType}
-                          </span>
-                          {activeExamObj.maxScore && (
-                            <span className="text-[10px] text-slate-400">
-                              (Max: {activeExamObj.maxScore})
-                            </span>
-                          )}
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={userScoreInput}
-                          onChange={(e) => setUserScoreInput(e.target.value)}
-                          placeholder={
-                            activeExamObj.scoreType === "Percentile"
-                              ? "e.g. 98.45"
-                              : activeExamObj.scoreType === "Marks"
-                              ? "e.g. 280"
-                              : "e.g. 12500"
-                          }
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-extrabold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
-                        />
+                    {/* Key Metrics: Packages & Fees */}
+                    <div className="grid grid-cols-2 gap-2 py-2 px-3 bg-slate-50/70 border border-slate-100 rounded-xl text-center">
+                      <div>
+                        <p className="text-[7.5px] font-extrabold text-slate-400 uppercase">
+                          Highest Package
+                        </p>
+                        <p className="font-outfit font-bold text-xs text-emerald-600 mt-0.5">
+                          {college.highestPackage}
+                        </p>
                       </div>
-
-                      {/* Quota Category */}
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-700">
-                          Reservation Category / Quota
-                        </label>
-                        <select
-                          value={category}
-                          onChange={(e) => setCategory(e.target.value)}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
-                        >
-                          <option value="General">General / Open (CRL)</option>
-                          <option value="OBC-NCL">OBC-NCL</option>
-                          <option value="EWS">GEN-EWS (Economically Weaker)</option>
-                          <option value="SC">SC (Scheduled Caste)</option>
-                          <option value="ST">ST (Scheduled Tribe)</option>
-                          <option value="PwD">PwD (Persons with Disabilities)</option>
-                        </select>
-                      </div>
-
-                      {/* Gender Pool (Critical for NITs/IITs/IGDTUW) */}
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-700">
-                          Gender Pool
-                        </label>
-                        <select
-                          value={gender}
-                          onChange={(e) => setGender(e.target.value)}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
-                        >
-                          <option value="Gender-Neutral">Gender-Neutral (All)</option>
-                          <option value="Female-Only">Female-Only (Supernumerary Seats)</option>
-                        </select>
-                      </div>
-
-                      {/* Home State Eligibility (JoSAA 50% Home State Quota) */}
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-700">
-                          Home State Eligibility (12th Board State)
-                        </label>
-                        <select
-                          value={homeState}
-                          onChange={(e) => setHomeState(e.target.value)}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-orange-500 outline-none shadow-xs"
-                        >
-                          <option value="Delhi NCT">Delhi NCT (85% State Quota)</option>
-                          <option value="Bihar">Bihar</option>
-                          <option value="Uttar Pradesh">Uttar Pradesh</option>
-                          <option value="Maharashtra">Maharashtra</option>
-                          <option value="Karnataka">Karnataka</option>
-                          <option value="West Bengal">West Bengal</option>
-                          <option value="Tamil Nadu">Tamil Nadu</option>
-                          <option value="Rajasthan">Rajasthan</option>
-                          <option value="Punjab / Haryana">Punjab / Haryana</option>
-                          <option value="Other States">Other States / UTs</option>
-                        </select>
+                      <div className="border-l border-slate-200">
+                        <p className="text-[7.5px] font-extrabold text-slate-400 uppercase">
+                          Tuition Fees
+                        </p>
+                        <p className="font-outfit font-bold text-xs text-slate-800 mt-0.5">
+                          {college.fees}
+                        </p>
                       </div>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            )}
+                  </div>
 
-            {/* BOTTOM STEP CONTROLS & NAVIGATION BAR */}
-            {!isAnalyzing && (
-              <div className="flex items-center justify-between pt-6 mt-6 border-t border-slate-100">
-                <button
-                  type="button"
-                  disabled={currentStep === 1}
-                  onClick={() => setCurrentStep(currentStep - 1)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 active:scale-95 transition-all ${
-                    currentStep === 1 ? "opacity-0 pointer-events-none" : ""
-                  }`}
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Previous</span>
-                </button>
-
-                {currentStep < 3 ? (
-                  <button
-                    type="button"
-                    onClick={() => setCurrentStep(currentStep + 1)}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-[#f26522] hover:bg-[#d9531e] text-white text-xs font-black rounded-xl shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer"
-                  >
-                    <span>
-                      {currentStep === 2
-                        ? `Next (${selectedExams.length} Selected)`
-                        : "Next Step"}
-                    </span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleStartPrediction}
-                    className="flex items-center gap-2 px-7 py-2.5 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white text-xs font-black rounded-xl shadow-lg shadow-orange-500/25 active:scale-95 transition-all cursor-pointer"
-                  >
-                    <span>Predict My Colleges</span>
-                    <Sparkles className="w-4 h-4 animate-pulse" />
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        /* 3. COMPREHENSIVE PREDICTION RESULTS DASHBOARD */
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
-        >
-          {/* USER INPUT SUMMARY PILLS & RECALCULATE CTA */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-              <span className="px-3 py-1 bg-orange-50 text-orange-700 font-extrabold rounded-lg border border-orange-200/60">
-                Exam: {activeExamObj.name}
-              </span>
-              <span className="px-3 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg border border-slate-200">
-                {activeExamObj.scoreType}: <strong>{userScoreInput}</strong>
-              </span>
-              <span className="px-3 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg border border-slate-200">
-                Category: <strong>{category}</strong>
-              </span>
-              <span className="px-3 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg border border-slate-200">
-                Home State: <strong>{homeState}</strong>
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleResetWizard}
-              className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-orange-600 text-white font-bold text-xs rounded-xl active:scale-95 transition-all self-start md:self-auto cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Modify Details</span>
-            </button>
-          </div>
-
-          {/* FILTER TOOLBAR: PROBABILITY TABS & DROPDOWNS */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5">
-            {/* Probability Category Tabs */}
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                { id: "All", label: "All Predicted", color: "" },
-                { id: "High", label: "🟢 High Chance (Safe)", color: "text-emerald-700" },
-                { id: "Medium", label: "🟡 Medium Chance (Likely)", color: "text-amber-700" },
-                { id: "Low", label: "🔴 Low Chance (Ambitious)", color: "text-red-700" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setResultsFilterChance(tab.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    resultsFilterChance === tab.id
-                      ? "bg-white border border-slate-300 text-slate-900 shadow-xs scale-[1.02]"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
-                  }`}
-                >
-                  {tab.label}
-                </button>
+                  {/* Card Action Buttons */}
+                  <div className="flex gap-2 pt-3 mt-2 border-t border-slate-100">
+                    <Link
+                      href={`/colleges/${college.slug}`}
+                      className="flex-1 py-2 text-center bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs rounded-xl transition-all"
+                    >
+                      View College
+                    </Link>
+                    <Link
+                      href="/counseling"
+                      className="flex-1 py-2 text-center bg-[#f26522] hover:bg-[#d9531e] text-white font-bold text-xs rounded-xl shadow-xs transition-all"
+                    >
+                      Get Counseling
+                    </Link>
+                  </div>
+                </motion.div>
               ))}
             </div>
 
-            {/* Location & Ownership Filters */}
-            <div className="flex items-center gap-2">
-              <select
-                value={resultsFilterState}
-                onChange={(e) => setResultsFilterState(e.target.value)}
-                className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-bold bg-white text-slate-700 outline-none"
-              >
-                <option value="All">All Locations</option>
-                <option value="Delhi NCT">Delhi NCT</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Maharashtra">Maharashtra</option>
-              </select>
+            {/* COUNSELING PDF DOWNLOAD BANNER */}
+            <div className="bg-gradient-to-r from-[#032b53] to-[#094175] text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
+              <div className="space-y-1 text-center md:text-left">
+                <h3 className="font-outfit font-black text-xl text-white">
+                  Download Full 2026 Counseling Choice-Filling Order
+                </h3>
+                <p className="text-xs text-slate-300 max-w-xl">
+                  Get a customized choice-filling preference PDF list generated
+                  specifically for your rank, home state quota & branch choices.
+                </p>
+              </div>
 
-              <select
-                value={resultsFilterType}
-                onChange={(e) => setResultsFilterType(e.target.value)}
-                className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-bold bg-white text-slate-700 outline-none"
+              <Link
+                href="/counseling"
+                className="px-6 py-3 bg-[#f26522] hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-lg shadow-orange-500/25 active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap"
               >
-                <option value="All">All Institutes</option>
-                <option value="Government">Government Only</option>
-                <option value="Private">Private Only</option>
-              </select>
+                <FileText className="w-4 h-4" />
+                <span>Get Choice-Filling PDF</span>
+              </Link>
             </div>
-          </div>
-
-          {/* RESULTS COLLEGE CARDS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredPredictions.map((college) => (
-              <motion.div
-                layout
-                key={college.id}
-                className="group bg-white border border-slate-200/90 hover:border-orange-500/60 rounded-2xl p-4 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
-              >
-                <div className="space-y-3">
-                  {/* Card Header: Chance Badge & NIRF */}
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                        college.chance === "High"
-                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                          : college.chance === "Medium"
-                          ? "bg-amber-50 text-amber-700 border border-amber-200"
-                          : "bg-red-50 text-red-700 border border-red-200"
-                      }`}
-                    >
-                      {college.chance === "High"
-                        ? "High Probability"
-                        : college.chance === "Medium"
-                        ? "Medium Probability"
-                        : "Competitive / Dream"}
-                    </span>
-
-                    {college.nirfRank && (
-                      <span className="text-[9px] font-extrabold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
-                        NIRF #{college.nirfRank}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* College Identity: Logo + Name + Branch */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xs">
-                      {college.logo ? (
-                        <img
-                          src={college.logo}
-                          alt={college.name}
-                          className="max-h-full max-w-full object-contain"
-                          onError={(e) => {
-                            (e.target as HTMLElement).style.display = "none";
-                          }}
-                        />
-                      ) : null}
-                      <Building2 className="w-6 h-6 text-orange-500" />
-                    </div>
-
-                    <div className="overflow-hidden">
-                      <h4 className="font-outfit font-black text-sm text-slate-900 leading-snug group-hover:text-orange-600 transition-colors line-clamp-1">
-                        {college.name}
-                      </h4>
-                      <p className="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
-                        <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
-                        <span className="truncate">{college.location}</span>
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Predicted Branch */}
-                  <div className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-100">
-                    <p className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider">
-                      Predicted Course / Branch
-                    </p>
-                    <p className="font-outfit font-bold text-xs text-slate-800 mt-0.5 truncate">
-                      {college.branch}
-                    </p>
-                  </div>
-
-                  {/* Key Metrics: Packages & Fees */}
-                  <div className="grid grid-cols-2 gap-2 py-2 px-3 bg-slate-50/70 border border-slate-100 rounded-xl text-center">
-                    <div>
-                      <p className="text-[7.5px] font-extrabold text-slate-400 uppercase">
-                        Highest Package
-                      </p>
-                      <p className="font-outfit font-bold text-xs text-emerald-600 mt-0.5">
-                        {college.highestPackage}
-                      </p>
-                    </div>
-                    <div className="border-l border-slate-200">
-                      <p className="text-[7.5px] font-extrabold text-slate-400 uppercase">
-                        Tuition Fees
-                      </p>
-                      <p className="font-outfit font-bold text-xs text-slate-800 mt-0.5">
-                        {college.fees}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Action Buttons */}
-                <div className="flex gap-2 pt-3 mt-2 border-t border-slate-100">
-                  <Link
-                    href={`/colleges/${college.slug}`}
-                    className="flex-1 py-2 text-center bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-orange-600 font-bold text-xs rounded-xl transition-all"
-                  >
-                    View College
-                  </Link>
-                  <Link
-                    href="/counseling"
-                    className="flex-1 py-2 text-center bg-[#f26522] hover:bg-[#d9531e] text-white font-bold text-xs rounded-xl shadow-xs transition-all"
-                  >
-                    Get Counseling
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* COUNSELING PDF DOWNLOAD BANNER */}
-          <div className="bg-gradient-to-r from-[#032b53] to-[#094175] text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
-            <div className="space-y-1 text-center md:text-left">
-              <h3 className="font-outfit font-black text-xl text-white">
-                Download Full 2026 Counseling Choice-Filling Order
-              </h3>
-              <p className="text-xs text-slate-300 max-w-xl">
-                Get a customized choice-filling preference PDF list generated
-                specifically for your rank, home state quota & branch choices.
-              </p>
-            </div>
-
-            <Link
-              href="/counseling"
-              className="px-6 py-3 bg-[#f26522] hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-lg shadow-orange-500/25 active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Get Choice-Filling PDF</span>
-            </Link>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
