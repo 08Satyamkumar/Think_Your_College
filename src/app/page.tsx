@@ -1758,100 +1758,94 @@ export default function HomePage() {
       {/* DUAL WIDGET SECTION: COMPARE COLLEGES & EXAM DEADLINES */}
       {/* Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent !mt-0 !mb-1.5" />
-      <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-6 lg:gap-8 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory !mt-0">
+      <section className="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-x-visible no-scrollbar gap-5 lg:gap-6 pb-4 lg:pb-0 scroll-smooth snap-x snap-mandatory !mt-0 items-stretch">
         {/* WIDGET 1: COMPARE COLLEGES (INTERACTIVE WIDGET) */}
-        <div className="w-[82vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-blue-500/20 hover:border-blue-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none">
+        <div className="w-[82vw] sm:w-[480px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-blue-500/20 hover:border-blue-500/50 p-4 sm:p-5 md:p-5 rounded-[22px] space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(59,130,246,0.14)] transition-all duration-350 relative overflow-hidden group/compare select-none flex flex-col justify-between">
           {/* Automatic Shimmer Sheen Reflection Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10" />
 
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="space-y-2 relative z-20">
-            <h2 className="font-outfit font-black text-xl md:text-2xl text-text_primary flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-blue-50 text-blue-500 group-hover/compare:bg-blue-500 group-hover/compare:text-white transition-all duration-300">
-                <Layers className="w-5 h-5" />
+          <div className="space-y-1 relative z-20">
+            <h2 className="font-outfit font-black text-lg md:text-xl text-text_primary flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-blue-50 text-blue-500 group-hover/compare:bg-blue-500 group-hover/compare:text-white transition-all duration-300">
+                <Layers className="w-4 h-4" />
               </div>
               Compare Colleges Side-by-Side
             </h2>
-            <p className="text-xs text-text_secondary leading-relaxed">
-              Confused between two institutes? Select them below to compare
-              side-by-side placements package, annual fees, ranks, and user
-              ratings.
+            <p className="text-[11px] text-text_secondary leading-tight">
+              Select any two institutes to compare packages, fees, ranks & ratings side-by-side.
             </p>
           </div>
 
-          <div className="space-y-4 relative z-20">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2.5 relative z-20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
-                <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">
+                <label className="text-[9px] text-text_secondary font-extrabold uppercase tracking-wider">
                   Select College 1
                 </label>
                 <select
                   value={compareC1}
                   onChange={(e) => setCompareC1(e.target.value)}
-                  className="w-full mt-1.5 px-3.5 py-2.5 border border-slate-200/80 hover:border-blue-300 rounded-xl bg-slate-50 hover:bg-white text-xs text-text_primary outline-none focus:border-blue-500 font-bold transition-all"
+                  className="w-full mt-1 px-2.5 py-1.5 border border-slate-200/80 hover:border-blue-300 rounded-lg bg-slate-50 hover:bg-white text-[11px] text-text_primary outline-none focus:border-blue-500 font-bold transition-all"
                 >
                   <option value="1">IIT Delhi (Engineering)</option>
                   <option value="2">IIM Ahmedabad (Management)</option>
                   <option value="3">Galgotias University (Engineering)</option>
                   <option value="4">SIBM Pune (Management)</option>
-                  <option value="5">
-                    RV College of Engineering (Engineering)
-                  </option>
-                  <option value="6">Kasturba Medical College (Medical)</option>
+                  <option value="5">RV College of Engg (Engineering)</option>
+                  <option value="6">KMC Mangalore (Medical)</option>
                   <option value="7">NLSIU Bangalore (Law)</option>
                   <option value="8">AIIMS Delhi (Medical)</option>
                 </select>
               </div>
 
               <div>
-                <label className="text-[10px] text-text_secondary font-extrabold uppercase tracking-wider">
+                <label className="text-[9px] text-text_secondary font-extrabold uppercase tracking-wider">
                   Select College 2
                 </label>
                 <select
                   value={compareC2}
                   onChange={(e) => setCompareC2(e.target.value)}
-                  className="w-full mt-1.5 px-3.5 py-2.5 border border-slate-200/80 hover:border-blue-300 rounded-xl bg-slate-50 hover:bg-white text-xs text-text_primary outline-none focus:border-blue-500 font-bold transition-all"
+                  className="w-full mt-1 px-2.5 py-1.5 border border-slate-200/80 hover:border-blue-300 rounded-lg bg-slate-50 hover:bg-white text-[11px] text-text_primary outline-none focus:border-blue-500 font-bold transition-all"
                 >
                   <option value="2">IIM Ahmedabad (Management)</option>
                   <option value="1">IIT Delhi (Engineering)</option>
                   <option value="3">Galgotias University (Engineering)</option>
                   <option value="4">SIBM Pune (Management)</option>
-                  <option value="5">
-                    RV College of Engineering (Engineering)
-                  </option>
-                  <option value="6">Kasturba Medical College (Medical)</option>
+                  <option value="5">RV College of Engg (Engineering)</option>
+                  <option value="6">KMC Mangalore (Medical)</option>
                   <option value="7">NLSIU Bangalore (Law)</option>
                   <option value="8">AIIMS Delhi (Medical)</option>
                 </select>
               </div>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-0.5">
               {compareC1 === compareC2 ? (
-                <div className="text-rose-500 text-[10px] font-bold pb-2">
+                <div className="text-rose-500 text-[9px] font-bold pb-1">
                   Please select two different colleges to compare!
                 </div>
               ) : null}
               <Link
                 href={`/compare?ids=${compareC1},${compareC2}`}
-                className={`w-full py-3 bg-slate-950 hover:bg-blue-600 text-white font-black text-xs rounded-xl active:scale-95 transition-all shadow-md shadow-black/5 hover:shadow-blue-500/15 flex items-center justify-center gap-2 ${
+                className={`w-full py-2 bg-slate-950 hover:bg-blue-600 text-white font-black text-[11px] rounded-lg active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5 ${
                   compareC1 === compareC2
                     ? "pointer-events-none opacity-50"
                     : ""
                 }`}
               >
                 Compare Selected Colleges
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
             {/* POPULAR HEAD-TO-HEAD COLLEGE COMPARISONS (From User Database) */}
-            <div className="pt-3 border-t border-slate-100 space-y-2.5">
+            <div className="pt-2 border-t border-slate-100 space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-700 font-outfit">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 font-outfit">
                     Popular Comparisons
                   </span>
                 </div>
@@ -1861,24 +1855,24 @@ export default function HomePage() {
                     onClick={() => {
                       document
                         .getElementById("popular-vs-carousel-container")
-                        ?.scrollBy({ left: -250, behavior: "smooth" });
+                        ?.scrollBy({ left: -220, behavior: "smooth" });
                     }}
-                    className="w-6 h-6 rounded-full bg-slate-100 hover:bg-orange-500 hover:text-white flex items-center justify-center text-slate-600 transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="w-5 h-5 rounded-full bg-slate-100 hover:bg-orange-500 hover:text-white flex items-center justify-center text-slate-600 transition-all cursor-pointer shadow-xs active:scale-95"
                     title="Previous"
                   >
-                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <ChevronLeft className="w-3 h-3" />
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       document
                         .getElementById("popular-vs-carousel-container")
-                        ?.scrollBy({ left: 250, behavior: "smooth" });
+                        ?.scrollBy({ left: 220, behavior: "smooth" });
                     }}
-                    className="w-6 h-6 rounded-full bg-slate-100 hover:bg-orange-500 hover:text-white flex items-center justify-center text-slate-600 transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="w-5 h-5 rounded-full bg-slate-100 hover:bg-orange-500 hover:text-white flex items-center justify-center text-slate-600 transition-all cursor-pointer shadow-xs active:scale-95"
                     title="Next"
                   >
-                    <ChevronRight className="w-3.5 h-3.5" />
+                    <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
               </div>
@@ -1886,17 +1880,17 @@ export default function HomePage() {
               {/* Scrollable Popular VS Matchups Carousel */}
               <div
                 id="popular-vs-carousel-container"
-                className="flex overflow-x-auto no-scrollbar gap-3 pb-1 scroll-smooth snap-x snap-mandatory"
+                className="flex overflow-x-auto no-scrollbar gap-2.5 pb-0.5 scroll-smooth snap-x snap-mandatory"
               >
                 {popularComparisons.map((item, idx) => (
                   <div
                     key={idx}
-                    className="snap-start w-[240px] sm:w-[250px] md:w-[260px] flex-shrink-0 bg-gradient-to-b from-white to-slate-50/80 border border-slate-200/90 hover:border-orange-500/50 rounded-2xl p-3 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group/vscard select-none"
+                    className="snap-start w-[190px] sm:w-[200px] flex-shrink-0 bg-gradient-to-b from-white to-slate-50/80 border border-slate-200/90 hover:border-orange-500/50 rounded-xl p-2 shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col justify-between group/vscard select-none"
                   >
                     {/* Top: 2 Logos with central circular VS badge */}
-                    <div className="relative flex items-center justify-between px-1 py-1">
+                    <div className="relative flex items-center justify-between px-0.5 py-0.5">
                       {/* College 1 Logo Box */}
-                      <div className="w-[44%] h-13 rounded-xl bg-white border border-slate-200/90 p-1 flex items-center justify-center shadow-xs overflow-hidden relative">
+                      <div className="w-[43%] h-9 rounded-lg bg-white border border-slate-200/90 p-0.5 flex items-center justify-center shadow-xs overflow-hidden relative">
                         {item.c1.logo ? (
                           <img
                             src={item.c1.logo}
@@ -1912,19 +1906,19 @@ export default function HomePage() {
                         ) : null}
                         <div
                           style={{ display: item.c1.logo ? "none" : "flex" }}
-                          className="w-full h-full rounded-lg bg-orange-50 text-orange-600 font-extrabold text-[9.5px] items-center justify-center text-center uppercase"
+                          className="w-full h-full rounded-md bg-orange-50 text-orange-600 font-extrabold text-[8.5px] items-center justify-center text-center uppercase"
                         >
                           {item.c1.name.slice(0, 4)}
                         </div>
                       </div>
 
                       {/* Central VS Badge */}
-                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-900 text-white font-black text-[9px] flex items-center justify-center border-2 border-white shadow-md z-20">
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4.5 h-4.5 rounded-full bg-slate-900 text-white font-black text-[7.5px] flex items-center justify-center border border-white shadow-xs z-20">
                         VS
                       </div>
 
                       {/* College 2 Logo Box */}
-                      <div className="w-[44%] h-13 rounded-xl bg-white border border-slate-200/90 p-1 flex items-center justify-center shadow-xs overflow-hidden relative">
+                      <div className="w-[43%] h-9 rounded-lg bg-white border border-slate-200/90 p-0.5 flex items-center justify-center shadow-xs overflow-hidden relative">
                         {item.c2.logo ? (
                           <img
                             src={item.c2.logo}
@@ -1940,7 +1934,7 @@ export default function HomePage() {
                         ) : null}
                         <div
                           style={{ display: item.c2.logo ? "none" : "flex" }}
-                          className="w-full h-full rounded-lg bg-blue-50 text-blue-600 font-extrabold text-[9.5px] items-center justify-center text-center uppercase"
+                          className="w-full h-full rounded-md bg-blue-50 text-blue-600 font-extrabold text-[8.5px] items-center justify-center text-center uppercase"
                         >
                           {item.c2.name.slice(0, 4)}
                         </div>
@@ -1948,36 +1942,36 @@ export default function HomePage() {
                     </div>
 
                     {/* Middle: 2-Column Names, Course & Ratings */}
-                    <div className="grid grid-cols-2 gap-2 text-left pt-2 pb-2 border-b border-slate-100">
+                    <div className="grid grid-cols-2 gap-1 text-left pt-1.5 pb-1 border-b border-slate-100">
                       {/* Left Column */}
-                      <div className="space-y-0.5">
-                        <h4 className="font-outfit font-bold text-[11px] text-slate-800 leading-tight line-clamp-2 min-h-[26px]">
+                      <div className="space-y-0.5 overflow-hidden">
+                        <h4 className="font-outfit font-bold text-[9.5px] text-slate-800 leading-tight truncate" title={item.c1.name}>
                           {item.c1.name}
                         </h4>
-                        <p className="text-[9px] text-slate-500 line-clamp-1">
+                        <p className="text-[8px] text-slate-500 truncate leading-none">
                           {item.c1.course}
                         </p>
-                        <div className="flex items-center gap-1 text-[9.5px] text-slate-700 font-bold pt-0.5">
+                        <div className="flex items-center gap-0.5 text-[8px] text-slate-700 font-bold pt-0.5">
                           <span>{item.c1.rating}</span>
-                          <span className="text-amber-400 text-[10px]">★</span>
-                          <span className="text-[8px] text-slate-400 font-normal">
+                          <span className="text-amber-400 text-[8px]">★</span>
+                          <span className="text-[7px] text-slate-400 font-normal">
                             ({item.c1.reviews})
                           </span>
                         </div>
                       </div>
 
                       {/* Right Column */}
-                      <div className="space-y-0.5 pl-1.5 border-l border-slate-100">
-                        <h4 className="font-outfit font-bold text-[11px] text-slate-800 leading-tight line-clamp-2 min-h-[26px]">
+                      <div className="space-y-0.5 pl-1 border-l border-slate-100 overflow-hidden">
+                        <h4 className="font-outfit font-bold text-[9.5px] text-slate-800 leading-tight truncate" title={item.c2.name}>
                           {item.c2.name}
                         </h4>
-                        <p className="text-[9px] text-slate-500 line-clamp-1">
+                        <p className="text-[8px] text-slate-500 truncate leading-none">
                           {item.c2.course}
                         </p>
-                        <div className="flex items-center gap-1 text-[9.5px] text-slate-700 font-bold pt-0.5">
+                        <div className="flex items-center gap-0.5 text-[8px] text-slate-700 font-bold pt-0.5">
                           <span>{item.c2.rating}</span>
-                          <span className="text-amber-400 text-[10px]">★</span>
-                          <span className="text-[8px] text-slate-400 font-normal">
+                          <span className="text-amber-400 text-[8px]">★</span>
+                          <span className="text-[7px] text-slate-400 font-normal">
                             ({item.c2.reviews})
                           </span>
                         </div>
@@ -1987,7 +1981,7 @@ export default function HomePage() {
                     {/* Bottom CTA Button */}
                     <Link
                       href={`/compare?ids=${item.c1.id},${item.c2.id}`}
-                      className="w-full mt-2 py-1.5 px-3 bg-[#f26522] hover:bg-[#d9531e] active:bg-[#c04312] text-white font-bold text-[11px] rounded-lg text-center shadow-xs hover:shadow transition-all duration-200 cursor-pointer block"
+                      className="w-full mt-1.5 py-1 px-2 bg-[#f26522] hover:bg-[#d9531e] active:bg-[#c04312] text-white font-bold text-[9.5px] rounded-md text-center shadow-xs transition-all duration-200 cursor-pointer block"
                     >
                       Compare
                     </Link>
@@ -1999,7 +1993,7 @@ export default function HomePage() {
         </div>
 
         {/* WIDGET 2: EXAMS & COUNSELING CALENDAR */}
-        <div className="w-[82vw] sm:w-[500px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-emerald-500/20 hover:border-emerald-500/50 p-6 md:p-8 rounded-[28px] space-y-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.14)] transition-all duration-350 relative overflow-hidden group/exams select-none">
+        <div className="w-[82vw] sm:w-[480px] lg:w-auto lg:col-span-6 flex-shrink-0 lg:flex-shrink snap-start bg-white border border-emerald-500/20 hover:border-emerald-500/50 p-4 sm:p-5 md:p-5 rounded-[22px] space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.14)] transition-all duration-350 relative overflow-hidden group/exams select-none flex flex-col justify-between">
           {/* Automatic Shimmer Sheen Reflection Overlay */}
           <div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[50%] h-[200%] pointer-events-none animate-shimmer-sheen z-10"
@@ -2008,24 +2002,23 @@ export default function HomePage() {
 
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="space-y-2 relative z-20">
-            <h2 className="font-outfit font-black text-xl md:text-2xl text-text_primary flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-500 group-hover/exams:bg-emerald-500 group-hover/exams:text-white transition-all duration-300">
-                <Calendar className="w-5 h-5" />
+          <div className="space-y-1 relative z-20">
+            <h2 className="font-outfit font-black text-lg md:text-xl text-text_primary flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-500 group-hover/exams:bg-emerald-500 group-hover/exams:text-white transition-all duration-300">
+                <Calendar className="w-4 h-4" />
               </div>
               Entrance Exams & Counseling 2026
             </h2>
-            <p className="text-xs text-text_secondary leading-relaxed">
-              Track upcoming registration deadlines, national level cutoffs, and
-              call predictions for top government counseling programs.
+            <p className="text-[11px] text-text_secondary leading-tight">
+              Track upcoming registration deadlines, national cutoffs & counseling updates.
             </p>
           </div>
 
-          <div className="space-y-3 relative z-20">
+          <div className="space-y-2 relative z-20 flex-1 flex flex-col justify-between">
             {[
               {
                 name: "JEE Main 2026",
-                date: "Registration open: Dec 2025",
+                date: "Registration: Dec 2025",
                 desc: "B.Tech/B.E Counseling",
                 predictor: true,
               },
@@ -2037,7 +2030,7 @@ export default function HomePage() {
               },
               {
                 name: "NEET UG 2026",
-                date: "Registration starts: Feb 2026",
+                date: "Registration: Feb 2026",
                 desc: "AIIMS & MBBS Seats",
                 predictor: true,
               },
@@ -2050,13 +2043,13 @@ export default function HomePage() {
             ].map((exam, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-xl transition-all"
+                className="flex items-center justify-between p-2 sm:p-2.5 bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-xl transition-all"
               >
                 <div>
-                  <h4 className="font-outfit font-bold text-xs text-text_primary">
+                  <h4 className="font-outfit font-bold text-[11px] text-text_primary">
                     {exam.name}
                   </h4>
-                  <p className="text-[10px] text-text_secondary font-semibold mt-0.5">
+                  <p className="text-[9.5px] text-text_secondary font-semibold mt-0.5">
                     {exam.date} •{" "}
                     <span className="text-emerald-600 font-extrabold">
                       {exam.desc}
@@ -2066,16 +2059,16 @@ export default function HomePage() {
                 {exam.predictor ? (
                   <Link
                     href="/predictor"
-                    className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-lg text-[9px] font-black tracking-wide transition-colors"
+                    className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-lg text-[8.5px] font-black tracking-wide transition-colors"
                   >
                     Predictor
                   </Link>
                 ) : (
                   <Link
                     href="/colleges"
-                    className="px-3 py-1.5 border border-slate-200 hover:bg-slate-100 rounded-lg text-[9px] font-black text-slate-500 transition-colors"
+                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-800 text-slate-700 hover:text-white rounded-lg text-[8.5px] font-black tracking-wide transition-colors"
                   >
-                    View Details
+                    Details
                   </Link>
                 )}
               </div>
