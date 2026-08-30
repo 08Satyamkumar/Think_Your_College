@@ -2020,25 +2020,25 @@ export default function HomePage() {
                 name: "JEE Main 2026",
                 date: "Registration: Dec 2025",
                 desc: "B.Tech/B.E Counseling",
-                predictor: true,
+                predictorHref: "/predictor?exam=JEE%20Main&course=Engineering",
               },
               {
                 name: "CAT 2026",
                 date: "Exam Date: 23 Nov 2026",
                 desc: "IIM & Private MBA calls",
-                predictor: true,
+                predictorHref: "/predictor?exam=CAT&course=Management",
               },
               {
                 name: "NEET UG 2026",
                 date: "Registration: Feb 2026",
                 desc: "AIIMS & MBBS Seats",
-                predictor: true,
+                predictorHref: "/predictor?exam=NEET%20UG&course=Medical",
               },
               {
                 name: "CLAT 2026",
                 date: "Exam Date: 07 Dec 2025",
                 desc: "National Law Universities",
-                predictor: false,
+                predictorHref: "/predictor?exam=CLAT&course=Law",
               },
             ].map((exam, idx) => (
               <div
@@ -2056,21 +2056,12 @@ export default function HomePage() {
                     </span>
                   </p>
                 </div>
-                {exam.predictor ? (
-                  <Link
-                    href="/predictor"
-                    className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-lg text-[8.5px] font-black tracking-wide transition-colors"
-                  >
-                    Predictor
-                  </Link>
-                ) : (
-                  <Link
-                    href="/colleges"
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-800 text-slate-700 hover:text-white rounded-lg text-[8.5px] font-black tracking-wide transition-colors"
-                  >
-                    Details
-                  </Link>
-                )}
+                <Link
+                  href={exam.predictorHref}
+                  className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-lg text-[8.5px] font-black tracking-wide transition-colors"
+                >
+                  Predictor
+                </Link>
               </div>
             ))}
           </div>
