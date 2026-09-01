@@ -70,7 +70,7 @@ interface PredictedCollegeResult {
   exam: string;
 }
 
-// 40+ Entrance Exams with real logos, state flags & conducting bodies
+// 40+ Entrance Exams with real official logos, state flags & conducting bodies
 const ALL_EXAMS: ExamOption[] = [
   // 1. Engineering Exams
   {
@@ -78,7 +78,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "JEE Main",
     shortName: "JEE Main",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JEE_Main_logo.png/220px-JEE_Main_logo.png",
+    logo: "/images/exams/jee-main.svg",
     conductedBy: "NTA (National Testing Agency)",
     scoreType: "Rank",
     stateTag: "National",
@@ -88,7 +88,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "JEE Advanced",
     shortName: "JEE Adv",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/JEE_Advanced_logo.png/220px-JEE_Advanced_logo.png",
+    logo: "/images/exams/jee-advanced.svg",
     conductedBy: "IITs (Joint Admission Board)",
     scoreType: "Rank",
     stateTag: "National",
@@ -98,7 +98,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "COMEDK UGET",
     shortName: "COMEDK",
     stream: "Engineering",
-    logo: "https://tse3.mm.bing.net/th/id/OIP.U71h8m3D0wK8w_lZ2pXzrgAAAA?rs=1&pid=ImgDetMain",
+    logo: "/images/exams/comedk.svg",
     conductedBy: "Consortium of Medical, Engg & Dental Colleges",
     scoreType: "Rank",
     stateTag: "Karnataka",
@@ -108,7 +108,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "BITSAT",
     shortName: "BITSAT",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/BITS_Pilani-Logo.svg/220px-BITS_Pilani-Logo.svg.png",
+    logo: "/images/exams/bitsat.png",
     conductedBy: "BITS Pilani",
     scoreType: "Marks",
     maxScore: 390,
@@ -119,7 +119,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "MHT CET",
     shortName: "MHT CET",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_Maharashtra.svg/200px-Emblem_of_Maharashtra.svg.png",
+    logo: "/images/exams/mht-cet.svg",
     conductedBy: "State CET Cell Maharashtra",
     scoreType: "Percentile",
     stateTag: "Maharashtra",
@@ -129,7 +129,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "WBJEE",
     shortName: "WBJEE",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Emblem_of_West_Bengal.svg/200px-Emblem_of_West_Bengal.svg.png",
+    logo: "/images/exams/wbjee.svg",
     conductedBy: "West Bengal Joint Entrance Examinations Board",
     scoreType: "Rank",
     stateTag: "West Bengal",
@@ -139,7 +139,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "TNEA (Anna University)",
     shortName: "TNEA",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/TamilNadu_Logo.svg/200px-TamilNadu_Logo.svg.png",
+    logo: "/images/exams/tnea.png",
     conductedBy: "Directorate of Technical Education, Tamil Nadu",
     scoreType: "Marks",
     maxScore: 200,
@@ -150,7 +150,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "KCET",
     shortName: "KCET",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Seal_of_Karnataka.svg/200px-Seal_of_Karnataka.svg.png",
+    logo: "/images/exams/kcet.png",
     conductedBy: "Karnataka Examinations Authority (KEA)",
     scoreType: "Rank",
     stateTag: "Karnataka",
@@ -160,7 +160,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "KEAM",
     shortName: "KEAM",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Seal_of_Kerala.svg/200px-Seal_of_Kerala.svg.png",
+    logo: "/images/exams/keam.svg",
     conductedBy: "CEE Kerala",
     scoreType: "Rank",
     stateTag: "Kerala",
@@ -170,7 +170,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "AP EAMCET (EAPCET)",
     shortName: "AP EAMCET",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Emblem_of_Andhra_Pradesh.svg/200px-Emblem_of_Andhra_Pradesh.svg.png",
+    logo: "/images/exams/ap-eamcet.png",
     conductedBy: "JNTU Kakinada (APSCHE)",
     scoreType: "Rank",
     stateTag: "Andhra Pradesh",
@@ -180,7 +180,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "TS EAMCET",
     shortName: "TS EAMCET",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Government_of_Telangana_Logo.png/200px-Government_of_Telangana_Logo.png",
+    logo: "/images/exams/ts-eamcet.svg",
     conductedBy: "JNTU Hyderabad (TSCHE)",
     scoreType: "Rank",
     stateTag: "Telangana",
@@ -190,7 +190,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "IPU CET (GGSIPU Delhi)",
     shortName: "IPU CET",
     stream: "Engineering",
-    logo: "https://avatars.githubusercontent.com/u/60731436?s=280&v=4",
+    logo: "/images/exams/ipu-cet.png",
     conductedBy: "Guru Gobind Singh Indraprastha University",
     scoreType: "Rank",
     stateTag: "Delhi NCT",
@@ -200,7 +200,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "JAC Delhi (DTU/NSUT/IIITD/IGDTUW)",
     shortName: "JAC Delhi",
     stream: "Engineering",
-    logo: "https://cdn.rm.dcedtu.in/images/dtu.png",
+    logo: "/images/exams/jac-delhi.png",
     conductedBy: "Joint Admission Committee Delhi",
     scoreType: "Rank",
     stateTag: "Delhi NCT",
@@ -210,7 +210,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "JAC Chandigarh",
     shortName: "JAC Chd",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Emblem_of_Chandigarh.svg/200px-Emblem_of_Chandigarh.svg.png",
+    logo: "/images/exams/jac-chandigarh.png",
     conductedBy: "Panjab University, Chandigarh",
     scoreType: "Rank",
     stateTag: "Chandigarh",
@@ -220,7 +220,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "VITEEE",
     shortName: "VITEEE",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Vellore_Institute_of_Technology_seal_2017.svg/220px-Vellore_Institute_of_Technology_seal_2017.svg.png",
+    logo: "/images/exams/viteee.png",
     conductedBy: "VIT University",
     scoreType: "Rank",
     stateTag: "National",
@@ -230,7 +230,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "SRMJEEE",
     shortName: "SRMJEEE",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fe/SRM_Institute_of_Science_and_Technology_logo.png/220px-SRM_Institute_of_Science_and_Technology_logo.png",
+    logo: "/images/exams/srmjeee.svg",
     conductedBy: "SRM University",
     scoreType: "Rank",
     stateTag: "National",
@@ -240,7 +240,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "UPTAC (AKTU UP B.Tech)",
     shortName: "UPTAC",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Seal_of_Uttar_Pradesh.svg/200px-Seal_of_Uttar_Pradesh.svg.png",
+    logo: "/images/exams/uptac.png",
     conductedBy: "Dr. A.P.J. Abdul Kalam Technical University",
     scoreType: "Rank",
     stateTag: "Uttar Pradesh",
@@ -250,7 +250,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "Bihar UGEAC (BCECE)",
     shortName: "Bihar UGEAC",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Seal_of_Bihar.svg/200px-Seal_of_Bihar.svg.png",
+    logo: "/images/exams/bihar-ugeac.png",
     conductedBy: "Bihar Combined Entrance Competitive Examination Board",
     scoreType: "Rank",
     stateTag: "Bihar",
@@ -260,7 +260,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "MET (Manipal University)",
     shortName: "MET",
     stream: "Engineering",
-    logo: "/images/chandigarh.png",
+    logo: "/images/exams/met-manipal.svg",
     conductedBy: "Manipal Academy of Higher Education",
     scoreType: "Marks",
     maxScore: 240,
@@ -271,7 +271,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "CUET UG",
     shortName: "CUET UG",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JEE_Main_logo.png/220px-JEE_Main_logo.png",
+    logo: "/images/exams/cuet.svg",
     conductedBy: "NTA (Central Universities)",
     scoreType: "Percentile",
     stateTag: "National",
@@ -281,7 +281,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "AMUEEE",
     shortName: "AMUEEE",
     stream: "Engineering",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Aligarh_Muslim_University_logo.png/220px-Aligarh_Muslim_University_logo.png",
+    logo: "/images/exams/amueee.png",
     conductedBy: "Aligarh Muslim University",
     scoreType: "Rank",
     stateTag: "National",
@@ -291,7 +291,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "JMI Entrance Exam",
     shortName: "JMI Entrance",
     stream: "Engineering",
-    logo: "https://www.jobsgyan.in/wp-content/uploads/2023/05/Jamia-Millia-Islamia-Logo.jpg",
+    logo: "/images/exams/jmi.svg",
     conductedBy: "Jamia Millia Islamia",
     scoreType: "Rank",
     stateTag: "Delhi NCT",
@@ -303,7 +303,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "CAT (Common Admission Test)",
     shortName: "CAT",
     stream: "Management",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/IIM_Ahmedabad_Logo.svg/220px-IIM_Ahmedabad_Logo.svg.png",
+    logo: "/images/exams/cat.svg",
     conductedBy: "Indian Institutes of Management (IIMs)",
     scoreType: "Percentile",
     stateTag: "National",
@@ -313,7 +313,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "XAT (Xavier Aptitude Test)",
     shortName: "XAT",
     stream: "Management",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3d/XLRI_logo.png/220px-XLRI_logo.png",
+    logo: "/images/exams/xat.svg",
     conductedBy: "XLRI Jamshedpur",
     scoreType: "Percentile",
     stateTag: "National",
@@ -323,7 +323,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "MAT (Management Aptitude Test)",
     shortName: "MAT",
     stream: "Management",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JEE_Main_logo.png/220px-JEE_Main_logo.png",
+    logo: "/images/exams/mat.svg",
     conductedBy: "All India Management Association (AIMA)",
     scoreType: "Percentile",
     stateTag: "National",
@@ -333,7 +333,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "CMAT",
     shortName: "CMAT",
     stream: "Management",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JEE_Main_logo.png/220px-JEE_Main_logo.png",
+    logo: "/images/exams/cmat.svg",
     conductedBy: "NTA (AICTE)",
     scoreType: "Percentile",
     stateTag: "National",
@@ -343,7 +343,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "SNAP (Symbiosis National Aptitude)",
     shortName: "SNAP",
     stream: "Management",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Symbiosis_International_University_logo.png/220px-Symbiosis_International_University_logo.png",
+    logo: "/images/exams/snap.svg",
     conductedBy: "Symbiosis International University",
     scoreType: "Percentile",
     stateTag: "National",
@@ -353,7 +353,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "NMAT by GMAC",
     shortName: "NMAT",
     stream: "Management",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/GMAC_Logo.svg/220px-GMAC_Logo.svg.png",
+    logo: "/images/exams/nmat.svg",
     conductedBy: "GMAC (NMIMS Mumbai)",
     scoreType: "Marks",
     maxScore: 360,
@@ -366,7 +366,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "NEET UG",
     shortName: "NEET UG",
     stream: "Medical",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JEE_Main_logo.png/220px-JEE_Main_logo.png",
+    logo: "/images/exams/neet-ug.svg",
     conductedBy: "NTA (National Testing Agency)",
     scoreType: "Marks",
     maxScore: 720,
@@ -377,7 +377,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "INI CET (AIIMS / JIPMER / PGI)",
     shortName: "INI CET",
     stream: "Medical",
-    logo: "/images/galgotias.png",
+    logo: "/images/exams/neet-ug.svg",
     conductedBy: "AIIMS New Delhi",
     scoreType: "Rank",
     stateTag: "National",
@@ -389,7 +389,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "CLAT (Common Law Admission Test)",
     shortName: "CLAT",
     stream: "Law",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Chanakya_National_Law_University_logo.png/220px-Chanakya_National_Law_University_logo.png",
+    logo: "/images/exams/clat.svg",
     conductedBy: "Consortium of National Law Universities",
     scoreType: "Rank",
     stateTag: "National",
@@ -399,7 +399,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "AILET (NLU Delhi)",
     shortName: "AILET",
     stream: "Law",
-    logo: "/images/iitdelhi.png",
+    logo: "/images/exams/ailet.png",
     conductedBy: "National Law University, Delhi",
     scoreType: "Rank",
     stateTag: "National",
@@ -409,7 +409,7 @@ const ALL_EXAMS: ExamOption[] = [
     name: "SLAT (Symbiosis Law Aptitude)",
     shortName: "SLAT",
     stream: "Law",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Symbiosis_International_University_logo.png/220px-Symbiosis_International_University_logo.png",
+    logo: "/images/exams/slat.svg",
     conductedBy: "Symbiosis Law School",
     scoreType: "Marks",
     maxScore: 60,
@@ -1250,19 +1250,19 @@ function PredictorContent() {
                               )}
 
                               {/* Center Logo Box */}
-                              <div className="w-14 h-14 mt-3.5 mb-1 rounded-xl bg-white border border-slate-100 p-1 flex items-center justify-center shadow-2xs overflow-hidden relative">
+                              <div className="w-14 h-14 mt-3.5 mb-1.5 rounded-xl bg-white border border-slate-100 p-1 flex items-center justify-center shadow-xs overflow-hidden relative group-hover:scale-105 transition-all">
                                 {exam.logo ? (
                                   <img
                                     src={exam.logo}
                                     alt={exam.name}
-                                    className="max-h-full max-w-full object-contain relative z-10"
+                                    className="max-h-full max-w-full object-contain relative z-10 filter drop-shadow-2xs"
                                     onError={(e) => {
                                       (e.target as HTMLElement).style.display =
                                         "none";
                                     }}
                                   />
                                 ) : null}
-                                <div className="w-full h-full rounded-lg bg-orange-50 text-orange-600 font-black text-[10px] flex items-center justify-center uppercase">
+                                <div className="absolute inset-0 rounded-lg bg-orange-50 text-orange-600 font-black text-[10px] flex items-center justify-center uppercase">
                                   {exam.shortName.slice(0, 4)}
                                 </div>
                               </div>

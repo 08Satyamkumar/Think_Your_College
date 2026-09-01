@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="mahaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="94" fill="#ffffff" stroke="#d97706" stroke-width="5"/>
+  <circle cx="100" cy="100" r="82" fill="url(#mahaGrad)"/>
+  <circle cx="100" cy="100" r="75" fill="none" stroke="#fde68a" stroke-width="2"/>
+  
+  <!-- Fort / Shield -->
+  <path d="M100 35 L125 50 L125 75 C125 90 100 102 100 102 C100 102 75 90 75 75 L75 50 Z" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="100" y="76" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="20" fill="#92400e" text-anchor="middle">CET</text>
+  
+  <text x="100" y="128" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="20" fill="#ffffff" text-anchor="middle">MHT CET</text>
+  <text x="100" y="148" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="10" fill="#fde68a" text-anchor="middle" letter-spacing="1">STATE CET CELL</text>
+  <text x="100" y="165" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="8.5" fill="#ffffff" text-anchor="middle">MAHARASHTRA</text>
+</svg>

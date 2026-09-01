@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <circle cx="100" cy="100" r="94" fill="#ffffff" stroke="#0284c7" stroke-width="5"/>
+  <circle cx="100" cy="100" r="82" fill="#0369a1"/>
+  <circle cx="100" cy="100" r="75" fill="none" stroke="#bae6fd" stroke-width="2"/>
+  
+  <!-- Elephant & Conch Shell Motif -->
+  <circle cx="100" cy="65" r="25" fill="#f0f9ff" stroke="#38bdf8" stroke-width="3"/>
+  <path d="M90 60 C90 50 110 50 110 60 C110 70 95 72 95 80" fill="none" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="95" cy="84" r="2" fill="#0284c7"/>
+  
+  <text x="100" y="124" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="22" fill="#ffffff" text-anchor="middle">KEAM</text>
+  <text x="100" y="146" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="11" fill="#bae6fd" text-anchor="middle" letter-spacing="1">CEE KERALA</text>
+  <text x="100" y="165" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="8" fill="#e0f2fe" text-anchor="middle">GOVERNMENT OF KERALA</text>
+</svg>

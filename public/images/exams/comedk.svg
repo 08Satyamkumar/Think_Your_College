@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="40" fill="#ffffff" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="100" cy="72" r="38" fill="#eff6ff" stroke="#3b82f6" stroke-width="3"/>
+  <path d="M78 72 C78 60 88 50 100 50 C112 50 122 60 122 72 C122 84 112 94 100 94" fill="none" stroke="#1e40af" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="100" cy="72" r="10" fill="#f59e0b"/>
+  <text x="100" y="134" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="22" fill="#1e3a8a" text-anchor="middle">COMEDK</text>
+  <text x="100" y="154" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="11" fill="#ea580c" text-anchor="middle" letter-spacing="1">UGET • KARNATAKA</text>
+  <text x="100" y="172" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="8" fill="#64748b" text-anchor="middle">ENGG & MEDICAL CONSORTIUM</text>
+</svg>

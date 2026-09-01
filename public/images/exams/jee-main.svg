@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="jeeMainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#003366"/>
+      <stop offset="100%" stop-color="#001a33"/>
+    </linearGradient>
+    <linearGradient id="jeeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f9b233"/>
+      <stop offset="100%" stop-color="#e28a00"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="94" fill="#ffffff" stroke="#003366" stroke-width="6"/>
+  <circle cx="100" cy="100" r="82" fill="url(#jeeMainGrad)"/>
+  <circle cx="100" cy="100" r="76" fill="none" stroke="url(#jeeGold)" stroke-width="2.5" stroke-dasharray="4 2"/>
+  
+  <!-- Central Emblem Symbol -->
+  <path d="M100 35 L125 55 L120 85 L100 98 L80 85 L75 55 Z" fill="url(#jeeGold)"/>
+  <circle cx="100" cy="65" r="14" fill="#ffffff"/>
+  <path d="M100 55 L104 62 L112 63 L106 69 L108 77 L100 73 L92 77 L94 69 L88 63 L96 62 Z" fill="#003366"/>
+  
+  <!-- Main Text -->
+  <text x="100" y="125" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="20" fill="#ffffff" text-anchor="middle" letter-spacing="1">JEE (Main)</text>
+  <rect x="55" y="134" width="90" height="2" fill="url(#jeeGold)"/>
+  <text x="100" y="152" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#f9b233" text-anchor="middle" letter-spacing="2">NTA • INDIA</text>
+  <text x="100" y="168" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="7.5" fill="#99ccff" text-anchor="middle">JOINT ENTRANCE EXAM</text>
+</svg>
