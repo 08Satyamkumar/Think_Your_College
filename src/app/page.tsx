@@ -1093,7 +1093,7 @@ export default function HomePage() {
     },
   ];
 
-  // Sync admin and stored homepage colleges from localStorage
+  // Sync admin and stored homepage colleges from Supabase cloud database & localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedAdmin = localStorage.getItem("think_college_admin");
@@ -1118,6 +1118,23 @@ export default function HomePage() {
           }
         } catch (e) {}
       }
+
+      // Fetch live shared colleges from Supabase Cloud Database so all mobiles & laptops see updates
+      fetch("/api/homepage-colleges")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.success) {
+            if (Array.isArray(data.trending) && data.trending.length > 0) {
+              setTrendingColleges(data.trending);
+              localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(data.trending));
+            }
+            if (Array.isArray(data.featured) && data.featured.length > 0) {
+              setFeaturedColleges(data.featured);
+              localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(data.featured));
+            }
+          }
+        })
+        .catch((err) => console.error("Error loading shared homepage colleges from cloud:", err));
     }
   }, []);
 
@@ -1144,6 +1161,23 @@ export default function HomePage() {
     }
   };
 
+  const syncToCloud = async (newTrending: CollegeMock[], newFeatured: CollegeMock[]) => {
+    try {
+      await fetch("/api/homepage-colleges", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: "Samrat1311",
+          password: "1311161161",
+          trending: newTrending,
+          featured: newFeatured,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to sync homepage colleges to cloud database:", err);
+    }
+  };
+
   const handleSaveCollege = (e: React.FormEvent) => {
     e.preventDefault();
     const collegeToSave: CollegeMock = {
@@ -1162,49 +1196,58 @@ export default function HomePage() {
       nirfRank: editingCollegeData.nirfRank ? Number(editingCollegeData.nirfRank) : undefined,
     };
 
+    let updatedTrending = trendingColleges;
+    let updatedFeatured = featuredColleges;
+
     if (editingCollegeRow === "trending") {
-      let updated: CollegeMock[];
       const exists = trendingColleges.some((c) => c.id === collegeToSave.id);
       if (isNewCollege || !exists) {
-        updated = [collegeToSave, ...trendingColleges];
+        updatedTrending = [collegeToSave, ...trendingColleges];
       } else {
-        updated = trendingColleges.map((c) => (c.id === collegeToSave.id ? collegeToSave : c));
+        updatedTrending = trendingColleges.map((c) => (c.id === collegeToSave.id ? collegeToSave : c));
       }
-      setTrendingColleges(updated);
+      setTrendingColleges(updatedTrending);
       if (typeof window !== "undefined") {
-        localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(updated));
+        localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(updatedTrending));
       }
     } else {
-      let updated: CollegeMock[];
       const exists = featuredColleges.some((c) => c.id === collegeToSave.id);
       if (isNewCollege || !exists) {
-        updated = [collegeToSave, ...featuredColleges];
+        updatedFeatured = [collegeToSave, ...featuredColleges];
       } else {
-        updated = featuredColleges.map((c) => (c.id === collegeToSave.id ? collegeToSave : c));
+        updatedFeatured = featuredColleges.map((c) => (c.id === collegeToSave.id ? collegeToSave : c));
       }
-      setFeaturedColleges(updated);
+      setFeaturedColleges(updatedFeatured);
       if (typeof window !== "undefined") {
-        localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(updated));
+        localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(updatedFeatured));
       }
     }
+
+    // Save to Cloud Database so all devices see the update immediately
+    syncToCloud(updatedTrending, updatedFeatured);
     setShowCollegeEditModal(false);
   };
 
   const handleDeleteCollege = (id: string, row: "trending" | "featured") => {
     if (!confirm("Are you sure you want to delete this college card from the homepage?")) return;
+    let updatedTrending = trendingColleges;
+    let updatedFeatured = featuredColleges;
+
     if (row === "trending") {
-      const updated = trendingColleges.filter((c) => c.id !== id);
-      setTrendingColleges(updated);
+      updatedTrending = trendingColleges.filter((c) => c.id !== id);
+      setTrendingColleges(updatedTrending);
       if (typeof window !== "undefined") {
-        localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(updated));
+        localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(updatedTrending));
       }
     } else {
-      const updated = featuredColleges.filter((c) => c.id !== id);
-      setFeaturedColleges(updated);
+      updatedFeatured = featuredColleges.filter((c) => c.id !== id);
+      setFeaturedColleges(updatedFeatured);
       if (typeof window !== "undefined") {
-        localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(updated));
+        localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(updatedFeatured));
       }
     }
+
+    syncToCloud(updatedTrending, updatedFeatured);
     setShowCollegeEditModal(false);
   };
 
@@ -1216,6 +1259,7 @@ export default function HomePage() {
       localStorage.removeItem("tyc_homepage_trending_colleges");
       localStorage.removeItem("tyc_homepage_featured_colleges");
     }
+    syncToCloud(INITIAL_TRENDING_COLLEGES, INITIAL_FEATURED_COLLEGES);
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
