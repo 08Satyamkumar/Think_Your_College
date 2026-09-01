@@ -39,6 +39,14 @@ import {
   Terminal,
   Music,
   Sparkles,
+  Edit3,
+  Plus,
+  Trash2,
+  Lock,
+  Unlock,
+  Image as ImageIcon,
+  RotateCcw,
+  Check,
 } from "lucide-react";
 
 interface CollegeMock {
@@ -524,6 +532,313 @@ function AdBannersRow() {
   );
 }
 
+// Default Featured and Trending Colleges with real image & logo links
+const INITIAL_TRENDING_COLLEGES: CollegeMock[] = [
+  {
+    id: "1",
+    name: "IIM Ahmedabad - Indian Institute of Management",
+    location: "Ahmedabad, Gujarat",
+    rating: 4.9,
+    highestPackage: "61.5 LPA",
+    averagePackage: "32.8 LPA",
+    averageFee: "₹12.5 Lakhs/Yr",
+    type: "Government",
+    slug: "iim-ahmedabad",
+    stream: "Management",
+    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/iimahmedabad.png",
+    nirfRank: 1,
+  },
+  {
+    id: "2",
+    name: "IIT Delhi - Indian Institute of Technology",
+    location: "New Delhi, Delhi",
+    rating: 4.9,
+    highestPackage: "1.2 Cr PA",
+    averagePackage: "25.0 LPA",
+    averageFee: "₹2.2 Lakhs/Yr",
+    type: "Government",
+    slug: "iit-delhi",
+    stream: "Engineering",
+    image: "/images/iitdelhi_real.jpg?v=2",
+    logo: "/images/iitdelhi.png",
+    nirfRank: 2,
+  },
+  {
+    id: "3",
+    name: "IIM Bangalore - Indian Institute of Management",
+    location: "Bangalore, Karnataka",
+    rating: 4.8,
+    highestPackage: "55.0 LPA",
+    averagePackage: "30.5 LPA",
+    averageFee: "₹11.8 Lakhs/Yr",
+    type: "Government",
+    slug: "iim-bangalore",
+    stream: "Management",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Indian_Institute_of_Management_Bangalore_Logo.svg/240px-Indian_Institute_of_Management_Bangalore_Logo.svg.png",
+    nirfRank: 2,
+  },
+  {
+    id: "4",
+    name: "IIT Bombay - Indian Institute of Technology",
+    location: "Mumbai, Maharashtra",
+    rating: 4.9,
+    highestPackage: "1.4 Cr PA",
+    averagePackage: "26.8 LPA",
+    averageFee: "₹2.3 Lakhs/Yr",
+    type: "Government",
+    slug: "iit-bombay",
+    stream: "Engineering",
+    image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/IIT_Bombay_Logo.svg/240px-IIT_Bombay_Logo.svg.png",
+    nirfRank: 3,
+  },
+  {
+    id: "5",
+    name: "AIIMS Delhi - All India Institute of Medical Sciences",
+    location: "New Delhi, Delhi",
+    rating: 5.0,
+    highestPackage: "45.0 LPA",
+    averagePackage: "18.0 LPA",
+    averageFee: "₹1,628/Yr",
+    type: "Government",
+    slug: "aiims-delhi",
+    stream: "Medical",
+    image: "/images/aiimsrishikesh.webp",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/All_India_Institute_of_Medical_Sciences%2C_New_Delhi_logo.png/220px-All_India_Institute_of_Medical_Sciences%2C_New_Delhi_logo.png",
+    nirfRank: 1,
+  },
+  {
+    id: "6",
+    name: "Galgotias University",
+    location: "Greater Noida, Uttar Pradesh",
+    rating: 4.3,
+    highestPackage: "35.0 LPA",
+    averagePackage: "8.5 LPA",
+    averageFee: "₹1.6 Lakhs/Yr",
+    type: "Private",
+    slug: "galgotias-university",
+    stream: "Engineering",
+    image: "/images/galgotias_real.jpg?v=2",
+    logo: "/images/galgotias.png",
+    nirfRank: 95,
+  },
+  {
+    id: "7",
+    name: "NLSIU Bangalore - National Law School of India",
+    location: "Bangalore, Karnataka",
+    rating: 4.8,
+    highestPackage: "25.0 LPA",
+    averagePackage: "16.0 LPA",
+    averageFee: "₹2.1 Lakhs/Yr",
+    type: "Government",
+    slug: "nlsiu-bangalore",
+    stream: "Law",
+    image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/9/91/National_Law_School_of_India_University_logo.png",
+    nirfRank: 1,
+  },
+  {
+    id: "8",
+    name: "SIBM Pune - Symbiosis Institute of Business Management",
+    location: "Pune, Maharashtra",
+    rating: 4.6,
+    highestPackage: "45.5 LPA",
+    averagePackage: "23.0 LPA",
+    averageFee: "₹10.2 Lakhs/Yr",
+    type: "Private",
+    slug: "sibm-pune",
+    stream: "Management",
+    image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Symbiosis_International_University_Logo.svg/240px-Symbiosis_International_University_Logo.svg.png",
+    nirfRank: 17,
+  },
+  {
+    id: "9",
+    name: "CMC Vellore - Christian Medical College",
+    location: "Vellore, Tamil Nadu",
+    rating: 4.8,
+    highestPackage: "20.0 LPA",
+    averagePackage: "9.5 LPA",
+    averageFee: "₹1.5 Lakhs/Yr",
+    type: "Private",
+    slug: "cmc-vellore",
+    stream: "Medical",
+    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Christian_Medical_College%2C_Vellore_logo.png/220px-Christian_Medical_College%2C_Vellore_logo.png",
+    nirfRank: 3,
+  },
+  {
+    id: "10",
+    name: "BIT Mesra Patna Campus",
+    location: "Patna, Bihar",
+    rating: 4.2,
+    highestPackage: "18.5 LPA",
+    averagePackage: "10.0 LPA",
+    averageFee: "₹2.8 Lakhs/Yr",
+    type: "Private",
+    slug: "bit-mesra-patna",
+    stream: "Engineering",
+    image: "https://images.unsplash.com/photo-1525920980995-f8a382bf42c5?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/90/Birla_Institute_of_Technology_Mesra_logo.png/220px-Birla_Institute_of_Technology_Mesra_logo.png",
+    nirfRank: 60,
+  },
+  {
+    id: "11",
+    name: "CNLU Patna - Chanakya National Law University",
+    location: "Patna, Bihar",
+    rating: 4.3,
+    highestPackage: "16.0 LPA",
+    averagePackage: "8.5 LPA",
+    averageFee: "₹1.8 Lakhs/Yr",
+    type: "Government",
+    slug: "cnlu-patna",
+    stream: "Law",
+    image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Chanakya_National_Law_University_logo.png/220px-Chanakya_National_Law_University_logo.png",
+    nirfRank: 25,
+  },
+];
+
+const INITIAL_FEATURED_COLLEGES: CollegeMock[] = [
+  {
+    id: "f1",
+    name: "Amity University",
+    location: "Noida, Uttar Pradesh",
+    rating: 4.5,
+    highestPackage: "61.75 LPA",
+    averagePackage: "8.5 LPA",
+    averageFee: "₹2.5 Lakhs/Yr",
+    type: "Private",
+    slug: "amity-university",
+    stream: "Engineering",
+    image: "/images/amity_real.jpg?v=3",
+    logo: "/images/amity.png",
+    nirfRank: 35,
+  },
+  {
+    id: "f2",
+    name: "Chandigarh University",
+    location: "Gharuan, Punjab",
+    rating: 4.6,
+    highestPackage: "54.75 LPA",
+    averagePackage: "9.2 LPA",
+    averageFee: "₹1.8 Lakhs/Yr",
+    type: "Private",
+    slug: "chandigarh-university",
+    stream: "Engineering",
+    image: "/images/chandigarh_real.jpg?v=2",
+    logo: "/images/chandigarh.png",
+    nirfRank: 27,
+  },
+  {
+    id: "f3",
+    name: "BITS Pilani - Birla Institute of Technology",
+    location: "Pilani, Rajasthan",
+    rating: 4.9,
+    highestPackage: "60.7 LPA",
+    averagePackage: "20.5 LPA",
+    averageFee: "₹5.4 Lakhs/Yr",
+    type: "Private",
+    slug: "bits-pilani",
+    stream: "Engineering",
+    image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/iitdelhi.png",
+    nirfRank: 20,
+  },
+  {
+    id: "f4",
+    name: "AIIMS Rishikesh - All India Institute of Medical Sciences",
+    location: "Rishikesh, Uttarakhand",
+    rating: 4.9,
+    highestPackage: "36.0 LPA",
+    averagePackage: "16.5 LPA",
+    averageFee: "₹2,500/Yr",
+    type: "Government",
+    slug: "aiims-rishikesh",
+    stream: "Medical",
+    image: "/images/aiimsrishikesh.webp",
+    logo: "/images/galgotias.png",
+    nirfRank: 22,
+  },
+  {
+    id: "f5",
+    name: "XLRI Xavier School of Management",
+    location: "Jamshedpur, Jharkhand",
+    rating: 4.8,
+    highestPackage: "75.0 LPA",
+    averagePackage: "32.7 LPA",
+    averageFee: "₹14.5 Lakhs/Yr",
+    type: "Private",
+    slug: "xlri-jamshedpur",
+    stream: "Management",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/iimahmedabad.png",
+    nirfRank: 9,
+  },
+  {
+    id: "f6",
+    name: "DTU - Delhi Technological University",
+    location: "Rohini, New Delhi",
+    rating: 4.7,
+    highestPackage: "82.0 LPA",
+    averagePackage: "15.5 LPA",
+    averageFee: "₹2.2 Lakhs/Yr",
+    type: "Government",
+    slug: "dtu-delhi",
+    stream: "Engineering",
+    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/iitdelhi.png",
+    nirfRank: 29,
+  },
+  {
+    id: "f7",
+    name: "Symbiosis Law School (SLS)",
+    location: "Pune, Maharashtra",
+    rating: 4.6,
+    highestPackage: "18.0 LPA",
+    averagePackage: "11.0 LPA",
+    averageFee: "₹3.8 Lakhs/Yr",
+    type: "Private",
+    slug: "sls-pune",
+    stream: "Law",
+    image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/galgotias.png",
+    nirfRank: 6,
+  },
+  {
+    id: "f8",
+    name: "MAHE - Manipal Academy of Higher Education",
+    location: "Manipal, Karnataka",
+    rating: 4.7,
+    highestPackage: "54.0 LPA",
+    averagePackage: "12.5 LPA",
+    averageFee: "₹4.5 Lakhs/Yr",
+    type: "Private",
+    slug: "manipal-university",
+    stream: "Medical",
+    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/chandigarh.png",
+    nirfRank: 16,
+  },
+  {
+    id: "f9",
+    name: "NALSAR University of Law",
+    location: "Hyderabad, Telangana",
+    rating: 4.8,
+    highestPackage: "24.0 LPA",
+    averagePackage: "15.5 LPA",
+    averageFee: "₹2.6 Lakhs/Yr",
+    type: "Government",
+    slug: "nalsar-hyderabad",
+    stream: "Law",
+    image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=80",
+    logo: "/images/galgotias.png",
+    nirfRank: 3,
+  },
+];
+
 export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeTrendingUpdate, setActiveTrendingUpdate] = useState<any>(null);
@@ -531,6 +846,35 @@ export default function HomePage() {
   const [activeHubTab, setActiveHubTab] = useState<
     "cities" | "exams" | "courses"
   >("cities");
+
+  // Admin and Dynamic College Management State
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
+  const [adminUser, setAdminUser] = useState("");
+  const [adminPass, setAdminPass] = useState("");
+  const [adminError, setAdminError] = useState("");
+
+  const [trendingColleges, setTrendingColleges] = useState<CollegeMock[]>(INITIAL_TRENDING_COLLEGES);
+  const [featuredColleges, setFeaturedColleges] = useState<CollegeMock[]>(INITIAL_FEATURED_COLLEGES);
+
+  const [showCollegeEditModal, setShowCollegeEditModal] = useState(false);
+  const [editingCollegeRow, setEditingCollegeRow] = useState<"trending" | "featured">("trending");
+  const [isNewCollege, setIsNewCollege] = useState(false);
+  const [editingCollegeData, setEditingCollegeData] = useState<CollegeMock>({
+    id: "",
+    name: "",
+    location: "",
+    rating: 4.8,
+    highestPackage: "45.0 LPA",
+    averagePackage: "18.0 LPA",
+    averageFee: "₹2.5 Lakhs/Yr",
+    type: "Government",
+    slug: "",
+    stream: "Engineering",
+    image: "/images/galgotias_real.jpg",
+    logo: "/images/galgotias.png",
+    nirfRank: 25,
+  });
 
   const biharBgs = [
     { src: "/images/bihar/bihar_bg_1.jpg", position: "bg-[right_bottom_20%]" },
@@ -749,173 +1093,130 @@ export default function HomePage() {
     },
   ];
 
-  const trendingColleges: CollegeMock[] = [
-    {
-      id: "1",
-      name: "IIM Ahmedabad - Indian Institute of Management",
-      location: "Ahmedabad, Gujarat",
-      rating: 4.9,
-      highestPackage: "61.5 LPA",
-      averagePackage: "32.8 LPA",
-      averageFee: "₹12.5 Lakhs/Yr",
-      type: "Government",
-      slug: "iim-ahmedabad",
-      stream: "Management",
-      image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/iimahmedabad.png",
-      nirfRank: 1,
-    },
-    {
-      id: "2",
-      name: "IIT Delhi - Indian Institute of Technology",
-      location: "New Delhi, Delhi",
-      rating: 4.9,
-      highestPackage: "1.2 Cr PA",
-      averagePackage: "25.0 LPA",
-      averageFee: "₹2.2 Lakhs/Yr",
-      type: "Government",
-      slug: "iit-delhi",
-      stream: "Engineering",
-      image: "/images/iitdelhi_real.jpg?v=2",
-      logo: "/images/iitdelhi.png",
-      nirfRank: 2,
-    },
-    {
-      id: "3",
-      name: "IIM Bangalore - Indian Institute of Management",
-      location: "Bangalore, Karnataka",
-      rating: 4.8,
-      highestPackage: "55.0 LPA",
-      averagePackage: "30.5 LPA",
-      averageFee: "₹11.8 Lakhs/Yr",
-      type: "Government",
-      slug: "iim-bangalore",
-      stream: "Management",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Indian_Institute_of_Management_Bangalore_Logo.svg/240px-Indian_Institute_of_Management_Bangalore_Logo.svg.png",
-      nirfRank: 2,
-    },
-    {
-      id: "4",
-      name: "IIT Bombay - Indian Institute of Technology",
-      location: "Mumbai, Maharashtra",
-      rating: 4.9,
-      highestPackage: "1.4 Cr PA",
-      averagePackage: "26.8 LPA",
-      averageFee: "₹2.3 Lakhs/Yr",
-      type: "Government",
-      slug: "iit-bombay",
-      stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/IIT_Bombay_Logo.svg/240px-IIT_Bombay_Logo.svg.png",
-      nirfRank: 3,
-    },
-    {
-      id: "5",
-      name: "AIIMS Delhi - All India Institute of Medical Sciences",
-      location: "New Delhi, Delhi",
-      rating: 5.0,
-      highestPackage: "45.0 LPA",
-      averagePackage: "18.0 LPA",
-      averageFee: "₹1,628/Yr",
-      type: "Government",
-      slug: "aiims-delhi",
-      stream: "Medical",
-      image: "/images/aiimsrishikesh.webp",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/All_India_Institute_of_Medical_Sciences%2C_New_Delhi_logo.png/220px-All_India_Institute_of_Medical_Sciences%2C_New_Delhi_logo.png",
-      nirfRank: 1,
-    },
-    {
-      id: "6",
-      name: "Galgotias University",
-      location: "Greater Noida, Uttar Pradesh",
-      rating: 4.3,
-      highestPackage: "35.0 LPA",
-      averagePackage: "8.5 LPA",
-      averageFee: "₹1.6 Lakhs/Yr",
-      type: "Private",
-      slug: "galgotias-university",
-      stream: "Engineering",
-      image: "/images/galgotias_real.jpg?v=2",
-      logo: "/images/galgotias.png",
-      nirfRank: 95,
-    },
-    {
-      id: "7",
-      name: "NLSIU Bangalore - National Law School of India",
-      location: "Bangalore, Karnataka",
-      rating: 4.8,
-      highestPackage: "25.0 LPA",
-      averagePackage: "16.0 LPA",
-      averageFee: "₹2.1 Lakhs/Yr",
-      type: "Government",
-      slug: "nlsiu-bangalore",
-      stream: "Law",
-      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/9/91/National_Law_School_of_India_University_logo.png",
-      nirfRank: 1,
-    },
-    {
-      id: "8",
-      name: "SIBM Pune - Symbiosis Institute of Business Management",
-      location: "Pune, Maharashtra",
-      rating: 4.6,
-      highestPackage: "45.5 LPA",
-      averagePackage: "23.0 LPA",
-      averageFee: "₹10.2 Lakhs/Yr",
-      type: "Private",
-      slug: "sibm-pune",
-      stream: "Management",
-      image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Symbiosis_International_University_Logo.svg/240px-Symbiosis_International_University_Logo.svg.png",
-      nirfRank: 17,
-    },
-    {
-      id: "9",
-      name: "CMC Vellore - Christian Medical College",
-      location: "Vellore, Tamil Nadu",
-      rating: 4.8,
-      highestPackage: "20.0 LPA",
-      averagePackage: "9.5 LPA",
-      averageFee: "₹1.5 Lakhs/Yr",
-      type: "Private",
-      slug: "cmc-vellore",
-      stream: "Medical",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Christian_Medical_College%2C_Vellore_logo.png/220px-Christian_Medical_College%2C_Vellore_logo.png",
-      nirfRank: 3,
-    },
-    {
-      id: "10",
-      name: "BIT Mesra Patna Campus",
-      location: "Patna, Bihar",
-      rating: 4.2,
-      highestPackage: "18.5 LPA",
-      averagePackage: "10.0 LPA",
-      averageFee: "₹2.8 Lakhs/Yr",
-      type: "Private",
-      slug: "bit-mesra-patna",
-      stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1525920980995-f8a382bf42c5?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/90/Birla_Institute_of_Technology_Mesra_logo.png/220px-Birla_Institute_of_Technology_Mesra_logo.png",
-      nirfRank: 60,
-    },
-    {
-      id: "11",
-      name: "CNLU Patna - Chanakya National Law University",
-      location: "Patna, Bihar",
-      rating: 4.3,
-      highestPackage: "16.0 LPA",
-      averagePackage: "8.5 LPA",
-      averageFee: "₹1.8 Lakhs/Yr",
-      type: "Government",
-      slug: "cnlu-patna",
-      stream: "Law",
-      image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=80",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Chanakya_National_Law_University_logo.png/220px-Chanakya_National_Law_University_logo.png",
-      nirfRank: 25,
-    },
-  ];
+  // Sync admin and stored homepage colleges from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedAdmin = localStorage.getItem("think_college_admin");
+      if (savedAdmin === "true") {
+        setIsAdmin(true);
+      }
+      const savedTrending = localStorage.getItem("tyc_homepage_trending_colleges");
+      if (savedTrending) {
+        try {
+          const parsed = JSON.parse(savedTrending);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setTrendingColleges(parsed);
+          }
+        } catch (e) {}
+      }
+      const savedFeatured = localStorage.getItem("tyc_homepage_featured_colleges");
+      if (savedFeatured) {
+        try {
+          const parsed = JSON.parse(savedFeatured);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setFeaturedColleges(parsed);
+          }
+        } catch (e) {}
+      }
+    }
+  }, []);
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminUser === "Samrat1311" && adminPass === "1311161161") {
+      setIsAdmin(true);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("think_college_admin", "true");
+      }
+      setShowAdminLoginModal(false);
+      setAdminError("");
+      setAdminUser("");
+      setAdminPass("");
+    } else {
+      setAdminError("Invalid Username or Password.");
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdmin(false);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("think_college_admin");
+    }
+  };
+
+  const handleSaveCollege = (e: React.FormEvent) => {
+    e.preventDefault();
+    const collegeToSave: CollegeMock = {
+      id: editingCollegeData.id || `custom-${Date.now()}`,
+      name: editingCollegeData.name || "New University",
+      location: editingCollegeData.location || "City, State",
+      rating: Number(editingCollegeData.rating) || 4.5,
+      highestPackage: editingCollegeData.highestPackage || "35.0 LPA",
+      averagePackage: editingCollegeData.averagePackage || "10.0 LPA",
+      averageFee: editingCollegeData.averageFee || "₹2.0 Lakhs/Yr",
+      type: editingCollegeData.type || "Private",
+      slug: editingCollegeData.slug || (editingCollegeData.name || "college").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      stream: editingCollegeData.stream || "Engineering",
+      image: editingCollegeData.image || "/images/galgotias_real.jpg",
+      logo: editingCollegeData.logo || "/images/galgotias.png",
+      nirfRank: editingCollegeData.nirfRank ? Number(editingCollegeData.nirfRank) : undefined,
+    };
+
+    if (editingCollegeRow === "trending") {
+      let updated: CollegeMock[];
+      const exists = trendingColleges.some((c) => c.id === collegeToSave.id);
+      if (isNewCollege || !exists) {
+        updated = [collegeToSave, ...trendingColleges];
+      } else {
+        updated = trendingColleges.map((c) => (c.id === collegeToSave.id ? collegeToSave : c));
+      }
+      setTrendingColleges(updated);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(updated));
+      }
+    } else {
+      let updated: CollegeMock[];
+      const exists = featuredColleges.some((c) => c.id === collegeToSave.id);
+      if (isNewCollege || !exists) {
+        updated = [collegeToSave, ...featuredColleges];
+      } else {
+        updated = featuredColleges.map((c) => (c.id === collegeToSave.id ? collegeToSave : c));
+      }
+      setFeaturedColleges(updated);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(updated));
+      }
+    }
+    setShowCollegeEditModal(false);
+  };
+
+  const handleDeleteCollege = (id: string, row: "trending" | "featured") => {
+    if (!confirm("Are you sure you want to delete this college card from the homepage?")) return;
+    if (row === "trending") {
+      const updated = trendingColleges.filter((c) => c.id !== id);
+      setTrendingColleges(updated);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(updated));
+      }
+    } else {
+      const updated = featuredColleges.filter((c) => c.id !== id);
+      setFeaturedColleges(updated);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(updated));
+      }
+    }
+    setShowCollegeEditModal(false);
+  };
+
+  const handleResetColleges = () => {
+    if (!confirm("Reset homepage colleges to factory defaults?")) return;
+    setTrendingColleges(INITIAL_TRENDING_COLLEGES);
+    setFeaturedColleges(INITIAL_FEATURED_COLLEGES);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("tyc_homepage_trending_colleges");
+      localStorage.removeItem("tyc_homepage_featured_colleges");
+    }
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -974,144 +1275,6 @@ export default function HomePage() {
       }, 2500);
     }
   };
-
-  const featuredColleges: CollegeMock[] = [
-    {
-      id: "f1",
-      name: "Amity University",
-      location: "Noida, Uttar Pradesh",
-      rating: 4.5,
-      highestPackage: "61.75 LPA",
-      averagePackage: "8.5 LPA",
-      averageFee: "₹2.5 Lakhs/Yr",
-      type: "Private",
-      slug: "amity-university",
-      stream: "Engineering",
-      image: "/images/amity_real.jpg?v=3",
-      logo: "/images/amity.png",
-      nirfRank: 35,
-    },
-    {
-      id: "f2",
-      name: "Chandigarh University",
-      location: "Gharuan, Punjab",
-      rating: 4.6,
-      highestPackage: "54.75 LPA",
-      averagePackage: "9.2 LPA",
-      averageFee: "₹1.8 Lakhs/Yr",
-      type: "Private",
-      slug: "chandigarh-university",
-      stream: "Engineering",
-      image: "/images/chandigarh_real.jpg?v=2",
-      logo: "/images/chandigarh.png",
-      nirfRank: 27,
-    },
-    {
-      id: "f3",
-      name: "BITS Pilani - Birla Institute of Technology",
-      location: "Pilani, Rajasthan",
-      rating: 4.9,
-      highestPackage: "60.7 LPA",
-      averagePackage: "20.5 LPA",
-      averageFee: "₹5.4 Lakhs/Yr",
-      type: "Private",
-      slug: "bits-pilani",
-      stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/iitdelhi.png",
-      nirfRank: 20,
-    },
-    {
-      id: "f4",
-      name: "AIIMS Rishikesh - All India Institute of Medical Sciences",
-      location: "Rishikesh, Uttarakhand",
-      rating: 4.9,
-      highestPackage: "36.0 LPA",
-      averagePackage: "16.5 LPA",
-      averageFee: "₹2,500/Yr",
-      type: "Government",
-      slug: "aiims-rishikesh",
-      stream: "Medical",
-      image: "/images/aiimsrishikesh.webp",
-      logo: "/images/galgotias.png",
-      nirfRank: 22,
-    },
-    {
-      id: "f5",
-      name: "XLRI Xavier School of Management",
-      location: "Jamshedpur, Jharkhand",
-      rating: 4.8,
-      highestPackage: "75.0 LPA",
-      averagePackage: "32.7 LPA",
-      averageFee: "₹14.5 Lakhs/Yr",
-      type: "Private",
-      slug: "xlri-jamshedpur",
-      stream: "Management",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/iimahmedabad.png",
-      nirfRank: 9,
-    },
-    {
-      id: "f6",
-      name: "DTU - Delhi Technological University",
-      location: "Rohini, New Delhi",
-      rating: 4.7,
-      highestPackage: "82.0 LPA",
-      averagePackage: "15.5 LPA",
-      averageFee: "₹2.2 Lakhs/Yr",
-      type: "Government",
-      slug: "dtu-delhi",
-      stream: "Engineering",
-      image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/iitdelhi.png",
-      nirfRank: 29,
-    },
-    {
-      id: "f7",
-      name: "Symbiosis Law School (SLS)",
-      location: "Pune, Maharashtra",
-      rating: 4.6,
-      highestPackage: "18.0 LPA",
-      averagePackage: "11.0 LPA",
-      averageFee: "₹3.8 Lakhs/Yr",
-      type: "Private",
-      slug: "sls-pune",
-      stream: "Law",
-      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/galgotias.png",
-      nirfRank: 6,
-    },
-    {
-      id: "f8",
-      name: "MAHE - Manipal Academy of Higher Education",
-      location: "Manipal, Karnataka",
-      rating: 4.7,
-      highestPackage: "54.0 LPA",
-      averagePackage: "12.5 LPA",
-      averageFee: "₹4.5 Lakhs/Yr",
-      type: "Private",
-      slug: "manipal-university",
-      stream: "Medical",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/chandigarh.png",
-      nirfRank: 16,
-    },
-    {
-      id: "f9",
-      name: "NALSAR University of Law",
-      location: "Hyderabad, Telangana",
-      rating: 4.8,
-      highestPackage: "24.0 LPA",
-      averagePackage: "15.5 LPA",
-      averageFee: "₹2.6 Lakhs/Yr",
-      type: "Government",
-      slug: "nalsar-hyderabad",
-      stream: "Law",
-      image: "https://images.unsplash.com/photo-1505664194779-8bebcb95c539?w=600&auto=format&fit=crop&q=80",
-      logo: "/images/galgotias.png",
-      nirfRank: 3,
-    },
-  ];
 
   const filteredColleges =
     selectedStream === "All"
@@ -2254,13 +2417,76 @@ export default function HomePage() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.08),transparent_60%)] pointer-events-none z-0" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.05),transparent_60%)] pointer-events-none z-0" />
 
-        {/* Header with Title & Filter Tabs */}
+        {/* Header with Title, Admin Controls & Filter Tabs */}
         <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 text-[10px] font-black uppercase tracking-wider mb-2">
-              <Sparkles className="w-3 h-3 text-orange-500 animate-pulse" />
-              <span>Verified Top Campuses 2026-27</span>
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 text-[10px] font-black uppercase tracking-wider">
+                <Sparkles className="w-3 h-3 text-orange-500 animate-pulse" />
+                <span>Verified Top Campuses 2026-27</span>
+              </div>
+
+              {/* Admin Status Pill & Action Buttons */}
+              {isAdmin ? (
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold">
+                    <CheckCircle className="w-3 h-3" />
+                    Admin Mode Active
+                  </span>
+                  <button
+                    onClick={() => {
+                      setEditingCollegeRow("trending");
+                      setIsNewCollege(true);
+                      setEditingCollegeData({
+                        id: `custom-${Date.now()}`,
+                        name: "",
+                        location: "",
+                        rating: 4.8,
+                        highestPackage: "45.0 LPA",
+                        averagePackage: "15.0 LPA",
+                        averageFee: "₹2.0 Lakhs/Yr",
+                        type: "Private",
+                        slug: "",
+                        stream: "Engineering",
+                        image: "/images/galgotias_real.jpg",
+                        logo: "/images/galgotias.png",
+                        nirfRank: 25,
+                      });
+                      setShowCollegeEditModal(true);
+                    }}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-[10.5px] font-black shadow-xs active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add College Card</span>
+                  </button>
+                  <button
+                    onClick={handleResetColleges}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold transition-all cursor-pointer"
+                    title="Reset to default college cards"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset</span>
+                  </button>
+                  <button
+                    onClick={handleAdminLogout}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-[10px] font-bold transition-all cursor-pointer"
+                  >
+                    <Lock className="w-3 h-3" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowAdminLoginModal(true)}
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border border-slate-200 text-[9.5px] font-bold transition-all cursor-pointer"
+                  title="Admin login to edit college cards"
+                >
+                  <Lock className="w-3 h-3" />
+                  <span>Admin Edit Access</span>
+                </button>
+              )}
             </div>
+
             <h2 className="font-outfit font-extrabold text-2xl md:text-3xl text-text_primary">
               Trending & Top Featured Colleges in India
             </h2>
@@ -2337,6 +2563,24 @@ export default function HomePage() {
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                  {/* Admin Edit Button Trigger on Card */}
+                  {isAdmin && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingCollegeRow("trending");
+                        setEditingCollegeData(college);
+                        setIsNewCollege(false);
+                        setShowCollegeEditModal(true);
+                      }}
+                      className="absolute top-2.5 right-12 bg-white/95 hover:bg-orange-500 hover:text-white text-slate-800 px-2 py-0.5 rounded-full shadow-md z-20 flex items-center gap-1 text-[9px] font-black transition-all cursor-pointer border border-slate-200/80"
+                      title="Edit College Card"
+                    >
+                      <Edit3 className="w-2.5 h-2.5" />
+                      <span>Edit</span>
+                    </button>
+                  )}
 
                   {college.nirfRank && (
                     <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full text-[8.5px] font-black shadow-md shadow-orange-500/25 z-10 flex items-center gap-1">
@@ -2482,6 +2726,24 @@ export default function HomePage() {
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                  {/* Admin Edit Button Trigger on Card */}
+                  {isAdmin && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingCollegeRow("featured");
+                        setEditingCollegeData(college);
+                        setIsNewCollege(false);
+                        setShowCollegeEditModal(true);
+                      }}
+                      className="absolute top-2.5 right-12 bg-white/95 hover:bg-orange-500 hover:text-white text-slate-800 px-2 py-0.5 rounded-full shadow-md z-20 flex items-center gap-1 text-[9px] font-black transition-all cursor-pointer border border-slate-200/80"
+                      title="Edit College Card"
+                    >
+                      <Edit3 className="w-2.5 h-2.5" />
+                      <span>Edit</span>
+                    </button>
+                  )}
 
                   {college.nirfRank && (
                     <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full text-[8.5px] font-black shadow-md shadow-orange-500/25 z-10 flex items-center gap-1">
@@ -3746,6 +4008,502 @@ export default function HomePage() {
                   Find Colleges accepting {activeExamModal.exam.name}
                 </Link>
               </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* ADMIN LOGIN MODAL */}
+        {showAdminLoginModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 relative overflow-hidden"
+            >
+              <button
+                onClick={() => {
+                  setShowAdminLoginModal(false);
+                  setAdminError("");
+                }}
+                className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-outfit font-black text-xl text-slate-800">
+                    Admin Portal Access
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Sign in to edit homepage cards & manage colleges
+                  </p>
+                </div>
+              </div>
+
+              {adminError && (
+                <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold">
+                  {adminError}
+                </div>
+              )}
+
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Admin Username
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter Admin Username"
+                    value={adminUser}
+                    onChange={(e) => setAdminUser(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-sm font-semibold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Admin Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="••••••••••••"
+                    value={adminPass}
+                    onChange={(e) => setAdminPass(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-sm font-semibold"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAdminLoginModal(false)}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-sm shadow-md shadow-orange-500/20 active:scale-95 transition-all"
+                  >
+                    Unlock & Edit
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+
+        {/* HOMEPAGE COLLEGE CARD EDIT & ADD MODAL */}
+        {showCollegeEditModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-3xl p-6 sm:p-7 max-w-2xl w-full shadow-2xl border border-slate-200 relative my-8 max-h-[90vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setShowCollegeEditModal(false)}
+                className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-11 h-11 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                  <Edit3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-outfit font-black text-xl text-slate-800">
+                    {isNewCollege ? "Add New College Card" : "Edit College Card"}
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Customize college images, packages, ratings & metadata on homepage
+                  </p>
+                </div>
+              </div>
+
+              <form onSubmit={handleSaveCollege} className="space-y-4">
+                {/* Carousel Placement Selector */}
+                <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                  <label
+                    onClick={() => setEditingCollegeRow("trending")}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all ${
+                      editingCollegeRow === "trending"
+                        ? "bg-orange-500 text-white border-orange-500 shadow-sm"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="collegeRow"
+                      checked={editingCollegeRow === "trending"}
+                      onChange={() => setEditingCollegeRow("trending")}
+                      className="sr-only"
+                    />
+                    <span className="text-xs font-black">Row 1: Trending Colleges</span>
+                  </label>
+
+                  <label
+                    onClick={() => setEditingCollegeRow("featured")}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all ${
+                      editingCollegeRow === "featured"
+                        ? "bg-orange-500 text-white border-orange-500 shadow-sm"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="collegeRow"
+                      checked={editingCollegeRow === "featured"}
+                      onChange={() => setEditingCollegeRow("featured")}
+                      className="sr-only"
+                    />
+                    <span className="text-xs font-black">Row 2: Top Ranked & Emerging</span>
+                  </label>
+                </div>
+
+                {/* DUAL IMAGE INPUTS SECTION WITH LIVE PREVIEWS */}
+                <div className="p-4 rounded-2xl bg-orange-50/50 border border-orange-200/60 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black text-orange-900 uppercase tracking-wide flex items-center gap-1.5">
+                      <ImageIcon className="w-3.5 h-3.5 text-orange-600" />
+                      Dual Image Configuration (Logo + Real Campus Banner)
+                    </span>
+                    <span className="text-[10px] text-orange-700 font-bold">Live Previews Below</span>
+                  </div>
+
+                  {/* 1. Real Campus Cover Image */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                      1. Real Campus / College Cover Image Link (Banner Photo)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="/images/iitdelhi_real.jpg or https://images.unsplash.com/..."
+                      value={editingCollegeData.image || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          image: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold text-slate-800"
+                    />
+                  </div>
+
+                  {/* 2. Small College Logo Image */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                      2. College Logo Image Link (Small Square Avatar)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="/images/iitdelhi.png or https://upload.wikimedia.org/..."
+                      value={editingCollegeData.logo || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          logo: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold text-slate-800"
+                    />
+                  </div>
+
+                  {/* Live Visual Preview of Card Header */}
+                  <div className="pt-2">
+                    <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      Visual Preview on Card:
+                    </span>
+                    <div className="w-[280px] bg-white border border-slate-200 rounded-[20px] overflow-hidden shadow-sm">
+                      <div className="relative h-[100px] bg-slate-100">
+                        <img
+                          src={editingCollegeData.image || "/images/galgotias_real.jpg"}
+                          alt="Preview Banner"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              "https://images.unsplash.com/photo-1562774053-701939374585?w=600&auto=format&fit=crop&q=80";
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        <span className="absolute top-2 right-2 bg-white/90 px-1.5 py-0.5 rounded-full text-[8.5px] font-bold text-slate-800">
+                          ★ {editingCollegeData.rating || 4.5}
+                        </span>
+                      </div>
+                      <div className="relative -mt-5 px-3 flex items-center justify-between pb-2">
+                        <div className="w-10 h-10 rounded-lg bg-white border-2 border-white shadow-md p-1 flex items-center justify-center overflow-hidden">
+                          {editingCollegeData.logo ? (
+                            <img
+                              src={editingCollegeData.logo}
+                              alt="Preview Logo"
+                              className="max-h-full max-w-full object-contain"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <div className="text-[8px] font-black text-orange-600">LOGO</div>
+                          )}
+                        </div>
+                        <span className="text-[8px] uppercase font-black px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 border border-orange-200">
+                          {editingCollegeData.stream || "Stream"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Basic Details Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      College Full Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. IIT Delhi - Indian Institute of Technology"
+                      value={editingCollegeData.name || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          name: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Location (City, State)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. New Delhi, Delhi"
+                      value={editingCollegeData.location || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          location: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+                </div>
+
+                {/* Stream and Ownership */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Stream / Discipline
+                    </label>
+                    <select
+                      value={editingCollegeData.stream || "Engineering"}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          stream: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold bg-white"
+                    >
+                      <option value="Engineering">Engineering</option>
+                      <option value="Management">Management</option>
+                      <option value="Medical">Medical</option>
+                      <option value="Law">Law</option>
+                      <option value="Design">Design</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Ownership / Type
+                    </label>
+                    <select
+                      value={editingCollegeData.type || "Government"}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          type: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold bg-white"
+                    >
+                      <option value="Government">Government</option>
+                      <option value="Private">Private</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Metrics Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <div>
+                    <label className="block text-[10.5px] font-bold text-slate-700 mb-1">
+                      NIRF Rank (Optional)
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="e.g. 2"
+                      value={editingCollegeData.nirfRank || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          nirfRank: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10.5px] font-bold text-slate-700 mb-1">
+                      Rating (Out of 5.0)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="1.0"
+                      max="5.0"
+                      required
+                      placeholder="e.g. 4.9"
+                      value={editingCollegeData.rating || 4.5}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          rating: Number(e.target.value),
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10.5px] font-bold text-slate-700 mb-1">
+                      Highest Package
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 1.2 Cr PA"
+                      value={editingCollegeData.highestPackage || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          highestPackage: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10.5px] font-bold text-slate-700 mb-1">
+                      Average Package
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 25.0 LPA"
+                      value={editingCollegeData.averagePackage || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          averagePackage: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+                </div>
+
+                {/* Fees and Slug */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Annual Tuition Fees
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. ₹2.2 Lakhs/Yr"
+                      value={editingCollegeData.averageFee || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          averageFee: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      College URL Slug
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. iit-delhi (opens /colleges/iit-delhi)"
+                      value={editingCollegeData.slug || ""}
+                      onChange={(e) =>
+                        setEditingCollegeData({
+                          ...editingCollegeData,
+                          slug: e.target.value,
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                    />
+                  </div>
+                </div>
+
+                {/* Modal Footer Actions */}
+                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                  {!isNewCollege && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleDeleteCollege(editingCollegeData.id as string, editingCollegeRow)
+                      }
+                      className="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Card</span>
+                    </button>
+                  )}
+
+                  <div className="flex items-center gap-2 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => setShowCollegeEditModal(false)}
+                      className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xs shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Save & Publish</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
