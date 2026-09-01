@@ -1126,13 +1126,36 @@ export default function HomePage() {
         .then((res) => res.json())
         .then((data) => {
           if (data && data.success) {
+            let hasCloudData = false;
             if (Array.isArray(data.trending) && data.trending.length > 0) {
               setTrendingColleges(data.trending);
               localStorage.setItem("tyc_homepage_trending_colleges", JSON.stringify(data.trending));
+              hasCloudData = true;
             }
             if (Array.isArray(data.featured) && data.featured.length > 0) {
               setFeaturedColleges(data.featured);
               localStorage.setItem("tyc_homepage_featured_colleges", JSON.stringify(data.featured));
+              hasCloudData = true;
+            }
+
+            // If cloud database has no records yet but this browser has local edits, automatically sync local edits to the cloud!
+            if (!hasCloudData && (savedTrending || savedFeatured)) {
+              let localTrending = INITIAL_TRENDING_COLLEGES;
+              let localFeatured = INITIAL_FEATURED_COLLEGES;
+              try {
+                if (savedTrending) localTrending = JSON.parse(savedTrending);
+                if (savedFeatured) localFeatured = JSON.parse(savedFeatured);
+              } catch (e) {}
+              fetch("/api/homepage-colleges", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  username: "Samrat1311",
+                  password: "1311161161",
+                  trending: localTrending,
+                  featured: localFeatured,
+                }),
+              }).catch((e) => console.error("Auto cloud sync error:", e));
             }
           }
         })
@@ -2511,6 +2534,22 @@ export default function HomePage() {
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Add College Card</span>
+                  </button>
+                  <button
+                    onClick={async () => {
+                      await syncToCloud(trendingColleges, featuredColleges);
+                      alert("✅ Successfully synced to Cloud Database! All other phones & laptops will now show this.");
+                    }}
+                    disabled={isSavingToCloud}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-[10.5px] font-black shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-60"
+                    title="Publish current college cards to Cloud Database for all mobiles & visitors"
+                  >
+                    {isSavingToCloud ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Check className="w-3.5 h-3.5" />
+                    )}
+                    <span>Sync to All Devices</span>
                   </button>
                   <button
                     onClick={handleResetColleges}
