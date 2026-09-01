@@ -47,6 +47,7 @@ import {
   Image as ImageIcon,
   RotateCcw,
   Check,
+  Loader2,
 } from "lucide-react";
 
 interface CollegeMock {
@@ -860,6 +861,7 @@ export default function HomePage() {
   const [showCollegeEditModal, setShowCollegeEditModal] = useState(false);
   const [editingCollegeRow, setEditingCollegeRow] = useState<"trending" | "featured">("trending");
   const [isNewCollege, setIsNewCollege] = useState(false);
+  const [isSavingToCloud, setIsSavingToCloud] = useState(false);
   const [editingCollegeData, setEditingCollegeData] = useState<CollegeMock>({
     id: "",
     name: "",
@@ -1162,8 +1164,9 @@ export default function HomePage() {
   };
 
   const syncToCloud = async (newTrending: CollegeMock[], newFeatured: CollegeMock[]) => {
+    setIsSavingToCloud(true);
     try {
-      await fetch("/api/homepage-colleges", {
+      const res = await fetch("/api/homepage-colleges", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1173,12 +1176,18 @@ export default function HomePage() {
           featured: newFeatured,
         }),
       });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        console.warn("Cloud sync response error:", data);
+      }
     } catch (err) {
       console.error("Failed to sync homepage colleges to cloud database:", err);
+    } finally {
+      setIsSavingToCloud(false);
     }
   };
 
-  const handleSaveCollege = (e: React.FormEvent) => {
+  const handleSaveCollege = async (e: React.FormEvent) => {
     e.preventDefault();
     const collegeToSave: CollegeMock = {
       id: editingCollegeData.id || `custom-${Date.now()}`,
@@ -1224,7 +1233,7 @@ export default function HomePage() {
     }
 
     // Save to Cloud Database so all devices see the update immediately
-    syncToCloud(updatedTrending, updatedFeatured);
+    await syncToCloud(updatedTrending, updatedFeatured);
     setShowCollegeEditModal(false);
   };
 
@@ -4540,10 +4549,20 @@ export default function HomePage() {
                     </button>
                     <button
                       type="submit"
-                      className="px-5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xs shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
+                      disabled={isSavingToCloud}
+                      className="px-5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-60 text-white font-bold text-xs shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
                     >
-                      <Check className="w-3.5 h-3.5" />
-                      <span>Save & Publish</span>
+                      {isSavingToCloud ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Saving to Cloud...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Save & Publish</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
