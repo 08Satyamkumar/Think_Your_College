@@ -42,6 +42,10 @@ import {
   Users,
   Shield,
   Clock,
+  School,
+  Landmark,
+  Percent,
+  CheckCircle2,
 } from "lucide-react";
 
 interface CourseItem {
@@ -88,6 +92,14 @@ interface GalleryPhoto {
   category: string;
 }
 
+interface FacultyMember {
+  name: string;
+  designation: string;
+  dept: string;
+  qualification: string;
+  experience: string;
+}
+
 interface CollegeDetail {
   name: string;
   fullName?: string;
@@ -119,9 +131,10 @@ interface CollegeDetail {
   reviews: ReviewItem[];
   faqs: FaqItem[];
   gallery: GalleryPhoto[];
+  facultyList?: FacultyMember[];
 }
 
-// Master Benchmark Dataset for IIT Delhi (World-Class Detailing)
+// Master Benchmark Dataset for IIT Delhi
 const IIT_DELHI_MASTER_DATA: CollegeDetail = {
   name: "IIT Delhi - Indian Institute of Technology",
   fullName: "Indian Institute of Technology Delhi (IIT Delhi)",
@@ -134,7 +147,7 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
   type: "Government (Autonomous) • Institute of National Importance",
   estd: "1961",
   stream: "Engineering",
-  highestPackage: "₹1.2 Crore PA (Domestic) / ₹2.4 Crore PA (Int.)",
+  highestPackage: "₹1.20 Crore PA (Domestic) / ₹2.40 Crore PA (Int.)",
   averagePackage: "₹25.82 Lakhs PA",
   medianPackage: "₹20.50 Lakhs PA",
   totalFees: "₹2.38 Lakhs / Year (₹9.52 Lakhs Total B.Tech)",
@@ -336,7 +349,33 @@ Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delh
     { url: "/images/amity_real.jpg", caption: "High-Tech AI & Robotics Research Lab", category: "Labs" },
     { url: "/images/chandigarh_real.jpg", caption: "Student Hostels & Green Courtyards", category: "Hostel" },
   ],
+  facultyList: [
+    { name: "Prof. Rangan Banerjee", designation: "Director & Senior Professor", dept: "Energy Science and Engineering", qualification: "Ph.D. IIT Bombay", experience: "32+ Years" },
+    { name: "Prof. Mausam", designation: "Head of School of AI (ScAI)", dept: "Computer Science & Artificial Intelligence", qualification: "Ph.D. University of Washington (USA)", experience: "18+ Years" },
+    { name: "Prof. Subodh Kumar", designation: "Professor", dept: "Computer Science & Engineering", qualification: "Ph.D. University of North Carolina", experience: "24+ Years" },
+    { name: "Prof. Brejesh Lall", designation: "Professor & Dean", dept: "Electrical Engineering", qualification: "Ph.D. IIT Delhi", experience: "22+ Years" },
+  ],
 };
+
+// Exact Shiksha Tabs List from User's 1st Reference Image
+const SHIKSHA_NAV_TABS = [
+  { id: "info", label: "College Info" },
+  { id: "courses", label: "Courses" },
+  { id: "fees", label: "Fees" },
+  { id: "reviews", label: "Reviews" },
+  { id: "admissions", label: "Admissions" },
+  { id: "placements", label: "Placements" },
+  { id: "cutoffs", label: "Cut-Offs" },
+  { id: "rankings", label: "Rankings" },
+  { id: "gallery", label: "Gallery" },
+  { id: "hostel", label: "Hostel & Campus" },
+  { id: "faculty", label: "Faculty" },
+  { id: "compare", label: "Compare" },
+  { id: "qa", label: "Q&A" },
+  { id: "scholarships", label: "Scholarships" },
+] as const;
+
+type ShikshaTabId = (typeof SHIKSHA_NAV_TABS)[number]["id"];
 
 const iconMap: Record<string, any> = {
   Building,
@@ -351,10 +390,8 @@ export default function CollegeDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  // Selected Tab State
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "highlights" | "courses" | "cutoffs" | "placements" | "campus" | "reviews" | "faqs"
-  >("overview");
+  // Selected Tab State (Default is 'info' which maps to 'College Info')
+  const [activeTab, setActiveTab] = useState<ShikshaTabId>("info");
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -405,7 +442,7 @@ export default function CollegeDetailPage() {
         }
 
         if (data) {
-          const ratingNum = parseFloat(data.rating) || 4.8;
+          const ratingNum = parseFloat(data.rating) || 4.9;
           let parsedData: any = {};
 
           if (
@@ -449,6 +486,7 @@ export default function CollegeDetailPage() {
             reviews: parsedData.reviews || IIT_DELHI_MASTER_DATA.reviews,
             faqs: parsedData.faqs || IIT_DELHI_MASTER_DATA.faqs,
             gallery: parsedData.gallery || IIT_DELHI_MASTER_DATA.gallery,
+            facultyList: parsedData.facultyList || IIT_DELHI_MASTER_DATA.facultyList,
           };
 
           setCollegeData(baseDetail);
@@ -557,17 +595,6 @@ export default function CollegeDetailPage() {
       c.eligibility.toLowerCase().includes(courseSearch.toLowerCase())
   );
 
-  const tabs = [
-    { id: "overview", name: "Overview & Info" },
-    { id: "highlights", name: "Key Highlights" },
-    { id: "courses", name: `Courses & Fees (${collegeData.courses.length})` },
-    { id: "cutoffs", name: "JEE Cutoffs" },
-    { id: "placements", name: "Placements" },
-    { id: "campus", name: "Campus & Hostels" },
-    { id: "reviews", name: `Reviews (${collegeData.reviews.length})` },
-    { id: "faqs", name: "FAQs & Q&A" },
-  ] as const;
-
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f9fa] gap-3">
@@ -580,7 +607,7 @@ export default function CollegeDetailPage() {
   }
 
   return (
-    <div className="min-h-screen pb-16 space-y-6 select-none">
+    <div className="min-h-screen pb-16 space-y-5 select-none">
       {/* 1. SHIKSHA-STYLE MODERN HERO BANNER */}
       <section className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xl">
         {/* Cover Photo with Dark Gradient & Ambient Backlight */}
@@ -694,45 +721,58 @@ export default function CollegeDetailPage() {
         </div>
       </section>
 
-      {/* 2. STICKY SUB-NAVIGATION BAR (SHIKSHA STYLE) */}
-      <div className="sticky top-16 md:top-0 bg-white/95 backdrop-blur-md z-30 border-y border-slate-200 py-2.5 px-2 flex items-center overflow-x-auto no-scrollbar gap-2 shadow-xs">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all cursor-pointer ${
-              activeTab === tab.id
-                ? "bg-orange-500 text-white shadow-md shadow-orange-500/20 scale-[1.02]"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent"
-            }`}
-          >
-            {tab.name}
-          </button>
-        ))}
+      {/* 2. EXACT SHIKSHA.COM STYLE SUB-HEADER TABS (From 1st Image) */}
+      <div className="sticky top-16 md:top-0 bg-white z-30 border-b border-slate-200 shadow-xs">
+        <div className="flex items-center overflow-x-auto no-scrollbar scroll-smooth px-2 sm:px-4">
+          {SHIKSHA_NAV_TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`py-3.5 px-3.5 sm:px-4 text-xs font-bold whitespace-nowrap transition-all relative flex-shrink-0 cursor-pointer ${
+                  isActive
+                    ? "text-[#4a154b] font-black"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span>{tab.label}</span>
+                {/* Active Indicator Underline (Matching Shiksha Reference) */}
+                {isActive && (
+                  <motion.div
+                    layoutId="shikshaTabIndicator"
+                    className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#4a154b] rounded-t-full shadow-xs"
+                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                  />
+                )}
+              </button>
+            );
+          })}
 
-        {isAdmin && (
-          <button
-            onClick={startEditing}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-xs cursor-pointer transition-all flex-shrink-0"
-          >
-            <Edit className="w-3.5 h-3.5" />
-            <span>Edit Page Details</span>
-          </button>
-        )}
+          {isAdmin && (
+            <button
+              onClick={startEditing}
+              className="ml-auto my-auto flex items-center gap-1.5 px-3 py-1 bg-slate-900 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-xs cursor-pointer transition-all flex-shrink-0"
+            >
+              <Edit className="w-3.5 h-3.5" />
+              <span>Edit Details</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 3. CORE TWO-COLUMN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
         {/* LEFT COLUMN: ACTIVE TAB CONTENT (70%) */}
         <div className="lg:col-span-7 space-y-6">
-          {/* TAB 1: OVERVIEW & NARRATIVE */}
-          {activeTab === "overview" && (
+          {/* TAB 1: COLLEGE INFO (OVERVIEW & HIGHLIGHTS) */}
+          {activeTab === "info" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
               {/* What's New Box 2026 */}
               <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
                 <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
                   <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
-                  <span>Latest Updates & Admission Alerts 2026-27</span>
+                  <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
                 </div>
                 <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
                   {collegeData.whatsNew?.map((item, idx) => (
@@ -756,8 +796,36 @@ export default function CollegeDetailPage() {
                 </div>
               </div>
 
+              {/* Key Highlights Table (Shiksha Benchmark) */}
+              <div className="space-y-3 pt-2">
+                <h3 className="font-outfit font-black text-lg text-slate-900">
+                  {collegeData.name} - Key Highlights
+                </h3>
+                <div className="overflow-hidden border border-slate-200 rounded-2xl">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <tbody>
+                      {collegeData.highlights.map((item, idx) => (
+                        <tr
+                          key={idx}
+                          className={`border-b border-slate-100 ${
+                            idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
+                          }`}
+                        >
+                          <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
+                            {item.label}
+                          </td>
+                          <td className="py-3 px-4 font-bold text-slate-900">
+                            {item.value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               {/* Key Quick Stats Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-2">
                 <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-center">
                   <p className="text-[10px] uppercase font-bold text-emerald-700">Highest CTC</p>
                   <p className="font-outfit font-black text-base text-emerald-600 mt-0.5">
@@ -784,76 +852,28 @@ export default function CollegeDetailPage() {
                   <p className="font-outfit font-black text-base text-purple-600 mt-0.5">
                     Rank #2
                   </p>
-                  <span className="text-[9px] text-purple-600 font-semibold">Engineering Category</span>
+                  <span className="text-[9px] text-purple-600 font-semibold">Engineering</span>
                 </div>
               </div>
-
-              {/* Quick Jump to Highlights Table */}
-              <div className="pt-2">
-                <button
-                  onClick={() => setActiveTab("highlights")}
-                  className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-between transition-colors"
-                >
-                  <span>View Complete Key Highlights Table & Parameters</span>
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
-                </button>
-              </div>
             </div>
           )}
 
-          {/* TAB 2: KEY HIGHLIGHTS TABLE (SHIKSHA BENCHMARK) */}
-          {activeTab === "highlights" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  {collegeData.name} - Key Highlights 2026
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Detailed institutional parameters, rankings, intake capacity, and accreditation
-                </p>
-              </div>
-
-              <div className="overflow-hidden border border-slate-200 rounded-2xl">
-                <table className="w-full text-left border-collapse text-xs">
-                  <tbody>
-                    {collegeData.highlights.map((item, idx) => (
-                      <tr
-                        key={idx}
-                        className={`border-b border-slate-100 ${
-                          idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
-                        }`}
-                      >
-                        <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
-                          {item.label}
-                        </td>
-                        <td className="py-3 px-4 font-bold text-slate-900">
-                          {item.value}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: COURSES, FEES & ELIGIBILITY TABLE */}
+          {/* TAB 2: COURSES */}
           {activeTab === "courses" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
-                    Courses & Tuition Fees Structure
+                    All Courses Offered at {collegeData.name.split(" - ")[0]}
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Full breakdown of academic degrees, annual fees, duration, and entrance requirements
+                    Full list of Undergraduate, Postgraduate, MBA, and Doctoral degree programs
                   </p>
                 </div>
 
-                {/* Course Search Filter */}
                 <input
                   type="text"
-                  placeholder="Search course (e.g. CSE, MBA)..."
+                  placeholder="Search course (e.g. CSE, AI)..."
                   value={courseSearch}
                   onChange={(e) => setCourseSearch(e.target.value)}
                   className="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-500 bg-slate-50 sm:w-60"
@@ -864,10 +884,10 @@ export default function CollegeDetailPage() {
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
-                      <th className="py-3 px-4">Program / Degree</th>
+                      <th className="py-3 px-4">Course / Specialization</th>
                       <th className="py-3 px-3">Duration</th>
                       <th className="py-3 px-3">Tuition Fees</th>
-                      <th className="py-3 px-4">Eligibility & Accepted Exam</th>
+                      <th className="py-3 px-4">Eligibility & Entrance Exam</th>
                       <th className="py-3 px-3">Action</th>
                     </tr>
                   </thead>
@@ -897,7 +917,7 @@ export default function CollegeDetailPage() {
                               const elem = document.getElementById("lead-inquiry-box");
                               elem?.scrollIntoView({ behavior: "smooth" });
                             }}
-                            className="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-black text-[10px] transition-all shadow-xs"
+                            className="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-black text-[10px] transition-all shadow-xs cursor-pointer"
                           >
                             Apply
                           </button>
@@ -910,7 +930,227 @@ export default function CollegeDetailPage() {
             </div>
           )}
 
-          {/* TAB 4: JEE ADVANCED / JOSAA CUTOFFS MATRIX TABLE */}
+          {/* TAB 3: FEES STRUCTURE */}
+          {activeTab === "fees" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  {collegeData.name.split(" - ")[0]} Fee Structure 2026-27
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Semester-wise tuition fees, hostel rent, mess advances, and fee exemption criteria
+                </p>
+              </div>
+
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
+                      <th className="py-3 px-4">Fee Component</th>
+                      <th className="py-3 px-3">Amount (General / OBC)</th>
+                      <th className="py-3 px-3">Amount (SC / ST / PwD)</th>
+                      <th className="py-3 px-4">Payment Frequency</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium">
+                    <tr className="hover:bg-slate-50">
+                      <td className="py-3 px-4 font-bold text-slate-900">Tuition Fee (B.Tech)</td>
+                      <td className="py-3 px-3 font-bold text-orange-600">₹1,00,000</td>
+                      <td className="py-3 px-3 font-bold text-emerald-600">₹0 (100% Free)</td>
+                      <td className="py-3 px-4 text-slate-600">Per Semester</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="py-3 px-4 font-bold text-slate-900">Hostel Seat Rent & Amenities</td>
+                      <td className="py-3 px-3 font-bold text-slate-800">₹10,500</td>
+                      <td className="py-3 px-3 font-bold text-slate-800">₹10,500</td>
+                      <td className="py-3 px-4 text-slate-600">Per Semester</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="py-3 px-4 font-bold text-slate-900">Mess Advance & Food Charges</td>
+                      <td className="py-3 px-3 font-bold text-slate-800">₹28,000</td>
+                      <td className="py-3 px-3 font-bold text-slate-800">₹28,000</td>
+                      <td className="py-3 px-4 text-slate-600">Per Semester (Adjustable)</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="py-3 px-4 font-bold text-slate-900">One-Time Admission & Caution Deposit</td>
+                      <td className="py-3 px-3 font-bold text-slate-800">₹12,000</td>
+                      <td className="py-3 px-3 font-bold text-slate-800">₹12,000</td>
+                      <td className="py-3 px-4 text-slate-600">One-time (Refundable ₹5,000)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold space-y-1">
+                <p className="font-bold flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  Govt. Fee Waiver & Concessions:
+                </p>
+                <p>• 100% Tuition Fee waiver for SC/ST/PH scholars.</p>
+                <p>• 100% Tuition Fee waiver for general/OBC scholars whose family annual income is below ₹1 Lakh.</p>
+                <p>• 66.6% Tuition Fee waiver for family income between ₹1 Lakh to ₹5 Lakhs.</p>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: REVIEWS */}
+          {activeTab === "reviews" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Student Reviews & Campus Ratings
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Authentic feedback and experiences from verified alumni & current scholars
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black">
+                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <span>{collegeData.rating} / 5.0 (842 Verified Reviews)</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {collegeData.reviews.map((rev) => (
+                  <div
+                    key={rev.id}
+                    className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black text-xs">
+                          {rev.author[0]}
+                        </div>
+                        <div>
+                          <h4 className="font-outfit font-black text-xs text-slate-900">
+                            {rev.author}
+                          </h4>
+                          <p className="text-[10px] text-slate-500 font-semibold">
+                            {rev.course} • {rev.year}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-black flex items-center gap-1">
+                        ★ {rev.rating}.0
+                      </div>
+                    </div>
+
+                    <h5 className="font-outfit font-bold text-xs text-slate-900">
+                      "{rev.title}"
+                    </h5>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {rev.content}
+                    </p>
+
+                    {rev.pros && (
+                      <div className="text-[11px] text-emerald-700 bg-emerald-50/70 p-2 rounded-lg font-semibold">
+                        👍 <strong>Pros:</strong> {rev.pros}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: ADMISSIONS */}
+          {activeTab === "admissions" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  {collegeData.name.split(" - ")[0]} Admission Process 2026
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Step-by-step selection criteria, national counselling, and important registration dates
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <h4 className="font-outfit font-bold text-sm text-slate-900 flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-black">1</span>
+                    B.Tech / Dual Degree Admission:
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed pl-8 font-medium">
+                    Candidates must appear for <strong>JEE Main</strong> and qualify among the top 2.5 Lakh rankers to be eligible for <strong>JEE Advanced</strong>. Allotment is strictly managed through online <strong>JoSAA Counselling</strong> based on All India Rank (AIR).
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <h4 className="font-outfit font-bold text-sm text-slate-900 flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-black">2</span>
+                    M.Tech & M.S. (Research) Admission:
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed pl-8 font-medium">
+                    Conducted via <strong>GATE Examination</strong> and central COAP counselling. Some specialized interdisciplinary departments conduct a written test followed by an interview.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <h4 className="font-outfit font-bold text-sm text-slate-900 flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-black">3</span>
+                    MBA Admission (DMS IIT Delhi):
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed pl-8 font-medium">
+                    Requires a valid <strong>CAT Percentile (98.5+ percentile for General)</strong> followed by a rigorous Personal Interview (PI) and analytical writing assessment.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: PLACEMENTS */}
+          {activeTab === "placements" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Placement Statistics & Top Recruiters
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Verified salary trends, CTC packages, and corporate partners
+                </p>
+              </div>
+
+              {/* CTC Metrics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-200 text-center">
+                  <span className="text-[10.5px] uppercase font-bold text-emerald-800">Highest Package</span>
+                  <p className="font-outfit font-black text-xl text-emerald-600 mt-1">₹1.20 Crore PA</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">International: ₹2.40 Cr PA</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-200 text-center">
+                  <span className="text-[10.5px] uppercase font-bold text-orange-800">Average Package</span>
+                  <p className="font-outfit font-black text-xl text-orange-600 mt-1">{collegeData.averagePackage}</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">CSE Average: ₹39.5 LPA</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-200 text-center">
+                  <span className="text-[10.5px] uppercase font-bold text-blue-800">Total Job Offers</span>
+                  <p className="font-outfit font-black text-xl text-blue-600 mt-1">1,300+ Offers</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">400+ Top Companies</p>
+                </div>
+              </div>
+
+              {/* Top Recruiting Brands Grid */}
+              <div className="space-y-3">
+                <h3 className="font-outfit font-bold text-sm text-slate-900">
+                  Top Recruiting Companies & Brands
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {collegeData.recruiters.map((rec, i) => (
+                    <div
+                      key={i}
+                      className="p-3 bg-slate-50 hover:bg-orange-50/50 border border-slate-200 hover:border-orange-300 rounded-xl text-center text-xs font-black text-slate-800 transition-all shadow-2xs"
+                    >
+                      {rec}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 7: CUT-OFFS */}
           {activeTab === "cutoffs" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
               <div>
@@ -963,62 +1203,85 @@ export default function CollegeDetailPage() {
             </div>
           )}
 
-          {/* TAB 5: PLACEMENT STATISTICS & RECRUITERS GRID */}
-          {activeTab === "placements" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+          {/* TAB 8: RANKINGS */}
+          {activeTab === "rankings" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
               <div>
                 <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Placement Statistics & Top Recruiters
+                  {collegeData.name.split(" - ")[0]} Rankings 2026
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Verified salary trends, CTC packages, and corporate partners
+                  National and Global University Ranking performance across engineering & management
                 </p>
               </div>
 
-              {/* CTC Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-200 text-center">
-                  <span className="text-[10.5px] uppercase font-bold text-emerald-800">Highest Package</span>
-                  <p className="font-outfit font-black text-xl text-emerald-600 mt-1">₹1.20 Crore PA</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">International: ₹2.40 Cr PA</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-orange-50/70 border border-orange-200 space-y-1">
+                  <span className="text-[10px] uppercase font-black text-orange-700">NIRF 2026 (MHRD India)</span>
+                  <p className="font-outfit font-black text-2xl text-orange-600">Rank #2 in India</p>
+                  <p className="text-xs text-slate-600 font-medium">Category: Engineering Institutes</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-200 text-center">
-                  <span className="text-[10.5px] uppercase font-bold text-orange-800">Average Package</span>
-                  <p className="font-outfit font-black text-xl text-orange-600 mt-1">{collegeData.averagePackage}</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">CSE Average: ₹39.5 LPA</p>
-                </div>
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-200 text-center">
-                  <span className="text-[10.5px] uppercase font-bold text-blue-800">Total Job Offers</span>
-                  <p className="font-outfit font-black text-xl text-blue-600 mt-1">1,300+ Offers</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">400+ Top Companies</p>
-                </div>
-              </div>
 
-              {/* Top Recruiting Brands Grid */}
-              <div className="space-y-3">
-                <h3 className="font-outfit font-bold text-sm text-slate-900">
-                  Top Recruiting Companies & Brands
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  {collegeData.recruiters.map((rec, i) => (
-                    <div
-                      key={i}
-                      className="p-3 bg-slate-50 hover:bg-orange-50/50 border border-slate-200 hover:border-orange-300 rounded-xl text-center text-xs font-black text-slate-800 transition-all shadow-2xs"
-                    >
-                      {rec}
-                    </div>
-                  ))}
+                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-1">
+                  <span className="text-[10px] uppercase font-black text-blue-700">QS World University Ranking</span>
+                  <p className="font-outfit font-black text-2xl text-blue-600">Rank #150 Global</p>
+                  <p className="text-xs text-slate-600 font-medium">Top 50 Globally for Engineering & Technology</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-1">
+                  <span className="text-[10px] uppercase font-black text-purple-700">India Today Ranking</span>
+                  <p className="font-outfit font-black text-2xl text-purple-600">Rank #1 in North India</p>
+                  <p className="text-xs text-slate-600 font-medium">Rank #1 for Placement Record and Faculty Quality</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1">
+                  <span className="text-[10px] uppercase font-black text-emerald-700">NIRF Management (DMS)</span>
+                  <p className="font-outfit font-black text-2xl text-emerald-600">Rank #4 in India</p>
+                  <p className="text-xs text-slate-600 font-medium">Department of Management Studies (DMS)</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* TAB 6: CAMPUS INFRASTRUCTURE & 13 HOSTELS */}
-          {activeTab === "campus" && (
+          {/* TAB 9: GALLERY */}
+          {activeTab === "gallery" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Campus Photo Gallery & Video Tour
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Visual tour of iconic buildings, coding labs, athletic grounds, and hostels
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+                {collegeData.gallery.map((photo, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setActivePhotoIdx(i)}
+                    className="group relative rounded-2xl overflow-hidden h-44 sm:h-52 bg-slate-950 border border-slate-200 cursor-pointer shadow-xs"
+                  >
+                    <img
+                      src={photo.url}
+                      alt={photo.caption}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3 text-white text-xs font-bold">
+                      <span>{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 10: HOSTEL & CAMPUS INFRASTRUCTURE */}
+          {activeTab === "hostel" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
               <div>
                 <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Campus Infrastructure, Labs & Hostels
+                  Campus Infrastructure, 13 Hostels & Life
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
                   World-class residential facilities, supercomputing research centers, and sports arenas
@@ -1051,73 +1314,110 @@ export default function CollegeDetailPage() {
             </div>
           )}
 
-          {/* TAB 7: VERIFIED STUDENT REVIEWS */}
-          {activeTab === "reviews" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <h2 className="font-outfit font-black text-xl text-slate-900">
-                    Student Reviews & Campus Ratings
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Authentic feedback and experiences from current scholars and alumni
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black">
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span>{collegeData.rating} Out of 5.0 (842 Reviews)</span>
-                </div>
+          {/* TAB 11: FACULTY */}
+          {activeTab === "faculty" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Distinguished Faculty & Research Heads
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Internationally acclaimed professors, research fellows, and department deans
+                </p>
               </div>
 
-              <div className="space-y-4">
-                {collegeData.reviews.map((rev) => (
-                  <div
-                    key={rev.id}
-                    className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black text-xs">
-                          {rev.author[0]}
-                        </div>
-                        <div>
-                          <h4 className="font-outfit font-black text-xs text-slate-900">
-                            {rev.author}
-                          </h4>
-                          <p className="text-[10px] text-slate-500 font-semibold">
-                            {rev.course} • {rev.year}
-                          </p>
-                        </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {collegeData.facultyList?.map((fac, idx) => (
+                  <div key={idx} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-black text-sm">
+                        {fac.name.split(" ")[1]?.[0] || "P"}
                       </div>
-                      <div className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-black flex items-center gap-1">
-                        ★ {rev.rating}.0
+                      <div>
+                        <h4 className="font-outfit font-black text-xs sm:text-sm text-slate-900">{fac.name}</h4>
+                        <p className="text-[10.5px] font-bold text-orange-600">{fac.designation}</p>
                       </div>
                     </div>
-
-                    <h5 className="font-outfit font-bold text-xs text-slate-900">
-                      "{rev.title}"
-                    </h5>
-                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                      {rev.content}
-                    </p>
-
-                    {rev.pros && (
-                      <div className="text-[11px] text-emerald-700 bg-emerald-50/70 p-2 rounded-lg font-semibold">
-                        👍 <strong>Pros:</strong> {rev.pros}
-                      </div>
-                    )}
+                    <div className="text-xs text-slate-600 font-medium pl-13 space-y-0.5">
+                      <p><strong>Dept:</strong> {fac.dept}</p>
+                      <p><strong>Alma Mater:</strong> {fac.qualification}</p>
+                      <p><strong>Experience:</strong> {fac.experience}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* TAB 8: FAQS & STUDENT Q&A ACCORDION */}
-          {activeTab === "faqs" && (
+          {/* TAB 12: COMPARE */}
+          {activeTab === "compare" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
               <div>
                 <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Frequently Asked Questions (FAQs)
+                  Compare {collegeData.name.split(" - ")[0]} with Top Colleges
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Benchmark fees, NIRF rank, average salary package, and cutoffs side-by-side
+                </p>
+              </div>
+
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
+                      <th className="py-3 px-4">Parameter</th>
+                      <th className="py-3 px-3 text-orange-700 font-black">IIT Delhi</th>
+                      <th className="py-3 px-3">IIT Bombay</th>
+                      <th className="py-3 px-3">BITS Pilani</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium">
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">NIRF 2026 Ranking</td>
+                      <td className="py-3 px-3 font-bold text-orange-600">Rank #2</td>
+                      <td className="py-3 px-3 text-slate-700">Rank #3</td>
+                      <td className="py-3 px-3 text-slate-700">Rank #20</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">Average CTC Package</td>
+                      <td className="py-3 px-3 font-bold text-orange-600">₹25.82 LPA</td>
+                      <td className="py-3 px-3 text-slate-700">₹26.50 LPA</td>
+                      <td className="py-3 px-3 text-slate-700">₹20.50 LPA</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">Total B.Tech Fees</td>
+                      <td className="py-3 px-3 font-bold text-orange-600">₹9.52 Lakhs</td>
+                      <td className="py-3 px-3 text-slate-700">₹9.20 Lakhs</td>
+                      <td className="py-3 px-3 text-slate-700">₹22.50 Lakhs</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">Accepted Entrance Exam</td>
+                      <td className="py-3 px-3 font-bold text-orange-600">JEE Advanced</td>
+                      <td className="py-3 px-3 text-slate-700">JEE Advanced</td>
+                      <td className="py-3 px-3 text-slate-700">BITSAT</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="pt-2 text-center">
+                <Link
+                  href={`/compare?ids=iit-delhi,bits-pilani,iit-bombay`}
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-md transition-all active:scale-95"
+                >
+                  <Layers className="w-4 h-4" />
+                  <span>Open Advanced 4-Way Comparison Tool</span>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 13: Q&A / FAQS */}
+          {activeTab === "qa" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Student Questions & Expert Answers (Q&A)
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Common queries answered regarding admission, cutoffs, placements, and campus rules
@@ -1148,6 +1448,43 @@ export default function CollegeDetailPage() {
                     )}
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 14: SCHOLARSHIPS */}
+          {activeTab === "scholarships" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Scholarships & Financial Assistance
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Government waivers, merit-cum-means awards, and alumni endowment schemes
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1">
+                  <h4 className="font-outfit font-black text-sm text-emerald-900">1. Merit-cum-Means (MCM) Scholarship</h4>
+                  <p className="text-xs text-emerald-800 font-medium">
+                    Awarded to up to 25% of undergraduate scholars with family annual income under ₹5 Lakhs. Covers full tuition fee waiver plus ₹1,000/month pocket allowance.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 space-y-1">
+                  <h4 className="font-outfit font-black text-sm text-blue-900">2. Central Sector SC/ST/PwD Scheme</h4>
+                  <p className="text-xs text-blue-800 font-medium">
+                    100% complete tuition fee waiver along with a free hostel lodging and boarding allowance from the Ministry of Social Justice.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200 space-y-1">
+                  <h4 className="font-outfit font-black text-sm text-orange-900">3. Inspire & Alumni Endowed Awards</h4>
+                  <p className="text-xs text-orange-800 font-medium">
+                    Scholarships of ₹80,000/year for top-performing students in Mathematics and Computing and Physical Sciences funded by DST and global alumni donors.
+                  </p>
+                </div>
               </div>
             </div>
           )}
