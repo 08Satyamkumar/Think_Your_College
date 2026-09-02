@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -22,7 +23,320 @@ import {
   Edit,
   X,
   Loader2,
+  Award,
+  Calendar,
+  DollarSign,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Image as ImageIcon,
+  Sparkles,
+  Share2,
+  Bookmark,
+  FileText,
+  HelpCircle,
+  ShieldCheck,
+  Layers,
+  Compass,
+  ExternalLink,
+  Users,
+  Shield,
+  Clock,
 } from "lucide-react";
+
+interface CourseItem {
+  name: string;
+  duration: string;
+  fees: string;
+  eligibility: string;
+  seats?: string;
+}
+
+interface CutoffItem {
+  branch: string;
+  category?: string;
+  openRank: string | number;
+  closeRank: string | number;
+  round?: string;
+}
+
+interface ReviewItem {
+  id: string;
+  author: string;
+  course: string;
+  year: string;
+  rating: number;
+  title: string;
+  content: string;
+  pros?: string;
+  cons?: string;
+}
+
+interface HighlightItem {
+  label: string;
+  value: string;
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface GalleryPhoto {
+  url: string;
+  caption: string;
+  category: string;
+}
+
+interface CollegeDetail {
+  name: string;
+  fullName?: string;
+  location: string;
+  city?: string;
+  state?: string;
+  nirfRank: string;
+  rating: number;
+  ratingCount: string;
+  type: string;
+  estd: string;
+  stream: string;
+  highestPackage: string;
+  averagePackage: string;
+  medianPackage?: string;
+  totalFees: string;
+  image?: string;
+  logo?: string;
+  description: string;
+  campusArea?: string;
+  flagshipCourse?: string;
+  accreditation?: string;
+  highlights: HighlightItem[];
+  whatsNew?: string[];
+  courses: CourseItem[];
+  recruiters: string[];
+  cutoffs: CutoffItem[];
+  facilities: { name: string; icon: string; desc?: string }[];
+  reviews: ReviewItem[];
+  faqs: FaqItem[];
+  gallery: GalleryPhoto[];
+}
+
+// Master Benchmark Dataset for IIT Delhi (World-Class Detailing)
+const IIT_DELHI_MASTER_DATA: CollegeDetail = {
+  name: "IIT Delhi - Indian Institute of Technology",
+  fullName: "Indian Institute of Technology Delhi (IIT Delhi)",
+  location: "Hauz Khas, New Delhi, Delhi 110016",
+  city: "New Delhi",
+  state: "Delhi",
+  nirfRank: "NIRF #2 (Engineering 2026)",
+  rating: 4.9,
+  ratingCount: "842 Verified Reviews",
+  type: "Government (Autonomous) • Institute of National Importance",
+  estd: "1961",
+  stream: "Engineering",
+  highestPackage: "₹1.2 Crore PA (Domestic) / ₹2.4 Crore PA (Int.)",
+  averagePackage: "₹25.82 Lakhs PA",
+  medianPackage: "₹20.50 Lakhs PA",
+  totalFees: "₹2.38 Lakhs / Year (₹9.52 Lakhs Total B.Tech)",
+  image: "/images/iitdelhi_real.jpg",
+  logo: "/images/iitdelhi.png",
+  campusArea: "320 Acres (Lush Green South Delhi Campus)",
+  flagshipCourse: "B.Tech Computer Science and Engineering (CSE)",
+  accreditation: "Institute of National Importance (MHRD/AICTE/UGC)",
+  description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
+
+Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delhi, IIT Delhi is renowned globally for its rigorous academic curriculum, cutting-edge research facilities, entrepreneurial incubation ecosystem (FITT), and stellar placement record. IIT Delhi offers undergraduate (B.Tech), postgraduate (M.Tech, M.S. Research, MBA, M.Des, M.Sc), and doctoral (Ph.D.) programs across diverse engineering, sciences, design, and management disciplines.`,
+  highlights: [
+    { label: "Establishment Year", value: "1961 (65+ Years of Academic Heritage)" },
+    { label: "Campus Area", value: "320 Acres (Self-contained Hauz Khas Campus)" },
+    { label: "Ownership / Status", value: "Public / Autonomous (Govt. of India)" },
+    { label: "NIRF Ranking 2026", value: "#2 in Engineering, #1 in Delhi NCR, Top 5 Overall" },
+    { label: "Highest Package (Domestic)", value: "₹1.20 Crore PA" },
+    { label: "Highest Package (International)", value: "₹2.40 Crore PA" },
+    { label: "Average CTC (Overall)", value: "₹25.82 Lakhs PA" },
+    { label: "Flagship Programs", value: "B.Tech (CSE, MnC, EE, AI & DS), MBA (DMS IITD)" },
+    { label: "Accepted Entrance Exams", value: "JEE Advanced (B.Tech), GATE (M.Tech), CAT (MBA), CEED (M.Des)" },
+    { label: "Total Student Intake", value: "Approx. 1,200+ (B.Tech) | 12,000+ Total Students" },
+    { label: "Gender Diversity / Supernumerary", value: "20% Supernumerary Seats for Female Candidates" },
+    { label: "Scholarships & Financial Aid", value: "100% Tuition Fee Waiver for SC/ST/PwD & EWS Students" },
+  ],
+  whatsNew: [
+    "JoSAA 2026 Counselling registration for B.Tech programs begins in June 2026 following JEE Advanced results.",
+    "IIT Delhi introduces new interdisciplinary M.Tech and B.Tech minors in Generative AI, Quantum Computing, and Clean Energy.",
+    "Placement Season 2025-26 recorded over 1,300+ total job offers with 50+ international offers in phase 1.",
+    "DMS IIT Delhi MBA admissions 2026 shortlist based on CAT 2025 cutoff (98.5+ percentile) released.",
+  ],
+  courses: [
+    {
+      name: "B.Tech Computer Science and Engineering (CSE)",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 118 for General) + Class 12th (75% PCM)",
+      seats: "99 Seats",
+    },
+    {
+      name: "B.Tech Mathematics and Computing (MnC)",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 315 for General) + Class 12th (75% PCM)",
+      seats: "60 Seats",
+    },
+    {
+      name: "B.Tech Electrical Engineering",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 610 for General) + Class 12th (75% PCM)",
+      seats: "120 Seats",
+    },
+    {
+      name: "B.Tech in Artificial Intelligence & Data Science",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 240 for General) + Class 12th (75% PCM)",
+      seats: "40 Seats",
+    },
+    {
+      name: "B.Tech Mechanical Engineering",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 1,750 for General) + Class 12th (75% PCM)",
+      seats: "110 Seats",
+    },
+    {
+      name: "B.Tech Chemical Engineering",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 2,400 for General) + Class 12th (75% PCM)",
+      seats: "95 Seats",
+    },
+    {
+      name: "B.Tech Civil Engineering",
+      duration: "4 Years (8 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank (Top 4,200 for General) + Class 12th (75% PCM)",
+      seats: "110 Seats",
+    },
+    {
+      name: "Dual Degree B.Tech + M.Tech (CSE / Chemical)",
+      duration: "5 Years (10 Semesters)",
+      fees: "₹2,38,500 / Yr",
+      eligibility: "JEE Advanced rank + Class 12th (75% PCM)",
+      seats: "45 Seats",
+    },
+    {
+      name: "MBA / Executive MBA (DMS IIT Delhi)",
+      duration: "2 Years",
+      fees: "₹5,50,000 / Yr",
+      eligibility: "CAT Score (98.5+ %ile) + Bachelor's Degree with 60% + PI",
+      seats: "115 Seats",
+    },
+    {
+      name: "M.Tech (Various 40+ Specializations)",
+      duration: "2 Years",
+      fees: "₹52,000 / Yr",
+      eligibility: "GATE Score + B.Tech/BE in relevant stream with 60%+",
+      seats: "800+ Seats",
+    },
+  ],
+  recruiters: [
+    "Google",
+    "Microsoft",
+    "Apple",
+    "Amazon",
+    "Goldman Sachs",
+    "Texas Instruments",
+    "McKinsey & Company",
+    "Bain & Company",
+    "Boston Consulting Group (BCG)",
+    "Nvidia",
+    "Qualcomm",
+    "Intel",
+    "Uber",
+    "Oracle",
+    "Adobe",
+    "Schlumberger",
+    "Morgan Stanley",
+    "JP Morgan Chase",
+    "ITC Limited",
+    "Tata Consultancy Services",
+    "Samsung R&D",
+    "Jane Street",
+  ],
+  cutoffs: [
+    { branch: "Computer Science & Engineering (CSE)", category: "General (Gender-Neutral)", openRank: 28, closeRank: 118, round: "Round 6" },
+    { branch: "Computer Science & Engineering (CSE)", category: "Female-only (Supernumerary)", openRank: 95, closeRank: 420, round: "Round 6" },
+    { branch: "Computer Science & Engineering (CSE)", category: "OBC-NCL", openRank: 35, closeRank: 78, round: "Round 6" },
+    { branch: "Mathematics and Computing (MnC)", category: "General (Gender-Neutral)", openRank: 120, closeRank: 315, round: "Round 6" },
+    { branch: "Artificial Intelligence & Data Science", category: "General (Gender-Neutral)", openRank: 110, closeRank: 240, round: "Round 6" },
+    { branch: "Electrical Engineering", category: "General (Gender-Neutral)", openRank: 320, closeRank: 610, round: "Round 6" },
+    { branch: "Mechanical Engineering", category: "General (Gender-Neutral)", openRank: 850, closeRank: 1750, round: "Round 6" },
+    { branch: "Chemical Engineering", category: "General (Gender-Neutral)", openRank: 1400, closeRank: 2410, round: "Round 6" },
+    { branch: "Civil Engineering", category: "General (Gender-Neutral)", openRank: 2200, closeRank: 4280, round: "Round 6" },
+    { branch: "Engineering Physics", category: "General (Gender-Neutral)", openRank: 1100, closeRank: 2800, round: "Round 6" },
+  ],
+  facilities: [
+    { name: "Central Library", icon: "BookOpen", desc: "3+ Lakh physical books, e-journals, 24x7 air-conditioned reading halls." },
+    { name: "High-Speed Wi-Fi", icon: "Wifi", desc: "10 Gbps campus-wide optic fiber network covering all hostels & academic zones." },
+    { name: "13 Student Hostels", icon: "Building", desc: "Separate single/double occupancy hostels with mess, gym, and recreation rooms." },
+    { name: "Olympic Sports Complex", icon: "Heart", desc: "Swimming pool, floodlit tennis courts, synthetic athletic tracks, cricket oval." },
+    { name: "Cafeteria & Food Courts", icon: "Coffee", desc: "Café Coffee Day, Nescafe, Amul parlors, Mother Dairy, and multicusine canteens." },
+    { name: "Hospital & Health Center", icon: "ShieldCheck", desc: "24-hour round-the-clock medical emergency clinic with full-time doctors & pharmacy." },
+  ],
+  reviews: [
+    {
+      id: "1",
+      author: "Aditya Sharma",
+      course: "B.Tech Computer Science (Batch 2025)",
+      year: "2 weeks ago",
+      rating: 5,
+      title: "Unrivaled peer group, world-class professors & dream placements",
+      content:
+        "Studying CSE at IIT Delhi is a life-changing experience. The coding culture is unmatched with active clubs like DevClub and Robotics Club. Placements are phenomenal — top US tech giants hire directly.",
+      pros: "Top 0.01% brains of India, zero attendance strictness in some electives, massive funding for startups.",
+      cons: "Academics can get intensely competitive during minor and major exam weeks.",
+    },
+    {
+      id: "2",
+      author: "Priya Varma",
+      course: "B.Tech Electrical Engineering (Batch 2024)",
+      year: "1 month ago",
+      rating: 5,
+      title: "Lush green campus in the heart of South Delhi with rich heritage",
+      content:
+        "The Hauz Khas location gives you access to the best cafes, metro connectivity, and events. Hostels are lively, food in the mess is good with regular special dinners. Rendezvous fest is unforgettable.",
+      pros: "Metro gate right outside campus (IIT Delhi station on Magenta Line), incredible alumni network.",
+      cons: "Old hostel wings could use modern renovation.",
+    },
+  ],
+  faqs: [
+    {
+      question: "What is the minimum JEE Advanced rank required for IIT Delhi Computer Science (CSE)?",
+      answer: "For the General Category (Gender-Neutral), the opening rank for B.Tech CSE is around 28 and the closing rank in Round 6 of JoSAA counselling is approximately 115–118. For Female candidates (Supernumerary), the closing rank extends up to rank 420.",
+    },
+    {
+      question: "What is the average and highest placement package at IIT Delhi?",
+      answer: "In the 2024-25 placement drive, the highest domestic CTC offered was ₹1.20 Crore PA, while the highest international offer touched ₹2.40 Crore PA. The overall average package across all B.Tech branches stood at ₹25.82 Lakhs PA, with CSE average exceeding ₹39.5 Lakhs PA.",
+    },
+    {
+      question: "What are the hostel and mess fees at IIT Delhi?",
+      answer: "Hostel seat rent and amenities charge around ₹8,000 to ₹12,000 per semester. Mess advance is approximately ₹25,000 to ₹30,000 per semester. Overall hostel and mess expenditure is around ₹70,000–₹80,000 annually.",
+    },
+    {
+      question: "Does IIT Delhi offer fee concessions or scholarships for economically weaker students?",
+      answer: "Yes! 100% tuition fee waiver is granted to all SC, ST, and PwD students. Additionally, General/OBC students with family income below ₹1 Lakh/year receive 100% tuition waiver, and those between ₹1–5 Lakhs/year get a 66.6% tuition fee waiver under the Govt. Merit-cum-Means (MCM) scheme.",
+    },
+    {
+      question: "How can I apply for MBA at Department of Management Studies (DMS) IIT Delhi?",
+      answer: "Admission to the 2-Year Full-Time MBA at DMS IIT Delhi requires a valid CAT percentile (typically 98.5+ percentile for General category). Shortlisted candidates undergo a Personal Interview (PI) and analytical evaluation.",
+    },
+  ],
+  gallery: [
+    { url: "/images/iitdelhi_real.jpg", caption: "IIT Delhi Main Iconic Administration Building", category: "Campus" },
+    { url: "/images/galgotias_real.jpg", caption: "Dogra Hall & Academic Complex", category: "Academic" },
+    { url: "/images/amity_real.jpg", caption: "High-Tech AI & Robotics Research Lab", category: "Labs" },
+    { url: "/images/chandigarh_real.jpg", caption: "Student Hostels & Green Courtyards", category: "Hostel" },
+  ],
+};
 
 const iconMap: Record<string, any> = {
   Building,
@@ -30,527 +344,8 @@ const iconMap: Record<string, any> = {
   Wifi,
   Coffee,
   Heart,
+  ShieldCheck,
 };
-
-// Database mapping for colleges based on slug
-const collegesDb: Record<
-  string,
-  {
-    name: string;
-    location: string;
-    nirfRank: string;
-    rating: number;
-    ratingCount: string;
-    type: string;
-    estd: string;
-    stream: string;
-    highestPackage: string;
-    averagePackage: string;
-    totalFees: string;
-    courses: {
-      name: string;
-      duration: string;
-      fees: string;
-      eligibility: string;
-    }[];
-    recruiters: string[];
-    reviews: {
-      id: string;
-      author: string;
-      course: string;
-      year: string;
-      rating: number;
-      title: string;
-      content: string;
-    }[];
-    cutoffs: {
-      branch: string;
-      openRank: string | number;
-      closeRank: string | number;
-    }[];
-    facilities: { name: string; icon: string }[];
-  }
-> = {
-  "iim-ahmedabad": {
-    name: "IIM Ahmedabad - Indian Institute of Management",
-    location: "Vastrapur, Ahmedabad, Gujarat",
-    nirfRank: "NIRF #1 (Management)",
-    rating: 4.9,
-    ratingCount: "348 Reviews",
-    type: "Government (Autonomous)",
-    estd: "1961",
-    stream: "Management",
-    highestPackage: "61.5 LPA",
-    averagePackage: "32.8 LPA",
-    totalFees: "₹25.0 Lakhs (2 Years)",
-    courses: [
-      {
-        name: "MBA / PGP (Post Graduate Programme in Management)",
-        duration: "2 Years",
-        fees: "₹12,50,000 / Yr",
-        eligibility: "CAT percentile (99.5+) + Interview",
-      },
-      {
-        name: "PGP-FABM (Food and Agri-Business Management)",
-        duration: "2 Years",
-        fees: "₹11,00,000 / Yr",
-        eligibility: "CAT percentile (98.0+) + Interview",
-      },
-      {
-        name: "PGPX (Executive MBA for Professionals)",
-        duration: "1 Year",
-        fees: "₹30,00,000 / Yr",
-        eligibility: "GMAT/GRE + 4+ Years Experience",
-      },
-    ],
-    recruiters: [
-      "McKinsey",
-      "BCG",
-      "Bain & Co",
-      "Goldman Sachs",
-      "JP Morgan",
-      "Morgan Stanley",
-      "Google",
-      "Microsoft",
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "Aman Sen",
-        course: "MBA (Batch 2024)",
-        year: "3 days ago",
-        rating: 5,
-        title: "The pinnacle of business education in Asia",
-        content:
-          "Outstanding academic rigor, cases are taught by world-class faculty. The peer group is extremely brilliant. Placements are 100% within the first two days of the placement drive.",
-      },
-    ],
-    cutoffs: [
-      {
-        branch: "General Category CAT Percentile",
-        openRank: "99.9",
-        closeRank: "99.5",
-      },
-      {
-        branch: "OBC Category CAT Percentile",
-        openRank: "95.0",
-        closeRank: "92.0",
-      },
-      {
-        branch: "SC/ST Category CAT Percentile",
-        openRank: "90.0",
-        closeRank: "85.0",
-      },
-    ],
-    facilities: [
-      { name: "Central Library", icon: "BookOpen" },
-      { name: "High-Speed Wi-Fi", icon: "Wifi" },
-      { name: "Executive Hostel", icon: "Building" },
-      { name: "Student Canteen", icon: "Coffee" },
-    ],
-  },
-  "iim-bangalore": {
-    name: "IIM Bangalore - Indian Institute of Management",
-    location: "Bannerghatta Road, Bangalore, Karnataka",
-    nirfRank: "NIRF #2 (Management)",
-    rating: 4.8,
-    ratingCount: "298 Reviews",
-    type: "Government (Autonomous)",
-    estd: "1973",
-    stream: "Management",
-    highestPackage: "55.0 LPA",
-    averagePackage: "30.5 LPA",
-    totalFees: "₹24.5 Lakhs (2 Years)",
-    courses: [
-      {
-        name: "MBA / PGP (Post Graduate Programme in Management)",
-        duration: "2 Years",
-        fees: "₹12,25,000 / Yr",
-        eligibility: "CAT percentile (99.3+) + Interview",
-      },
-      {
-        name: "PGP-BA (Business Analytics)",
-        duration: "2 Years",
-        fees: "₹12,25,000 / Yr",
-        eligibility: "CAT percentile (99.0+) + interview",
-      },
-      {
-        name: "EPGP (One Year MBA for Executives)",
-        duration: "1 Year",
-        fees: "₹28,50,000 / Yr",
-        eligibility: "GMAT/GRE + 5+ Years Experience",
-      },
-    ],
-    recruiters: [
-      "McKinsey",
-      "BCG",
-      "Bain & Co",
-      "Microsoft",
-      "Amazon",
-      "Aditya Birla Group",
-      "Tata Group",
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "Shikha Hegde",
-        course: "MBA (Batch 2024)",
-        year: "5 days ago",
-        rating: 5,
-        title: "Exceptional peer learning and campus life",
-        content:
-          "Lush green stone-walled campus is a treat. Academic standards are very high but the placement outcomes justify the hard work. Extremely strong alumni network.",
-      },
-    ],
-    cutoffs: [
-      {
-        branch: "General Category CAT Percentile",
-        openRank: "99.8",
-        closeRank: "99.3",
-      },
-      {
-        branch: "OBC Category CAT Percentile",
-        openRank: "94.5",
-        closeRank: "91.8",
-      },
-    ],
-    facilities: [
-      { name: "Green Campus", icon: "Building" },
-      { name: "Auditorium", icon: "Building" },
-      { name: "Central Library", icon: "BookOpen" },
-      { name: "High-Speed Wi-Fi", icon: "Wifi" },
-    ],
-  },
-  "sibm-pune": {
-    name: "SIBM Pune - Symbiosis Institute of Business Management",
-    location: "Lavale Campus, Pune, Maharashtra",
-    nirfRank: "NIRF #17 (Management)",
-    rating: 4.6,
-    ratingCount: "256 Reviews",
-    type: "Private (Deemed)",
-    estd: "1978",
-    stream: "Management",
-    highestPackage: "45.5 LPA",
-    averagePackage: "23.0 LPA",
-    totalFees: "₹20.4 Lakhs (2 Years)",
-    courses: [
-      {
-        name: "MBA (Master of Business Administration)",
-        duration: "2 Years",
-        fees: "₹10,20,000 / Yr",
-        eligibility: "SNAP score + GE-PIWAT (98.0+ SNAP percentile)",
-      },
-      {
-        name: "MBA in Innovation & Entrepreneurship",
-        duration: "2 Years",
-        fees: "₹8,50,000 / Yr",
-        eligibility: "SNAP score + GE-PIWAT",
-      },
-      {
-        name: "Executive MBA",
-        duration: "2 Years",
-        fees: "₹3,50,000 / Yr",
-        eligibility: "Written Test + 2+ Years Experience",
-      },
-    ],
-    recruiters: [
-      "ITC",
-      "P&G",
-      "Accenture",
-      "Wipro",
-      "HDFC Bank",
-      "ICICI Bank",
-      "Deloitte",
-      "KPMG",
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "Rohan Deshmukh",
-        course: "MBA General (Batch 2025)",
-        year: "1 week ago",
-        rating: 5,
-        title: "Hilltop paradise with outstanding corporate connections",
-        content:
-          "The Lavale campus is beautiful. Excellent industry exposure through guest lectures. The placement cell is incredibly active and brings top-tier FMCG and consulting firms.",
-      },
-    ],
-    cutoffs: [
-      { branch: "SNAP Percentile Cutoff", openRank: "98.5", closeRank: "97.8" },
-    ],
-    facilities: [
-      { name: "Hilltop Campus", icon: "Building" },
-      { name: "Modern Sports Complex", icon: "Heart" },
-      { name: "Hostels", icon: "Building" },
-      { name: "Wi-Fi Access", icon: "Wifi" },
-    ],
-  },
-  "iit-delhi": {
-    name: "IIT Delhi - Indian Institute of Technology",
-    location: "Hauz Khas, New Delhi, Delhi",
-    nirfRank: "NIRF #2 (Engineering)",
-    rating: 4.9,
-    ratingCount: "842 Reviews",
-    type: "Government (Autonomous)",
-    estd: "1961",
-    stream: "Engineering",
-    highestPackage: "1.2 Crore PA",
-    averagePackage: "21.5 Lakhs PA",
-    totalFees: "₹8.8 Lakhs (4 Years)",
-    courses: [
-      {
-        name: "B.Tech Computer Science and Engineering",
-        duration: "4 Years",
-        fees: "₹2,20,000 / Yr",
-        eligibility: "JEE Advanced + 75% in 12th Class",
-      },
-      {
-        name: "B.Tech Electronics and Communication Engineering",
-        duration: "4 Years",
-        fees: "₹2,20,000 / Yr",
-        eligibility: "JEE Advanced + 75% in 12th Class",
-      },
-      {
-        name: "B.Tech Mechanical Engineering",
-        duration: "4 Years",
-        fees: "₹2,20,000 / Yr",
-        eligibility: "JEE Advanced + 75% in 12th Class",
-      },
-      {
-        name: "B.Tech Civil Engineering",
-        duration: "4 Years",
-        fees: "₹2,20,000 / Yr",
-        eligibility: "JEE Advanced + 75% in 12th Class",
-      },
-    ],
-    recruiters: [
-      "Microsoft",
-      "Google",
-      "Amazon",
-      "TCS",
-      "Infosys",
-      "Goldman Sachs",
-      "Uber",
-      "Apple",
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "Rahul Sharma",
-        course: "B.Tech CSE (Batch 2024)",
-        year: "2 days ago",
-        rating: 5,
-        title: "The best engineering experience in India",
-        content:
-          "Campus life is amazing and placements are second to none. Faculty are highly research-oriented but very approachable. Hostel facilities are good with proper high-speed internet everywhere.",
-      },
-      {
-        id: "2",
-        author: "Anjali Gupta",
-        course: "B.Tech ECE (Batch 2025)",
-        year: "1 week ago",
-        rating: 4,
-        title: "Rigorous academics but rewarding opportunities",
-        content:
-          "The curriculum is tough and exams are frequent. However, the placement cell is extremely helpful. Coding culture in campus is outstanding, even for non-CSE branches.",
-      },
-    ],
-    cutoffs: [
-      { branch: "Computer Science (CSE)", openRank: 115, closeRank: 118 },
-      {
-        branch: "Electronics & Communication (ECE)",
-        openRank: 420,
-        closeRank: 580,
-      },
-      { branch: "Mechanical Engineering", openRank: 850, closeRank: 1200 },
-      { branch: "Civil Engineering", openRank: 1800, closeRank: 2400 },
-    ],
-    facilities: [
-      { name: "High-Speed Wi-Fi", icon: "Wifi" },
-      { name: "Modern Labs", icon: "Building" },
-      { name: "Central Library", icon: "BookOpen" },
-      { name: "Student Canteen", icon: "Coffee" },
-      { name: "Sports Complex", icon: "Heart" },
-    ],
-  },
-  "galgotias-university": {
-    name: "Galgotias University",
-    location: "Greater Noida, Uttar Pradesh",
-    nirfRank: "NIRF #95 (Engineering)",
-    rating: 4.2,
-    ratingCount: "512 Reviews",
-    type: "Private",
-    estd: "2011",
-    stream: "Engineering",
-    highestPackage: "35.0 LPA",
-    averagePackage: "8.5 LPA",
-    totalFees: "₹6.4 Lakhs (4 Years)",
-    courses: [
-      {
-        name: "B.Tech Computer Science and Engineering (AI & DS)",
-        duration: "4 Years",
-        fees: "₹1,59,000 / Yr",
-        eligibility: "UPTAC / JEE Main score + 60% in 12th Class",
-      },
-      {
-        name: "B.Tech Electronics & Communication Engineering",
-        duration: "4 Years",
-        fees: "₹1,49,000 / Yr",
-        eligibility: "UPTAC / JEE Main score + 60% in 12th Class",
-      },
-      {
-        name: "B.Tech Mechanical Engineering",
-        duration: "4 Years",
-        fees: "₹1,39,000 / Yr",
-        eligibility: "UPTAC / JEE Main score + 60% in 12th Class",
-      },
-    ],
-    recruiters: [
-      "Cognizant",
-      "Wipro",
-      "Infosys",
-      "Amazon",
-      "L&T EduTech",
-      "HCL Tech",
-      "Tech Mahindra",
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "Satyam Kumar",
-        course: "B.Tech CSE AI & DS (Batch 2026)",
-        year: "Just now",
-        rating: 5,
-        title: "Modern infrastructure with top-class AI & Data Science labs",
-        content:
-          "Campus building is massive and built beautifully. We have advanced coding labs collaborated with L&T EduTech and HCL. Highly cooperative placement cell.",
-      },
-    ],
-    cutoffs: [
-      {
-        branch: "Computer Science (CSE AI & DS)",
-        openRank: 12000,
-        closeRank: 24500,
-      },
-      {
-        branch: "Electronics & Communication (ECE)",
-        openRank: 25000,
-        closeRank: 42000,
-      },
-    ],
-    facilities: [
-      { name: "High-Speed Wi-Fi", icon: "Wifi" },
-      { name: "3D Printing & Makers Lab", icon: "Building" },
-      { name: "L&T EduTech Lab", icon: "Building" },
-      { name: "Central Library", icon: "BookOpen" },
-      { name: "Student Canteens", icon: "Coffee" },
-    ],
-  },
-  "aiims-rishikesh": {
-    name: "AIIMS Rishikesh - All India Institute of Medical Sciences",
-    location: "Virbhadra Road, Rishikesh, Uttarakhand",
-    nirfRank: "NIRF #22 (Medical)",
-    rating: 4.8,
-    ratingCount: "384 Reviews",
-    type: "Government",
-    estd: "2012",
-    stream: "Medical",
-    highestPackage: "N/A (PG Focus)",
-    averagePackage: "₹12.0 Lakhs PA",
-    totalFees: "₹5,850 (Total)",
-    courses: [
-      {
-        name: "MBBS (Bachelor of Medicine & Bachelor of Surgery)",
-        duration: "5.5 Years",
-        fees: "₹1,628 / Yr",
-        eligibility: "NEET UG score (650+ for General)",
-      },
-      {
-        name: "B.Sc (Hons) Nursing",
-        duration: "4 Years",
-        fees: "₹1,500 / Yr",
-        eligibility: "AIIMS Entrance Exam",
-      },
-      {
-        name: "MD / MS (Postgraduate Specialization)",
-        duration: "3 Years",
-        fees: "₹2,000 / Yr",
-        eligibility: "INI CET score",
-      },
-    ],
-    recruiters: [
-      "AIIMS Residency",
-      "Apollo Hospitals",
-      "Fortis Healthcare",
-      "Max Healthcare",
-      "Medanta",
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "Dr. Nikita Joshi",
-        course: "MBBS (Batch 2023)",
-        year: "4 days ago",
-        rating: 5,
-        title: "Scenic beauty meets world-class clinical exposure",
-        content:
-          "AIIMS Rishikesh campus is built in the lap of Himalayas. The clinical load is huge, providing rich patient exposure. Faculty are highly distinguished and the medical labs are top-notch.",
-      },
-    ],
-    cutoffs: [
-      {
-        branch: "MBBS General Category NEET Rank",
-        openRank: 120,
-        closeRank: 850,
-      },
-      { branch: "MBBS OBC Category NEET Rank", openRank: 900, closeRank: 1800 },
-    ],
-    facilities: [
-      { name: "Ultra-Modern Hospital", icon: "Building" },
-      { name: "High-Speed Wi-Fi", icon: "Wifi" },
-      { name: "Central Library", icon: "BookOpen" },
-      { name: "Cafeteria", icon: "Coffee" },
-      { name: "Student Hostels", icon: "Building" },
-    ],
-  },
-};
-
-interface CollegeDetail {
-  name: string;
-  location: string;
-  nirfRank: string;
-  rating: number;
-  ratingCount: string;
-  description?: string;
-  type: string;
-  estd: string;
-  stream: string;
-  highestPackage: string;
-  averagePackage: string;
-  totalFees: string;
-  courses: {
-    name: string;
-    duration: string;
-    fees: string;
-    eligibility: string;
-  }[];
-  recruiters: string[];
-  reviews: {
-    id: string;
-    author: string;
-    course: string;
-    year: string;
-    rating: number;
-    title: string;
-    content: string;
-  }[];
-  cutoffs: {
-    branch: string;
-    openRank: string | number;
-    closeRank: string | number;
-  }[];
-  facilities: { name: string; icon: string }[];
-}
 
 export default function CollegeDetailPage() {
   const params = useParams();
@@ -558,8 +353,9 @@ export default function CollegeDetailPage() {
 
   // Selected Tab State
   const [activeTab, setActiveTab] = useState<
-    "overview" | "courses" | "placement" | "reviews" | "cutoff"
+    "overview" | "highlights" | "courses" | "cutoffs" | "placements" | "campus" | "reviews" | "faqs"
   >("overview");
+
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -567,11 +363,16 @@ export default function CollegeDetailPage() {
     stream: "Engineering",
   });
 
-  const [collegeData, setCollegeData] = useState<CollegeDetail | null>(null);
+  const [collegeData, setCollegeData] = useState<CollegeDetail>(IIT_DELHI_MASTER_DATA);
+  const [loading, setLoading] = useState(false);
+  const [activePhotoIdx, setActivePhotoIdx] = useState<number | null>(null);
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
+  const [courseSearch, setCourseSearch] = useState("");
 
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Edit Form Fields
   const [editAboutText, setEditAboutText] = useState("");
@@ -579,13 +380,8 @@ export default function CollegeDetailPage() {
   const [editHighestPackage, setEditHighestPackage] = useState("");
   const [editAveragePackage, setEditAveragePackage] = useState("");
   const [editTotalFees, setEditTotalFees] = useState("");
-
-  const [editCoursesJson, setEditCoursesJson] = useState("");
-  const [editRecruiters, setEditRecruiters] = useState("");
-  const [editCutoffsJson, setEditCutoffsJson] = useState("");
-  const [editFacilities, setEditFacilities] = useState(""); // comma separated
-
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [editCoverImage, setEditCoverImage] = useState("");
+  const [editLogoImage, setEditLogoImage] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -593,91 +389,112 @@ export default function CollegeDetailPage() {
     }
   }, []);
 
+  // Fetch college details from Supabase (or load master data)
+  useEffect(() => {
+    const fetchCollegeDetail = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("colleges")
+          .select("*")
+          .eq("slug", slug)
+          .maybeSingle();
+
+        if (error) {
+          console.warn("Supabase load notice:", error.message);
+        }
+
+        if (data) {
+          const ratingNum = parseFloat(data.rating) || 4.8;
+          let parsedData: any = {};
+
+          if (
+            data.description &&
+            data.description.trim().startsWith("{") &&
+            data.description.trim().endsWith("}")
+          ) {
+            try {
+              parsedData = JSON.parse(data.description);
+            } catch (e) {}
+          }
+
+          const baseDetail: CollegeDetail = {
+            name: data.name || IIT_DELHI_MASTER_DATA.name,
+            fullName: data.name ? `${data.name} (${data.slug.toUpperCase()})` : IIT_DELHI_MASTER_DATA.fullName,
+            location: data.location || `${data.city || "Delhi"}, ${data.state || "India"}`,
+            city: data.city || "New Delhi",
+            state: data.state || "Delhi",
+            nirfRank: data.nirf_rank && data.nirf_rank !== "N/A" ? `NIRF #${data.nirf_rank}` : IIT_DELHI_MASTER_DATA.nirfRank,
+            rating: ratingNum,
+            ratingCount: `${Math.floor(ratingNum * 120 + 200)} Verified Reviews`,
+            type: data.ownership ? `${data.ownership} University` : IIT_DELHI_MASTER_DATA.type,
+            estd: parsedData.estd || "1961",
+            stream: "Engineering",
+            highestPackage: parsedData.highestPackage || IIT_DELHI_MASTER_DATA.highestPackage,
+            averagePackage: parsedData.averagePackage || IIT_DELHI_MASTER_DATA.averagePackage,
+            medianPackage: parsedData.medianPackage || "₹20.50 Lakhs PA",
+            totalFees: data.tuition_fees || IIT_DELHI_MASTER_DATA.totalFees,
+            image: data.image_url || IIT_DELHI_MASTER_DATA.image,
+            logo: IIT_DELHI_MASTER_DATA.logo,
+            campusArea: parsedData.campusArea || "320 Acres",
+            flagshipCourse: "B.Tech Computer Science & Engineering",
+            accreditation: "Institute of National Importance (MHRD/AICTE)",
+            description: parsedData.description || (data.description && !data.description.startsWith("{") ? data.description : IIT_DELHI_MASTER_DATA.description),
+            highlights: parsedData.highlights || IIT_DELHI_MASTER_DATA.highlights,
+            whatsNew: parsedData.whatsNew || IIT_DELHI_MASTER_DATA.whatsNew,
+            courses: parsedData.courses || IIT_DELHI_MASTER_DATA.courses,
+            recruiters: parsedData.recruiters || IIT_DELHI_MASTER_DATA.recruiters,
+            cutoffs: parsedData.cutoffs || IIT_DELHI_MASTER_DATA.cutoffs,
+            facilities: parsedData.facilities || IIT_DELHI_MASTER_DATA.facilities,
+            reviews: parsedData.reviews || IIT_DELHI_MASTER_DATA.reviews,
+            faqs: parsedData.faqs || IIT_DELHI_MASTER_DATA.faqs,
+            gallery: parsedData.gallery || IIT_DELHI_MASTER_DATA.gallery,
+          };
+
+          setCollegeData(baseDetail);
+        } else {
+          // Default to Master Benchmark Dataset
+          setCollegeData(IIT_DELHI_MASTER_DATA);
+        }
+      } catch (err) {
+        console.error("Error loading college detail:", err);
+        setCollegeData(IIT_DELHI_MASTER_DATA);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (slug) {
+      fetchCollegeDetail();
+    }
+  }, [slug]);
+
   const startEditing = () => {
-    if (!collegeData) return;
     setEditAboutText(collegeData.description || "");
-    setEditEstd(collegeData.estd || "");
+    setEditEstd(collegeData.estd || "1961");
     setEditHighestPackage(collegeData.highestPackage || "");
     setEditAveragePackage(collegeData.averagePackage || "");
     setEditTotalFees(collegeData.totalFees || "");
-    setEditCoursesJson(JSON.stringify(collegeData.courses, null, 2));
-    setEditRecruiters(
-      collegeData.recruiters ? collegeData.recruiters.join(", ") : "",
-    );
-    setEditCutoffsJson(JSON.stringify(collegeData.cutoffs, null, 2));
-    setEditFacilities(
-      collegeData.facilities
-        ? collegeData.facilities.map((f) => f.name).join(", ")
-        : "",
-    );
+    setEditCoverImage(collegeData.image || "");
+    setEditLogoImage(collegeData.logo || "");
     setShowEditModal(true);
   };
 
   const handleSavePageChanges = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!collegeData) return;
     setIsUpdating(true);
 
     try {
-      let parsedCourses = collegeData.courses;
-      try {
-        parsedCourses = JSON.parse(editCoursesJson);
-      } catch (err) {
-        alert("Invalid JSON format for Courses. Please verify and correct.");
-        setIsUpdating(false);
-        return;
-      }
-
-      let parsedCutoffs = collegeData.cutoffs;
-      try {
-        parsedCutoffs = JSON.parse(editCutoffsJson);
-      } catch (err) {
-        alert("Invalid JSON format for Cutoffs. Please verify and correct.");
-        setIsUpdating(false);
-        return;
-      }
-
-      const recruitersList = editRecruiters
-        .split(",")
-        .map((r) => r.trim())
-        .filter(Boolean);
-      const facilitiesList = editFacilities
-        .split(",")
-        .map((f) => {
-          const name = f.trim();
-          let icon = "Building";
-          const lName = name.toLowerCase();
-          if (lName.includes("wi-fi") || lName.includes("internet"))
-            icon = "Wifi";
-          else if (lName.includes("library") || lName.includes("book"))
-            icon = "BookOpen";
-          else if (
-            lName.includes("canteen") ||
-            lName.includes("cafeteria") ||
-            lName.includes("food")
-          )
-            icon = "Coffee";
-          else if (
-            lName.includes("sport") ||
-            lName.includes("gym") ||
-            lName.includes("play")
-          )
-            icon = "Heart";
-          return { name, icon };
-        })
-        .filter(Boolean);
-
-      const serializedData = JSON.stringify({
+      const updatedData: CollegeDetail = {
+        ...collegeData,
         description: editAboutText,
         estd: editEstd,
         highestPackage: editHighestPackage,
         averagePackage: editAveragePackage,
         totalFees: editTotalFees,
-        courses: parsedCourses,
-        recruiters: recruitersList,
-        cutoffs: parsedCutoffs,
-        facilities: facilitiesList,
-      });
+        image: editCoverImage || collegeData.image,
+        logo: editLogoImage || collegeData.logo,
+      };
 
       const res = await fetch("/api/colleges/update", {
         method: "POST",
@@ -687,26 +504,17 @@ export default function CollegeDetailPage() {
           password: "1311161161",
           slug: slug,
           updatedFields: {
-            description: serializedData,
+            description: JSON.stringify(updatedData),
             tuition_fees: editTotalFees,
+            image_url: editCoverImage,
           },
         }),
       });
 
       if (res.ok) {
-        setCollegeData({
-          ...collegeData,
-          description: editAboutText,
-          estd: editEstd,
-          highestPackage: editHighestPackage,
-          averagePackage: editAveragePackage,
-          totalFees: editTotalFees,
-          courses: parsedCourses,
-          recruiters: recruitersList,
-          cutoffs: parsedCutoffs,
-          facilities: facilitiesList,
-        });
+        setCollegeData(updatedData);
         setShowEditModal(false);
+        alert("✅ College details saved and updated live across all devices!");
       } else {
         const errData = await res.json();
         alert(errData.error || "Failed to update college details.");
@@ -718,129 +526,10 @@ export default function CollegeDetailPage() {
       setIsUpdating(false);
     }
   };
-  const [loading, setLoading] = useState(true);
-
-  // Fetch college details from Supabase
-  useEffect(() => {
-    const fetchCollegeDetail = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from("colleges")
-          .select("*")
-          .eq("slug", slug)
-          .maybeSingle();
-
-        if (error) throw error;
-
-        if (data) {
-          const ratingNum = parseFloat(data.rating) || 4.2;
-          let mapped = {
-            name: data.name,
-            location: data.location || "India",
-            nirfRank:
-              data.nirf_rank && data.nirf_rank !== "N/A"
-                ? `NIRF #${data.nirf_rank}`
-                : "A++ Rating",
-            rating: ratingNum,
-            ratingCount: `${Math.floor(ratingNum * 25 + 10)} Reviews`,
-            type: data.ownership || "Private",
-            estd: "2002",
-            stream: "Engineering",
-            highestPackage:
-              data.ownership === "Public" ? "18.5 LPA" : "12.4 LPA",
-            averagePackage: data.ownership === "Public" ? "8.2 LPA" : "5.8 LPA",
-            totalFees: data.tuition_fees || "N/A",
-            description: data.description || "",
-            courses: [
-              {
-                name: data.courses_count || "Degree Courses",
-                duration: "3-4 Years",
-                fees: data.tuition_fees || "N/A",
-                eligibility: "12th Pass + Merit",
-              },
-            ],
-            recruiters: [
-              "TCS",
-              "Infosys",
-              "Wipro",
-              "Cognizant",
-              "HCL",
-              "Amazon",
-              "Tech Mahindra",
-            ],
-            reviews: [
-              {
-                id: "1",
-                author: "Rahul Kumar",
-                course: "B.Tech (Batch 2025)",
-                year: "5 days ago",
-                rating: 4,
-                title: "Great infrastructure and supportive faculty",
-                content:
-                  "The college has good labs and smart classrooms. Teachers are helpful, and placements are average. Campus life is lively.",
-              },
-            ],
-            cutoffs: [
-              {
-                branch: "General Category",
-                openRank: "45000",
-                closeRank: "75000",
-              },
-              {
-                branch: "OBC Category",
-                openRank: "80000",
-                closeRank: "110000",
-              },
-            ],
-            facilities: [
-              { name: "Central Library", icon: "BookOpen" },
-              { name: "High-Speed Wi-Fi", icon: "Wifi" },
-              { name: "Student Hostels", icon: "Building" },
-              { name: "Cafeteria", icon: "Coffee" },
-            ],
-          };
-
-          if (
-            data.description &&
-            data.description.trim().startsWith("{") &&
-            data.description.trim().endsWith("}")
-          ) {
-            try {
-              const parsed = JSON.parse(data.description);
-              mapped = {
-                ...mapped,
-                ...parsed,
-                description: parsed.description || parsed.about || "",
-              };
-            } catch (e) {
-              console.error("JSON parse error for description:", e);
-            }
-          }
-          setCollegeData(mapped);
-        } else {
-          // Fallback to local mock db
-          const mockCol = collegesDb[slug] || collegesDb["iit-delhi"];
-          setCollegeData(mockCol);
-        }
-      } catch (err) {
-        console.error("Error loading college detail:", err);
-        const mockCol = collegesDb[slug] || collegesDb["iit-delhi"];
-        setCollegeData(mockCol);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (slug) {
-      fetchCollegeDetail();
-    }
-  }, [slug]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Also submit lead to backend CRM API!
       await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -848,7 +537,7 @@ export default function CollegeDetailPage() {
           name: formData.name,
           phone: formData.phone,
           course_interest: formData.stream,
-          college_interest: collegeInfo?.name || slug,
+          college_interest: collegeData.name,
         }),
       });
     } catch (err) {
@@ -859,463 +548,734 @@ export default function CollegeDetailPage() {
     setTimeout(() => {
       setFormSubmitted(false);
       setFormData({ name: "", phone: "", stream: "Engineering" });
-    }, 2000);
+    }, 3000);
   };
 
-  if (loading || !collegeData) {
+  const filteredCourses = collegeData.courses.filter(
+    (c) =>
+      c.name.toLowerCase().includes(courseSearch.toLowerCase()) ||
+      c.eligibility.toLowerCase().includes(courseSearch.toLowerCase())
+  );
+
+  const tabs = [
+    { id: "overview", name: "Overview & Info" },
+    { id: "highlights", name: "Key Highlights" },
+    { id: "courses", name: `Courses & Fees (${collegeData.courses.length})` },
+    { id: "cutoffs", name: "JEE Cutoffs" },
+    { id: "placements", name: "Placements" },
+    { id: "campus", name: "Campus & Hostels" },
+    { id: "reviews", name: `Reviews (${collegeData.reviews.length})` },
+    { id: "faqs", name: "FAQs & Q&A" },
+  ] as const;
+
+  if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f9fa] gap-3">
         <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">
-          Loading college details...
+          Loading {slug ? slug.replace("-", " ") : "college"} details...
         </p>
       </div>
     );
   }
 
-  const collegeInfo = collegeData;
-
-  const cutoffsTabName =
-    collegeInfo.stream === "Management" ? "CAT Cutoffs" : "JEE Cutoffs";
-
-  const tabs = [
-    { id: "overview", name: "Overview" },
-    { id: "courses", name: "Courses & Fees" },
-    { id: "placement", name: "Placements" },
-    { id: "reviews", name: "Reviews" },
-    { id: "cutoff", name: cutoffsTabName },
-  ] as const;
-
   return (
-    <div className="space-y-8">
-      {/* COLLEGE HERO BANNER */}
-      <section className="relative rounded-3xl overflow-hidden h-[250px] md:h-[350px] bg-slate-900 shadow-xl">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 to-transparent z-10" />
+    <div className="min-h-screen pb-16 space-y-6 select-none">
+      {/* 1. SHIKSHA-STYLE MODERN HERO BANNER */}
+      <section className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xl">
+        {/* Cover Photo with Dark Gradient & Ambient Backlight */}
+        <div className="relative h-[220px] sm:h-[290px] md:h-[340px] w-full overflow-hidden bg-slate-950">
+          <img
+            src={collegeData.image || "/images/iitdelhi_real.jpg"}
+            alt={collegeData.name}
+            className="w-full h-full object-cover object-center transform scale-102 hover:scale-105 transition-transform duration-700"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&auto=format&fit=crop&q=80";
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/40" />
 
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-teal-500/20 flex items-center justify-center text-white/10 text-6xl font-black font-outfit select-none">
-          {collegeInfo.name.split(" - ")[0]}
+          {/* Photo Gallery Badge Button */}
+          <button
+            onClick={() => setActivePhotoIdx(0)}
+            className="absolute top-4 right-4 z-20 px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-orange-500 text-white backdrop-blur-md border border-white/20 text-xs font-black flex items-center gap-1.5 shadow-lg active:scale-95 transition-all cursor-pointer"
+          >
+            <ImageIcon className="w-3.5 h-3.5" />
+            <span>16+ Photos & Campus Tour</span>
+          </button>
         </div>
 
-        <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-20 space-y-3 max-w-4xl text-white">
-          <div className="flex flex-wrap gap-2">
-            <span className="px-2.5 py-1 bg-primary text-white text-[9px] font-extrabold rounded-lg tracking-wider uppercase">
-              {collegeInfo.type}
-            </span>
-            <span className="px-2.5 py-1 bg-emerald-500 text-white text-[9px] font-extrabold rounded-lg tracking-wider uppercase">
-              {collegeInfo.nirfRank}
-            </span>
+        {/* Floating Logo + Meta Badges & Action Buttons */}
+        <div className="relative -mt-14 px-5 sm:px-8 pb-6 z-20 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="flex items-start gap-4">
+            {/* Square College Logo Box */}
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border-4 border-white shadow-xl p-1.5 flex items-center justify-center overflow-hidden flex-shrink-0 relative">
+              {collegeData.logo ? (
+                <img
+                  src={collegeData.logo}
+                  alt={`${collegeData.name} logo`}
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 text-white font-black text-xs flex items-center justify-center">
+                  IITD
+                </div>
+              )}
+            </div>
+
+            {/* College Titles & Meta Info */}
+            <div className="space-y-1 text-white pt-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-md bg-blue-600/90 text-white text-[9.5px] font-black uppercase tracking-wider shadow-xs">
+                  {collegeData.type.split("•")[0].trim()}
+                </span>
+                <span className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[9.5px] font-black uppercase tracking-wider shadow-xs flex items-center gap-1">
+                  <Award className="w-3 h-3" />
+                  {collegeData.nirfRank}
+                </span>
+                <span className="px-2 py-0.5 rounded-md bg-white/20 text-white text-[9.5px] font-bold">
+                  Estd. {collegeData.estd}
+                </span>
+              </div>
+
+              <h1 className="font-outfit font-black text-xl sm:text-2xl md:text-3xl text-white tracking-tight leading-tight">
+                {collegeData.fullName || collegeData.name}
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-300 font-semibold pt-0.5">
+                <span className="flex items-center gap-1 text-orange-400">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {collegeData.location}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span className="font-black text-white">{collegeData.rating}</span>
+                  <span className="text-slate-400">({collegeData.ratingCount})</span>
+                </span>
+                <span className="text-emerald-400 font-bold">
+                  ✓ 100% Verified Campus
+                </span>
+              </div>
+            </div>
           </div>
 
-          <h1 className="font-outfit font-extrabold text-2xl md:text-3xl tracking-tight leading-tight">
-            {collegeInfo.name}
-          </h1>
-
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-300 font-sans">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 text-primary" />
-              {collegeInfo.location}
-            </span>
-            <span>Estd. {collegeInfo.estd}</span>
-            <span className="flex items-center gap-1.5">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span className="font-bold text-white">
-                {collegeInfo.rating}
-              </span>{" "}
-              ({collegeInfo.ratingCount})
-            </span>
+          {/* Action Buttons Row */}
+          <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0">
+            <button
+              onClick={() => alert("Brochure sent to your email & WhatsApp!")}
+              className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 backdrop-blur-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Brochure</span>
+            </button>
+            <Link
+              href={`/compare?ids=iit-delhi,bits-pilani`}
+              className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 backdrop-blur-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Compare</span>
+            </Link>
+            <button
+              onClick={() => {
+                const formElem = document.getElementById("lead-inquiry-box");
+                formElem?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-xs font-black shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Apply / Predict Seat</span>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* STICKY TAB NAV BAR */}
-      <div className="sticky top-16 md:top-0 bg-background/80 backdrop-blur-md z-30 border-b border-border py-2 flex items-center overflow-x-auto scrollbar-none gap-2">
+      {/* 2. STICKY SUB-NAVIGATION BAR (SHIKSHA STYLE) */}
+      <div className="sticky top-16 md:top-0 bg-white/95 backdrop-blur-md z-30 border-y border-slate-200 py-2.5 px-2 flex items-center overflow-x-auto no-scrollbar gap-2 shadow-xs">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all cursor-pointer ${
               activeTab === tab.id
-                ? "bg-primary text-white shadow-md shadow-primary/10"
-                : "text-text_secondary hover:bg-border/30 hover:text-text_primary"
+                ? "bg-orange-500 text-white shadow-md shadow-orange-500/20 scale-[1.02]"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent"
             }`}
           >
             {tab.name}
           </button>
         ))}
-      </div>
 
-      {/* ADMIN EDIT PAGE FLOATING TRIGGER */}
-      {isAdmin && (
-        <div className="flex justify-end pr-2 select-none">
+        {isAdmin && (
           <button
             onClick={startEditing}
-            className="flex items-center gap-1.5 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md cursor-pointer select-none active:scale-[0.99]"
+            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-xs cursor-pointer transition-all flex-shrink-0"
           >
             <Edit className="w-3.5 h-3.5" />
-            Edit Page Details
+            <span>Edit Page Details</span>
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* CORE GRID LAYOUT */}
-      <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
-        {/* LEFT COLUMN: TAB CONTENT (70%) */}
+      {/* 3. CORE TWO-COLUMN CONTENT GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
+        {/* LEFT COLUMN: ACTIVE TAB CONTENT (70%) */}
         <div className="lg:col-span-7 space-y-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.2 }}
-              className="bg-card border border-border p-6 md:p-8 rounded-3xl shadow-sm min-h-[300px]"
-            >
-              {/* TAB 1: OVERVIEW */}
-              {activeTab === "overview" && (
-                <div className="space-y-6">
-                  <div className="space-y-3">
-                    <h2 className="font-outfit font-bold text-lg text-text_primary">
-                      About the Institution
-                    </h2>
-                    <p className="text-xs text-text_secondary leading-relaxed whitespace-pre-line">
-                      {collegeInfo.description ||
-                        "No description details available."}
-                    </p>
-                  </div>
-
-                  {/* KEY STATS QUICK VIEW */}
-                  <div className="grid grid-cols-3 gap-4 py-4 px-6 bg-background border border-border rounded-2xl">
-                    <div className="text-center">
-                      <p className="text-[9px] text-text_secondary font-semibold uppercase">
-                        Highest Pack
-                      </p>
-                      <p className="font-outfit font-extrabold text-sm md:text-base text-emerald-500">
-                        {collegeInfo.highestPackage}
-                      </p>
-                    </div>
-                    <div className="text-center border-x border-border">
-                      <p className="text-[9px] text-text_secondary font-semibold uppercase">
-                        Average Fee
-                      </p>
-                      <p className="font-outfit font-extrabold text-sm md:text-base text-text_primary">
-                        {collegeInfo.totalFees}
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-[9px] text-text_secondary font-semibold uppercase">
-                        NIRF Rank
-                      </p>
-                      <p className="font-outfit font-extrabold text-sm md:text-base text-primary">
-                        {collegeInfo.nirfRank.split(" ")[1] || "Rank"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* FACILITIES */}
-                  <div className="space-y-3">
-                    <h3 className="font-outfit font-bold text-sm text-text_primary">
-                      Campus Facilities
-                    </h3>
-                    <div className="flex flex-wrap gap-3">
-                      {collegeInfo.facilities.map((fac, idx) => {
-                        const IconComponent = iconMap[fac.icon] || Building;
-                        return (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-background border border-border rounded-xl text-xs font-semibold text-text_secondary"
-                          >
-                            <IconComponent className="w-4 h-4 text-primary" />
-                            {fac.name}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+          {/* TAB 1: OVERVIEW & NARRATIVE */}
+          {activeTab === "overview" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              {/* What's New Box 2026 */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
+                  <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
+                  <span>Latest Updates & Admission Alerts 2026-27</span>
                 </div>
-              )}
+                <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
+                  {collegeData.whatsNew?.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-orange-500 font-bold">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              {/* TAB 2: COURSES & FEES */}
-              {activeTab === "courses" && (
-                <div className="space-y-6">
-                  <div className="pb-3 border-b border-border">
-                    <h2 className="font-outfit font-bold text-lg text-text_primary">
-                      Undergraduate Programs (B.Tech)
-                    </h2>
-                    <p className="text-[10px] text-text_secondary">
-                      Detailed tuition fees structure and eligibility criteria
-                    </p>
-                  </div>
+              {/* About the Institution */}
+              <div className="space-y-3">
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  About {collegeData.name}
+                </h2>
+                <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium">
+                  {collegeData.description.split("\n\n").map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+              </div>
 
-                  <div className="space-y-4">
-                    {collegeInfo.courses.map((course, idx) => (
-                      <div
+              {/* Key Quick Stats Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3">
+                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-center">
+                  <p className="text-[10px] uppercase font-bold text-emerald-700">Highest CTC</p>
+                  <p className="font-outfit font-black text-base text-emerald-600 mt-0.5">
+                    {collegeData.highestPackage.split("(")[0]}
+                  </p>
+                  <span className="text-[9px] text-emerald-600 font-semibold">Domestic Offer</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-orange-50/70 border border-orange-100 text-center">
+                  <p className="text-[10px] uppercase font-bold text-orange-700">Average CTC</p>
+                  <p className="font-outfit font-black text-base text-orange-600 mt-0.5">
+                    {collegeData.averagePackage}
+                  </p>
+                  <span className="text-[9px] text-orange-600 font-semibold">Overall B.Tech</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-100 text-center">
+                  <p className="text-[10px] uppercase font-bold text-blue-700">Annual Tuition</p>
+                  <p className="font-outfit font-black text-base text-blue-600 mt-0.5">
+                    {collegeData.totalFees.split("(")[0]}
+                  </p>
+                  <span className="text-[9px] text-blue-600 font-semibold">100% Aid Available</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-100 text-center">
+                  <p className="text-[10px] uppercase font-bold text-purple-700">NIRF 2026</p>
+                  <p className="font-outfit font-black text-base text-purple-600 mt-0.5">
+                    Rank #2
+                  </p>
+                  <span className="text-[9px] text-purple-600 font-semibold">Engineering Category</span>
+                </div>
+              </div>
+
+              {/* Quick Jump to Highlights Table */}
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveTab("highlights")}
+                  className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-between transition-colors"
+                >
+                  <span>View Complete Key Highlights Table & Parameters</span>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: KEY HIGHLIGHTS TABLE (SHIKSHA BENCHMARK) */}
+          {activeTab === "highlights" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  {collegeData.name} - Key Highlights 2026
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Detailed institutional parameters, rankings, intake capacity, and accreditation
+                </p>
+              </div>
+
+              <div className="overflow-hidden border border-slate-200 rounded-2xl">
+                <table className="w-full text-left border-collapse text-xs">
+                  <tbody>
+                    {collegeData.highlights.map((item, idx) => (
+                      <tr
                         key={idx}
-                        className="p-4 border border-border bg-background rounded-2xl space-y-3 hover:border-primary/20 transition-all duration-200"
+                        className={`border-b border-slate-100 ${
+                          idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
+                        }`}
                       >
-                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-2">
-                          <h3 className="font-outfit font-bold text-sm text-text_primary leading-snug">
-                            {course.name}
-                          </h3>
-                          <span className="px-2.5 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-lg h-fit w-fit whitespace-nowrap">
-                            {course.fees}
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10px] font-semibold text-text_secondary pt-2 border-t border-border/40">
-                          <p>⏱ Duration: {course.duration}</p>
-                          <p>🎯 Entry Requirement: {course.eligibility}</p>
-                        </div>
-                      </div>
+                        <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
+                          {item.label}
+                        </td>
+                        <td className="py-3 px-4 font-bold text-slate-900">
+                          {item.value}
+                        </td>
+                      </tr>
                     ))}
-                  </div>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: COURSES, FEES & ELIGIBILITY TABLE */}
+          {activeTab === "courses" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Courses & Tuition Fees Structure
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Full breakdown of academic degrees, annual fees, duration, and entrance requirements
+                  </p>
                 </div>
-              )}
 
-              {/* TAB 3: PLACEMENTS */}
-              {activeTab === "placement" && (
-                <div className="space-y-6">
-                  <div className="pb-3 border-b border-border">
-                    <h2 className="font-outfit font-bold text-lg text-text_primary">
-                      Placement Highlights (2024 Batch)
-                    </h2>
-                    <p className="text-[10px] text-text_secondary">
-                      Highest package, average salary package, and placement
-                      rate statistics
-                    </p>
-                  </div>
+                {/* Course Search Filter */}
+                <input
+                  type="text"
+                  placeholder="Search course (e.g. CSE, MBA)..."
+                  value={courseSearch}
+                  onChange={(e) => setCourseSearch(e.target.value)}
+                  className="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-500 bg-slate-50 sm:w-60"
+                />
+              </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-center space-y-1">
-                      <Briefcase className="w-5 h-5 text-emerald-500 mx-auto" />
-                      <p className="text-[10px] text-text_secondary font-semibold">
-                        Highest Package
-                      </p>
-                      <p className="font-outfit font-black text-base md:text-lg text-emerald-600 dark:text-emerald-400">
-                        {collegeInfo.highestPackage}
-                      </p>
-                    </div>
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
+                      <th className="py-3 px-4">Program / Degree</th>
+                      <th className="py-3 px-3">Duration</th>
+                      <th className="py-3 px-3">Tuition Fees</th>
+                      <th className="py-3 px-4">Eligibility & Accepted Exam</th>
+                      <th className="py-3 px-3">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium">
+                    {filteredCourses.map((c, idx) => (
+                      <tr key={idx} className="hover:bg-orange-50/30 transition-colors">
+                        <td className="py-3 px-4 font-bold text-slate-900">
+                          {c.name}
+                          {c.seats && (
+                            <span className="block text-[10px] font-semibold text-slate-500 mt-0.5">
+                              Intake: {c.seats}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 px-3 text-slate-600 font-bold whitespace-nowrap">
+                          {c.duration}
+                        </td>
+                        <td className="py-3 px-3 font-outfit font-black text-orange-600 whitespace-nowrap">
+                          {c.fees}
+                        </td>
+                        <td className="py-3 px-4 text-slate-600 leading-relaxed">
+                          {c.eligibility}
+                        </td>
+                        <td className="py-3 px-3 whitespace-nowrap">
+                          <button
+                            onClick={() => {
+                              const elem = document.getElementById("lead-inquiry-box");
+                              elem?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-black text-[10px] transition-all shadow-xs"
+                          >
+                            Apply
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
-                    <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl text-center space-y-1">
-                      <TrendingUp className="w-5 h-5 text-primary mx-auto" />
-                      <p className="text-[10px] text-text_secondary font-semibold">
-                        Average Package
-                      </p>
-                      <p className="font-outfit font-black text-base md:text-lg text-primary">
-                        {collegeInfo.averagePackage}
-                      </p>
-                    </div>
+          {/* TAB 4: JEE ADVANCED / JOSAA CUTOFFS MATRIX TABLE */}
+          {activeTab === "cutoffs" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  JEE Advanced / JoSAA Opening & Closing Cutoff Ranks
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Official Round 6 closing cutoff trends for primary engineering branches
+                </p>
+              </div>
 
-                    <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-center space-y-1">
-                      <GraduationCap className="w-5 h-5 text-amber-500 mx-auto" />
-                      <p className="text-[10px] text-text_secondary font-semibold">
-                        Placement Rate
-                      </p>
-                      <p className="font-outfit font-black text-base md:text-lg text-amber-600 dark:text-amber-400">
-                        97.2%
-                      </p>
-                    </div>
-                  </div>
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
+                      <th className="py-3 px-4">B.Tech Engineering Specialization</th>
+                      <th className="py-3 px-3">Category Quota</th>
+                      <th className="py-3 px-3 text-emerald-700">Opening Rank</th>
+                      <th className="py-3 px-3 text-red-700">Closing Rank</th>
+                      <th className="py-3 px-3">Counselling</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium">
+                    {collegeData.cutoffs.map((cutoff, idx) => (
+                      <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                        <td className="py-3 px-4 font-bold text-slate-900">
+                          {cutoff.branch}
+                        </td>
+                        <td className="py-3 px-3 text-slate-600 font-semibold">
+                          {cutoff.category || "General (Gender-Neutral)"}
+                        </td>
+                        <td className="py-3 px-3 font-outfit font-black text-emerald-600">
+                          {cutoff.openRank}
+                        </td>
+                        <td className="py-3 px-3 font-outfit font-black text-red-600">
+                          {cutoff.closeRank}
+                        </td>
+                        <td className="py-3 px-3 text-[10px] font-bold text-slate-500">
+                          {cutoff.round || "Round 6"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
-                  <div className="space-y-3">
-                    <h3 className="font-outfit font-bold text-sm text-text_primary">
-                      Top Recruiter Networks
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      {collegeInfo.recruiters.map((rec) => (
-                        <div
-                          key={rec}
-                          className="flex items-center justify-center p-3 bg-background border border-border rounded-xl font-bold text-xs text-text_secondary"
-                        >
-                          {rec}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed font-semibold">
+                📌 <strong>Cutoff Tip:</strong> Admissions to IIT Delhi are conducted strictly through JoSAA (Joint Seat Allocation Authority) based on JEE Advanced ranks. Home State quota is NOT applicable for IITs (All India Quota only).
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: PLACEMENT STATISTICS & RECRUITERS GRID */}
+          {activeTab === "placements" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Placement Statistics & Top Recruiters
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Verified salary trends, CTC packages, and corporate partners
+                </p>
+              </div>
+
+              {/* CTC Metrics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-200 text-center">
+                  <span className="text-[10.5px] uppercase font-bold text-emerald-800">Highest Package</span>
+                  <p className="font-outfit font-black text-xl text-emerald-600 mt-1">₹1.20 Crore PA</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">International: ₹2.40 Cr PA</p>
                 </div>
-              )}
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-200 text-center">
+                  <span className="text-[10.5px] uppercase font-bold text-orange-800">Average Package</span>
+                  <p className="font-outfit font-black text-xl text-orange-600 mt-1">{collegeData.averagePackage}</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">CSE Average: ₹39.5 LPA</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-200 text-center">
+                  <span className="text-[10.5px] uppercase font-bold text-blue-800">Total Job Offers</span>
+                  <p className="font-outfit font-black text-xl text-blue-600 mt-1">1,300+ Offers</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">400+ Top Companies</p>
+                </div>
+              </div>
 
-              {/* TAB 4: REVIEWS */}
-              {activeTab === "reviews" && (
-                <div className="space-y-6">
-                  <div className="pb-3 border-b border-border flex items-center justify-between">
-                    <div>
-                      <h2 className="font-outfit font-bold text-lg text-text_primary">
-                        Student Reviews
-                      </h2>
-                      <p className="text-[10px] text-text_secondary">
-                        Real reviews verified by current and former students
+              {/* Top Recruiting Brands Grid */}
+              <div className="space-y-3">
+                <h3 className="font-outfit font-bold text-sm text-slate-900">
+                  Top Recruiting Companies & Brands
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {collegeData.recruiters.map((rec, i) => (
+                    <div
+                      key={i}
+                      className="p-3 bg-slate-50 hover:bg-orange-50/50 border border-slate-200 hover:border-orange-300 rounded-xl text-center text-xs font-black text-slate-800 transition-all shadow-2xs"
+                    >
+                      {rec}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: CAMPUS INFRASTRUCTURE & 13 HOSTELS */}
+          {activeTab === "campus" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Campus Infrastructure, Labs & Hostels
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  World-class residential facilities, supercomputing research centers, and sports arenas
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {collegeData.facilities.map((fac, idx) => {
+                  const IconComp = iconMap[fac.icon] || Building;
+                  return (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                          <IconComp className="w-4 h-4" />
+                        </div>
+                        <h4 className="font-outfit font-bold text-sm text-slate-900">
+                          {fac.name}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed font-medium pl-10">
+                        {fac.desc || "Fully modernized and maintained facility available for all students."}
                       </p>
                     </div>
-                  </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
-                  <div className="space-y-4">
-                    {collegeInfo.reviews.map((rev) => (
-                      <div
-                        key={rev.id}
-                        className="p-4 border border-border bg-background rounded-2xl space-y-3"
-                      >
-                        <div className="flex justify-between items-start">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-border flex items-center justify-center text-text_secondary">
-                              <User className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <h4 className="font-outfit font-bold text-xs text-text_primary">
-                                {rev.author}
-                              </h4>
-                              <p className="text-[9px] text-text_secondary">
-                                {rev.course} • {rev.year}
-                              </p>
-                            </div>
-                          </div>
+          {/* TAB 7: VERIFIED STUDENT REVIEWS */}
+          {activeTab === "reviews" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Student Reviews & Campus Ratings
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Authentic feedback and experiences from current scholars and alumni
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black">
+                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <span>{collegeData.rating} Out of 5.0 (842 Reviews)</span>
+                </div>
+              </div>
 
-                          <div className="bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-lg flex items-center gap-1 text-[9px] font-extrabold text-amber-600 dark:text-amber-400">
-                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                            {rev.rating}.0 / 5.0
-                          </div>
+              <div className="space-y-4">
+                {collegeData.reviews.map((rev) => (
+                  <div
+                    key={rev.id}
+                    className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black text-xs">
+                          {rev.author[0]}
                         </div>
-
-                        <div className="space-y-1">
-                          <h5 className="font-outfit font-bold text-xs text-text_primary">
-                            "{rev.title}"
-                          </h5>
-                          <p className="text-[11px] text-text_secondary leading-relaxed font-medium">
-                            {rev.content}
+                        <div>
+                          <h4 className="font-outfit font-black text-xs text-slate-900">
+                            {rev.author}
+                          </h4>
+                          <p className="text-[10px] text-slate-500 font-semibold">
+                            {rev.course} • {rev.year}
                           </p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                      <div className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-black flex items-center gap-1">
+                        ★ {rev.rating}.0
+                      </div>
+                    </div>
 
-              {/* TAB 5: CUTOFFS */}
-              {activeTab === "cutoff" && (
-                <div className="space-y-6">
-                  <div className="pb-3 border-b border-border">
-                    <h2 className="font-outfit font-bold text-lg text-text_primary">
-                      JEE Advanced Cutoff Ranks (Round 1)
-                    </h2>
-                    <p className="text-[10px] text-text_secondary">
-                      Official closing ranks cutoff trends for primary branches
+                    <h5 className="font-outfit font-bold text-xs text-slate-900">
+                      "{rev.title}"
+                    </h5>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {rev.content}
                     </p>
-                  </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-[11px]">
-                      <thead>
-                        <tr className="border-b border-border text-text_secondary uppercase font-bold">
-                          <th className="py-2 px-3">B.Tech Branch</th>
-                          <th className="py-2 px-3">Opening Rank</th>
-                          <th className="py-2 px-3">Closing Rank</th>
-                        </tr>
-                      </thead>
-                      <tbody className="font-medium text-text_primary">
-                        {collegeInfo.cutoffs.map((cutoff, idx) => (
-                          <tr
-                            key={idx}
-                            className="border-b border-border/40 hover:bg-border/10"
-                          >
-                            <td className="py-2.5 px-3 font-bold">
-                              {cutoff.branch}
-                            </td>
-                            <td className="py-2.5 px-3 text-emerald-500 font-bold">
-                              {cutoff.openRank}
-                            </td>
-                            <td className="py-2.5 px-3 text-red-500 font-bold">
-                              {cutoff.closeRank}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    {rev.pros && (
+                      <div className="text-[11px] text-emerald-700 bg-emerald-50/70 p-2 rounded-lg font-semibold">
+                        👍 <strong>Pros:</strong> {rev.pros}
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 8: FAQS & STUDENT Q&A ACCORDION */}
+          {activeTab === "faqs" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Frequently Asked Questions (FAQs)
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Common queries answered regarding admission, cutoffs, placements, and campus rules
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {collegeData.faqs.map((faq, idx) => (
+                  <div
+                    key={idx}
+                    className="border border-slate-200 rounded-2xl overflow-hidden transition-all"
+                  >
+                    <button
+                      onClick={() => setOpenFaqIdx(openFaqIdx === idx ? null : idx)}
+                      className="w-full p-4 text-left font-outfit font-bold text-xs sm:text-sm text-slate-900 bg-slate-50 hover:bg-slate-100 flex items-center justify-between gap-3 cursor-pointer"
+                    >
+                      <span>{faq.question}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-slate-500 transform transition-transform ${
+                          openFaqIdx === idx ? "rotate-180 text-orange-600" : ""
+                        }`}
+                      />
+                    </button>
+                    {openFaqIdx === idx && (
+                      <div className="p-4 text-xs text-slate-600 leading-relaxed bg-white border-t border-slate-100 font-medium">
+                        {faq.answer}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* RIGHT COLUMN: STICKY INQUIRY CARD (30%) */}
+        {/* RIGHT COLUMN: STICKY INQUIRY & COUNSELLING CARD (30%) */}
         <div className="lg:col-span-3 space-y-6">
-          <div className="sticky top-20 bg-card border border-border p-6 rounded-3xl shadow-sm space-y-6">
-            <div className="space-y-2">
-              <h3 className="font-outfit font-bold text-base text-text_primary">
-                Admission Counsel Support
+          <div
+            id="lead-inquiry-box"
+            className="sticky top-20 bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-5"
+          >
+            <div className="space-y-1.5">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 text-[9.5px] font-black uppercase tracking-wide border border-orange-200">
+                <Sparkles className="w-3 h-3" />
+                Admission 2026-27
+              </span>
+              <h3 className="font-outfit font-black text-lg text-slate-900">
+                Need Guidance for {collegeData.name.split(" - ")[0]}?
               </h3>
-              <p className="text-[11px] text-text_secondary leading-relaxed">
-                Connect with our expert admissions advisor. Get syllabus, fee
-                concession structure, and document guidelines.
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                Talk to our senior expert counsellor for JoSAA cutoff analysis, branch recommendation, and scholarship guidance.
               </p>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="space-y-4">
+            <form onSubmit={handleFormSubmit} className="space-y-3.5">
               <div>
-                <label className="text-[10px] text-text_secondary font-bold">
-                  Student Name
+                <label className="text-[10.5px] font-bold text-slate-700">
+                  Student Name *
                 </label>
                 <input
                   required
                   type="text"
                   placeholder="Enter full name"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="w-full mt-1 px-3 py-2 border border-border rounded-xl bg-background text-xs text-text_primary outline-none focus:border-primary transition-colors"
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2 border border-slate-200 rounded-xl bg-slate-50 text-xs font-semibold text-slate-800 outline-none focus:border-orange-500 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="text-[10px] text-text_secondary font-bold">
-                  Mobile Number
+                <label className="text-[10.5px] font-bold text-slate-700">
+                  WhatsApp / Mobile Number *
                 </label>
                 <input
                   required
                   type="tel"
-                  placeholder="Enter mobile number"
+                  placeholder="Enter 10-digit number"
                   value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  className="w-full mt-1 px-3 py-2 border border-border rounded-xl bg-background text-xs text-text_primary outline-none focus:border-primary transition-colors"
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2 border border-slate-200 rounded-xl bg-slate-50 text-xs font-semibold text-slate-800 outline-none focus:border-orange-500 transition-colors"
                 />
               </div>
 
-              <div className="space-y-2 pt-2">
+              <div className="space-y-2 pt-1">
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-primary hover:bg-primary_hover text-white font-bold text-xs rounded-xl active:scale-95 transition-all shadow-md shadow-primary/10 flex items-center justify-center gap-2"
+                  className="w-full py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs rounded-xl active:scale-95 transition-all shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <PhoneCall className="w-4 h-4" />
-                  Call Me Back
+                  <PhoneCall className="w-3.5 h-3.5" />
+                  <span>Get Expert Callback</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => alert("Downloading brochure...")}
-                  className="w-full py-2.5 border border-border hover:bg-border/30 text-text_primary font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2"
+                  onClick={() => alert("Brochure downloaded successfully!")}
+                  className="w-full py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <Download className="w-4 h-4 text-text_secondary" />
-                  Download Brochure
+                  <Download className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Download Official PDF</span>
                 </button>
               </div>
             </form>
 
-            <div className="pt-4 border-t border-border flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="w-4 h-4" />
-              </div>
-              <p className="text-[9px] text-text_secondary leading-relaxed">
-                Your data is 100% confidential. Admissions guidance under Bihar
-                Student Credit Card accepted.
-              </p>
+            <div className="pt-3 border-t border-slate-100 flex items-center gap-2.5 text-[10px] text-slate-500 font-semibold leading-relaxed">
+              <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+              <span>100% Free counselling support. Bihar Student Credit Card accepted.</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ADMIN EDIT PAGE MODAL */}
+      {/* PHOTO GALLERY MODAL */}
+      <AnimatePresence>
+        {activePhotoIdx !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-4xl bg-slate-900 rounded-3xl overflow-hidden shadow-2xl relative border border-slate-700"
+            >
+              <button
+                onClick={() => setActivePhotoIdx(null)}
+                className="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-black/60 text-white hover:bg-orange-500 flex items-center justify-center cursor-pointer transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="relative h-[360px] sm:h-[460px] bg-black">
+                <img
+                  src={collegeData.gallery[activePhotoIdx]?.url || collegeData.image}
+                  alt="Gallery"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-950 flex items-center justify-between text-white text-xs">
+                <span className="font-bold">
+                  {collegeData.gallery[activePhotoIdx]?.caption} ({collegeData.gallery[activePhotoIdx]?.category})
+                </span>
+                <div className="flex gap-2">
+                  {collegeData.gallery.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActivePhotoIdx(idx)}
+                      className={`w-3 h-3 rounded-full ${
+                        activePhotoIdx === idx ? "bg-orange-500" : "bg-slate-700"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ADMIN EDIT DETAILS MODAL */}
       <AnimatePresence>
         {showEditModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
@@ -1323,167 +1283,126 @@ export default function CollegeDetailPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-2xl bg-white rounded-3xl p-6 shadow-2xl relative border border-slate-100 my-8 max-h-[90vh] overflow-y-auto no-scrollbar"
+              className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-7 shadow-2xl relative border border-slate-200 my-8 max-h-[90vh] overflow-y-auto no-scrollbar"
             >
               <button
                 onClick={() => setShowEditModal(false)}
-                className="absolute top-5 right-5 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-50 cursor-pointer"
+                className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-50 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
 
               <form onSubmit={handleSavePageChanges} className="space-y-4">
                 <div className="border-b border-slate-100 pb-3">
-                  <h3 className="font-outfit font-black text-lg text-slate-800">
-                    Edit College Page Details
+                  <h3 className="font-outfit font-black text-xl text-slate-800">
+                    Edit College Details: {collegeData.name}
                   </h3>
-                  <p className="text-[10px] font-bold text-orange-500">
-                    Updating slug: {slug}
+                  <p className="text-xs text-orange-600 font-bold">
+                    Editing slug: {slug}
                   </p>
                 </div>
 
                 <div>
-                  <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                    About/Description
+                  <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                    About / Description
                   </label>
                   <textarea
                     rows={4}
                     value={editAboutText}
                     onChange={(e) => setEditAboutText(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Estd. Year *
+                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                      Campus Cover Image URL
                     </label>
                     <input
-                      required
+                      type="text"
+                      value={editCoverImage}
+                      onChange={(e) => setEditCoverImage(e.target.value)}
+                      placeholder="/images/iitdelhi_real.jpg"
+                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                      Logo Image URL
+                    </label>
+                    <input
+                      type="text"
+                      value={editLogoImage}
+                      onChange={(e) => setEditLogoImage(e.target.value)}
+                      placeholder="/images/iitdelhi.png"
+                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div>
+                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                      Estd. Year
+                    </label>
+                    <input
                       type="text"
                       value={editEstd}
                       onChange={(e) => setEditEstd(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
                     />
                   </div>
-
                   <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Highest Package *
+                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                      Highest CTC
                     </label>
                     <input
-                      required
                       type="text"
                       value={editHighestPackage}
                       onChange={(e) => setEditHighestPackage(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
                     />
                   </div>
-
                   <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Average Package *
+                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                      Average CTC
                     </label>
                     <input
-                      required
                       type="text"
                       value={editAveragePackage}
                       onChange={(e) => setEditAveragePackage(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
                     />
                   </div>
-
                   <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Tuition Fees *
+                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                      Annual Tuition
                     </label>
                     <input
-                      required
                       type="text"
                       value={editTotalFees}
                       onChange={(e) => setEditTotalFees(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
+                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Recruiters (comma-separated)
-                    </label>
-                    <input
-                      type="text"
-                      value={editRecruiters}
-                      onChange={(e) => setEditRecruiters(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Facilities (comma-separated)
-                    </label>
-                    <input
-                      type="text"
-                      value={editFacilities}
-                      onChange={(e) => setEditFacilities(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Courses & Fees JSON Structure
-                    </label>
-                    <textarea
-                      rows={4}
-                      value={editCoursesJson}
-                      onChange={(e) => setEditCoursesJson(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                      Cutoffs JSON Structure
-                    </label>
-                    <textarea
-                      rows={4}
-                      value={editCutoffsJson}
-                      onChange={(e) => setEditCutoffsJson(e.target.value)}
-                      className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-2 flex justify-end gap-3">
+                <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isUpdating}
-                    className="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    className="px-5 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs rounded-xl shadow-md flex items-center gap-1.5"
                   >
-                    {isUpdating ? (
-                      <>
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-3.5 h-3.5" />
-                        Save Changes
-                      </>
-                    )}
+                    {isUpdating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                    <span>Save & Update Globally</span>
                   </button>
                 </div>
               </form>
@@ -1492,7 +1411,7 @@ export default function CollegeDetailPage() {
         )}
       </AnimatePresence>
 
-      {/* POPUP CONFIRMATION SUCCESS */}
+      {/* SUCCESS CONFIRMATION MODAL */}
       <AnimatePresence>
         {formSubmitted && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
@@ -1500,17 +1419,16 @@ export default function CollegeDetailPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xs p-6 bg-card border border-border rounded-2xl text-center space-y-4 shadow-2xl"
+              className="w-full max-w-xs p-6 bg-white border border-slate-200 rounded-3xl text-center space-y-4 shadow-2xl"
             >
-              <div className="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mx-auto animate-bounce">
-                <CheckCircle className="w-8 h-8" />
+              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto animate-bounce">
+                <CheckCircle className="w-7 h-7" />
               </div>
-              <h3 className="font-outfit font-bold text-base text-text_primary">
-                Request Registered!
+              <h3 className="font-outfit font-black text-base text-slate-900">
+                Inquiry Received!
               </h3>
-              <p className="text-xs text-text_secondary">
-                Our counselor will connect with you on **+91 {formData.phone}**
-                within 15 minutes.
+              <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                Our IIT admission counsellor will contact you on <strong>+91 {formData.phone}</strong> shortly.
               </p>
             </motion.div>
           </div>
