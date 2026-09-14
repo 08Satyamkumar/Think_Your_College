@@ -357,7 +357,7 @@ Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delh
   ],
 };
 
-// Exact Shiksha Tabs List from User's 1st Reference Image
+// Exact Shiksha & Portal Tabs List including all Primary and Support Headers
 const SHIKSHA_NAV_TABS = [
   { id: "info", label: "College Info" },
   { id: "courses", label: "Courses" },
@@ -373,6 +373,11 @@ const SHIKSHA_NAV_TABS = [
   { id: "compare", label: "Compare" },
   { id: "qa", label: "Q&A" },
   { id: "scholarships", label: "Scholarships" },
+  { id: "news", label: "News & Articles" },
+  { id: "hostel_guide", label: "Hostel" },
+  { id: "community", label: "Community" },
+  { id: "college_compare", label: "College Compare" },
+  { id: "profile", label: "Profile" },
 ] as const;
 
 type ShikshaTabId = (typeof SHIKSHA_NAV_TABS)[number]["id"];
@@ -1484,6 +1489,194 @@ export default function CollegeDetailPage() {
                   <p className="text-xs text-orange-800 font-medium">
                     Scholarships of ₹80,000/year for top-performing students in Mathematics and Computing and Physical Sciences funded by DST and global alumni donors.
                   </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 15: NEWS & ARTICLES */}
+          {activeTab === "news" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Latest News, Exam Circulars & Press Releases
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Official updates regarding admissions 2026, research breakthroughs, and JoSAA counselling notifications
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-300 transition-all space-y-2">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-bold">
+                    <span className="px-2 py-0.5 rounded-md bg-orange-100 text-orange-700 font-black">ADMISSIONS 2026</span>
+                    <span>Updated 2 days ago</span>
+                  </div>
+                  <h3 className="font-outfit font-black text-sm text-slate-900">
+                    JoSAA 2026 Counselling Dates & Seat Matrix Released for {collegeData.name.split(" - ")[0]}
+                  </h3>
+                  <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                    National Testing Agency and JoSAA authorities have declared the tentative schedule for 6 rounds of seat allocation following the JEE Advanced results.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-300 transition-all space-y-2">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-bold">
+                    <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 font-black">RESEARCH & AI</span>
+                    <span>Updated 1 week ago</span>
+                  </div>
+                  <h3 className="font-outfit font-black text-sm text-slate-900">
+                    New Centre for Generative AI & Quantum Computing Inaugurated
+                  </h3>
+                  <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                    A multi-million dollar high-performance supercomputing cluster was launched to support undergraduate and doctoral research in robotics and machine learning.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 16: DEDICATED HOSTEL GUIDE */}
+          {activeTab === "hostel_guide" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Hostel Accommodation & Campus Residence Details
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Hostel seat allocation, mess menu, room categories, and annual expenditure breakdown
+                </p>
+              </div>
+
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
+                      <th className="py-3 px-4">Room Type / Occupancy</th>
+                      <th className="py-3 px-3">Seat Rent (Per Sem)</th>
+                      <th className="py-3 px-3">Mess Charges (Per Sem)</th>
+                      <th className="py-3 px-3">Amenities Included</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium">
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">Single Occupancy (Final Year)</td>
+                      <td className="py-3 px-3 font-bold text-slate-700">₹14,000</td>
+                      <td className="py-3 px-3 font-bold text-slate-700">₹28,000</td>
+                      <td className="py-3 px-3 text-emerald-600 font-semibold">24x7 High-Speed Wi-Fi, Balcony</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">Double Sharing (1st-3rd Year)</td>
+                      <td className="py-3 px-3 font-bold text-slate-700">₹9,500</td>
+                      <td className="py-3 px-3 font-bold text-slate-700">₹28,000</td>
+                      <td className="py-3 px-3 text-emerald-600 font-semibold">Study Table, Wardrobe, Geyser</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-bold text-slate-900">Triple Sharing (Freshers Option)</td>
+                      <td className="py-3 px-3 font-bold text-slate-700">₹7,000</td>
+                      <td className="py-3 px-3 font-bold text-slate-700">₹28,000</td>
+                      <td className="py-3 px-3 text-emerald-600 font-semibold">Common Room, Gym & Badminton Court</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 17: COMMUNITY */}
+          {activeTab === "community" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Student & Alumni Community Network
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Connect with verified current students, branch seniors, and alumni mentors
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 text-center space-y-3">
+                <div className="inline-flex p-3 rounded-full bg-orange-100 text-orange-600">
+                  <Users className="w-6 h-6" />
+                </div>
+                <h3 className="font-outfit font-black text-base text-slate-900">
+                  Join the Official {collegeData.name.split(" - ")[0]} Student Group
+                </h3>
+                <p className="text-xs text-slate-600 font-medium max-w-md mx-auto">
+                  Over 1,400+ aspirants and seniors are discussing JoSAA cutoffs, coding culture, and hostel life.
+                </p>
+                <button
+                  onClick={() => alert("Redirecting to Community Forum...")}
+                  className="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs shadow-md transition-all active:scale-95"
+                >
+                  Join Telegram / Discussion Hub
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 18: COLLEGE COMPARE */}
+          {activeTab === "college_compare" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Multi-College Side-by-Side Comparison
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Evaluate fees, placements, campus facilities, and ranking metrics side-by-side
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-4">
+                <div className="inline-flex p-3 rounded-full bg-blue-100 text-blue-600">
+                  <Layers className="w-6 h-6" />
+                </div>
+                <h3 className="font-outfit font-black text-base text-slate-900">
+                  Compare {collegeData.name.split(" - ")[0]} with any College in India
+                </h3>
+                <Link
+                  href={`/compare?ids=${slug || "iit-delhi"},bits-pilani`}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-orange-600 text-white font-black text-xs shadow-md transition-all active:scale-95"
+                >
+                  <span>Launch Live 3-Way Comparator</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 19: PROFILE */}
+          {activeTab === "profile" && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  Student Aspirant Profile & Shortlist Hub
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Your saved colleges, rank prediction history, and submitted admission applications
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black text-lg">
+                    S
+                  </div>
+                  <div>
+                    <h3 className="font-outfit font-black text-sm text-slate-900">Student Applicant Portal</h3>
+                    <p className="text-xs text-slate-500">Track application status & JoSAA seat predictor result</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <div className="p-3.5 rounded-xl bg-white border border-slate-200">
+                    <p className="text-[10px] font-bold text-slate-500 uppercase">Shortlisted College</p>
+                    <p className="font-bold text-xs text-slate-900 mt-0.5">{collegeData.name.split(" - ")[0]}</p>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-white border border-slate-200">
+                    <p className="text-[10px] font-bold text-slate-500 uppercase">Application Status</p>
+                    <p className="font-bold text-xs text-emerald-600 mt-0.5">Verified Profile Active</p>
+                  </div>
                 </div>
               </div>
             </div>
