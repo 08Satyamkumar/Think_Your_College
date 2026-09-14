@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -28,6 +28,7 @@ import {
   DollarSign,
   Check,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
   Image as ImageIcon,
   Sparkles,
@@ -411,6 +412,36 @@ export default function CollegeDetailPage() {
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [courseSearch, setCourseSearch] = useState("");
 
+  // Horizontal Scroll Ref for 19 Sub-Header Tabs
+  const tabScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkTabScroll = () => {
+    if (tabScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabScrollRef.current;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scrollTabs = (direction: "left" | "right") => {
+    if (tabScrollRef.current) {
+      const scrollAmount = 260;
+      tabScrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+      setTimeout(checkTabScroll, 350);
+    }
+  };
+
+  useEffect(() => {
+    checkTabScroll();
+    window.addEventListener("resize", checkTabScroll);
+    return () => window.removeEventListener("resize", checkTabScroll);
+  }, []);
+
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -726,19 +757,39 @@ export default function CollegeDetailPage() {
         </div>
       </section>
 
-      {/* 2. EXACT SHIKSHA.COM STYLE SUB-HEADER TABS (From 1st Image) */}
-      <div className="sticky top-16 md:top-0 bg-white z-30 border-b border-slate-200 shadow-xs">
-        <div className="flex items-center overflow-x-auto no-scrollbar scroll-smooth px-2 sm:px-4">
+      {/* 2. EXACT SHIKSHA.COM STYLE SUB-HEADER TABS WITH HORIZONTAL SCROLL ARROWS */}
+      <div className="sticky top-16 md:top-0 bg-white z-30 border-b border-slate-200 shadow-xs relative">
+        {/* Left Scroll Navigation Button */}
+        {canScrollLeft && (
+          <button
+            onClick={() => scrollTabs("left")}
+            aria-label="Scroll left"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all cursor-pointer hidden sm:flex"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+        )}
+
+        {/* Tab Items Container */}
+        <div
+          ref={tabScrollRef}
+          onScroll={checkTabScroll}
+          className="flex items-center overflow-x-auto scroll-smooth px-3 sm:px-6 py-0 relative [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
           {SHIKSHA_NAV_TABS.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  // Centering the active tab on click
+                  setTimeout(checkTabScroll, 100);
+                }}
                 className={`py-3.5 px-3.5 sm:px-4 text-xs font-bold whitespace-nowrap transition-all relative flex-shrink-0 cursor-pointer ${
                   isActive
                     ? "text-[#4a154b] font-black"
-                    : "text-slate-600 hover:text-slate-900"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50/80 rounded-t-xl"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -764,6 +815,17 @@ export default function CollegeDetailPage() {
             </button>
           )}
         </div>
+
+        {/* Right Scroll Navigation Button */}
+        {canScrollRight && (
+          <button
+            onClick={() => scrollTabs("right")}
+            aria-label="Scroll right"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all cursor-pointer hidden sm:flex"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* 3. CORE TWO-COLUMN CONTENT GRID */}
