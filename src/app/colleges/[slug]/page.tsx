@@ -757,58 +757,65 @@ export default function CollegeDetailPage() {
         </div>
       </section>
 
-      {/* 2. EXACT SHIKSHA.COM STYLE SUB-HEADER TABS WITH HORIZONTAL SCROLL ARROWS */}
-      <div className="sticky top-16 md:top-0 bg-white z-30 border-b border-slate-200 shadow-xs relative">
-        {/* Left Scroll Navigation Button */}
+      {/* 2. WORLD-CLASS GLASSMORPHIC SUB-HEADER TABS WITH SEPARATORS & INTERACTIVE SCROLL */}
+      <div className="sticky top-16 md:top-0 bg-white/85 backdrop-blur-xl z-30 border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] py-1 relative">
+        {/* Left Scroll Gradient Fade & Floating Glass Arrow */}
         {canScrollLeft && (
-          <button
-            onClick={() => scrollTabs("left")}
-            aria-label="Scroll left"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all cursor-pointer hidden sm:flex"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+          <div className="absolute left-0 inset-y-0 w-16 bg-gradient-to-r from-white via-white/90 to-transparent z-20 flex items-center pl-2 pointer-events-none">
+            <button
+              onClick={() => scrollTabs("left")}
+              aria-label="Scroll left"
+              className="w-8 h-8 rounded-full bg-white/95 border border-slate-200/90 shadow-lg flex items-center justify-center text-slate-700 hover:text-orange-600 hover:scale-110 active:scale-95 transition-all pointer-events-auto cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+          </div>
         )}
 
-        {/* Tab Items Container */}
+        {/* Glassmorphic Tab Items Container */}
         <div
           ref={tabScrollRef}
           onScroll={checkTabScroll}
-          className="flex items-center overflow-x-auto scroll-smooth px-3 sm:px-6 py-0 relative [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex items-center gap-1 overflow-x-auto scroll-smooth px-3 sm:px-8 py-1.5 relative [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
-          {SHIKSHA_NAV_TABS.map((tab) => {
+          {SHIKSHA_NAV_TABS.map((tab, index) => {
             const isActive = activeTab === tab.id;
             return (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  // Centering the active tab on click
-                  setTimeout(checkTabScroll, 100);
-                }}
-                className={`py-3.5 px-3.5 sm:px-4 text-xs font-bold whitespace-nowrap transition-all relative flex-shrink-0 cursor-pointer ${
-                  isActive
-                    ? "text-[#4a154b] font-black"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50/80 rounded-t-xl"
-                }`}
-              >
-                <span>{tab.label}</span>
-                {/* Active Indicator Underline (Matching Shiksha Reference) */}
-                {isActive && (
-                  <motion.div
-                    layoutId="shikshaTabIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#4a154b] rounded-t-full shadow-xs"
-                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                  />
+              <React.Fragment key={tab.id}>
+                <button
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setTimeout(checkTabScroll, 100);
+                  }}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 relative flex-shrink-0 cursor-pointer select-none group ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#4a154b]/10 to-[#6b21a8]/10 text-[#4a154b] font-black border border-[#4a154b]/20 shadow-xs backdrop-blur-md"
+                      : "text-slate-600 hover:text-slate-950 hover:bg-white/80 hover:shadow-xs hover:border hover:border-slate-200/70"
+                  }`}
+                >
+                  <span className="relative z-10">{tab.label}</span>
+                  {/* Subtle Glass Sheen on Active */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="glassTabActive"
+                      className="absolute inset-0 rounded-xl bg-white/40 shadow-inner border border-white/60 pointer-events-none"
+                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                </button>
+
+                {/* Elegant Micro Separator Dot between items */}
+                {index < SHIKSHA_NAV_TABS.length - 1 && (
+                  <span className="w-1 h-1 rounded-full bg-slate-300/80 mx-0.5 shrink-0 select-none pointer-events-none" />
                 )}
-              </button>
+              </React.Fragment>
             );
           })}
 
           {isAdmin && (
             <button
               onClick={startEditing}
-              className="ml-auto my-auto flex items-center gap-1.5 px-3 py-1 bg-slate-900 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-xs cursor-pointer transition-all flex-shrink-0"
+              className="ml-auto my-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-sm cursor-pointer transition-all flex-shrink-0"
             >
               <Edit className="w-3.5 h-3.5" />
               <span>Edit Details</span>
@@ -816,15 +823,17 @@ export default function CollegeDetailPage() {
           )}
         </div>
 
-        {/* Right Scroll Navigation Button */}
+        {/* Right Scroll Gradient Fade & Floating Glass Arrow */}
         {canScrollRight && (
-          <button
-            onClick={() => scrollTabs("right")}
-            aria-label="Scroll right"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all cursor-pointer hidden sm:flex"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          <div className="absolute right-0 inset-y-0 w-16 bg-gradient-to-l from-white via-white/90 to-transparent z-20 flex items-center justify-end pr-2 pointer-events-none">
+            <button
+              onClick={() => scrollTabs("right")}
+              aria-label="Scroll right"
+              className="w-8 h-8 rounded-full bg-white/95 border border-slate-200/90 shadow-lg flex items-center justify-center text-slate-700 hover:text-orange-600 hover:scale-110 active:scale-95 transition-all pointer-events-auto cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         )}
       </div>
 
