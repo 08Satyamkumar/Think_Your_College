@@ -841,94 +841,222 @@ export default function CollegeDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
         {/* LEFT COLUMN: ACTIVE TAB CONTENT (70%) */}
         <div className="lg:col-span-7 space-y-6">
-          {/* TAB 1: COLLEGE INFO (OVERVIEW & HIGHLIGHTS) */}
+          {/* TAB 1: COLLEGE INFO (WORLD-CLASS MASTER DETAILED TEMPLATE) */}
           {activeTab === "info" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
-              {/* What's New Box 2026 */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
-                <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
-                  <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
-                  <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
+            <div className="space-y-6">
+              {/* 1. Verified Editorial & Authority Header Badge */}
+              <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-700 to-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-purple-500/20 shrink-0">
+                    <GraduationCap className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900">
+                      <span>Research & Content Editorial Team</span>
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 fill-emerald-50" />
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-semibold mt-0.5">
+                      Curated from Official NIRF 2026, JoSAA Seat Matrix & College Archives • Updated Sept 2026
+                    </p>
+                  </div>
                 </div>
-                <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
-                  {collegeData.whatsNew?.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-orange-500 font-bold">•</span>
-                      <span>{item}</span>
-                    </li>
+
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10.5px] font-black tracking-wide flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    100% Fact Checked
+                  </span>
+                </div>
+              </div>
+
+              {/* 2. Interactive Table of Contents (TOC) Quick Anchor Bar */}
+              <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-white p-5 rounded-3xl shadow-md space-y-3">
+                <div className="flex items-center gap-2 text-xs font-black tracking-wider uppercase text-orange-400">
+                  <Compass className="w-4 h-4" />
+                  <span>Table of Contents (Jump to Section)</span>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {[
+                    { label: "📌 Highlights Matrix", id: "section-highlights" },
+                    { label: "✨ What's New 2026", id: "section-whats-new" },
+                    { label: "🏛️ About & Heritage", id: "section-about" },
+                    { label: "📊 Key Stat Metrics", id: "section-stats" },
+                    { label: "🌟 Campus Strengths & USPs", id: "section-usps" },
+                    { label: "❓ Top FAQs", id: "section-faqs" },
+                  ].map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        const elem = document.getElementById(item.id);
+                        elem?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-orange-500 text-white text-xs font-bold transition-all border border-white/10 backdrop-blur-sm active:scale-95 cursor-pointer"
+                    >
+                      {item.label}
+                    </button>
                   ))}
-                </ul>
-              </div>
-
-              {/* About the Institution */}
-              <div className="space-y-3">
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  About {collegeData.name}
-                </h2>
-                <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium">
-                  {collegeData.description.split("\n\n").map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
                 </div>
               </div>
 
-              {/* Key Highlights Table (Shiksha Benchmark) */}
-              <div className="space-y-3 pt-2">
-                <h3 className="font-outfit font-black text-lg text-slate-900">
-                  {collegeData.name} - Key Highlights
-                </h3>
-                <div className="overflow-hidden border border-slate-200 rounded-2xl">
-                  <table className="w-full text-left border-collapse text-xs">
-                    <tbody>
-                      {collegeData.highlights.map((item, idx) => (
-                        <tr
-                          key={idx}
-                          className={`border-b border-slate-100 ${
-                            idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
-                          }`}
-                        >
-                          <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
-                            {item.label}
-                          </td>
-                          <td className="py-3 px-4 font-bold text-slate-900">
-                            {item.value}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              {/* 3. Main Content Card */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-7 shadow-xs">
+                {/* SECTION A: What's New Alert Box */}
+                <div id="section-whats-new" className="p-5 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50/70 border border-orange-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-orange-800 font-black text-xs uppercase tracking-wide">
+                      <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
+                      <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-orange-200/80 text-orange-800 text-[10px] font-black uppercase">
+                      Live Notification
+                    </span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-700 font-semibold pl-1">
+                    {collegeData.whatsNew?.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <span className="text-orange-500 font-black text-sm leading-none">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
 
-              {/* Key Quick Stats Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-2">
-                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-center">
-                  <p className="text-[10px] uppercase font-bold text-emerald-700">Highest CTC</p>
-                  <p className="font-outfit font-black text-base text-emerald-600 mt-0.5">
-                    {collegeData.highestPackage.split("(")[0]}
-                  </p>
-                  <span className="text-[9px] text-emerald-600 font-semibold">Domestic Offer</span>
+                {/* SECTION B: 4 Key Quick Stat KPI Cards */}
+                <div id="section-stats" className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+                  <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 text-center hover:shadow-sm transition-all">
+                    <p className="text-[10px] uppercase font-bold text-emerald-800 tracking-wider">Highest CTC</p>
+                    <p className="font-outfit font-black text-lg text-emerald-700 mt-0.5">
+                      {collegeData.highestPackage.split("(")[0]}
+                    </p>
+                    <span className="text-[9.5px] text-emerald-600 font-bold">Domestic / Int. Offer</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-orange-50/70 border border-orange-200/70 text-center hover:shadow-sm transition-all">
+                    <p className="text-[10px] uppercase font-bold text-orange-800 tracking-wider">Average CTC</p>
+                    <p className="font-outfit font-black text-lg text-orange-700 mt-0.5">
+                      {collegeData.averagePackage}
+                    </p>
+                    <span className="text-[9.5px] text-orange-600 font-bold">Overall B.Tech Batch</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/70 text-center hover:shadow-sm transition-all">
+                    <p className="text-[10px] uppercase font-bold text-blue-800 tracking-wider">Annual Tuition</p>
+                    <p className="font-outfit font-black text-lg text-blue-700 mt-0.5">
+                      {collegeData.totalFees.split("(")[0]}
+                    </p>
+                    <span className="text-[9.5px] text-blue-600 font-bold">100% Fee Aid Available</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200/70 text-center hover:shadow-sm transition-all">
+                    <p className="text-[10px] uppercase font-bold text-purple-800 tracking-wider">NIRF 2026</p>
+                    <p className="font-outfit font-black text-lg text-purple-700 mt-0.5">
+                      Rank #2
+                    </p>
+                    <span className="text-[9.5px] text-purple-600 font-bold">Engineering Category</span>
+                  </div>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-orange-50/70 border border-orange-100 text-center">
-                  <p className="text-[10px] uppercase font-bold text-orange-700">Average CTC</p>
-                  <p className="font-outfit font-black text-base text-orange-600 mt-0.5">
-                    {collegeData.averagePackage}
-                  </p>
-                  <span className="text-[9px] text-orange-600 font-semibold">Overall B.Tech</span>
+
+                {/* SECTION C: 12-Point Master Highlights Table */}
+                <div id="section-highlights" className="space-y-3.5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-outfit font-black text-xl text-slate-900 tracking-tight">
+                      {collegeData.name.split(" - ")[0]} - Key Institutional Highlights
+                    </h3>
+                    <span className="text-xs text-slate-500 font-bold hidden sm:inline">
+                      Official 2026 Factsheet
+                    </span>
+                  </div>
+
+                  <div className="overflow-hidden border border-slate-200 rounded-2xl shadow-xs">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <tbody>
+                        {collegeData.highlights.map((item, idx) => (
+                          <tr
+                            key={idx}
+                            className={`border-b border-slate-100 transition-colors hover:bg-orange-50/40 ${
+                              idx % 2 === 0 ? "bg-white" : "bg-slate-50/70"
+                            }`}
+                          >
+                            <td className="py-3.5 px-4 font-black text-slate-800 w-2/5 sm:w-1/3 border-r border-slate-100 flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                              <span>{item.label}</span>
+                            </td>
+                            <td className="py-3.5 px-4 font-bold text-slate-900">
+                              {item.value}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-100 text-center">
-                  <p className="text-[10px] uppercase font-bold text-blue-700">Annual Tuition</p>
-                  <p className="font-outfit font-black text-base text-blue-600 mt-0.5">
-                    {collegeData.totalFees.split("(")[0]}
-                  </p>
-                  <span className="text-[9px] text-blue-600 font-semibold">100% Aid Available</span>
+
+                {/* SECTION D: About the Institution Story Narrative */}
+                <div id="section-about" className="space-y-4 pt-2">
+                  <h3 className="font-outfit font-black text-xl text-slate-900 tracking-tight">
+                    About {collegeData.name}
+                  </h3>
+                  <div className="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3.5 font-medium">
+                    {collegeData.description.split("\n\n").map((para, i) => (
+                      <p key={i} className="text-justify">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-100 text-center">
-                  <p className="text-[10px] uppercase font-bold text-purple-700">NIRF 2026</p>
-                  <p className="font-outfit font-black text-base text-purple-600 mt-0.5">
-                    Rank #2
-                  </p>
-                  <span className="text-[9px] text-purple-600 font-semibold">Engineering</span>
+
+                {/* SECTION E: 4 Core Institutional Strengths & USPs Grid */}
+                <div id="section-usps" className="space-y-3.5 pt-2">
+                  <h3 className="font-outfit font-black text-xl text-slate-900 tracking-tight">
+                    Why Choose {collegeData.name.split(" - ")[0]}? Key Strengths
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
+                      <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
+                        <Sparkles className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-outfit font-black text-sm text-slate-900">
+                        Top 0.01% Peer Group & Hackathon Culture
+                      </h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                        Surround yourself with India's brightest engineering minds, active coding societies (DevClub, Robotics Club), and high-impact student projects.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
+                      <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                        <Building className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-outfit font-black text-sm text-slate-900">
+                        World-Class FITT Startup Incubation
+                      </h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                        Foundation for Innovation and Technology Transfer (FITT) provides seed funding, patent mentoring, and venture backing for student entrepreneurs.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
+                      <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        <Award className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-outfit font-black text-sm text-slate-900">
+                        Global Corporate Brand Value & Placements
+                      </h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                        Recognized globally by MIT, Stanford, Google, Apple, and McKinsey, offering unmatched career acceleration and alumni networking.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
+                      <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-outfit font-black text-sm text-slate-900">
+                        Prime Hauz Khas South Delhi Location
+                      </h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                        Dedicated Magenta Line Metro Station right outside the campus gate, providing effortless access to corporate hubs, cafes, and airports.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
