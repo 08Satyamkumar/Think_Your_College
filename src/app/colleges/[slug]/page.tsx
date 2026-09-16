@@ -975,7 +975,7 @@ export default function CollegeDetailPage() {
           {/* TAB 1: COLLEGE INFO */}
           {activeTab === "info" && (
             <div className="space-y-6">
-              {/* 1. TABLE OF CONTENTS (EXACT USER REFERENCE TEMPLATE) */}
+              {/* 1. TABLE OF CONTENTS (WORLD-CLASS PREMIUM REFERENCE TEMPLATE) */}
               {(() => {
                 const tocList = getCollegeTocList(collegeData);
                 const visibleList = isTocExpanded ? tocList : tocList.slice(0, 5);
@@ -983,15 +983,15 @@ export default function CollegeDetailPage() {
                 const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
 
                 return (
-                  <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs transition-all duration-200">
+                  <div className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300">
                     {/* Top Header Row */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-0.5">
-                        <span className="text-[12px] font-medium text-slate-500 block tracking-tight">
+                        <span className="text-[11.5px] font-bold text-slate-400 uppercase tracking-wide block">
                           {collegeShortName} Overview
                         </span>
-                        <h2 className="text-lg sm:text-xl font-bold font-outfit text-[#1e1b4b] tracking-tight">
-                          Table of contents
+                        <h2 className="text-lg sm:text-xl font-black font-outfit text-slate-900 tracking-tight flex items-center gap-2">
+                          <span>Table of contents</span>
                         </h2>
                       </div>
 
@@ -1000,9 +1000,9 @@ export default function CollegeDetailPage() {
                           <button
                             type="button"
                             onClick={() => openMiniModal("toc")}
-                            className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
                           >
-                            <Edit className="w-3 h-3" />
+                            <Edit className="w-3.5 h-3.5" />
                             <span>Edit TOC</span>
                           </button>
                         )}
@@ -1010,11 +1010,11 @@ export default function CollegeDetailPage() {
                           type="button"
                           onClick={() => setIsTocOpen(!isTocOpen)}
                           aria-label={isTocOpen ? "Collapse Table of Contents" : "Expand Table of Contents"}
-                          className="p-1 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
                         >
                           <ChevronDown
-                            className={`w-5 h-5 transition-transform duration-300 ${
-                              isTocOpen ? "rotate-180" : ""
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isTocOpen ? "rotate-180 text-blue-600" : ""
                             }`}
                           />
                         </button>
@@ -1031,36 +1031,38 @@ export default function CollegeDetailPage() {
                           transition={{ duration: 0.25, ease: "easeInOut" }}
                           className="overflow-hidden"
                         >
-                          <div className="pt-4 space-y-2.5">
+                          <div className="pt-4 space-y-2 border-t border-slate-100/90 mt-3.5">
                             {visibleList.map((item, idx) => (
                               <button
                                 key={idx}
                                 type="button"
                                 onClick={() => handleTocClick(item)}
-                                className="block text-left text-[#1a73e8] hover:text-[#1557b0] text-[14px] sm:text-[15px] font-medium leading-snug hover:underline cursor-pointer transition-colors w-full"
+                                className="group/item flex items-center text-left text-[#1a73e8] hover:text-[#0b57d0] text-[14px] sm:text-[14.5px] font-semibold leading-relaxed transition-all cursor-pointer py-0.5 w-full"
                               >
-                                {item.label}
+                                <span className="group-hover/item:underline underline-offset-2">
+                                  {item.label}
+                                </span>
                               </button>
                             ))}
 
                             {/* + X more items / - Collapse toggle */}
                             {tocList.length > 5 && (
-                              <div className="pt-1">
+                              <div className="pt-1.5">
                                 {!isTocExpanded ? (
                                   <button
                                     type="button"
                                     onClick={() => setIsTocExpanded(true)}
-                                    className="text-[#1a73e8] hover:text-[#1557b0] text-[14px] sm:text-[15px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                    className="inline-flex items-center gap-1.5 text-[#1a73e8] hover:text-[#0b57d0] text-[14px] sm:text-[14.5px] font-bold transition-all cursor-pointer underline-offset-4 hover:underline"
                                   >
-                                    + {remainingCount} more items
+                                    <span>+ {remainingCount} more items</span>
                                   </button>
                                 ) : (
                                   <button
                                     type="button"
                                     onClick={() => setIsTocExpanded(false)}
-                                    className="text-[#1a73e8] hover:text-[#1557b0] text-[14px] sm:text-[15px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                    className="inline-flex items-center gap-1.5 text-[#1a73e8] hover:text-[#0b57d0] text-[14px] sm:text-[14.5px] font-bold transition-all cursor-pointer underline-offset-4 hover:underline"
                                   >
-                                    - Collapse
+                                    <span>- Collapse</span>
                                   </button>
                                 )}
                               </div>
