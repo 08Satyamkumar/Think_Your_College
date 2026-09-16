@@ -101,6 +101,14 @@ interface FacultyMember {
   experience: string;
 }
 
+interface AuthorProfile {
+  name: string;
+  role: string;
+  image?: string;
+  updatedDate: string;
+  verified?: boolean;
+}
+
 interface CollegeDetail {
   name: string;
   fullName?: string;
@@ -133,6 +141,7 @@ interface CollegeDetail {
   faqs: FaqItem[];
   gallery: GalleryPhoto[];
   facultyList?: FacultyMember[];
+  author?: AuthorProfile;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -154,6 +163,13 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
   totalFees: "₹2.38 Lakhs / Year (₹9.52 Lakhs Total B.Tech)",
   image: "/images/iitdelhi_real.jpg",
   logo: "/images/iitdelhi.png",
+  author: {
+    name: "Shreeya Panda",
+    role: "Intern",
+    image: "",
+    updatedDate: "Feb 09, 2026",
+    verified: true,
+  },
   campusArea: "320 Acres (Lush Green South Delhi Campus)",
   flagshipCourse: "B.Tech Computer Science and Engineering (CSE)",
   accreditation: "Institute of National Importance (MHRD/AICTE/UGC)",
@@ -455,6 +471,10 @@ export default function CollegeDetailPage() {
   const [editTotalFees, setEditTotalFees] = useState("");
   const [editCoverImage, setEditCoverImage] = useState("");
   const [editLogoImage, setEditLogoImage] = useState("");
+  const [editAuthorName, setEditAuthorName] = useState("");
+  const [editAuthorRole, setEditAuthorRole] = useState("");
+  const [editAuthorImage, setEditAuthorImage] = useState("");
+  const [editAuthorDate, setEditAuthorDate] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -523,6 +543,7 @@ export default function CollegeDetailPage() {
             faqs: parsedData.faqs || IIT_DELHI_MASTER_DATA.faqs,
             gallery: parsedData.gallery || IIT_DELHI_MASTER_DATA.gallery,
             facultyList: parsedData.facultyList || IIT_DELHI_MASTER_DATA.facultyList,
+            author: parsedData.author || IIT_DELHI_MASTER_DATA.author,
           };
 
           setCollegeData(baseDetail);
@@ -551,6 +572,10 @@ export default function CollegeDetailPage() {
     setEditTotalFees(collegeData.totalFees || "");
     setEditCoverImage(collegeData.image || "");
     setEditLogoImage(collegeData.logo || "");
+    setEditAuthorName(collegeData.author?.name || "Shreeya Panda");
+    setEditAuthorRole(collegeData.author?.role || "Intern");
+    setEditAuthorImage(collegeData.author?.image || "");
+    setEditAuthorDate(collegeData.author?.updatedDate || "Feb 09, 2026");
     setShowEditModal(true);
   };
 
@@ -568,6 +593,13 @@ export default function CollegeDetailPage() {
         totalFees: editTotalFees,
         image: editCoverImage || collegeData.image,
         logo: editLogoImage || collegeData.logo,
+        author: {
+          name: editAuthorName || "Shreeya Panda",
+          role: editAuthorRole || "Intern",
+          image: editAuthorImage || "",
+          updatedDate: editAuthorDate || "Feb 09, 2026",
+          verified: true,
+        },
       };
 
       const res = await fetch("/api/colleges/update", {
@@ -835,6 +867,65 @@ export default function CollegeDetailPage() {
             </button>
           </div>
         )}
+      </div>
+
+      {/* 2.5. CONTENT AUTHOR / WRITER PROFILE BYLINE (SHIKSHA EXACT REFERENCE) */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          {/* Author Badge / Avatar Logo */}
+          <div className="w-13 h-13 rounded-xl bg-gradient-to-tr from-[#c23616] via-[#273c75] to-[#192a56] p-0.5 shadow-sm flex items-center justify-center shrink-0 overflow-hidden">
+            {collegeData.author?.image ? (
+              <img
+                src={collegeData.author.image}
+                alt={collegeData.author.name}
+                className="w-full h-full object-cover rounded-[10px]"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = "none";
+                }}
+              />
+            ) : (
+              <div className="w-full h-full rounded-[10px] bg-gradient-to-br from-[#c93b2b] via-[#22487a] to-[#12233c] flex flex-col items-center justify-center text-white p-1">
+                <GraduationCap className="w-5 h-5 text-white" />
+                <span className="text-[7px] font-black uppercase tracking-tighter text-white/90">TYC</span>
+              </div>
+            )}
+          </div>
+
+          {/* Author Info: Name in Purple, Verified Green Checkmark, Role and Updated Date */}
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="font-outfit font-black text-base sm:text-lg text-[#6b21a8] hover:underline cursor-pointer">
+                {collegeData.author?.name || "Shreeya Panda"}
+              </span>
+              <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#10b981] text-white text-[9.5px] font-black shadow-2xs">
+                ✓
+              </span>
+            </div>
+            <p className="text-xs font-semibold text-slate-800">
+              {collegeData.author?.role || "Intern"}
+            </p>
+            <p className="text-xs font-medium text-slate-500 pt-0.5">
+              Updated on - {collegeData.author?.updatedDate || "Feb 09, 2026"}
+            </p>
+          </div>
+        </div>
+
+        {/* Fact check badge & admin edit */}
+        <div className="flex items-center gap-2">
+          <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10.5px] font-black tracking-wide flex items-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>100% Fact Checked Editorial</span>
+          </span>
+          {isAdmin && (
+            <button
+              onClick={startEditing}
+              className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Edit className="w-3 h-3" />
+              <span>Edit Author</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 3. CORE TWO-COLUMN CONTENT GRID */}
@@ -2114,6 +2205,62 @@ export default function CollegeDetailPage() {
                       onChange={(e) => setEditTotalFees(e.target.value)}
                       className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
                     />
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-100 pt-3">
+                  <h4 className="font-outfit font-black text-xs text-purple-700 uppercase tracking-wider mb-2">
+                    ✍️ Content Writer / Author Profile
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                        Author Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={editAuthorName}
+                        onChange={(e) => setEditAuthorName(e.target.value)}
+                        placeholder="e.g. Shreeya Panda"
+                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                        Role / Position *
+                      </label>
+                      <input
+                        type="text"
+                        value={editAuthorRole}
+                        onChange={(e) => setEditAuthorRole(e.target.value)}
+                        placeholder="e.g. Intern / Senior Education Specialist"
+                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                        Author Avatar / Photo URL
+                      </label>
+                      <input
+                        type="text"
+                        value={editAuthorImage}
+                        onChange={(e) => setEditAuthorImage(e.target.value)}
+                        placeholder="e.g. https://... or /images/avatar.jpg"
+                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                        Updated On Date String
+                      </label>
+                      <input
+                        type="text"
+                        value={editAuthorDate}
+                        onChange={(e) => setEditAuthorDate(e.target.value)}
+                        placeholder="e.g. Feb 09, 2026"
+                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
                   </div>
                 </div>
 
