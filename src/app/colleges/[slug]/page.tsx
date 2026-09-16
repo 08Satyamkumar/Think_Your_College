@@ -47,6 +47,8 @@ import {
   Landmark,
   Percent,
   CheckCircle2,
+  Plus,
+  Trash2,
 } from "lucide-react";
 
 interface CourseItem {
@@ -374,7 +376,7 @@ Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delh
   ],
 };
 
-// Exact Shiksha & Portal Tabs List including all Primary and Support Headers
+// Exact Shiksha Tabs List from User's Reference
 const SHIKSHA_NAV_TABS = [
   { id: "info", label: "College Info" },
   { id: "courses", label: "Courses" },
@@ -387,17 +389,30 @@ const SHIKSHA_NAV_TABS = [
   { id: "gallery", label: "Gallery" },
   { id: "hostel", label: "Hostel & Campus" },
   { id: "faculty", label: "Faculty" },
-  { id: "compare", label: "Compare" },
+  { id: "compare", label: "College Compare" },
   { id: "qa", label: "Q&A" },
   { id: "scholarships", label: "Scholarships" },
-  { id: "news", label: "News & Articles" },
-  { id: "hostel_guide", label: "Hostel" },
-  { id: "community", label: "Community" },
-  { id: "college_compare", label: "College Compare" },
-  { id: "profile", label: "Profile" },
 ] as const;
 
 type ShikshaTabId = (typeof SHIKSHA_NAV_TABS)[number]["id"];
+type MiniModalId =
+  | "header"
+  | "author"
+  | "info"
+  | "highlights"
+  | "courses"
+  | "fees"
+  | "reviews"
+  | "admissions"
+  | "placements"
+  | "cutoffs"
+  | "rankings"
+  | "gallery"
+  | "hostel"
+  | "faculty"
+  | "qa"
+  | "scholarships"
+  | null;
 
 const iconMap: Record<string, any> = {
   Building,
@@ -412,7 +427,7 @@ export default function CollegeDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  // Selected Tab State (Default is 'info' which maps to 'College Info')
+  // Selected Tab State
   const [activeTab, setActiveTab] = useState<ShikshaTabId>("info");
 
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -428,7 +443,7 @@ export default function CollegeDetailPage() {
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [courseSearch, setCourseSearch] = useState("");
 
-  // Horizontal Scroll Ref for 19 Sub-Header Tabs
+  // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -460,21 +475,11 @@ export default function CollegeDetailPage() {
 
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [activeMiniModal, setActiveMiniModal] = useState<MiniModalId>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Edit Form Fields
-  const [editAboutText, setEditAboutText] = useState("");
-  const [editEstd, setEditEstd] = useState("");
-  const [editHighestPackage, setEditHighestPackage] = useState("");
-  const [editAveragePackage, setEditAveragePackage] = useState("");
-  const [editTotalFees, setEditTotalFees] = useState("");
-  const [editCoverImage, setEditCoverImage] = useState("");
-  const [editLogoImage, setEditLogoImage] = useState("");
-  const [editAuthorName, setEditAuthorName] = useState("");
-  const [editAuthorRole, setEditAuthorRole] = useState("");
-  const [editAuthorImage, setEditAuthorImage] = useState("");
-  const [editAuthorDate, setEditAuthorDate] = useState("");
+  // Section-by-Section Edit State Buffer
+  const [tempData, setTempData] = useState<CollegeDetail>(IIT_DELHI_MASTER_DATA);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -547,13 +552,15 @@ export default function CollegeDetailPage() {
           };
 
           setCollegeData(baseDetail);
+          setTempData(baseDetail);
         } else {
-          // Default to Master Benchmark Dataset
           setCollegeData(IIT_DELHI_MASTER_DATA);
+          setTempData(IIT_DELHI_MASTER_DATA);
         }
       } catch (err) {
         console.error("Error loading college detail:", err);
         setCollegeData(IIT_DELHI_MASTER_DATA);
+        setTempData(IIT_DELHI_MASTER_DATA);
       } finally {
         setLoading(false);
       }
@@ -564,43 +571,17 @@ export default function CollegeDetailPage() {
     }
   }, [slug]);
 
-  const startEditing = () => {
-    setEditAboutText(collegeData.description || "");
-    setEditEstd(collegeData.estd || "1961");
-    setEditHighestPackage(collegeData.highestPackage || "");
-    setEditAveragePackage(collegeData.averagePackage || "");
-    setEditTotalFees(collegeData.totalFees || "");
-    setEditCoverImage(collegeData.image || "");
-    setEditLogoImage(collegeData.logo || "");
-    setEditAuthorName(collegeData.author?.name || "Shreeya Panda");
-    setEditAuthorRole(collegeData.author?.role || "Intern");
-    setEditAuthorImage(collegeData.author?.image || "");
-    setEditAuthorDate(collegeData.author?.updatedDate || "Feb 09, 2026");
-    setShowEditModal(true);
+  const openMiniModal = (modalId: MiniModalId) => {
+    setTempData(JSON.parse(JSON.stringify(collegeData)));
+    setActiveMiniModal(modalId);
   };
 
-  const handleSavePageChanges = async (e: React.FormEvent) => {
+  const handleSaveSection = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsUpdating(true);
 
     try {
-      const updatedData: CollegeDetail = {
-        ...collegeData,
-        description: editAboutText,
-        estd: editEstd,
-        highestPackage: editHighestPackage,
-        averagePackage: editAveragePackage,
-        totalFees: editTotalFees,
-        image: editCoverImage || collegeData.image,
-        logo: editLogoImage || collegeData.logo,
-        author: {
-          name: editAuthorName || "Shreeya Panda",
-          role: editAuthorRole || "Intern",
-          image: editAuthorImage || "",
-          updatedDate: editAuthorDate || "Feb 09, 2026",
-          verified: true,
-        },
-      };
+      const updatedData: CollegeDetail = { ...tempData };
 
       const res = await fetch("/api/colleges/update", {
         method: "POST",
@@ -611,23 +592,23 @@ export default function CollegeDetailPage() {
           slug: slug,
           updatedFields: {
             description: JSON.stringify(updatedData),
-            tuition_fees: editTotalFees,
-            image_url: editCoverImage,
+            tuition_fees: updatedData.totalFees,
+            image_url: updatedData.image,
           },
         }),
       });
 
       if (res.ok) {
         setCollegeData(updatedData);
-        setShowEditModal(false);
-        alert("✅ College details saved and updated live across all devices!");
+        setActiveMiniModal(null);
+        alert("✅ Section updated and published live!");
       } else {
         const errData = await res.json();
-        alert(errData.error || "Failed to update college details.");
+        alert(errData.error || "Failed to update section.");
       }
     } catch (err) {
       console.error("Save error:", err);
-      alert("Network error updating page details.");
+      alert("Network error updating section.");
     } finally {
       setIsUpdating(false);
     }
@@ -675,7 +656,7 @@ export default function CollegeDetailPage() {
   }
 
   return (
-    <div className="min-h-screen pb-16 space-y-5 select-none">
+    <div className="min-h-screen pb-16 space-y-4 select-none">
       {/* 1. SHIKSHA-STYLE MODERN HERO BANNER */}
       <section className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xl">
         {/* Cover Photo with Dark Gradient & Ambient Backlight */}
@@ -761,6 +742,16 @@ export default function CollegeDetailPage() {
 
           {/* Action Buttons Row */}
           <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0">
+            {isAdmin && (
+              <button
+                onClick={() => openMiniModal("header")}
+                className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm"
+                title="Edit Banner Image & Header Titles"
+              >
+                <Edit className="w-3.5 h-3.5" />
+                <span>Edit Banner</span>
+              </button>
+            )}
             <button
               onClick={() => alert("Brochure sent to your email & WhatsApp!")}
               className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 backdrop-blur-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm"
@@ -789,9 +780,8 @@ export default function CollegeDetailPage() {
         </div>
       </section>
 
-      {/* 2. WORLD-CLASS GLASSMORPHIC SUB-HEADER TABS WITH SEPARATORS & INTERACTIVE SCROLL */}
+      {/* 2. GLASSMORPHIC SUB-HEADER TABS WITH SEPARATORS */}
       <div className="sticky top-16 md:top-0 bg-white/85 backdrop-blur-xl z-30 border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] py-1 relative">
-        {/* Left Scroll Gradient Fade & Floating Glass Arrow */}
         {canScrollLeft && (
           <div className="absolute left-0 inset-y-0 w-16 bg-gradient-to-r from-white via-white/90 to-transparent z-20 flex items-center pl-2 pointer-events-none">
             <button
@@ -804,7 +794,6 @@ export default function CollegeDetailPage() {
           </div>
         )}
 
-        {/* Glassmorphic Tab Items Container */}
         <div
           ref={tabScrollRef}
           onScroll={checkTabScroll}
@@ -826,7 +815,6 @@ export default function CollegeDetailPage() {
                   }`}
                 >
                   <span className="relative z-10">{tab.label}</span>
-                  {/* Subtle Glass Sheen on Active */}
                   {isActive && (
                     <motion.div
                       layoutId="glassTabActive"
@@ -836,26 +824,14 @@ export default function CollegeDetailPage() {
                   )}
                 </button>
 
-                {/* Elegant Micro Separator Dot between items */}
                 {index < SHIKSHA_NAV_TABS.length - 1 && (
                   <span className="w-1 h-1 rounded-full bg-slate-300/80 mx-0.5 shrink-0 select-none pointer-events-none" />
                 )}
               </React.Fragment>
             );
           })}
-
-          {isAdmin && (
-            <button
-              onClick={startEditing}
-              className="ml-auto my-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-sm cursor-pointer transition-all flex-shrink-0"
-            >
-              <Edit className="w-3.5 h-3.5" />
-              <span>Edit Details</span>
-            </button>
-          )}
         </div>
 
-        {/* Right Scroll Gradient Fade & Floating Glass Arrow */}
         {canScrollRight && (
           <div className="absolute right-0 inset-y-0 w-16 bg-gradient-to-l from-white via-white/90 to-transparent z-20 flex items-center justify-end pr-2 pointer-events-none">
             <button
@@ -918,7 +894,7 @@ export default function CollegeDetailPage() {
           </span>
           {isAdmin && (
             <button
-              onClick={startEditing}
+              onClick={() => openMiniModal("author")}
               className="px-2.5 py-0.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-[10.5px] font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Edit className="w-3 h-3" />
@@ -932,222 +908,84 @@ export default function CollegeDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
         {/* LEFT COLUMN: ACTIVE TAB CONTENT (70%) */}
         <div className="lg:col-span-7 space-y-6">
-          {/* TAB 1: COLLEGE INFO (WORLD-CLASS MASTER DETAILED TEMPLATE) */}
+          {/* TAB 1: COLLEGE INFO */}
           {activeTab === "info" && (
-            <div className="space-y-6">
-              {/* 1. Verified Editorial & Authority Header Badge */}
-              <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-700 to-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-purple-500/20 shrink-0">
-                    <GraduationCap className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900">
-                      <span>Research & Content Editorial Team</span>
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 fill-emerald-50" />
-                    </div>
-                    <p className="text-[11px] text-slate-500 font-semibold mt-0.5">
-                      Curated from Official NIRF 2026, JoSAA Seat Matrix & College Archives • Updated Sept 2026
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10.5px] font-black tracking-wide flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                    100% Fact Checked
-                  </span>
-                </div>
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+              <div className="flex items-center justify-between">
+                <h2 className="font-outfit font-black text-xl text-slate-900">
+                  About {collegeData.name}
+                </h2>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("info")}
+                    className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3 h-3" />
+                    <span>Edit Overview & Updates</span>
+                  </button>
+                )}
               </div>
 
-              {/* 2. Interactive Table of Contents (TOC) Quick Anchor Bar */}
-              <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-white p-5 rounded-3xl shadow-md space-y-3">
-                <div className="flex items-center gap-2 text-xs font-black tracking-wider uppercase text-orange-400">
-                  <Compass className="w-4 h-4" />
-                  <span>Table of Contents (Jump to Section)</span>
+              {/* What's New Box 2026 */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
+                  <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
+                  <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
                 </div>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {[
-                    { label: "📌 Highlights Matrix", id: "section-highlights" },
-                    { label: "✨ What's New 2026", id: "section-whats-new" },
-                    { label: "🏛️ About & Heritage", id: "section-about" },
-                    { label: "📊 Key Stat Metrics", id: "section-stats" },
-                    { label: "🌟 Campus Strengths & USPs", id: "section-usps" },
-                    { label: "❓ Top FAQs", id: "section-faqs" },
-                  ].map((item, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        const elem = document.getElementById(item.id);
-                        elem?.scrollIntoView({ behavior: "smooth", block: "start" });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-orange-500 text-white text-xs font-bold transition-all border border-white/10 backdrop-blur-sm active:scale-95 cursor-pointer"
-                    >
-                      {item.label}
-                    </button>
+                <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
+                  {collegeData.whatsNew?.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-orange-500 font-bold">•</span>
+                      <span>{item}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
-              {/* 3. Main Content Card */}
-              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-7 shadow-xs">
-                {/* SECTION A: What's New Alert Box */}
-                <div id="section-whats-new" className="p-5 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50/70 border border-orange-200 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-orange-800 font-black text-xs uppercase tracking-wide">
-                      <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
-                      <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
-                    </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-orange-200/80 text-orange-800 text-[10px] font-black uppercase">
-                      Live Notification
-                    </span>
-                  </div>
-                  <ul className="space-y-2 text-xs text-slate-700 font-semibold pl-1">
-                    {collegeData.whatsNew?.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5">
-                        <span className="text-orange-500 font-black text-sm leading-none">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {/* About text */}
+              <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium">
+                {collegeData.description.split("\n\n").map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
 
-                {/* SECTION B: 4 Key Quick Stat KPI Cards */}
-                <div id="section-stats" className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-                  <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 text-center hover:shadow-sm transition-all">
-                    <p className="text-[10px] uppercase font-bold text-emerald-800 tracking-wider">Highest CTC</p>
-                    <p className="font-outfit font-black text-lg text-emerald-700 mt-0.5">
-                      {collegeData.highestPackage.split("(")[0]}
-                    </p>
-                    <span className="text-[9.5px] text-emerald-600 font-bold">Domestic / Int. Offer</span>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-orange-50/70 border border-orange-200/70 text-center hover:shadow-sm transition-all">
-                    <p className="text-[10px] uppercase font-bold text-orange-800 tracking-wider">Average CTC</p>
-                    <p className="font-outfit font-black text-lg text-orange-700 mt-0.5">
-                      {collegeData.averagePackage}
-                    </p>
-                    <span className="text-[9.5px] text-orange-600 font-bold">Overall B.Tech Batch</span>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/70 text-center hover:shadow-sm transition-all">
-                    <p className="text-[10px] uppercase font-bold text-blue-800 tracking-wider">Annual Tuition</p>
-                    <p className="font-outfit font-black text-lg text-blue-700 mt-0.5">
-                      {collegeData.totalFees.split("(")[0]}
-                    </p>
-                    <span className="text-[9.5px] text-blue-600 font-bold">100% Fee Aid Available</span>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200/70 text-center hover:shadow-sm transition-all">
-                    <p className="text-[10px] uppercase font-bold text-purple-800 tracking-wider">NIRF 2026</p>
-                    <p className="font-outfit font-black text-lg text-purple-700 mt-0.5">
-                      Rank #2
-                    </p>
-                    <span className="text-[9.5px] text-purple-600 font-bold">Engineering Category</span>
-                  </div>
-                </div>
-
-                {/* SECTION C: 12-Point Master Highlights Table */}
-                <div id="section-highlights" className="space-y-3.5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-outfit font-black text-xl text-slate-900 tracking-tight">
-                      {collegeData.name.split(" - ")[0]} - Key Institutional Highlights
-                    </h3>
-                    <span className="text-xs text-slate-500 font-bold hidden sm:inline">
-                      Official 2026 Factsheet
-                    </span>
-                  </div>
-
-                  <div className="overflow-hidden border border-slate-200 rounded-2xl shadow-xs">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <tbody>
-                        {collegeData.highlights.map((item, idx) => (
-                          <tr
-                            key={idx}
-                            className={`border-b border-slate-100 transition-colors hover:bg-orange-50/40 ${
-                              idx % 2 === 0 ? "bg-white" : "bg-slate-50/70"
-                            }`}
-                          >
-                            <td className="py-3.5 px-4 font-black text-slate-800 w-2/5 sm:w-1/3 border-r border-slate-100 flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
-                              <span>{item.label}</span>
-                            </td>
-                            <td className="py-3.5 px-4 font-bold text-slate-900">
-                              {item.value}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* SECTION D: About the Institution Story Narrative */}
-                <div id="section-about" className="space-y-4 pt-2">
-                  <h3 className="font-outfit font-black text-xl text-slate-900 tracking-tight">
-                    About {collegeData.name}
+              {/* Key Highlights Table */}
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-outfit font-black text-lg text-slate-900">
+                    {collegeData.name} - Key Highlights
                   </h3>
-                  <div className="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3.5 font-medium">
-                    {collegeData.description.split("\n\n").map((para, i) => (
-                      <p key={i} className="text-justify">
-                        {para}
-                      </p>
-                    ))}
-                  </div>
+                  {isAdmin && (
+                    <button
+                      onClick={() => openMiniModal("highlights")}
+                      className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <Edit className="w-3 h-3" />
+                      <span>Edit Highlights Table</span>
+                    </button>
+                  )}
                 </div>
 
-                {/* SECTION E: 4 Core Institutional Strengths & USPs Grid */}
-                <div id="section-usps" className="space-y-3.5 pt-2">
-                  <h3 className="font-outfit font-black text-xl text-slate-900 tracking-tight">
-                    Why Choose {collegeData.name.split(" - ")[0]}? Key Strengths
-                  </h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
-                      <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
-                        <Sparkles className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-outfit font-black text-sm text-slate-900">
-                        Top 0.01% Peer Group & Hackathon Culture
-                      </h4>
-                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                        Surround yourself with India's brightest engineering minds, active coding societies (DevClub, Robotics Club), and high-impact student projects.
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
-                      <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
-                        <Building className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-outfit font-black text-sm text-slate-900">
-                        World-Class FITT Startup Incubation
-                      </h4>
-                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                        Foundation for Innovation and Technology Transfer (FITT) provides seed funding, patent mentoring, and venture backing for student entrepreneurs.
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
-                      <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                        <Award className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-outfit font-black text-sm text-slate-900">
-                        Global Corporate Brand Value & Placements
-                      </h4>
-                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                        Recognized globally by MIT, Stanford, Google, Apple, and McKinsey, offering unmatched career acceleration and alumni networking.
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 hover:border-orange-300 transition-all">
-                      <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
-                        <MapPin className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-outfit font-black text-sm text-slate-900">
-                        Prime Hauz Khas South Delhi Location
-                      </h4>
-                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                        Dedicated Magenta Line Metro Station right outside the campus gate, providing effortless access to corporate hubs, cafes, and airports.
-                      </p>
-                    </div>
-                  </div>
+                <div className="overflow-hidden border border-slate-200 rounded-2xl">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <tbody>
+                      {collegeData.highlights.map((item, idx) => (
+                        <tr
+                          key={idx}
+                          className={`border-b border-slate-100 ${
+                            idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
+                          }`}
+                        >
+                          <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
+                            {item.label}
+                          </td>
+                          <td className="py-3 px-4 font-bold text-slate-900">
+                            {item.value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -1166,13 +1004,24 @@ export default function CollegeDetailPage() {
                   </p>
                 </div>
 
-                <input
-                  type="text"
-                  placeholder="Search course (e.g. CSE, AI)..."
-                  value={courseSearch}
-                  onChange={(e) => setCourseSearch(e.target.value)}
-                  className="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-500 bg-slate-50 sm:w-60"
-                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Search course (e.g. CSE, AI)..."
+                    value={courseSearch}
+                    onChange={(e) => setCourseSearch(e.target.value)}
+                    className="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-500 bg-slate-50 sm:w-48"
+                  />
+                  {isAdmin && (
+                    <button
+                      onClick={() => openMiniModal("courses")}
+                      className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shrink-0"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                      <span>Edit Courses</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="overflow-x-auto border border-slate-200 rounded-2xl">
@@ -1228,13 +1077,24 @@ export default function CollegeDetailPage() {
           {/* TAB 3: FEES STRUCTURE */}
           {activeTab === "fees" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  {collegeData.name.split(" - ")[0]} Fee Structure 2026-27
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Semester-wise tuition fees, hostel rent, mess advances, and fee exemption criteria
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    {collegeData.name.split(" - ")[0]} Fee Structure 2026-27
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Semester-wise tuition fees, hostel rent, mess advances, and fee exemption criteria
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("fees")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Fees</span>
+                  </button>
+                )}
               </div>
 
               <div className="overflow-x-auto border border-slate-200 rounded-2xl">
@@ -1275,16 +1135,6 @@ export default function CollegeDetailPage() {
                   </tbody>
                 </table>
               </div>
-
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold space-y-1">
-                <p className="font-bold flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Govt. Fee Waiver & Concessions:
-                </p>
-                <p>• 100% Tuition Fee waiver for SC/ST/PH scholars.</p>
-                <p>• 100% Tuition Fee waiver for general/OBC scholars whose family annual income is below ₹1 Lakh.</p>
-                <p>• 66.6% Tuition Fee waiver for family income between ₹1 Lakh to ₹5 Lakhs.</p>
-              </div>
             </div>
           )}
 
@@ -1297,12 +1147,23 @@ export default function CollegeDetailPage() {
                     Student Reviews & Campus Ratings
                   </h2>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Authentic feedback and experiences from verified alumni & current scholars
+                    Authentic feedback and experiences from verified alumni & scholars
                   </p>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black">
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span>{collegeData.rating} / 5.0 (842 Verified Reviews)</span>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black">
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <span>{collegeData.rating} / 5.0 ({collegeData.reviews.length} Reviews)</span>
+                  </div>
+                  {isAdmin && (
+                    <button
+                      onClick={() => openMiniModal("reviews")}
+                      className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                      <span>Edit Reviews</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -1352,13 +1213,24 @@ export default function CollegeDetailPage() {
           {/* TAB 5: ADMISSIONS */}
           {activeTab === "admissions" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  {collegeData.name.split(" - ")[0]} Admission Process 2026
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Step-by-step selection criteria, national counselling, and important registration dates
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    {collegeData.name.split(" - ")[0]} Admission Process 2026
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Step-by-step selection criteria, national counselling, and important registration dates
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("admissions")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Admissions</span>
+                  </button>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -1398,26 +1270,37 @@ export default function CollegeDetailPage() {
           {/* TAB 6: PLACEMENTS */}
           {activeTab === "placements" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Placement Statistics & Top Recruiters
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Verified salary trends, CTC packages, and corporate partners
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Placement Statistics & Top Recruiters
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Verified salary trends, CTC packages, and corporate partners
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("placements")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Placements</span>
+                  </button>
+                )}
               </div>
 
               {/* CTC Metrics Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-200 text-center">
                   <span className="text-[10.5px] uppercase font-bold text-emerald-800">Highest Package</span>
-                  <p className="font-outfit font-black text-xl text-emerald-600 mt-1">₹1.20 Crore PA</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">International: ₹2.40 Cr PA</p>
+                  <p className="font-outfit font-black text-xl text-emerald-600 mt-1">{collegeData.highestPackage.split("(")[0]}</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">Domestic Offer</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-200 text-center">
                   <span className="text-[10.5px] uppercase font-bold text-orange-800">Average Package</span>
                   <p className="font-outfit font-black text-xl text-orange-600 mt-1">{collegeData.averagePackage}</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">CSE Average: ₹39.5 LPA</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">Overall B.Tech</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-200 text-center">
                   <span className="text-[10.5px] uppercase font-bold text-blue-800">Total Job Offers</span>
@@ -1429,7 +1312,7 @@ export default function CollegeDetailPage() {
               {/* Top Recruiting Brands Grid */}
               <div className="space-y-3">
                 <h3 className="font-outfit font-bold text-sm text-slate-900">
-                  Top Recruiting Companies & Brands
+                  Top Recruiting Companies & Brands ({collegeData.recruiters.length})
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   {collegeData.recruiters.map((rec, i) => (
@@ -1448,13 +1331,24 @@ export default function CollegeDetailPage() {
           {/* TAB 7: CUT-OFFS */}
           {activeTab === "cutoffs" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  JEE Advanced / JoSAA Opening & Closing Cutoff Ranks
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Official Round 6 closing cutoff trends for primary engineering branches
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    JEE Advanced / JoSAA Opening & Closing Cutoff Ranks
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Official Round 6 closing cutoff trends for primary engineering branches
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("cutoffs")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Cutoffs Table</span>
+                  </button>
+                )}
               </div>
 
               <div className="overflow-x-auto border border-slate-200 rounded-2xl">
@@ -1491,23 +1385,30 @@ export default function CollegeDetailPage() {
                   </tbody>
                 </table>
               </div>
-
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed font-semibold">
-                📌 <strong>Cutoff Tip:</strong> Admissions to IIT Delhi are conducted strictly through JoSAA (Joint Seat Allocation Authority) based on JEE Advanced ranks. Home State quota is NOT applicable for IITs (All India Quota only).
-              </div>
             </div>
           )}
 
           {/* TAB 8: RANKINGS */}
           {activeTab === "rankings" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  {collegeData.name.split(" - ")[0]} Rankings 2026
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  National and Global University Ranking performance across engineering & management
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    {collegeData.name.split(" - ")[0]} Rankings 2026
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    National and Global University Ranking performance
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("rankings")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Rankings</span>
+                  </button>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1522,18 +1423,6 @@ export default function CollegeDetailPage() {
                   <p className="font-outfit font-black text-2xl text-blue-600">Rank #150 Global</p>
                   <p className="text-xs text-slate-600 font-medium">Top 50 Globally for Engineering & Technology</p>
                 </div>
-
-                <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-1">
-                  <span className="text-[10px] uppercase font-black text-purple-700">India Today Ranking</span>
-                  <p className="font-outfit font-black text-2xl text-purple-600">Rank #1 in North India</p>
-                  <p className="text-xs text-slate-600 font-medium">Rank #1 for Placement Record and Faculty Quality</p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1">
-                  <span className="text-[10px] uppercase font-black text-emerald-700">NIRF Management (DMS)</span>
-                  <p className="font-outfit font-black text-2xl text-emerald-600">Rank #4 in India</p>
-                  <p className="text-xs text-slate-600 font-medium">Department of Management Studies (DMS)</p>
-                </div>
               </div>
             </div>
           )}
@@ -1541,13 +1430,24 @@ export default function CollegeDetailPage() {
           {/* TAB 9: GALLERY */}
           {activeTab === "gallery" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Campus Photo Gallery & Video Tour
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Visual tour of iconic buildings, coding labs, athletic grounds, and hostels
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Campus Photo Gallery & Video Tour
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Visual tour of iconic buildings, coding labs, athletic grounds, and hostels
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("gallery")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Photos</span>
+                  </button>
+                )}
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
@@ -1574,13 +1474,24 @@ export default function CollegeDetailPage() {
           {/* TAB 10: HOSTEL & CAMPUS INFRASTRUCTURE */}
           {activeTab === "hostel" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Campus Infrastructure, 13 Hostels & Life
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  World-class residential facilities, supercomputing research centers, and sports arenas
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Campus Infrastructure, 13 Hostels & Life
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    World-class residential facilities, supercomputing research centers, and sports arenas
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("hostel")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Facilities</span>
+                  </button>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1612,13 +1523,24 @@ export default function CollegeDetailPage() {
           {/* TAB 11: FACULTY */}
           {activeTab === "faculty" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Distinguished Faculty & Research Heads
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Internationally acclaimed professors, research fellows, and department deans
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Distinguished Faculty & Research Heads
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Internationally acclaimed professors, research fellows, and department deans
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("faculty")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Faculty</span>
+                  </button>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1685,12 +1607,6 @@ export default function CollegeDetailPage() {
                       <td className="py-3 px-3 text-slate-700">₹9.20 Lakhs</td>
                       <td className="py-3 px-3 text-slate-700">₹22.50 Lakhs</td>
                     </tr>
-                    <tr>
-                      <td className="py-3 px-4 font-bold text-slate-900">Accepted Entrance Exam</td>
-                      <td className="py-3 px-3 font-bold text-orange-600">JEE Advanced</td>
-                      <td className="py-3 px-3 text-slate-700">JEE Advanced</td>
-                      <td className="py-3 px-3 text-slate-700">BITSAT</td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -1701,7 +1617,7 @@ export default function CollegeDetailPage() {
                   className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs rounded-xl shadow-md transition-all active:scale-95"
                 >
                   <Layers className="w-4 h-4" />
-                  <span>Open Advanced 4-Way Comparison Tool</span>
+                  <span>Open Full Comparison Tool</span>
                 </Link>
               </div>
             </div>
@@ -1710,13 +1626,24 @@ export default function CollegeDetailPage() {
           {/* TAB 13: Q&A / FAQS */}
           {activeTab === "qa" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Student Questions & Expert Answers (Q&A)
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Common queries answered regarding admission, cutoffs, placements, and campus rules
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Student Questions & Expert Answers (Q&A)
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Common queries answered regarding admission, cutoffs, placements, and campus rules
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("qa")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Q&A FAQs</span>
+                  </button>
+                )}
               </div>
 
               <div className="space-y-3">
@@ -1750,13 +1677,24 @@ export default function CollegeDetailPage() {
           {/* TAB 14: SCHOLARSHIPS */}
           {activeTab === "scholarships" && (
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Scholarships & Financial Assistance
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Government waivers, merit-cum-means awards, and alumni endowment schemes
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    Scholarships & Financial Assistance
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Government waivers, merit-cum-means awards, and alumni endowment schemes
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => openMiniModal("scholarships")}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Edit Scholarships</span>
+                  </button>
+                )}
               </div>
 
               <div className="space-y-3">
@@ -1772,201 +1710,6 @@ export default function CollegeDetailPage() {
                   <p className="text-xs text-blue-800 font-medium">
                     100% complete tuition fee waiver along with a free hostel lodging and boarding allowance from the Ministry of Social Justice.
                   </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200 space-y-1">
-                  <h4 className="font-outfit font-black text-sm text-orange-900">3. Inspire & Alumni Endowed Awards</h4>
-                  <p className="text-xs text-orange-800 font-medium">
-                    Scholarships of ₹80,000/year for top-performing students in Mathematics and Computing and Physical Sciences funded by DST and global alumni donors.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 15: NEWS & ARTICLES */}
-          {activeTab === "news" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Latest News, Exam Circulars & Press Releases
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Official updates regarding admissions 2026, research breakthroughs, and JoSAA counselling notifications
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-300 transition-all space-y-2">
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-bold">
-                    <span className="px-2 py-0.5 rounded-md bg-orange-100 text-orange-700 font-black">ADMISSIONS 2026</span>
-                    <span>Updated 2 days ago</span>
-                  </div>
-                  <h3 className="font-outfit font-black text-sm text-slate-900">
-                    JoSAA 2026 Counselling Dates & Seat Matrix Released for {collegeData.name.split(" - ")[0]}
-                  </h3>
-                  <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                    National Testing Agency and JoSAA authorities have declared the tentative schedule for 6 rounds of seat allocation following the JEE Advanced results.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-300 transition-all space-y-2">
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-bold">
-                    <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 font-black">RESEARCH & AI</span>
-                    <span>Updated 1 week ago</span>
-                  </div>
-                  <h3 className="font-outfit font-black text-sm text-slate-900">
-                    New Centre for Generative AI & Quantum Computing Inaugurated
-                  </h3>
-                  <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                    A multi-million dollar high-performance supercomputing cluster was launched to support undergraduate and doctoral research in robotics and machine learning.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 16: DEDICATED HOSTEL GUIDE */}
-          {activeTab === "hostel_guide" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Hostel Accommodation & Campus Residence Details
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Hostel seat allocation, mess menu, room categories, and annual expenditure breakdown
-                </p>
-              </div>
-
-              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
-                      <th className="py-3 px-4">Room Type / Occupancy</th>
-                      <th className="py-3 px-3">Seat Rent (Per Sem)</th>
-                      <th className="py-3 px-3">Mess Charges (Per Sem)</th>
-                      <th className="py-3 px-3">Amenities Included</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium">
-                    <tr>
-                      <td className="py-3 px-4 font-bold text-slate-900">Single Occupancy (Final Year)</td>
-                      <td className="py-3 px-3 font-bold text-slate-700">₹14,000</td>
-                      <td className="py-3 px-3 font-bold text-slate-700">₹28,000</td>
-                      <td className="py-3 px-3 text-emerald-600 font-semibold">24x7 High-Speed Wi-Fi, Balcony</td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-4 font-bold text-slate-900">Double Sharing (1st-3rd Year)</td>
-                      <td className="py-3 px-3 font-bold text-slate-700">₹9,500</td>
-                      <td className="py-3 px-3 font-bold text-slate-700">₹28,000</td>
-                      <td className="py-3 px-3 text-emerald-600 font-semibold">Study Table, Wardrobe, Geyser</td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-4 font-bold text-slate-900">Triple Sharing (Freshers Option)</td>
-                      <td className="py-3 px-3 font-bold text-slate-700">₹7,000</td>
-                      <td className="py-3 px-3 font-bold text-slate-700">₹28,000</td>
-                      <td className="py-3 px-3 text-emerald-600 font-semibold">Common Room, Gym & Badminton Court</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 17: COMMUNITY */}
-          {activeTab === "community" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Student & Alumni Community Network
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Connect with verified current students, branch seniors, and alumni mentors
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 text-center space-y-3">
-                <div className="inline-flex p-3 rounded-full bg-orange-100 text-orange-600">
-                  <Users className="w-6 h-6" />
-                </div>
-                <h3 className="font-outfit font-black text-base text-slate-900">
-                  Join the Official {collegeData.name.split(" - ")[0]} Student Group
-                </h3>
-                <p className="text-xs text-slate-600 font-medium max-w-md mx-auto">
-                  Over 1,400+ aspirants and seniors are discussing JoSAA cutoffs, coding culture, and hostel life.
-                </p>
-                <button
-                  onClick={() => alert("Redirecting to Community Forum...")}
-                  className="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs shadow-md transition-all active:scale-95"
-                >
-                  Join Telegram / Discussion Hub
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 18: COLLEGE COMPARE */}
-          {activeTab === "college_compare" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Multi-College Side-by-Side Comparison
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Evaluate fees, placements, campus facilities, and ranking metrics side-by-side
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-4">
-                <div className="inline-flex p-3 rounded-full bg-blue-100 text-blue-600">
-                  <Layers className="w-6 h-6" />
-                </div>
-                <h3 className="font-outfit font-black text-base text-slate-900">
-                  Compare {collegeData.name.split(" - ")[0]} with any College in India
-                </h3>
-                <Link
-                  href={`/compare?ids=${slug || "iit-delhi"},bits-pilani`}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-orange-600 text-white font-black text-xs shadow-md transition-all active:scale-95"
-                >
-                  <span>Launch Live 3-Way Comparator</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 19: PROFILE */}
-          {activeTab === "profile" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
-              <div>
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  Student Aspirant Profile & Shortlist Hub
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Your saved colleges, rank prediction history, and submitted admission applications
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black text-lg">
-                    S
-                  </div>
-                  <div>
-                    <h3 className="font-outfit font-black text-sm text-slate-900">Student Applicant Portal</h3>
-                    <p className="text-xs text-slate-500">Track application status & JoSAA seat predictor result</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase">Shortlisted College</p>
-                    <p className="font-bold text-xs text-slate-900 mt-0.5">{collegeData.name.split(" - ")[0]}</p>
-                  </div>
-                  <div className="p-3.5 rounded-xl bg-white border border-slate-200">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase">Application Status</p>
-                    <p className="font-bold text-xs text-emerald-600 mt-0.5">Verified Profile Active</p>
-                  </div>
                 </div>
               </div>
             </div>
@@ -2049,7 +1792,7 @@ export default function CollegeDetailPage() {
         </div>
       </div>
 
-      {/* PHOTO GALLERY MODAL */}
+      {/* PHOTO GALLERY FULLSCREEN MODAL */}
       <AnimatePresence>
         {activePhotoIdx !== null && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
@@ -2095,9 +1838,9 @@ export default function CollegeDetailPage() {
         )}
       </AnimatePresence>
 
-      {/* ADMIN EDIT DETAILS MODAL */}
+      {/* INDEPENDENT MINI-MODALS SYSTEM FOR EACH SECTION */}
       <AnimatePresence>
-        {showEditModal && (
+        {activeMiniModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -2106,179 +1849,529 @@ export default function CollegeDetailPage() {
               className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-7 shadow-2xl relative border border-slate-200 my-8 max-h-[90vh] overflow-y-auto no-scrollbar"
             >
               <button
-                onClick={() => setShowEditModal(false)}
+                onClick={() => setActiveMiniModal(null)}
                 className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-50 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
 
-              <form onSubmit={handleSavePageChanges} className="space-y-4">
+              <form onSubmit={handleSaveSection} className="space-y-4">
                 <div className="border-b border-slate-100 pb-3">
-                  <h3 className="font-outfit font-black text-xl text-slate-800">
-                    Edit College Details: {collegeData.name}
+                  <h3 className="font-outfit font-black text-xl text-slate-900">
+                    {activeMiniModal === "author" && "✍️ Edit Author & Byline Profile"}
+                    {activeMiniModal === "header" && "🖼️ Edit Banner Photo & Titles"}
+                    {activeMiniModal === "info" && "📝 Edit College Overview & Latest Updates"}
+                    {activeMiniModal === "highlights" && "📊 Edit Key Highlights Table"}
+                    {activeMiniModal === "courses" && "🎓 Edit Courses, Fees & Intake"}
+                    {activeMiniModal === "fees" && "💰 Edit Tuition & Hostel Fees"}
+                    {activeMiniModal === "placements" && "💼 Edit Placement Records & Recruiters"}
+                    {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
+                    {activeMiniModal === "rankings" && "🏆 Edit Rankings"}
+                    {activeMiniModal === "gallery" && "📸 Edit Photo Gallery"}
+                    {activeMiniModal === "hostel" && "🏢 Edit Campus Facilities & Hostels"}
+                    {activeMiniModal === "faculty" && "👨‍🏫 Edit Faculty Profiles"}
+                    {activeMiniModal === "qa" && "❓ Edit Student Q&A FAQs"}
+                    {activeMiniModal === "scholarships" && "🎁 Edit Scholarship Schemes"}
+                    {activeMiniModal === "reviews" && "⭐ Edit Verified Reviews"}
                   </h3>
-                  <p className="text-xs text-orange-600 font-bold">
-                    Editing slug: {slug}
+                  <p className="text-xs text-purple-600 font-bold">
+                    Editing: {collegeData.name} ({slug})
                   </p>
                 </div>
 
-                <div>
-                  <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                    About / Description
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={editAboutText}
-                    onChange={(e) => setEditAboutText(e.target.value)}
-                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-orange-500 resize-none"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                      Campus Cover Image URL
-                    </label>
-                    <input
-                      type="text"
-                      value={editCoverImage}
-                      onChange={(e) => setEditCoverImage(e.target.value)}
-                      placeholder="/images/iitdelhi_real.jpg"
-                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                      Logo Image URL
-                    </label>
-                    <input
-                      type="text"
-                      value={editLogoImage}
-                      onChange={(e) => setEditLogoImage(e.target.value)}
-                      placeholder="/images/iitdelhi.png"
-                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div>
-                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                      Estd. Year
-                    </label>
-                    <input
-                      type="text"
-                      value={editEstd}
-                      onChange={(e) => setEditEstd(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                      Highest CTC
-                    </label>
-                    <input
-                      type="text"
-                      value={editHighestPackage}
-                      onChange={(e) => setEditHighestPackage(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                      Average CTC
-                    </label>
-                    <input
-                      type="text"
-                      value={editAveragePackage}
-                      onChange={(e) => setEditAveragePackage(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                      Annual Tuition
-                    </label>
-                    <input
-                      type="text"
-                      value={editTotalFees}
-                      onChange={(e) => setEditTotalFees(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
-                    />
-                  </div>
-                </div>
-
-                <div className="border-t border-slate-100 pt-3">
-                  <h4 className="font-outfit font-black text-xs text-purple-700 uppercase tracking-wider mb-2">
-                    ✍️ Content Writer / Author Profile
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* MODAL 1: AUTHOR PROFILE */}
+                {activeMiniModal === "author" && (
+                  <div className="space-y-3">
                     <div>
-                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                        Author Name *
-                      </label>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Author Name *</label>
                       <input
+                        required
                         type="text"
-                        value={editAuthorName}
-                        onChange={(e) => setEditAuthorName(e.target.value)}
-                        placeholder="e.g. Shreeya Panda"
-                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                        value={tempData.author?.name || ""}
+                        onChange={(e) =>
+                          setTempData({
+                            ...tempData,
+                            author: { ...tempData.author, name: e.target.value, role: tempData.author?.role || "Intern", updatedDate: tempData.author?.updatedDate || "Feb 09, 2026" },
+                          })
+                        }
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
                       />
                     </div>
                     <div>
-                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                        Role / Position *
-                      </label>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Role / Position *</label>
                       <input
+                        required
                         type="text"
-                        value={editAuthorRole}
-                        onChange={(e) => setEditAuthorRole(e.target.value)}
-                        placeholder="e.g. Intern / Senior Education Specialist"
-                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                        value={tempData.author?.role || ""}
+                        onChange={(e) =>
+                          setTempData({
+                            ...tempData,
+                            author: { ...tempData.author, role: e.target.value, name: tempData.author?.name || "Shreeya Panda", updatedDate: tempData.author?.updatedDate || "Feb 09, 2026" },
+                          })
+                        }
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
                       />
                     </div>
                     <div>
-                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                        Author Avatar / Photo URL
-                      </label>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Author Avatar / Photo URL</label>
                       <input
                         type="text"
-                        value={editAuthorImage}
-                        onChange={(e) => setEditAuthorImage(e.target.value)}
-                        placeholder="e.g. https://... or /images/avatar.jpg"
-                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                        value={tempData.author?.image || ""}
+                        placeholder="e.g. https://... or leave blank for default TYC badge"
+                        onChange={(e) =>
+                          setTempData({
+                            ...tempData,
+                            author: { ...tempData.author, image: e.target.value, name: tempData.author?.name || "Shreeya Panda", role: tempData.author?.role || "Intern", updatedDate: tempData.author?.updatedDate || "Feb 09, 2026" },
+                          })
+                        }
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
                       />
                     </div>
                     <div>
-                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                        Updated On Date String
-                      </label>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Updated Date String</label>
                       <input
                         type="text"
-                        value={editAuthorDate}
-                        onChange={(e) => setEditAuthorDate(e.target.value)}
+                        value={tempData.author?.updatedDate || ""}
                         placeholder="e.g. Feb 09, 2026"
-                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
+                        onChange={(e) =>
+                          setTempData({
+                            ...tempData,
+                            author: { ...tempData.author, updatedDate: e.target.value, name: tempData.author?.name || "Shreeya Panda", role: tempData.author?.role || "Intern" },
+                          })
+                        }
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-purple-500"
                       />
                     </div>
                   </div>
-                </div>
+                )}
 
+                {/* MODAL 2: HEADER & BANNER */}
+                {activeMiniModal === "header" && (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Cover Banner Image URL</label>
+                      <input
+                        type="text"
+                        value={tempData.image || ""}
+                        onChange={(e) => setTempData({ ...tempData, image: e.target.value })}
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">College Full Name / Title</label>
+                      <input
+                        type="text"
+                        value={tempData.fullName || tempData.name}
+                        onChange={(e) => setTempData({ ...tempData, fullName: e.target.value })}
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">NIRF Rank Badge</label>
+                        <input
+                          type="text"
+                          value={tempData.nirfRank}
+                          onChange={(e) => setTempData({ ...tempData, nirfRank: e.target.value })}
+                          className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Estd. Year</label>
+                        <input
+                          type="text"
+                          value={tempData.estd}
+                          onChange={(e) => setTempData({ ...tempData, estd: e.target.value })}
+                          className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL 3: INFO & OVERVIEW */}
+                {activeMiniModal === "info" && (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">About the Institution (Detailed narrative)</label>
+                      <textarea
+                        rows={6}
+                        value={tempData.description}
+                        onChange={(e) => setTempData({ ...tempData, description: e.target.value })}
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">What's New Updates (1 per line)</label>
+                      <textarea
+                        rows={4}
+                        value={tempData.whatsNew?.join("\n") || ""}
+                        onChange={(e) => setTempData({ ...tempData, whatsNew: e.target.value.split("\n").filter(Boolean) })}
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold resize-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL 4: KEY HIGHLIGHTS */}
+                {activeMiniModal === "highlights" && (
+                  <div className="space-y-3">
+                    <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                      {tempData.highlights.map((h, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={h.label}
+                            onChange={(e) => {
+                              const updated = [...tempData.highlights];
+                              updated[idx].label = e.target.value;
+                              setTempData({ ...tempData, highlights: updated });
+                            }}
+                            placeholder="Parameter Name"
+                            className="w-1/3 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                          />
+                          <input
+                            type="text"
+                            value={h.value}
+                            onChange={(e) => {
+                              const updated = [...tempData.highlights];
+                              updated[idx].value = e.target.value;
+                              setTempData({ ...tempData, highlights: updated });
+                            }}
+                            placeholder="Value"
+                            className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = tempData.highlights.filter((_, i) => i !== idx);
+                              setTempData({ ...tempData, highlights: updated });
+                            }}
+                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTempData({
+                          ...tempData,
+                          highlights: [...tempData.highlights, { label: "New Parameter", value: "Value" }],
+                        })
+                      }
+                      className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Highlight Row</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* MODAL 5: COURSES & FEES */}
+                {activeMiniModal === "courses" && (
+                  <div className="space-y-3">
+                    <div className="max-h-72 overflow-y-auto space-y-3 pr-1">
+                      {tempData.courses.map((c, idx) => (
+                        <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 relative">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = tempData.courses.filter((_, i) => i !== idx);
+                              setTempData({ ...tempData, courses: updated });
+                            }}
+                            className="absolute top-2.5 right-2.5 p-1 text-red-500 hover:bg-red-100 rounded-lg"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                          <input
+                            type="text"
+                            value={c.name}
+                            onChange={(e) => {
+                              const updated = [...tempData.courses];
+                              updated[idx].name = e.target.value;
+                              setTempData({ ...tempData, courses: updated });
+                            }}
+                            placeholder="Course Name (e.g. B.Tech CSE)"
+                            className="w-5/6 px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                          />
+                          <div className="grid grid-cols-3 gap-2">
+                            <input
+                              type="text"
+                              value={c.duration}
+                              onChange={(e) => {
+                                const updated = [...tempData.courses];
+                                updated[idx].duration = e.target.value;
+                                setTempData({ ...tempData, courses: updated });
+                              }}
+                              placeholder="Duration"
+                              className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                            />
+                            <input
+                              type="text"
+                              value={c.fees}
+                              onChange={(e) => {
+                                const updated = [...tempData.courses];
+                                updated[idx].fees = e.target.value;
+                                setTempData({ ...tempData, courses: updated });
+                              }}
+                              placeholder="Fees"
+                              className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                            />
+                            <input
+                              type="text"
+                              value={c.seats || ""}
+                              onChange={(e) => {
+                                const updated = [...tempData.courses];
+                                updated[idx].seats = e.target.value;
+                                setTempData({ ...tempData, courses: updated });
+                              }}
+                              placeholder="Seats"
+                              className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                            />
+                          </div>
+                          <input
+                            type="text"
+                            value={c.eligibility}
+                            onChange={(e) => {
+                              const updated = [...tempData.courses];
+                              updated[idx].eligibility = e.target.value;
+                              setTempData({ ...tempData, courses: updated });
+                            }}
+                            placeholder="Eligibility criteria & Exam"
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTempData({
+                          ...tempData,
+                          courses: [
+                            ...tempData.courses,
+                            {
+                              name: "New Degree Course",
+                              duration: "4 Years",
+                              fees: "₹2,00,000 / Yr",
+                              eligibility: "12th with 75% + Entrance Exam",
+                              seats: "60 Seats",
+                            },
+                          ],
+                        })
+                      }
+                      className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Course Row</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* MODAL 6: PLACEMENTS */}
+                {activeMiniModal === "placements" && (
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Highest Package (Domestic)</label>
+                        <input
+                          type="text"
+                          value={tempData.highestPackage}
+                          onChange={(e) => setTempData({ ...tempData, highestPackage: e.target.value })}
+                          className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Average Package</label>
+                        <input
+                          type="text"
+                          value={tempData.averagePackage}
+                          onChange={(e) => setTempData({ ...tempData, averagePackage: e.target.value })}
+                          className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Top Recruiters (Comma Separated)</label>
+                      <textarea
+                        rows={4}
+                        value={tempData.recruiters.join(", ")}
+                        onChange={(e) =>
+                          setTempData({
+                            ...tempData,
+                            recruiters: e.target.value.split(",").map((r) => r.trim()).filter(Boolean),
+                          })
+                        }
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold resize-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL 7: CUTOFFS */}
+                {activeMiniModal === "cutoffs" && (
+                  <div className="space-y-3">
+                    <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                      {tempData.cutoffs.map((cut, idx) => (
+                        <div key={idx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={cut.branch}
+                            onChange={(e) => {
+                              const updated = [...tempData.cutoffs];
+                              updated[idx].branch = e.target.value;
+                              setTempData({ ...tempData, cutoffs: updated });
+                            }}
+                            placeholder="Branch"
+                            className="w-1/3 px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                          />
+                          <input
+                            type="text"
+                            value={cut.category || "General"}
+                            onChange={(e) => {
+                              const updated = [...tempData.cutoffs];
+                              updated[idx].category = e.target.value;
+                              setTempData({ ...tempData, cutoffs: updated });
+                            }}
+                            placeholder="Category"
+                            className="w-1/4 px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                          />
+                          <input
+                            type="text"
+                            value={cut.openRank}
+                            onChange={(e) => {
+                              const updated = [...tempData.cutoffs];
+                              updated[idx].openRank = e.target.value;
+                              setTempData({ ...tempData, cutoffs: updated });
+                            }}
+                            placeholder="Open"
+                            className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                          />
+                          <input
+                            type="text"
+                            value={cut.closeRank}
+                            onChange={(e) => {
+                              const updated = [...tempData.cutoffs];
+                              updated[idx].closeRank = e.target.value;
+                              setTempData({ ...tempData, cutoffs: updated });
+                            }}
+                            placeholder="Close"
+                            className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-red-600"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = tempData.cutoffs.filter((_, i) => i !== idx);
+                              setTempData({ ...tempData, cutoffs: updated });
+                            }}
+                            className="p-1 text-red-500 hover:bg-red-50 rounded-lg ml-auto"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTempData({
+                          ...tempData,
+                          cutoffs: [
+                            ...tempData.cutoffs,
+                            {
+                              branch: "New Engineering Branch",
+                              category: "General (Gender-Neutral)",
+                              openRank: "100",
+                              closeRank: "500",
+                              round: "Round 6",
+                            },
+                          ],
+                        })
+                      }
+                      className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Cutoff Row</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* MODAL 8: FAQS */}
+                {activeMiniModal === "qa" && (
+                  <div className="space-y-3">
+                    <div className="max-h-72 overflow-y-auto space-y-3 pr-1">
+                      {tempData.faqs.map((faq, idx) => (
+                        <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 relative">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = tempData.faqs.filter((_, i) => i !== idx);
+                              setTempData({ ...tempData, faqs: updated });
+                            }}
+                            className="absolute top-2.5 right-2.5 p-1 text-red-500 hover:bg-red-100 rounded-lg"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                          <input
+                            type="text"
+                            value={faq.question}
+                            onChange={(e) => {
+                              const updated = [...tempData.faqs];
+                              updated[idx].question = e.target.value;
+                              setTempData({ ...tempData, faqs: updated });
+                            }}
+                            placeholder="Question"
+                            className="w-5/6 px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                          />
+                          <textarea
+                            rows={2}
+                            value={faq.answer}
+                            onChange={(e) => {
+                              const updated = [...tempData.faqs];
+                              updated[idx].answer = e.target.value;
+                              setTempData({ ...tempData, faqs: updated });
+                            }}
+                            placeholder="Answer"
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs resize-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTempData({
+                          ...tempData,
+                          faqs: [...tempData.faqs, { question: "What is the admission procedure?", answer: "Admission is conducted through national entrance tests." }],
+                        })
+                      }
+                      className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add FAQ</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* MODAL FOOTER */}
                 <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
                   <button
                     type="button"
-                    onClick={() => setShowEditModal(false)}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl"
+                    onClick={() => setActiveMiniModal(null)}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isUpdating}
-                    className="px-5 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black text-xs rounded-xl shadow-md flex items-center gap-1.5"
+                    className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black text-xs rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   >
                     {isUpdating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                    <span>Save & Update Globally</span>
+                    <span>Save & Publish Section</span>
                   </button>
                 </div>
               </form>
