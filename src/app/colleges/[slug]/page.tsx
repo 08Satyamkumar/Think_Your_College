@@ -103,6 +103,12 @@ interface FacultyMember {
   experience: string;
 }
 
+interface TableOfContentItem {
+  label: string;
+  targetId: string;
+  tabId?: ShikshaTabId;
+}
+
 interface AuthorProfile {
   name: string;
   role: string;
@@ -144,6 +150,7 @@ interface CollegeDetail {
   gallery: GalleryPhoto[];
   facultyList?: FacultyMember[];
   author?: AuthorProfile;
+  tableOfContents?: TableOfContentItem[];
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -374,6 +381,23 @@ Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delh
     { name: "Prof. Subodh Kumar", designation: "Professor", dept: "Computer Science & Engineering", qualification: "Ph.D. University of North Carolina", experience: "24+ Years" },
     { name: "Prof. Brejesh Lall", designation: "Professor & Dean", dept: "Electrical Engineering", qualification: "Ph.D. IIT Delhi", experience: "22+ Years" },
   ],
+  tableOfContents: [
+    { label: "IIT Delhi Highlights 2026", targetId: "highlights-section", tabId: "info" },
+    { label: "IIT Delhi Cutoff 2026", targetId: "cutoffs-section", tabId: "cutoffs" },
+    { label: "IIT Delhi Courses & Fees 2026", targetId: "courses-section", tabId: "courses" },
+    { label: "IIT Delhi Placements 2026", targetId: "placements-section", tabId: "placements" },
+    { label: "IIT Delhi Admission & Application Process 2026", targetId: "admissions-section", tabId: "admissions" },
+    { label: "IIT Delhi Rankings 2026", targetId: "rankings-section", tabId: "rankings" },
+    { label: "IIT Delhi Student Reviews", targetId: "reviews-section", tabId: "reviews" },
+    { label: "IIT Delhi Scholarships 2026", targetId: "scholarships-section", tabId: "scholarships" },
+    { label: "IIT Delhi Popular Courses", targetId: "courses-section", tabId: "courses" },
+    { label: "IIT Delhi College comparison", targetId: "compare-section", tabId: "compare" },
+    { label: "IIT Delhi Campus & Facilities 2026", targetId: "campus-section", tabId: "hostel" },
+    { label: "IIT Delhi Colleges/Departments", targetId: "faculty-section", tabId: "faculty" },
+    { label: "Top online courses you might be interested in", targetId: "courses-section", tabId: "courses" },
+    { label: "IIT Delhi Notable Alumni", targetId: "about-section", tabId: "info" },
+    { label: "IIT Delhi FAQs", targetId: "faq-section", tabId: "qa" },
+  ],
 };
 
 // Exact Shiksha Tabs List from User's Reference
@@ -398,6 +422,7 @@ type ShikshaTabId = (typeof SHIKSHA_NAV_TABS)[number]["id"];
 type MiniModalId =
   | "header"
   | "author"
+  | "toc"
   | "info"
   | "highlights"
   | "courses"
@@ -442,6 +467,8 @@ export default function CollegeDetailPage() {
   const [activePhotoIdx, setActivePhotoIdx] = useState<number | null>(null);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [courseSearch, setCourseSearch] = useState("");
+  const [isTocOpen, setIsTocOpen] = useState(true);
+  const [isTocExpanded, setIsTocExpanded] = useState(false);
 
   // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
@@ -549,6 +576,7 @@ export default function CollegeDetailPage() {
             gallery: parsedData.gallery || IIT_DELHI_MASTER_DATA.gallery,
             facultyList: parsedData.facultyList || IIT_DELHI_MASTER_DATA.facultyList,
             author: parsedData.author || IIT_DELHI_MASTER_DATA.author,
+            tableOfContents: parsedData.tableOfContents || IIT_DELHI_MASTER_DATA.tableOfContents,
           };
 
           setCollegeData(baseDetail);
@@ -570,6 +598,42 @@ export default function CollegeDetailPage() {
       fetchCollegeDetail();
     }
   }, [slug]);
+
+  const getCollegeTocList = (college: CollegeDetail): TableOfContentItem[] => {
+    if (college.tableOfContents && college.tableOfContents.length > 0) {
+      return college.tableOfContents;
+    }
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    return [
+      { label: `${shortName} Highlights 2026`, targetId: "highlights-section", tabId: "info" },
+      { label: `${shortName} Cutoff 2026`, targetId: "cutoffs-section", tabId: "cutoffs" },
+      { label: `${shortName} Courses & Fees 2026`, targetId: "courses-section", tabId: "courses" },
+      { label: `${shortName} Placements 2026`, targetId: "placements-section", tabId: "placements" },
+      { label: `${shortName} Admission & Application Process 2026`, targetId: "admissions-section", tabId: "admissions" },
+      { label: `${shortName} Rankings 2026`, targetId: "rankings-section", tabId: "rankings" },
+      { label: `${shortName} Student Reviews`, targetId: "reviews-section", tabId: "reviews" },
+      { label: `${shortName} Scholarships 2026`, targetId: "scholarships-section", tabId: "scholarships" },
+      { label: `${shortName} Popular Courses`, targetId: "courses-section", tabId: "courses" },
+      { label: `${shortName} College comparison`, targetId: "compare-section", tabId: "compare" },
+      { label: `${shortName} Campus & Facilities 2026`, targetId: "campus-section", tabId: "hostel" },
+      { label: `${shortName} Colleges/Departments`, targetId: "faculty-section", tabId: "faculty" },
+      { label: `Top online courses you might be interested in`, targetId: "courses-section", tabId: "courses" },
+      { label: `${shortName} Notable Alumni`, targetId: "about-section", tabId: "info" },
+      { label: `${shortName} FAQs`, targetId: "faq-section", tabId: "qa" },
+    ];
+  };
+
+  const handleTocClick = (item: TableOfContentItem) => {
+    if (item.tabId && item.tabId !== activeTab) {
+      setActiveTab(item.tabId);
+    }
+    setTimeout(() => {
+      const el = document.getElementById(item.targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 120);
+  };
 
   const openMiniModal = (modalId: MiniModalId) => {
     setTempData(JSON.parse(JSON.stringify(collegeData)));
@@ -910,82 +974,183 @@ export default function CollegeDetailPage() {
         <div className="lg:col-span-7 space-y-6">
           {/* TAB 1: COLLEGE INFO */}
           {activeTab === "info" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
-              <div className="flex items-center justify-between">
-                <h2 className="font-outfit font-black text-xl text-slate-900">
-                  About {collegeData.name}
-                </h2>
-                {isAdmin && (
-                  <button
-                    onClick={() => openMiniModal("info")}
-                    className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
-                  >
-                    <Edit className="w-3 h-3" />
-                    <span>Edit Overview & Updates</span>
-                  </button>
-                )}
-              </div>
+            <div className="space-y-6">
+              {/* 1. TABLE OF CONTENTS (EXACT USER REFERENCE TEMPLATE) */}
+              {(() => {
+                const tocList = getCollegeTocList(collegeData);
+                const visibleList = isTocExpanded ? tocList : tocList.slice(0, 5);
+                const remainingCount = Math.max(0, tocList.length - 5);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
 
-              {/* What's New Box 2026 */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
-                <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
-                  <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
-                  <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
-                </div>
-                <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
-                  {collegeData.whatsNew?.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-orange-500 font-bold">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                return (
+                  <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs transition-all duration-200">
+                    {/* Top Header Row */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <span className="text-[12px] font-medium text-slate-500 block tracking-tight">
+                          {collegeShortName} Overview
+                        </span>
+                        <h2 className="text-lg sm:text-xl font-bold font-outfit text-[#1e1b4b] tracking-tight">
+                          Table of contents
+                        </h2>
+                      </div>
 
-              {/* About text */}
-              <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium">
-                {collegeData.description.split("\n\n").map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-              </div>
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("toc")}
+                            className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
+                          >
+                            <Edit className="w-3 h-3" />
+                            <span>Edit TOC</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setIsTocOpen(!isTocOpen)}
+                          aria-label={isTocOpen ? "Collapse Table of Contents" : "Expand Table of Contents"}
+                          className="p-1 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
+                        >
+                          <ChevronDown
+                            className={`w-5 h-5 transition-transform duration-300 ${
+                              isTocOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
 
-              {/* Key Highlights Table */}
-              <div className="space-y-3 pt-2">
+                    {/* Collapsible Body */}
+                    <AnimatePresence initial={false}>
+                      {isTocOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4 space-y-2.5">
+                            {visibleList.map((item, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => handleTocClick(item)}
+                                className="block text-left text-[#1a73e8] hover:text-[#1557b0] text-[14px] sm:text-[15px] font-medium leading-snug hover:underline cursor-pointer transition-colors w-full"
+                              >
+                                {item.label}
+                              </button>
+                            ))}
+
+                            {/* + X more items / - Collapse toggle */}
+                            {tocList.length > 5 && (
+                              <div className="pt-1">
+                                {!isTocExpanded ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsTocExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#1557b0] text-[14px] sm:text-[15px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                  >
+                                    + {remainingCount} more items
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsTocExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#1557b0] text-[14px] sm:text-[15px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                  >
+                                    - Collapse
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 2. ABOUT & OVERVIEW BOX */}
+              <div id="about-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs scroll-mt-24">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-outfit font-black text-lg text-slate-900">
-                    {collegeData.name} - Key Highlights
-                  </h3>
+                  <h2 className="font-outfit font-black text-xl text-slate-900">
+                    About {collegeData.name}
+                  </h2>
                   {isAdmin && (
                     <button
-                      onClick={() => openMiniModal("highlights")}
+                      onClick={() => openMiniModal("info")}
                       className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <Edit className="w-3 h-3" />
-                      <span>Edit Highlights Table</span>
+                      <span>Edit Overview & Updates</span>
                     </button>
                   )}
                 </div>
 
-                <div className="overflow-hidden border border-slate-200 rounded-2xl">
-                  <table className="w-full text-left border-collapse text-xs">
-                    <tbody>
-                      {collegeData.highlights.map((item, idx) => (
-                        <tr
-                          key={idx}
-                          className={`border-b border-slate-100 ${
-                            idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
-                          }`}
-                        >
-                          <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
-                            {item.label}
-                          </td>
-                          <td className="py-3 px-4 font-bold text-slate-900">
-                            {item.value}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                {/* What's New Box 2026 */}
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
+                  <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
+                    <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
+                    <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
+                  </div>
+                  <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
+                    {collegeData.whatsNew?.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-orange-500 font-bold">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* About text */}
+                <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium">
+                  {collegeData.description.split("\n\n").map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+
+                {/* Key Highlights Table */}
+                <div id="highlights-section" className="space-y-3 pt-2 scroll-mt-24">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-outfit font-black text-lg text-slate-900">
+                      {collegeData.name} - Key Highlights
+                    </h3>
+                    {isAdmin && (
+                      <button
+                        onClick={() => openMiniModal("highlights")}
+                        className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <Edit className="w-3 h-3" />
+                        <span>Edit Highlights Table</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="overflow-hidden border border-slate-200 rounded-2xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <tbody>
+                        {collegeData.highlights.map((item, idx) => (
+                          <tr
+                            key={idx}
+                            className={`border-b border-slate-100 ${
+                              idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
+                            }`}
+                          >
+                            <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
+                              {item.label}
+                            </td>
+                            <td className="py-3 px-4 font-bold text-slate-900">
+                              {item.value}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -993,7 +1158,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 2: COURSES */}
           {activeTab === "courses" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="courses-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1076,7 +1241,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 3: FEES STRUCTURE */}
           {activeTab === "fees" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="fees-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1140,7 +1305,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 4: REVIEWS */}
           {activeTab === "reviews" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+            <div id="reviews-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs scroll-mt-24">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1212,7 +1377,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 5: ADMISSIONS */}
           {activeTab === "admissions" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="admissions-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1269,7 +1434,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 6: PLACEMENTS */}
           {activeTab === "placements" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+            <div id="placements-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1330,7 +1495,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 7: CUT-OFFS */}
           {activeTab === "cutoffs" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="cutoffs-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1390,7 +1555,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 8: RANKINGS */}
           {activeTab === "rankings" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="rankings-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1429,7 +1594,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 9: GALLERY */}
           {activeTab === "gallery" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="gallery-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1473,7 +1638,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 10: HOSTEL & CAMPUS INFRASTRUCTURE */}
           {activeTab === "hostel" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs">
+            <div id="campus-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1522,7 +1687,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 11: FACULTY */}
           {activeTab === "faculty" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="faculty-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1568,7 +1733,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 12: COMPARE */}
           {activeTab === "compare" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="compare-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div>
                 <h2 className="font-outfit font-black text-xl text-slate-900">
                   Compare {collegeData.name.split(" - ")[0]} with Top Colleges
@@ -1625,7 +1790,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 13: Q&A / FAQS */}
           {activeTab === "qa" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="faq-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1676,7 +1841,7 @@ export default function CollegeDetailPage() {
 
           {/* TAB 14: SCHOLARSHIPS */}
           {activeTab === "scholarships" && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+            <div id="scholarships-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1985,6 +2150,133 @@ export default function CollegeDetailPage() {
                           className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
                         />
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL 2.5: TABLE OF CONTENTS */}
+                {activeMiniModal === "toc" && (
+                  <div className="space-y-3">
+                    <p className="text-xs text-slate-500 font-medium">
+                      Manage links in the Table of contents box. When users click these blue links, they will be navigated straight to that section.
+                    </p>
+                    <div className="max-h-72 overflow-y-auto space-y-2.5 pr-1">
+                      {(tempData.tableOfContents && tempData.tableOfContents.length > 0
+                        ? tempData.tableOfContents
+                        : getCollegeTocList(tempData)
+                      ).map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
+                        >
+                          <input
+                            type="text"
+                            value={item.label}
+                            onChange={(e) => {
+                              const currentList = [
+                                ...(tempData.tableOfContents && tempData.tableOfContents.length > 0
+                                  ? tempData.tableOfContents
+                                  : getCollegeTocList(tempData)),
+                              ];
+                              currentList[idx] = { ...currentList[idx], label: e.target.value };
+                              setTempData({ ...tempData, tableOfContents: currentList });
+                            }}
+                            placeholder="Link Title (e.g. IIT Delhi Highlights 2026)"
+                            className="flex-1 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-blue-600"
+                          />
+
+                          <select
+                            value={`${item.targetId}|${item.tabId || "info"}`}
+                            onChange={(e) => {
+                              const [tId, tbId] = e.target.value.split("|");
+                              const currentList = [
+                                ...(tempData.tableOfContents && tempData.tableOfContents.length > 0
+                                  ? tempData.tableOfContents
+                                  : getCollegeTocList(tempData)),
+                              ];
+                              currentList[idx] = {
+                                ...currentList[idx],
+                                targetId: tId,
+                                tabId: tbId as ShikshaTabId,
+                              };
+                              setTempData({ ...tempData, tableOfContents: currentList });
+                            }}
+                            className="px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 sm:w-44"
+                          >
+                            <option value="highlights-section|info">Info - Highlights</option>
+                            <option value="about-section|info">Info - About Overview</option>
+                            <option value="courses-section|courses">Courses Tab</option>
+                            <option value="fees-section|fees">Fees Structure Tab</option>
+                            <option value="cutoffs-section|cutoffs">Cut-Offs Tab</option>
+                            <option value="placements-section|placements">Placements Tab</option>
+                            <option value="admissions-section|admissions">Admissions Tab</option>
+                            <option value="rankings-section|rankings">Rankings Tab</option>
+                            <option value="reviews-section|reviews">Reviews Tab</option>
+                            <option value="scholarships-section|scholarships">Scholarships Tab</option>
+                            <option value="campus-section|hostel">Hostel & Campus Tab</option>
+                            <option value="faculty-section|faculty">Faculty Tab</option>
+                            <option value="compare-section|compare">College Compare Tab</option>
+                            <option value="faq-section|qa">Q&A / FAQs Tab</option>
+                          </select>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const currentList = [
+                                ...(tempData.tableOfContents && tempData.tableOfContents.length > 0
+                                  ? tempData.tableOfContents
+                                  : getCollegeTocList(tempData)),
+                              ];
+                              const updated = currentList.filter((_, i) => i !== idx);
+                              setTempData({ ...tempData, tableOfContents: updated });
+                            }}
+                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg self-end sm:self-center"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentList = [
+                            ...(tempData.tableOfContents && tempData.tableOfContents.length > 0
+                              ? tempData.tableOfContents
+                              : getCollegeTocList(tempData)),
+                          ];
+                          setTempData({
+                            ...tempData,
+                            tableOfContents: [
+                              ...currentList,
+                              {
+                                label: `${tempData.name.split(" - ")[0]} New Section 2026`,
+                                targetId: "about-section",
+                                tabId: "info",
+                              },
+                            ],
+                          });
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add TOC Item</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTempData({
+                            ...tempData,
+                            tableOfContents: getCollegeTocList(tempData),
+                          });
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+                      >
+                        Reset to Defaults
+                      </button>
                     </div>
                   </div>
                 )}
