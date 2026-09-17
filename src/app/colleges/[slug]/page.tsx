@@ -1225,22 +1225,24 @@ export default function CollegeDetailPage() {
 
                             {/* Bullets: Collapsed vs Expanded */}
                             {!isHighlightsExpanded ? (
-                              <div className="relative pt-1 space-y-2">
+                              <div className="relative pt-0.5">
                                 {firstBullet && (
-                                  <div className="flex items-start gap-2 text-slate-700">
-                                    <span className="text-slate-900 font-black mt-0.5">•</span>
-                                    <p className="leading-relaxed">
-                                      <strong className="text-slate-900 font-bold">{firstBullet.title}: </strong>
-                                      {firstBullet.text}
-                                    </p>
+                                  <div className="relative max-h-[82px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_45%,rgba(0,0,0,0.5)_75%,transparent_100%)]">
+                                    <div className="flex items-start gap-2 text-slate-700">
+                                      <span className="text-slate-900 font-black mt-0.5">•</span>
+                                      <p className="leading-relaxed">
+                                        <strong className="text-slate-900 font-bold">{firstBullet.title}: </strong>
+                                        {firstBullet.text}
+                                      </p>
+                                    </div>
                                   </div>
                                 )}
-                                {/* Soft Fade and Read more */}
-                                <div className="pt-1 flex justify-end">
+                                {/* Ultra-Premium Water & Glass Fade Overlay with Read more */}
+                                <div className="absolute inset-x-0 bottom-0 h-11 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-end pointer-events-auto pr-0.5">
                                   <button
                                     type="button"
                                     onClick={() => setIsHighlightsExpanded(true)}
-                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors"
                                   >
                                     Read more
                                   </button>
