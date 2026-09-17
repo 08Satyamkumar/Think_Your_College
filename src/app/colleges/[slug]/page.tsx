@@ -84,6 +84,19 @@ interface HighlightItem {
   value: string;
 }
 
+interface HighlightBullet {
+  title: string;
+  text: string;
+}
+
+interface HighlightsArticleData {
+  introText?: string;
+  bullets?: HighlightBullet[];
+  nirfCalloutTitle?: string;
+  nirfCalloutDesc?: string;
+  nirfReportUrl?: string;
+}
+
 interface FaqItem {
   question: string;
   answer: string;
@@ -151,6 +164,7 @@ interface CollegeDetail {
   facultyList?: FacultyMember[];
   author?: AuthorProfile;
   tableOfContents?: TableOfContentItem[];
+  highlightsArticle?: HighlightsArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -182,6 +196,42 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
   campusArea: "320 Acres (Lush Green South Delhi Campus)",
   flagshipCourse: "B.Tech Computer Science and Engineering (CSE)",
   accreditation: "Institute of National Importance (MHRD/AICTE/UGC)",
+  highlightsArticle: {
+    introText: "Indian Institute of Technology Delhi (IIT Delhi) is one of India's top engineering institutions with two satellite campuses located in Sonipat, Jhajjar, and its first international campus in Abu Dhabi (UAE). Check out some of the important IIT Delhi highlights below:",
+    bullets: [
+      {
+        title: "Rankings",
+        text: "IIT Delhi India is ranked 118th in the QS World University Rankings 2027 (QS rankings are released a year ahead). In the QS Asian University Rankings 2026, IIT Delhi ranking is at 59th position. The top engineering institute is ranked 2nd (Engineering) and 4th (Overall) as per NIRF 2025 Rankings (NIRF 2026 rankings are still awaited). It is also ranked #1 under the 'Engineering' category by the India Today ranking 2026.",
+      },
+      {
+        title: "Courses",
+        text: "IITD offers BTech, MTech, BDes, MDes, MBA, MSc, PhD, and PG Diploma programmes.",
+      },
+      {
+        title: "Admissions",
+        text: "IIT Delhi admission are entrance-based. Admission to the IIT Delhi flagship programme BTech and BS programme requires a JEE Advanced qualification. The IIT MTech Admissions 2026 are conducted via GATE. Further, for IIT Delhi PhD admission, applications are accepted via CSIR/UGC-NET. For IIT Delhi course admissions, candidates are required to apply via centralized counseling portals (JoSAA, COAP, or JAM) and the official IIT Delhi application portal, iitd.ac.in.",
+      },
+      {
+        title: "Fees",
+        text: "IIT Delhi fees for the BE, BTech programme is INR 8 Lakh (4 Years). For ME, MTech, the fee for IIT Delhi is INR 3 Lakh (2 Years).",
+      },
+      {
+        title: "Cutoff",
+        text: "IIT Delhi closed its JoSAA Counselling Round 5 Cut Off 2026 at 128 for B.Tech. in Computer Science and Engineering (CSE) for General Category (Gender Neutral) candidates. Meanwhile, for BTech in Electrical Engineering, the IIT Delhi cut off closed at 612.",
+      },
+      {
+        title: "Placements",
+        text: "IIT Delhi Placement 2026 recorded more than 1,275 job offers, including 300+ PPOs. The top recruiter list who offered IIT Delhi packages includes top companies such as Google, Microsoft, Goldman Sachs, BCG, American Express, Barclays, Oracle, and PayU.",
+      },
+      {
+        title: "Median Package / NIRF",
+        text: "As per IIT Delhi overall report submitted for NIRF 2026, (BTech) UG 4-year students' median package is INR 20 LPA. Median package for (MTech) PG students is INR 19.25 LPA. The information such as average package of IIT Delhi, etc. are not available as of now.",
+      },
+    ],
+    nirfCalloutTitle: "Why Is IIT Delhi Ranked Among India's Best?",
+    nirfCalloutDesc: "Explore official NIRF 2026 data on placements, research, faculty strength and student outcomes.",
+    nirfReportUrl: "https://home.iitd.ac.in/",
+  },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
 Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delhi, IIT Delhi is renowned globally for its rigorous academic curriculum, cutting-edge research facilities, entrepreneurial incubation ecosystem (FITT), and stellar placement record. IIT Delhi offers undergraduate (B.Tech), postgraduate (M.Tech, M.S. Research, MBA, M.Des, M.Sc), and doctoral (Ph.D.) programs across diverse engineering, sciences, design, and management disciplines.`,
@@ -469,6 +519,8 @@ export default function CollegeDetailPage() {
   const [courseSearch, setCourseSearch] = useState("");
   const [isTocOpen, setIsTocOpen] = useState(true);
   const [isTocExpanded, setIsTocExpanded] = useState(false);
+  const [isHighlightsOpen, setIsHighlightsOpen] = useState(true);
+  const [isHighlightsExpanded, setIsHighlightsExpanded] = useState(false);
 
   // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
@@ -577,6 +629,7 @@ export default function CollegeDetailPage() {
             facultyList: parsedData.facultyList || IIT_DELHI_MASTER_DATA.facultyList,
             author: parsedData.author || IIT_DELHI_MASTER_DATA.author,
             tableOfContents: parsedData.tableOfContents || IIT_DELHI_MASTER_DATA.tableOfContents,
+            highlightsArticle: parsedData.highlightsArticle || IIT_DELHI_MASTER_DATA.highlightsArticle,
           };
 
           setCollegeData(baseDetail);
@@ -598,6 +651,41 @@ export default function CollegeDetailPage() {
       fetchCollegeDetail();
     }
   }, [slug]);
+
+  const getCollegeHighlightsArticle = (college: CollegeDetail): HighlightsArticleData => {
+    if (college.highlightsArticle && college.highlightsArticle.bullets && college.highlightsArticle.bullets.length > 0) {
+      return college.highlightsArticle;
+    }
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    return {
+      introText: `${college.fullName || college.name} is one of India's leading institutions located in ${college.location}. Check out some of the important ${shortName} highlights below:`,
+      bullets: [
+        {
+          title: "Rankings",
+          text: `${shortName} is recognized prominently in national rankings, holding ${college.nirfRank || "top tier NIRF positioning"} and stellar academic reputation across the country.`,
+        },
+        {
+          title: "Courses",
+          text: `${shortName} offers diverse programs including Undergraduate (B.Tech/BE), Postgraduate (M.Tech, MBA, M.Sc), and Doctoral (Ph.D.) degree programmes.`,
+        },
+        {
+          title: "Admissions",
+          text: `${shortName} admission is entrance-based. Admission to flagship degree courses requires valid national entrance exam qualifications followed by centralized counselling.`,
+        },
+        {
+          title: "Fees",
+          text: `The tuition fees for the premier flagship programme is approximately ${college.totalFees || "INR 8 Lakhs (4 Years)"}.`,
+        },
+        {
+          title: "Placements",
+          text: `${shortName} placement recorded stellar offers with highest domestic CTC of ${college.highestPackage} and average CTC around ${college.averagePackage}.`,
+        },
+      ],
+      nirfCalloutTitle: `Why Is ${shortName} Ranked Among India's Best?`,
+      nirfCalloutDesc: `Explore verified performance metrics, faculty strength, and student outcomes.`,
+      nirfReportUrl: "#",
+    };
+  };
 
   const getCollegeTocList = (college: CollegeDetail): TableOfContentItem[] => {
     if (college.tableOfContents && college.tableOfContents.length > 0) {
@@ -1075,7 +1163,143 @@ export default function CollegeDetailPage() {
                 );
               })()}
 
-              {/* 2. ABOUT & OVERVIEW BOX */}
+              {/* 2. HIGHLIGHTS 2026 CARD (EXACT USER REFERENCE TEMPLATE) */}
+              {(() => {
+                const hlData = getCollegeHighlightsArticle(collegeData);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
+                const bullets = hlData.bullets || [];
+                const firstBullet = bullets[0];
+
+                return (
+                  <div
+                    id="highlights-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-24"
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between gap-3">
+                      <h2 className="text-lg sm:text-xl font-bold font-outfit text-slate-900 tracking-tight">
+                        {collegeShortName} Highlights 2026
+                      </h2>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("highlights")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Highlights</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setIsHighlightsOpen(!isHighlightsOpen)}
+                          aria-label={isHighlightsOpen ? "Collapse Highlights" : "Expand Highlights"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isHighlightsOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Body */}
+                    <AnimatePresence initial={false}>
+                      {isHighlightsOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4 space-y-3.5 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {/* Intro text */}
+                            <p className="leading-relaxed">
+                              {hlData.introText}
+                            </p>
+
+                            {/* Bullets: Collapsed vs Expanded */}
+                            {!isHighlightsExpanded ? (
+                              <div className="relative pt-1 space-y-2">
+                                {firstBullet && (
+                                  <div className="flex items-start gap-2 text-slate-700">
+                                    <span className="text-slate-900 font-black mt-0.5">•</span>
+                                    <p className="leading-relaxed">
+                                      <strong className="text-slate-900 font-bold">{firstBullet.title}: </strong>
+                                      {firstBullet.text}
+                                    </p>
+                                  </div>
+                                )}
+                                {/* Soft Fade and Read more */}
+                                <div className="pt-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsHighlightsExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3 pt-1">
+                                {bullets.map((b, idx) => (
+                                  <div key={idx} className="flex items-start gap-2 text-slate-700">
+                                    <span className="text-slate-900 font-black mt-0.5">•</span>
+                                    <p className="leading-relaxed">
+                                      <strong className="text-slate-900 font-bold">{b.title}: </strong>
+                                      {b.text}
+                                    </p>
+                                  </div>
+                                ))}
+
+                                {/* NIRF Callout Box */}
+                                <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                                  <h4 className="font-outfit font-bold text-[13.5px] text-slate-900">
+                                    {hlData.nirfCalloutTitle || `Why Is ${collegeShortName} Ranked Among India's Best?`}
+                                  </h4>
+                                  <p className="text-[12.5px] text-slate-600 font-normal leading-relaxed">
+                                    {hlData.nirfCalloutDesc || "Explore official NIRF 2026 data on placements, research, faculty strength and student outcomes."}
+                                  </p>
+                                  <div className="pt-1">
+                                    <a
+                                      href={hlData.nirfReportUrl || "https://home.iitd.ac.in/"}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a73e8] hover:underline"
+                                    >
+                                      <FileText className="w-3.5 h-3.5 text-red-500" />
+                                      <span>Access {collegeShortName} NIRF 2026 Report</span>
+                                    </a>
+                                  </div>
+                                </div>
+
+                                {/* Read less */}
+                                <div className="pt-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsHighlightsExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                  >
+                                    Read less
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 3. ABOUT & OVERVIEW BOX */}
               <div id="about-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs scroll-mt-24">
                 <div className="flex items-center justify-between">
                   <h2 className="font-outfit font-black text-xl text-slate-900">
@@ -1116,7 +1340,7 @@ export default function CollegeDetailPage() {
                 </div>
 
                 {/* Key Highlights Table */}
-                <div id="highlights-section" className="space-y-3 pt-2 scroll-mt-24">
+                <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between">
                     <h3 className="font-outfit font-black text-lg text-slate-900">
                       {collegeData.name} - Key Highlights
@@ -1127,7 +1351,7 @@ export default function CollegeDetailPage() {
                         className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
                       >
                         <Edit className="w-3 h-3" />
-                        <span>Edit Highlights Table</span>
+                        <span>Edit Highlights</span>
                       </button>
                     )}
                   </div>
@@ -2307,60 +2531,224 @@ export default function CollegeDetailPage() {
                   </div>
                 )}
 
-                {/* MODAL 4: KEY HIGHLIGHTS */}
+                {/* MODAL 4: HIGHLIGHTS & EDITORIAL ARTICLE */}
                 {activeMiniModal === "highlights" && (
-                  <div className="space-y-3">
-                    <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
-                      {tempData.highlights.map((h, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
+                  <div className="space-y-4">
+                    {/* Editorial Highlights Article Section */}
+                    <div className="p-3.5 bg-purple-50/50 border border-purple-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-purple-900 uppercase tracking-wide">
+                          Editorial Highlights Article
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              highlightsArticle: {
+                                ...currentArt,
+                                bullets: [
+                                  ...(currentArt.bullets || []),
+                                  {
+                                    title: "New Highlight",
+                                    text: "Add detailed description here.",
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Bullet Point</span>
+                        </button>
+                      </div>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">Introductory Paragraph</label>
+                        <textarea
+                          rows={3}
+                          value={tempData.highlightsArticle?.introText || getCollegeHighlightsArticle(tempData).introText || ""}
+                          onChange={(e) => {
+                            const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              highlightsArticle: {
+                                ...currentArt,
+                                introText: e.target.value,
+                              },
+                            });
+                          }}
+                          placeholder="Intro text..."
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium resize-none"
+                        />
+                      </div>
+
+                      {/* Bullets List */}
+                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        {(tempData.highlightsArticle?.bullets || getCollegeHighlightsArticle(tempData).bullets || []).map((b, idx) => (
+                          <div key={idx} className="p-2.5 bg-white border border-slate-200 rounded-xl space-y-1.5 relative">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                                const updated = (currentArt.bullets || []).filter((_, i) => i !== idx);
+                                setTempData({
+                                  ...tempData,
+                                  highlightsArticle: {
+                                    ...currentArt,
+                                    bullets: updated,
+                                  },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <input
+                              type="text"
+                              value={b.title}
+                              onChange={(e) => {
+                                const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                                const updated = [...(currentArt.bullets || [])];
+                                updated[idx] = { ...updated[idx], title: e.target.value };
+                                setTempData({
+                                  ...tempData,
+                                  highlightsArticle: {
+                                    ...currentArt,
+                                    bullets: updated,
+                                  },
+                                });
+                              }}
+                              placeholder="Title (e.g. Rankings, Placements)"
+                              className="w-4/5 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                            />
+
+                            <textarea
+                              rows={2}
+                              value={b.text}
+                              onChange={(e) => {
+                                const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                                const updated = [...(currentArt.bullets || [])];
+                                updated[idx] = { ...updated[idx], text: e.target.value };
+                                setTempData({
+                                  ...tempData,
+                                  highlightsArticle: {
+                                    ...currentArt,
+                                    bullets: updated,
+                                  },
+                                });
+                              }}
+                              placeholder="Full description text..."
+                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* NIRF Banner Controls */}
+                      <div className="grid grid-cols-2 gap-2 pt-1">
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-0.5">NIRF Banner Title</label>
                           <input
                             type="text"
-                            value={h.label}
+                            value={tempData.highlightsArticle?.nirfCalloutTitle || `Why Is ${tempData.name.split(" - ")[0]} Ranked Among India's Best?`}
                             onChange={(e) => {
-                              const updated = [...tempData.highlights];
-                              updated[idx].label = e.target.value;
-                              setTempData({ ...tempData, highlights: updated });
+                              const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                highlightsArticle: {
+                                  ...currentArt,
+                                  nirfCalloutTitle: e.target.value,
+                                },
+                              });
                             }}
-                            placeholder="Parameter Name"
-                            className="w-1/3 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
                           />
-                          <input
-                            type="text"
-                            value={h.value}
-                            onChange={(e) => {
-                              const updated = [...tempData.highlights];
-                              updated[idx].value = e.target.value;
-                              setTempData({ ...tempData, highlights: updated });
-                            }}
-                            placeholder="Value"
-                            className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = tempData.highlights.filter((_, i) => i !== idx);
-                              setTempData({ ...tempData, highlights: updated });
-                            }}
-                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
                         </div>
-                      ))}
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-0.5">NIRF Report Link URL</label>
+                          <input
+                            type="text"
+                            value={tempData.highlightsArticle?.nirfReportUrl || "https://home.iitd.ac.in/"}
+                            onChange={(e) => {
+                              const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                highlightsArticle: {
+                                  ...currentArt,
+                                  nirfReportUrl: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-blue-600 font-semibold"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setTempData({
-                          ...tempData,
-                          highlights: [...tempData.highlights, { label: "New Parameter", value: "Value" }],
-                        })
-                      }
-                      className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Add Highlight Row</span>
-                    </button>
+
+                    {/* Key Highlights Table Parameters */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black text-slate-800 uppercase tracking-wide">
+                          Key Highlights Parameters Table
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setTempData({
+                              ...tempData,
+                              highlights: [...tempData.highlights, { label: "New Parameter", value: "Value" }],
+                            })
+                          }
+                          className="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10.5px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Row</span>
+                        </button>
+                      </div>
+
+                      <div className="max-h-44 overflow-y-auto space-y-1.5 pr-1">
+                        {tempData.highlights.map((h, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={h.label}
+                              onChange={(e) => {
+                                const updated = [...tempData.highlights];
+                                updated[idx].label = e.target.value;
+                                setTempData({ ...tempData, highlights: updated });
+                              }}
+                              placeholder="Parameter Name"
+                              className="w-1/3 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                            />
+                            <input
+                              type="text"
+                              value={h.value}
+                              onChange={(e) => {
+                                const updated = [...tempData.highlights];
+                                updated[idx].value = e.target.value;
+                                setTempData({ ...tempData, highlights: updated });
+                              }}
+                              placeholder="Value"
+                              className="flex-1 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = tempData.highlights.filter((_, i) => i !== idx);
+                                setTempData({ ...tempData, highlights: updated });
+                              }}
+                              className="p-1 text-red-500 hover:bg-red-50 rounded-lg"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
