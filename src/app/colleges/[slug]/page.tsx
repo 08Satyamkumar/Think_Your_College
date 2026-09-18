@@ -728,10 +728,33 @@ export default function CollegeDetailPage() {
   };
 
   const getCollegeHighlightsArticle = (college: CollegeDetail): HighlightsArticleData => {
-    if (college.highlightsArticle && college.highlightsArticle.bullets && college.highlightsArticle.bullets.length > 0) {
-      return college.highlightsArticle;
-    }
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    const defaultFaqs: FaqItem[] = [
+      {
+        question: `What was the highest package offered during ${shortName} placements?`,
+        answer: `As per recent placement reports, ${shortName} recorded a highest domestic package of ${college.highestPackage || "₹1.20 Crore PA"} and average CTC around ${college.averagePackage || "₹25.82 LPA"} with prominent national and global recruiters participating.`,
+      },
+      {
+        question: `How are the degree placements at ${shortName}?`,
+        answer: `${shortName} placements consistently record high placement percentages across undergraduate and postgraduate disciplines with prominent top tier firms visiting the campus.`,
+      },
+      {
+        question: `What is the hostel and accommodation fee for ${shortName}?`,
+        answer: `Hostel room and mess charges are structured on a per-semester basis with subsidized accommodation facilities for residential scholars.`,
+      },
+      {
+        question: `What is the NIRF ranking of ${shortName}?`,
+        answer: `${shortName} holds ${college.nirfRank || "prominent ranking in Engineering"} reflecting its academic excellence, faculty credentials, and student outcomes.`,
+      },
+    ];
+
+    if (college.highlightsArticle && college.highlightsArticle.bullets && college.highlightsArticle.bullets.length > 0) {
+      return {
+        ...college.highlightsArticle,
+        faqs: college.highlightsArticle.faqs && college.highlightsArticle.faqs.length > 0 ? college.highlightsArticle.faqs : defaultFaqs,
+      };
+    }
+
     return {
       introText: `${college.fullName || college.name} is one of India's leading institutions located in ${college.location}. Check out some of the important ${shortName} highlights below:`,
       bullets: [
@@ -759,24 +782,7 @@ export default function CollegeDetailPage() {
       nirfCalloutTitle: `Why Is ${shortName} Ranked Among India's Best?`,
       nirfCalloutDesc: `Explore verified performance metrics, faculty strength, and student outcomes.`,
       nirfReportUrl: "#",
-      faqs: [
-        {
-          question: `What was the highest package offered during ${shortName} placements?`,
-          answer: `As per recent placement reports, ${shortName} recorded a highest domestic package of ${college.highestPackage || "₹1.20 Crore PA"} and average CTC around ${college.averagePackage || "₹25.82 LPA"} with prominent national and global recruiters participating.`,
-        },
-        {
-          question: `How are the degree placements at ${shortName}?`,
-          answer: `${shortName} placements consistently record high placement percentages across undergraduate and postgraduate disciplines with prominent top tier firms visiting the campus.`,
-        },
-        {
-          question: `What is the hostel and accommodation fee for ${shortName}?`,
-          answer: `Hostel room and mess charges are structured on a per-semester basis with subsidized accommodation facilities for residential scholars.`,
-        },
-        {
-          question: `What is the NIRF ranking of ${shortName}?`,
-          answer: `${shortName} holds ${college.nirfRank || "prominent ranking in Engineering"} reflecting its academic excellence, faculty credentials, and student outcomes.`,
-        },
-      ],
+      faqs: defaultFaqs,
     };
   };
 
@@ -1509,87 +1515,6 @@ export default function CollegeDetailPage() {
                   </div>
                 );
               })()}
-
-              {/* 3. ABOUT & OVERVIEW BOX */}
-              <div id="about-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-6 shadow-xs scroll-mt-24">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-outfit font-black text-xl text-slate-900">
-                    About {collegeData.name}
-                  </h2>
-                  {isAdmin && (
-                    <button
-                      onClick={() => openMiniModal("info")}
-                      className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
-                    >
-                      <Edit className="w-3 h-3" />
-                      <span>Edit Overview & Updates</span>
-                    </button>
-                  )}
-                </div>
-
-                {/* What's New Box 2026 */}
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 space-y-2">
-                  <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-wide">
-                    <Sparkles className="w-4 h-4 text-orange-600 animate-pulse" />
-                    <span>What's New in {collegeData.name.split(" - ")[0]}? 2026-27 Updates</span>
-                  </div>
-                  <ul className="space-y-1.5 text-xs text-slate-700 font-semibold pl-1">
-                    {collegeData.whatsNew?.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-orange-500 font-bold">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* About text */}
-                <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium">
-                  {collegeData.description.split("\n\n").map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
-                </div>
-
-                {/* Key Highlights Table */}
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-outfit font-black text-lg text-slate-900">
-                      {collegeData.name} - Key Highlights
-                    </h3>
-                    {isAdmin && (
-                      <button
-                        onClick={() => openMiniModal("highlights")}
-                        className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition-colors flex items-center gap-1 cursor-pointer"
-                      >
-                        <Edit className="w-3 h-3" />
-                        <span>Edit Highlights</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="overflow-hidden border border-slate-200 rounded-2xl">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <tbody>
-                        {collegeData.highlights.map((item, idx) => (
-                          <tr
-                            key={idx}
-                            className={`border-b border-slate-100 ${
-                              idx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
-                            }`}
-                          >
-                            <td className="py-3 px-4 font-extrabold text-slate-700 w-1/3 border-r border-slate-100">
-                              {item.label}
-                            </td>
-                            <td className="py-3 px-4 font-bold text-slate-900">
-                              {item.value}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
             </div>
           )}
 
