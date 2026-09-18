@@ -98,6 +98,16 @@ interface HighlightsArticleData {
   faqs?: FaqItem[];
 }
 
+interface CutoffArticleData {
+  title?: string;
+  paragraphs?: string[];
+  calloutTitle?: string;
+  calloutDesc?: string;
+  calloutPdfUrl?: string;
+  afterCalloutParagraphs?: string[];
+  footerNote?: string;
+}
+
 interface FaqItem {
   question: string;
   answer: string;
@@ -166,6 +176,7 @@ interface CollegeDetail {
   author?: AuthorProfile;
   tableOfContents?: TableOfContentItem[];
   highlightsArticle?: HighlightsArticleData;
+  cutoffArticle?: CutoffArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -254,6 +265,21 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
         answer: "IIT Delhi is ranked #2 in the Engineering category and #4 in the Overall category in NIRF 2025/2026. Internationally, IIT Delhi is placed at #118 in QS World University Rankings 2027 and #59 in QS Asia University Rankings 2026.",
       },
     ],
+  },
+  cutoffArticle: {
+    paragraphs: [
+      "IIT Delhi JEE Advanced Cutoff 2026 has been released on the official website of JoSAA, i.e. josaa.nic.in! As per JoSAA Round 5 Cut Off 2026, the IIT Delhi admissions closed at a rank of 16295 for BTech Design in the Open Category. It was the least competitive branch with the lowest IIT Delhi cutoff.",
+      "The highest competition for admissions at IIT Delhi was observed for CSE with a closing rank of 128 (Open) in round 5. Second most competitive branch was CSE dual degree (five years) as the admissions closed at 212 rank.",
+      "On the other hand, the competition was lowest for branches like Design, Chemistry and Chemical Engineering. The opening and closing rank for BTech Chemistry in the overall open category was 6437 and 15833.",
+      "JEE Advanced 2026 cutoff Opening and Closing Ranks represent the minimum rank required for admission to various IIT Delhi BTech programmes. The higher the candidate's rank, the higher the chances of the candidate getting admission. Participating in JoSAA counselling 2026 is mandatory for admission to IIT Delhi.",
+    ],
+    calloutTitle: "Missed the IIT Delhi Cutoff?",
+    calloutDesc: "Explore engineering colleges accepting low JEE Main ranks and discover alternative pathways to pursue your BTech dream.",
+    calloutPdfUrl: "#",
+    afterCalloutParagraphs: [
+      "IIT Delhi also accepts IIT JAM cutoff 2026 for admission to the MSc course. With the release of IIT JAM Round 6 closing ranks, MSc in Economics turned out to be the most competitive specialisation with the lowest rank of 22 for the General AI category. The lower the rank, the higher the competition. Hence, it is considered one of the toughest MSc course to get at IIT Delhi India.",
+    ],
+    footerNote: "Check IIT Delhi Cut Off 2026 for other programmes below:",
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -545,6 +571,8 @@ export default function CollegeDetailPage() {
   const [isHighlightsOpen, setIsHighlightsOpen] = useState(true);
   const [isHighlightsExpanded, setIsHighlightsExpanded] = useState(false);
   const [openHighlightFaqIdx, setOpenHighlightFaqIdx] = useState<number | null>(0);
+  const [isCutoffCardOpen, setIsCutoffCardOpen] = useState(true);
+  const [isCutoffArticleExpanded, setIsCutoffArticleExpanded] = useState(false);
 
   // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
@@ -654,6 +682,7 @@ export default function CollegeDetailPage() {
             author: parsedData.author || IIT_DELHI_MASTER_DATA.author,
             tableOfContents: parsedData.tableOfContents || IIT_DELHI_MASTER_DATA.tableOfContents,
             highlightsArticle: parsedData.highlightsArticle || IIT_DELHI_MASTER_DATA.highlightsArticle,
+            cutoffArticle: parsedData.cutoffArticle || IIT_DELHI_MASTER_DATA.cutoffArticle,
           };
 
           setCollegeData(baseDetail);
@@ -675,6 +704,28 @@ export default function CollegeDetailPage() {
       fetchCollegeDetail();
     }
   }, [slug]);
+
+  const getCollegeCutoffArticle = (college: CollegeDetail): CutoffArticleData => {
+    if (college.cutoffArticle && college.cutoffArticle.paragraphs && college.cutoffArticle.paragraphs.length > 0) {
+      return college.cutoffArticle;
+    }
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    return {
+      paragraphs: [
+        `${shortName} Cutoff 2026 has been released on the official counselling portals! As per latest JoSAA Round Cut Off 2026, the ${shortName} admissions closed at competitive opening and closing ranks for flagship BTech programmes in the Open Category.`,
+        `The highest competition for admissions at ${shortName} was observed for Computer Science & Engineering (CSE) and allied technology branches with closing ranks among the top percentiles in the national entrance exam.`,
+        `On the other hand, candidates securing qualifying ranks across diverse categories can explore options across Mechanical, Civil, Chemical, and Interdisciplinary engineering disciplines.`,
+        `Opening and Closing Ranks represent the minimum rank required for admission to various ${shortName} degree programmes. The higher the candidate's rank, the higher the chances of securing admission. Participating in centralized counselling is mandatory.`
+      ],
+      calloutTitle: `Missed the ${shortName} Cutoff?`,
+      calloutDesc: `Explore top alternative engineering institutions accepting your rank and discover personalized pathways to pursue your dream career.`,
+      calloutPdfUrl: "#",
+      afterCalloutParagraphs: [
+        `${shortName} also accepts national level postgraduate entrance tests for M.Tech, MBA, and M.Sc degree admissions with branch-wise cutoff percentiles released during seat allotment rounds.`
+      ],
+      footerNote: `Check ${shortName} Cut Off 2026 for other programmes below:`
+    };
+  };
 
   const getCollegeHighlightsArticle = (college: CollegeDetail): HighlightsArticleData => {
     if (college.highlightsArticle && college.highlightsArticle.bullets && college.highlightsArticle.bullets.length > 0) {
@@ -1881,60 +1932,220 @@ export default function CollegeDetailPage() {
 
           {/* TAB 7: CUT-OFFS */}
           {activeTab === "cutoffs" && (
-            <div id="cutoffs-section" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs scroll-mt-24">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="font-outfit font-black text-xl text-slate-900">
-                    JEE Advanced / JoSAA Opening & Closing Cutoff Ranks
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Official Round 6 closing cutoff trends for primary engineering branches
-                  </p>
-                </div>
-                {isAdmin && (
-                  <button
-                    onClick={() => openMiniModal("cutoffs")}
-                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
-                  >
-                    <Edit className="w-3.5 h-3.5" />
-                    <span>Edit Cutoffs Table</span>
-                  </button>
-                )}
-              </div>
+            <div className="space-y-2.5">
+              {/* 1. CUTOFF 2026 EDITORIAL ARTICLE CARD (EXACT USER REFERENCE TEMPLATE) */}
+              {(() => {
+                const cutData = getCollegeCutoffArticle(collegeData);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
+                const paragraphs = cutData.paragraphs || [];
+                const firstTwoParas = paragraphs.slice(0, 2);
+                const thirdPara = paragraphs[2];
 
-              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
-                      <th className="py-3 px-4">B.Tech Engineering Specialization</th>
-                      <th className="py-3 px-3">Category Quota</th>
-                      <th className="py-3 px-3 text-emerald-700">Opening Rank</th>
-                      <th className="py-3 px-3 text-red-700">Closing Rank</th>
-                      <th className="py-3 px-3">Counselling</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium">
-                    {collegeData.cutoffs.map((cutoff, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                        <td className="py-3 px-4 font-bold text-slate-900">
-                          {cutoff.branch}
-                        </td>
-                        <td className="py-3 px-3 text-slate-600 font-semibold">
-                          {cutoff.category || "General (Gender-Neutral)"}
-                        </td>
-                        <td className="py-3 px-3 font-outfit font-black text-emerald-600">
-                          {cutoff.openRank}
-                        </td>
-                        <td className="py-3 px-3 font-outfit font-black text-red-600">
-                          {cutoff.closeRank}
-                        </td>
-                        <td className="py-3 px-3 text-[10px] font-bold text-slate-500">
-                          {cutoff.round || "Round 6"}
-                        </td>
+                return (
+                  <div
+                    id="cutoffs-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-24"
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between gap-3">
+                      <h2 className="text-lg sm:text-xl font-bold font-outfit text-slate-900 tracking-tight">
+                        {cutData.title || `${collegeShortName} Cutoff 2026`}
+                      </h2>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("cutoffs")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Cutoffs</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setIsCutoffCardOpen(!isCutoffCardOpen)}
+                          aria-label={isCutoffCardOpen ? "Collapse Cutoff Card" : "Expand Cutoff Card"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isCutoffCardOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Card Body */}
+                    <AnimatePresence initial={false}>
+                      {isCutoffCardOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4 space-y-3.5 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {/* Collapsed vs Expanded View */}
+                            {!isCutoffArticleExpanded ? (
+                              <div className="space-y-3 relative pt-0.5">
+                                {firstTwoParas.map((p, idx) => (
+                                  <p key={idx} className="leading-relaxed">
+                                    {p}
+                                  </p>
+                                ))}
+
+                                {/* 3rd paragraph with frosted water glass mask fade */}
+                                {thirdPara && (
+                                  <div className="relative max-h-[50px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_20%,rgba(0,0,0,0.4)_60%,transparent_100%)]">
+                                    <p className="leading-relaxed text-slate-700">{thirdPara}</p>
+                                  </div>
+                                )}
+
+                                {/* Ultra-Premium Water & Glass Fade Overlay with Read more */}
+                                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-end pointer-events-auto pr-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsCutoffArticleExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3.5 pt-1">
+                                {/* All initial paragraphs */}
+                                {paragraphs.map((p, idx) => (
+                                  <p key={idx} className="leading-relaxed">
+                                    {p}
+                                  </p>
+                                ))}
+
+                                {/* Callout Box: Missed the Cutoff */}
+                                <div className="my-4 p-4 rounded-xl bg-slate-50/90 border border-slate-200/80 space-y-1.5">
+                                  <h4 className="font-outfit font-bold text-[14px] text-slate-900">
+                                    {cutData.calloutTitle || `Missed the ${collegeShortName} Cutoff?`}
+                                  </h4>
+                                  <p className="text-[12.5px] text-slate-600 font-normal leading-relaxed">
+                                    {cutData.calloutDesc || "Explore engineering colleges accepting low JEE Main ranks and discover alternative pathways to pursue your BTech dream."}
+                                  </p>
+                                  <div className="pt-1">
+                                    <a
+                                      href={cutData.calloutPdfUrl || "#"}
+                                      onClick={(e) => {
+                                        if (!cutData.calloutPdfUrl || cutData.calloutPdfUrl === "#") {
+                                          e.preventDefault();
+                                          const leadEl = document.getElementById("lead-inquiry-box");
+                                          if (leadEl) {
+                                            leadEl.scrollIntoView({ behavior: "smooth" });
+                                          }
+                                        }
+                                      }}
+                                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a73e8] hover:underline cursor-pointer"
+                                    >
+                                      <FileText className="w-3.5 h-3.5 text-red-500" />
+                                      <span>Download Free PDF</span>
+                                    </a>
+                                  </div>
+                                </div>
+
+                                {/* Dashed divider line */}
+                                <div className="border-t border-dashed border-slate-200/90 my-3" />
+
+                                {/* After Callout Paragraphs */}
+                                {cutData.afterCalloutParagraphs?.map((p, idx) => (
+                                  <p key={idx} className="leading-relaxed">
+                                    {p}
+                                  </p>
+                                ))}
+
+                                {/* Footer Note */}
+                                {cutData.footerNote && (
+                                  <p className="text-[13.5px] text-slate-700 font-medium">
+                                    Check <span className="text-[#1a73e8] font-bold cursor-pointer hover:underline">{collegeShortName} Cut Off 2026</span> for other programmes below:
+                                  </p>
+                                )}
+
+                                {/* Read less */}
+                                <div className="pt-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsCutoffArticleExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                  >
+                                    Read less
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 2. OFFICIAL OPENING & CLOSING CUTOFF RANKS TABLE */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="font-outfit font-black text-xl text-slate-900">
+                      JEE Advanced / JoSAA Opening & Closing Cutoff Ranks
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Official Round 6 closing cutoff trends for primary engineering branches
+                    </p>
+                  </div>
+                  {isAdmin && (
+                    <button
+                      onClick={() => openMiniModal("cutoffs")}
+                      className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                      <span>Edit Cutoffs Table</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-100 text-slate-700 uppercase font-black text-[10px] tracking-wider border-b border-slate-200">
+                        <th className="py-3 px-4">B.Tech Engineering Specialization</th>
+                        <th className="py-3 px-3">Category Quota</th>
+                        <th className="py-3 px-3 text-emerald-700">Opening Rank</th>
+                        <th className="py-3 px-3 text-red-700">Closing Rank</th>
+                        <th className="py-3 px-3">Counselling</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium">
+                      {collegeData.cutoffs.map((cutoff, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                          <td className="py-3 px-4 font-bold text-slate-900">
+                            {cutoff.branch}
+                          </td>
+                          <td className="py-3 px-3 text-slate-600 font-semibold">
+                            {cutoff.category || "General (Gender-Neutral)"}
+                          </td>
+                          <td className="py-3 px-3 font-outfit font-black text-emerald-600">
+                            {cutoff.openRank}
+                          </td>
+                          <td className="py-3 px-3 font-outfit font-black text-red-600">
+                            {cutoff.closeRank}
+                          </td>
+                          <td className="py-3 px-3 text-[10px] font-bold text-slate-500">
+                            {cutoff.round || "Round 6"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
@@ -3163,89 +3374,232 @@ export default function CollegeDetailPage() {
 
                 {/* MODAL 7: CUTOFFS */}
                 {activeMiniModal === "cutoffs" && (
-                  <div className="space-y-3">
-                    <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
-                      {tempData.cutoffs.map((cut, idx) => (
-                        <div key={idx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-2">
+                  <div className="space-y-4">
+                    {/* Part 1: Editorial Cutoff Article Editor */}
+                    <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-purple-900 uppercase tracking-wide">
+                          Editorial Cutoffs Article
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              cutoffArticle: {
+                                ...currentCut,
+                                paragraphs: [
+                                  ...(currentCut.paragraphs || []),
+                                  "New cutoff explanation paragraph text here.",
+                                ],
+                              },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Paragraph</span>
+                        </button>
+                      </div>
+
+                      {/* Paragraphs List */}
+                      <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        {(tempData.cutoffArticle?.paragraphs || getCollegeCutoffArticle(tempData).paragraphs || []).map((p, idx) => (
+                          <div key={idx} className="p-2.5 bg-white border border-slate-200 rounded-xl space-y-1 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                                const updated = (currentCut.paragraphs || []).filter((_, i) => i !== idx);
+                                setTempData({
+                                  ...tempData,
+                                  cutoffArticle: {
+                                    ...currentCut,
+                                    paragraphs: updated,
+                                  },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Delete Paragraph"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <label className="text-[10px] font-bold text-slate-500 block">Paragraph #{idx + 1}</label>
+                            <textarea
+                              rows={2.5}
+                              value={p}
+                              onChange={(e) => {
+                                const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                                const updated = [...(currentCut.paragraphs || [])];
+                                updated[idx] = e.target.value;
+                                setTempData({
+                                  ...tempData,
+                                  cutoffArticle: {
+                                    ...currentCut,
+                                    paragraphs: updated,
+                                  },
+                                });
+                              }}
+                              placeholder="Cutoff details and analysis paragraph..."
+                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-800"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Missed Cutoff Callout Banner Controls */}
+                      <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200/80">
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-0.5">Callout Banner Title</label>
                           <input
                             type="text"
-                            value={cut.branch}
+                            value={tempData.cutoffArticle?.calloutTitle || `Missed the ${tempData.name.split(" - ")[0]} Cutoff?`}
                             onChange={(e) => {
-                              const updated = [...tempData.cutoffs];
-                              updated[idx].branch = e.target.value;
-                              setTempData({ ...tempData, cutoffs: updated });
+                              const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                cutoffArticle: {
+                                  ...currentCut,
+                                  calloutTitle: e.target.value,
+                                },
+                              });
                             }}
-                            placeholder="Branch"
-                            className="w-1/3 px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
                           />
-                          <input
-                            type="text"
-                            value={cut.category || "General"}
-                            onChange={(e) => {
-                              const updated = [...tempData.cutoffs];
-                              updated[idx].category = e.target.value;
-                              setTempData({ ...tempData, cutoffs: updated });
-                            }}
-                            placeholder="Category"
-                            className="w-1/4 px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
-                          />
-                          <input
-                            type="text"
-                            value={cut.openRank}
-                            onChange={(e) => {
-                              const updated = [...tempData.cutoffs];
-                              updated[idx].openRank = e.target.value;
-                              setTempData({ ...tempData, cutoffs: updated });
-                            }}
-                            placeholder="Open"
-                            className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs"
-                          />
-                          <input
-                            type="text"
-                            value={cut.closeRank}
-                            onChange={(e) => {
-                              const updated = [...tempData.cutoffs];
-                              updated[idx].closeRank = e.target.value;
-                              setTempData({ ...tempData, cutoffs: updated });
-                            }}
-                            placeholder="Close"
-                            className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-red-600"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = tempData.cutoffs.filter((_, i) => i !== idx);
-                              setTempData({ ...tempData, cutoffs: updated });
-                            }}
-                            className="p-1 text-red-500 hover:bg-red-50 rounded-lg ml-auto"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
                         </div>
-                      ))}
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-0.5">PDF Download Link URL</label>
+                          <input
+                            type="text"
+                            value={tempData.cutoffArticle?.calloutPdfUrl || "#"}
+                            onChange={(e) => {
+                              const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                cutoffArticle: {
+                                  ...currentCut,
+                                  calloutPdfUrl: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-blue-600 font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-700 block mb-0.5">Callout Description</label>
+                        <input
+                          type="text"
+                          value={tempData.cutoffArticle?.calloutDesc || "Explore engineering colleges accepting low JEE Main ranks and discover alternative pathways to pursue your BTech dream."}
+                          onChange={(e) => {
+                            const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              cutoffArticle: {
+                                ...currentCut,
+                                calloutDesc: e.target.value,
+                              },
+                            });
+                          }}
+                          className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                        />
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setTempData({
-                          ...tempData,
-                          cutoffs: [
-                            ...tempData.cutoffs,
-                            {
-                              branch: "New Engineering Branch",
-                              category: "General (Gender-Neutral)",
-                              openRank: "100",
-                              closeRank: "500",
-                              round: "Round 6",
-                            },
-                          ],
-                        })
-                      }
-                      className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Add Cutoff Row</span>
-                    </button>
+
+                    {/* Part 2: Opening & Closing Ranks Table Rows */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black text-slate-800 uppercase tracking-wide">
+                          Opening & Closing Ranks Table Rows
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setTempData({
+                              ...tempData,
+                              cutoffs: [
+                                ...tempData.cutoffs,
+                                {
+                                  branch: "New Engineering Branch",
+                                  category: "General (Gender-Neutral)",
+                                  openRank: "100",
+                                  closeRank: "500",
+                                  round: "Round 6",
+                                },
+                              ],
+                            })
+                          }
+                          className="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10.5px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Row</span>
+                        </button>
+                      </div>
+
+                      <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
+                        {tempData.cutoffs.map((cut, idx) => (
+                          <div key={idx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={cut.branch}
+                              onChange={(e) => {
+                                const updated = [...tempData.cutoffs];
+                                updated[idx].branch = e.target.value;
+                                setTempData({ ...tempData, cutoffs: updated });
+                              }}
+                              placeholder="Branch"
+                              className="w-1/3 px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                            />
+                            <input
+                              type="text"
+                              value={cut.category || "General"}
+                              onChange={(e) => {
+                                const updated = [...tempData.cutoffs];
+                                updated[idx].category = e.target.value;
+                                setTempData({ ...tempData, cutoffs: updated });
+                              }}
+                              placeholder="Category"
+                              className="w-1/4 px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                            />
+                            <input
+                              type="text"
+                              value={cut.openRank}
+                              onChange={(e) => {
+                                const updated = [...tempData.cutoffs];
+                                updated[idx].openRank = e.target.value;
+                                setTempData({ ...tempData, cutoffs: updated });
+                              }}
+                              placeholder="Open"
+                              className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                            />
+                            <input
+                              type="text"
+                              value={cut.closeRank}
+                              onChange={(e) => {
+                                const updated = [...tempData.cutoffs];
+                                updated[idx].closeRank = e.target.value;
+                                setTempData({ ...tempData, cutoffs: updated });
+                              }}
+                              placeholder="Close"
+                              className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-red-600"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = tempData.cutoffs.filter((_, i) => i !== idx);
+                                setTempData({ ...tempData, cutoffs: updated });
+                              }}
+                              className="p-1 text-red-500 hover:bg-red-50 rounded-lg ml-auto"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
