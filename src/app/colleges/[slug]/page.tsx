@@ -95,6 +95,7 @@ interface HighlightsArticleData {
   nirfCalloutTitle?: string;
   nirfCalloutDesc?: string;
   nirfReportUrl?: string;
+  faqs?: FaqItem[];
 }
 
 interface FaqItem {
@@ -231,6 +232,28 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
     nirfCalloutTitle: "Why Is IIT Delhi Ranked Among India's Best?",
     nirfCalloutDesc: "Explore official NIRF 2026 data on placements, research, faculty strength and student outcomes.",
     nirfReportUrl: "https://home.iitd.ac.in/",
+    faqs: [
+      {
+        question: "What was the highest package offered during IIT Delhi placements?",
+        answer: "As of now, IIT Delhi has released the placement data 2026 that is updated till Dec 2025. As per the report, a total of 1,275 offers including PPOs have been. More than 1,140 students have been placed during IIT Delhi placements 2026. The highest package 2026 has not been released yet.\n\nAbove 300 PPOs have been already made this year, which is 33% higher as compared with 2025. 35 international offers were made in 2026. Top recruiters such as Amazon, Accenture, Google, Goldman Sachs and American Express visited the campus.",
+      },
+      {
+        question: "How are the BTech placements at IIT Delhi?",
+        answer: "IIT Delhi BTech placements consistently rank among the finest in the country. During recent placement seasons, students secured over 1,275 offers with top domestic salaries crossing ₹1.20 Cr and international packages reaching ₹2.40 Cr. Top recruiting firms include Google, Microsoft, Graviton, Jane Street, Goldman Sachs, and McKinsey.",
+      },
+      {
+        question: "How can I check the list of selected candidates for M.Des in IIT Delhi (CEED 2026)?",
+        answer: "Candidates can check the shortlisted and final selection lists on the official IIT Delhi Department of Design admission portal (design.iitd.ac.in) by logging in using their CEED 2026 registered credentials and application number.",
+      },
+      {
+        question: "What is the hostel fee for IIT Delhi?",
+        answer: "The hostel seat rent and amenities charges at IIT Delhi are approximately ₹10,500 per semester. Additionally, mess advance charges of ₹28,000 per semester apply, which are adjustable based on actual food consumption.",
+      },
+      {
+        question: "What is the ranking of IIT Delhi?",
+        answer: "IIT Delhi is ranked #2 in the Engineering category and #4 in the Overall category in NIRF 2025/2026. Internationally, IIT Delhi is placed at #118 in QS World University Rankings 2027 and #59 in QS Asia University Rankings 2026.",
+      },
+    ],
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -521,6 +544,7 @@ export default function CollegeDetailPage() {
   const [isTocExpanded, setIsTocExpanded] = useState(false);
   const [isHighlightsOpen, setIsHighlightsOpen] = useState(true);
   const [isHighlightsExpanded, setIsHighlightsExpanded] = useState(false);
+  const [openHighlightFaqIdx, setOpenHighlightFaqIdx] = useState<number | null>(0);
 
   // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
@@ -684,6 +708,24 @@ export default function CollegeDetailPage() {
       nirfCalloutTitle: `Why Is ${shortName} Ranked Among India's Best?`,
       nirfCalloutDesc: `Explore verified performance metrics, faculty strength, and student outcomes.`,
       nirfReportUrl: "#",
+      faqs: [
+        {
+          question: `What was the highest package offered during ${shortName} placements?`,
+          answer: `As per recent placement reports, ${shortName} recorded a highest domestic package of ${college.highestPackage || "₹1.20 Crore PA"} and average CTC around ${college.averagePackage || "₹25.82 LPA"} with prominent national and global recruiters participating.`,
+        },
+        {
+          question: `How are the degree placements at ${shortName}?`,
+          answer: `${shortName} placements consistently record high placement percentages across undergraduate and postgraduate disciplines with prominent top tier firms visiting the campus.`,
+        },
+        {
+          question: `What is the hostel and accommodation fee for ${shortName}?`,
+          answer: `Hostel room and mess charges are structured on a per-semester basis with subsidized accommodation facilities for residential scholars.`,
+        },
+        {
+          question: `What is the NIRF ranking of ${shortName}?`,
+          answer: `${shortName} holds ${college.nirfRank || "prominent ranking in Engineering"} reflecting its academic excellence, faculty credentials, and student outcomes.`,
+        },
+      ],
     };
   };
 
@@ -1290,6 +1332,122 @@ export default function CollegeDetailPage() {
                                   >
                                     Read less
                                   </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* THIN DIVIDER & COMMONLY ASKED QUESTIONS (ON HIGHLIGHTS) */}
+                            {hlData.faqs && hlData.faqs.length > 0 && (
+                              <div className="mt-5 pt-5 border-t border-slate-200/80 space-y-3">
+                                {/* Header */}
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200/70 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">
+                                    <HelpCircle className="w-4.5 h-4.5 text-amber-600" />
+                                  </div>
+                                  <div>
+                                    <h3 className="font-outfit font-bold text-[15px] sm:text-base text-slate-900 leading-tight">
+                                      Commonly asked questions
+                                    </h3>
+                                    <p className="text-[11.5px] sm:text-xs text-slate-500 font-medium">
+                                      On Highlights
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Accordion List */}
+                                <div className="divide-y divide-slate-100/90 pt-1">
+                                  {hlData.faqs.map((faq, fIdx) => {
+                                    const isOpen = openHighlightFaqIdx === fIdx;
+                                    const rawQ = faq.question.trim();
+                                    const formattedQ = rawQ.startsWith("Q:") || rawQ.startsWith("Q.") ? rawQ : `Q: ${rawQ}`;
+                                    const rawA = faq.answer.trim();
+                                    const formattedA = rawA.startsWith("A:") || rawA.startsWith("A.") ? rawA : `A: ${rawA}`;
+
+                                    return (
+                                      <div key={fIdx} className="py-2.5 first:pt-1 last:pb-0">
+                                        <button
+                                          type="button"
+                                          onClick={() => setOpenHighlightFaqIdx(isOpen ? null : fIdx)}
+                                          className="w-full flex items-center justify-between gap-3 text-left py-1 text-slate-800 hover:text-blue-600 transition-colors cursor-pointer group/q"
+                                        >
+                                          <span className="font-outfit font-bold text-[13px] sm:text-[13.5px] leading-snug group-hover/q:text-blue-600 transition-colors">
+                                            {formattedQ}
+                                          </span>
+                                          <ChevronDown
+                                            className={`w-4 h-4 text-slate-500 group-hover/q:text-blue-600 shrink-0 transition-transform duration-200 ${
+                                              isOpen ? "rotate-180 text-blue-600" : ""
+                                            }`}
+                                          />
+                                        </button>
+
+                                        <AnimatePresence initial={false}>
+                                          {isOpen && (
+                                            <motion.div
+                                              initial={{ opacity: 0, height: 0 }}
+                                              animate={{ opacity: 1, height: "auto" }}
+                                              exit={{ opacity: 0, height: 0 }}
+                                              transition={{ duration: 0.2, ease: "easeInOut" }}
+                                              className="overflow-hidden"
+                                            >
+                                              <div className="pt-2 pb-3 space-y-3 pl-0.5 text-[13px] sm:text-[13.5px] text-slate-600 leading-relaxed font-normal">
+                                                {/* Multi-paragraph answer */}
+                                                <div className="space-y-2">
+                                                  {formattedA.split("\n\n").map((para, pIdx) => (
+                                                    <p key={pIdx} className="leading-relaxed">
+                                                      {para}
+                                                    </p>
+                                                  ))}
+                                                </div>
+
+                                                {/* Free Admissions Guidance Callout Box (Shiksha Reference) */}
+                                                <div className="mt-3 p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-3">
+                                                  <div className="flex items-center gap-3">
+                                                    <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/80">
+                                                      <img
+                                                        src="/images/counselor_avatar.png"
+                                                        alt="Expert Counselor"
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                          (e.target as HTMLElement).style.display = "none";
+                                                        }}
+                                                      />
+                                                      <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-indigo-700 font-black text-xs">
+                                                        SP
+                                                      </div>
+                                                      <span className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+                                                    </div>
+                                                    <div>
+                                                      <h5 className="font-outfit font-bold text-xs sm:text-[13px] text-slate-900 leading-tight">
+                                                        Get <span className="text-emerald-600 font-black italic">free</span> admissions guidance
+                                                      </h5>
+                                                      <p className="text-[11px] text-slate-400 font-semibold flex items-center gap-1 mt-0.5">
+                                                        <span>★ 0</span>
+                                                        <span>•</span>
+                                                        <span>0 review</span>
+                                                      </p>
+                                                    </div>
+                                                  </div>
+
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                      const leadEl = document.getElementById("lead-inquiry-box");
+                                                      if (leadEl) {
+                                                        leadEl.scrollIntoView({ behavior: "smooth" });
+                                                      }
+                                                    }}
+                                                    className="px-5 py-2 rounded-full bg-[#1c142e] hover:bg-[#2b2046] text-white text-xs font-bold transition-all shadow-2xs active:scale-95 cursor-pointer shrink-0"
+                                                  >
+                                                    Call Us
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             )}
@@ -2688,6 +2846,114 @@ export default function CollegeDetailPage() {
                             className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-blue-600 font-semibold"
                           />
                         </div>
+                      </div>
+                    </div>
+
+                    {/* COMMONLY ASKED QUESTIONS (ON HIGHLIGHTS) ACCORDION EDITOR */}
+                    <div className="p-3.5 bg-amber-50/50 border border-amber-200/70 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <span className="text-xs font-black text-amber-950 uppercase tracking-wide flex items-center gap-1.5">
+                            <HelpCircle className="w-3.5 h-3.5 text-amber-600" />
+                            <span>Commonly Asked Questions (On Highlights)</span>
+                          </span>
+                          <p className="text-[10px] text-amber-800/80 font-medium">
+                            Add, delete or edit any number of questions & answers for this college
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                            const currentFaqs = currentArt.faqs || [];
+                            setTempData({
+                              ...tempData,
+                              highlightsArticle: {
+                                ...currentArt,
+                                faqs: [
+                                  ...currentFaqs,
+                                  {
+                                    question: `What is the admission criteria for ${tempData.name.split(" - ")[0]}?`,
+                                    answer: `Admission is strictly entrance examination-based followed by centralized counselling rounds.`,
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Question</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                        {(tempData.highlightsArticle?.faqs || getCollegeHighlightsArticle(tempData).faqs || []).map((faq, fIdx) => (
+                          <div key={fIdx} className="p-2.5 bg-white border border-amber-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                                const updated = (currentArt.faqs || []).filter((_, i) => i !== fIdx);
+                                setTempData({
+                                  ...tempData,
+                                  highlightsArticle: {
+                                    ...currentArt,
+                                    faqs: updated,
+                                  },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Delete Question"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-4/5">
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Question #{fIdx + 1}</label>
+                              <input
+                                type="text"
+                                value={faq.question}
+                                onChange={(e) => {
+                                  const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                                  const updated = [...(currentArt.faqs || [])];
+                                  updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    highlightsArticle: {
+                                      ...currentArt,
+                                      faqs: updated,
+                                    },
+                                  });
+                                }}
+                                placeholder="Question text (e.g. What was the highest package...)"
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Answer Text</label>
+                              <textarea
+                                rows={2.5}
+                                value={faq.answer}
+                                onChange={(e) => {
+                                  const currentArt = tempData.highlightsArticle || getCollegeHighlightsArticle(tempData);
+                                  const updated = [...(currentArt.faqs || [])];
+                                  updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    highlightsArticle: {
+                                      ...currentArt,
+                                      faqs: updated,
+                                    },
+                                  });
+                                }}
+                                placeholder="Answer text (supports paragraphs)..."
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-700"
+                              />
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
