@@ -268,16 +268,16 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
   },
   cutoffArticle: {
     paragraphs: [
-      "IIT Delhi JEE Advanced Cutoff 2026 has been released on the official website of JoSAA, i.e. josaa.nic.in! As per JoSAA Round 5 Cut Off 2026, the IIT Delhi admissions closed at a rank of 16295 for BTech Design in the Open Category. It was the least competitive branch with the lowest IIT Delhi cutoff.",
-      "The highest competition for admissions at IIT Delhi was observed for CSE with a closing rank of 128 (Open) in round 5. Second most competitive branch was CSE dual degree (five years) as the admissions closed at 212 rank.",
-      "On the other hand, the competition was lowest for branches like Design, Chemistry and Chemical Engineering. The opening and closing rank for BTech Chemistry in the overall open category was 6437 and 15833.",
-      "JEE Advanced 2026 cutoff Opening and Closing Ranks represent the minimum rank required for admission to various IIT Delhi BTech programmes. The higher the candidate's rank, the higher the chances of the candidate getting admission. Participating in JoSAA counselling 2026 is mandatory for admission to IIT Delhi.",
+      "**IIT Delhi JEE Advanced Cutoff 2026** has been released on the official website of JoSAA, i.e. **josaa.nic.in**! As per **JoSAA Round 5 Cut Off 2026**, the **IIT Delhi admissions** closed at a rank of **16295** for BTech Design in the Open Category. It was the **least competitive** branch with the lowest **IIT Delhi cutoff**.",
+      "The **highest competition** for admissions at **IIT Delhi** was observed for **CSE** with a closing rank of **128** (Open) in round 5. Second most competitive branch was CSE dual degree (five years) as the admissions closed at 212 rank.",
+      "On the other hand, the **competition** was **lowest** for branches like **Design, Chemistry** and **Chemical Engineering**. The opening and closing rank for BTech Chemistry in the overall open category was 6437 and 15833.",
+      "**JEE Advanced 2026 cutoff** Opening and Closing Ranks represent the minimum rank required for admission to various IIT Delhi BTech programmes. The higher the candidate's rank, the higher the chances of the candidate getting admission. Participating in JoSAA counselling 2026 is mandatory for admission to IIT Delhi.",
     ],
     calloutTitle: "Missed the IIT Delhi Cutoff?",
     calloutDesc: "Explore engineering colleges accepting low JEE Main ranks and discover alternative pathways to pursue your BTech dream.",
     calloutPdfUrl: "#",
     afterCalloutParagraphs: [
-      "IIT Delhi also accepts IIT JAM cutoff 2026 for admission to the MSc course. With the release of IIT JAM Round 6 closing ranks, MSc in Economics turned out to be the most competitive specialisation with the lowest rank of 22 for the General AI category. The lower the rank, the higher the competition. Hence, it is considered one of the toughest MSc course to get at IIT Delhi India.",
+      "IIT Delhi also accepts **IIT JAM cutoff 2026** for admission to the MSc course. With the release of IIT JAM Round 6 closing ranks, MSc in Economics turned out to be the most competitive specialisation with the lowest rank of 22 for the General AI category. The lower the rank, the higher the competition. Hence, it is considered one of the toughest MSc course to get at IIT Delhi India.",
     ],
     footerNote: "Check IIT Delhi Cut Off 2026 for other programmes below:",
   },
@@ -547,6 +547,21 @@ const iconMap: Record<string, any> = {
   ShieldCheck,
 };
 
+const renderFormattedText = (text: string) => {
+  if (!text) return null;
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-bold text-slate-900">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
+};
+
 export default function CollegeDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -710,18 +725,22 @@ export default function CollegeDetailPage() {
       return college.cutoffArticle;
     }
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    const topBranch = college.cutoffs?.[0]?.branch || "Computer Science & Engineering (CSE)";
+    const closeRank = college.cutoffs?.[0]?.closeRank ? String(college.cutoffs[0].closeRank) : "128";
+    const round = college.cutoffs?.[0]?.round || "Round 5";
+
     return {
       paragraphs: [
-        `${shortName} Cutoff 2026 has been released on the official counselling portals! As per latest JoSAA Round Cut Off 2026, the ${shortName} admissions closed at competitive opening and closing ranks for flagship BTech programmes in the Open Category.`,
-        `The highest competition for admissions at ${shortName} was observed for Computer Science & Engineering (CSE) and allied technology branches with closing ranks among the top percentiles in the national entrance exam.`,
-        `On the other hand, candidates securing qualifying ranks across diverse categories can explore options across Mechanical, Civil, Chemical, and Interdisciplinary engineering disciplines.`,
-        `Opening and Closing Ranks represent the minimum rank required for admission to various ${shortName} degree programmes. The higher the candidate's rank, the higher the chances of securing admission. Participating in centralized counselling is mandatory.`
+        `**${shortName} Cutoff 2026** has been released on the official counselling portals! As per **${round} Cut Off 2026**, the **${shortName} admissions** closed at competitive opening and closing ranks for flagship BTech programmes in the Open Category.`,
+        `The **highest competition** for admissions at **${shortName}** was observed for **${topBranch}** with a closing rank of **${closeRank}** in ${round}. Allied computing, electrical and technology branches also witnessed strong candidate demand.`,
+        `On the other hand, the **competition** was **moderate to accessible** for core and interdisciplinary branches with closing cutoffs extending across reserved and general quotas.`,
+        `**Cutoff 2026** Opening and Closing Ranks represent the minimum rank required for admission to various **${shortName}** programmes. The higher the candidate's rank, the higher the chances of securing admission. Participating in centralized counselling is mandatory.`
       ],
       calloutTitle: `Missed the ${shortName} Cutoff?`,
-      calloutDesc: `Explore top alternative engineering institutions accepting your rank and discover personalized pathways to pursue your dream career.`,
+      calloutDesc: `Explore top engineering colleges accepting your rank and discover personalized pathways to pursue your BTech dream.`,
       calloutPdfUrl: "#",
       afterCalloutParagraphs: [
-        `${shortName} also accepts national level postgraduate entrance tests for M.Tech, MBA, and M.Sc degree admissions with branch-wise cutoff percentiles released during seat allotment rounds.`
+        `**${shortName}** also accepts national and state-level postgraduate entrance examinations for M.Tech, MBA, and M.Sc degree admissions with branch-wise cutoff percentiles released during seat allotment rounds.`
       ],
       footerNote: `Check ${shortName} Cut Off 2026 for other programmes below:`
     };
@@ -793,7 +812,7 @@ export default function CollegeDetailPage() {
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
     return [
       { label: `${shortName} Highlights 2026`, targetId: "highlights-section", tabId: "info" },
-      { label: `${shortName} Cutoff 2026`, targetId: "cutoffs-section", tabId: "cutoffs" },
+      { label: `${shortName} Cutoff 2026`, targetId: "cutoffs-section", tabId: "info" },
       { label: `${shortName} Courses & Fees 2026`, targetId: "courses-section", tabId: "courses" },
       { label: `${shortName} Placements 2026`, targetId: "placements-section", tabId: "placements" },
       { label: `${shortName} Admission & Application Process 2026`, targetId: "admissions-section", tabId: "admissions" },
@@ -1505,6 +1524,163 @@ export default function CollegeDetailPage() {
                                       </div>
                                     );
                                   })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 3. CUTOFF 2026 CARD (STEP 2 IN MASTER TEMPLATE) */}
+              {(() => {
+                const cutData = getCollegeCutoffArticle(collegeData);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
+                const paragraphs = cutData.paragraphs || [];
+                const firstTwoParas = paragraphs.slice(0, 2);
+                const thirdPara = paragraphs[2];
+
+                return (
+                  <div
+                    id="cutoffs-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-24"
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between gap-3">
+                      <h2 className="text-lg sm:text-xl font-bold font-outfit text-slate-900 tracking-tight">
+                        {cutData.title || `${collegeShortName} Cutoff 2026`}
+                      </h2>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("cutoffs")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Cutoffs</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setIsCutoffCardOpen(!isCutoffCardOpen)}
+                          aria-label={isCutoffCardOpen ? "Collapse Cutoff Card" : "Expand Cutoff Card"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isCutoffCardOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Card Body */}
+                    <AnimatePresence initial={false}>
+                      {isCutoffCardOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-3.5 space-y-3.5 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {!isCutoffArticleExpanded ? (
+                              <div className="space-y-3 relative pt-0.5">
+                                {firstTwoParas.map((p, idx) => (
+                                  <p key={idx} className="leading-relaxed">
+                                    {renderFormattedText(p)}
+                                  </p>
+                                ))}
+
+                                {/* 3rd paragraph with frosted water glass mask fade */}
+                                {thirdPara && (
+                                  <div className="relative max-h-[52px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_15%,rgba(0,0,0,0.35)_55%,transparent_100%)]">
+                                    <p className="leading-relaxed text-slate-700">
+                                      {renderFormattedText(thirdPara)}
+                                    </p>
+                                  </div>
+                                )}
+
+                                {/* Ultra-Premium Water & Glass Fade Overlay with Read more */}
+                                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-end pointer-events-auto pr-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsCutoffArticleExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3.5 pt-0.5">
+                                {/* All initial paragraphs */}
+                                {paragraphs.map((p, idx) => (
+                                  <p key={idx} className="leading-relaxed">
+                                    {renderFormattedText(p)}
+                                  </p>
+                                ))}
+
+                                {/* Callout Box: Missed the Cutoff */}
+                                {cutData.calloutTitle && (
+                                  <div className="my-3 p-4 rounded-xl bg-slate-50/90 border border-slate-200/80 space-y-1.5">
+                                    <h4 className="font-outfit font-bold text-[14px] text-slate-900">
+                                      {cutData.calloutTitle}
+                                    </h4>
+                                    <p className="text-[12.5px] text-slate-600 font-normal leading-relaxed">
+                                      {cutData.calloutDesc || "Explore engineering colleges accepting low JEE Main ranks and discover alternative pathways to pursue your BTech dream."}
+                                    </p>
+                                    <div className="pt-1">
+                                      <a
+                                        href={cutData.calloutPdfUrl || "#"}
+                                        onClick={(e) => {
+                                          if (!cutData.calloutPdfUrl || cutData.calloutPdfUrl === "#") {
+                                            e.preventDefault();
+                                            const leadEl = document.getElementById("lead-inquiry-box");
+                                            if (leadEl) {
+                                              leadEl.scrollIntoView({ behavior: "smooth" });
+                                            }
+                                          }
+                                        }}
+                                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a73e8] hover:underline cursor-pointer"
+                                      >
+                                        <FileText className="w-3.5 h-3.5 text-red-500" />
+                                        <span>Download Free PDF</span>
+                                      </a>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* After Callout Paragraphs */}
+                                {cutData.afterCalloutParagraphs?.map((p, idx) => (
+                                  <p key={idx} className="leading-relaxed">
+                                    {renderFormattedText(p)}
+                                  </p>
+                                ))}
+
+                                {/* Footer Note */}
+                                {cutData.footerNote && (
+                                  <p className="text-[13.5px] text-slate-700 font-medium">
+                                    Check <span className="text-[#1a73e8] font-bold cursor-pointer hover:underline">{collegeShortName} Cut Off 2026</span> for other programmes below:
+                                  </p>
+                                )}
+
+                                {/* Read less */}
+                                <div className="pt-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsCutoffArticleExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                  >
+                                    Read less
+                                  </button>
                                 </div>
                               </div>
                             )}
