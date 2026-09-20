@@ -47,6 +47,8 @@ import {
   Landmark,
   Percent,
   CheckCircle2,
+  SlidersHorizontal,
+  Filter,
   Plus,
   Trash2,
 } from "lucide-react";
@@ -192,6 +194,7 @@ interface CollegeDetail {
   highlightsArticle?: HighlightsArticleData;
   cutoffArticle?: CutoffArticleData;
   cutoffComparison?: CutoffRoundComparisonData;
+  secondaryCutoffComparison?: CutoffRoundComparisonData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -330,6 +333,19 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
         year2024: 332,
         year2025: 323,
         year2026: 338,
+      },
+    ],
+  },
+  secondaryCutoffComparison: {
+    title: "Cut Off 2026 for UCEED: Year-Wise rank",
+    subtitle: "UCEED Last Round Closing Rank (General-All India)",
+    years: ["2024", "2025", "2026"],
+    rows: [
+      {
+        course: "Bachelor of Design (B.Des.)",
+        year2024: 35,
+        year2025: 41,
+        year2026: 28,
       },
     ],
   },
@@ -583,6 +599,7 @@ type MiniModalId =
   | "placements"
   | "cutoffs"
   | "cutoff_comparison"
+  | "secondary_cutoff_comparison"
   | "rankings"
   | "gallery"
   | "hostel"
@@ -642,6 +659,7 @@ export default function CollegeDetailPage() {
   const [isCutoffCardOpen, setIsCutoffCardOpen] = useState(true);
   const [isCutoffArticleExpanded, setIsCutoffArticleExpanded] = useState(false);
   const [isCutoffRoundOpen, setIsCutoffRoundOpen] = useState(false);
+  const [isSecondaryCutoffOpen, setIsSecondaryCutoffOpen] = useState(false);
 
   // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
@@ -753,6 +771,7 @@ export default function CollegeDetailPage() {
             highlightsArticle: parsedData.highlightsArticle || IIT_DELHI_MASTER_DATA.highlightsArticle,
             cutoffArticle: parsedData.cutoffArticle || IIT_DELHI_MASTER_DATA.cutoffArticle,
             cutoffComparison: parsedData.cutoffComparison || IIT_DELHI_MASTER_DATA.cutoffComparison,
+            secondaryCutoffComparison: parsedData.secondaryCutoffComparison || IIT_DELHI_MASTER_DATA.secondaryCutoffComparison,
           };
 
           setCollegeData(baseDetail);
@@ -824,6 +843,37 @@ export default function CollegeDetailPage() {
               year2024: 332,
               year2025: 323,
               year2026: 338,
+            },
+          ],
+    };
+  };
+
+  const getCollegeSecondaryCutoffComparison = (college: CollegeDetail): CutoffRoundComparisonData => {
+    if (college.secondaryCutoffComparison && college.secondaryCutoffComparison.rows && college.secondaryCutoffComparison.rows.length > 0) {
+      return college.secondaryCutoffComparison;
+    }
+    const isIIT = college.name.toLowerCase().includes("iit") || college.name.toLowerCase().includes("indian institute of technology");
+    const exam = isIIT ? "UCEED" : college.stream === "Medical" ? "NEET PG" : "GATE / National Exam";
+
+    return {
+      title: `Cut Off 2026 for ${exam}: Year-Wise rank`,
+      subtitle: `${exam} Last Round Closing Rank (General-All India)`,
+      years: ["2024", "2025", "2026"],
+      rows: isIIT
+        ? [
+            {
+              course: "Bachelor of Design (B.Des.)",
+              year2024: 35,
+              year2025: 41,
+              year2026: 28,
+            },
+          ]
+        : [
+            {
+              course: `Postgraduate / Secondary Specialization (${exam})`,
+              year2024: 240,
+              year2025: 220,
+              year2026: 215,
             },
           ],
     };
@@ -1911,6 +1961,178 @@ export default function CollegeDetailPage() {
                                 </div>
                               );
                             })()}
+
+                            {/* SECONDARY CUTOFF COMPARISON ACCORDION BOX (UCEED / SPECIALIZED EXAMS - USER REFERENCE TEMPLATE) */}
+                            {(() => {
+                              const secData = getCollegeSecondaryCutoffComparison(collegeData);
+                              const secYears = secData.years || ["2024", "2025", "2026"];
+
+                              return (
+                                <div className="mt-3.5 pt-0.5">
+                                  <div className="bg-white/95 border border-slate-200/90 hover:border-slate-300/90 rounded-2xl overflow-hidden shadow-[0_2px_8px_-2px_rgba(0,0,0,0.03)] transition-all">
+                                    {/* Accordion Toggle Header */}
+                                    <div
+                                      onClick={() => setIsSecondaryCutoffOpen(!isSecondaryCutoffOpen)}
+                                      className="w-full p-4 sm:p-4.5 flex items-center justify-between text-left hover:bg-slate-50/70 transition-colors cursor-pointer group/hdr select-none"
+                                    >
+                                      <h3 className="text-sm sm:text-[15px] font-bold font-outfit text-slate-900 tracking-tight group-hover/hdr:text-blue-600 transition-colors">
+                                        {secData.title || `Cut Off 2026 for UCEED: Year-Wise rank`}
+                                      </h3>
+
+                                      <div className="flex items-center gap-2">
+                                        {isAdmin && (
+                                          <button
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              openMiniModal("secondary_cutoff_comparison");
+                                            }}
+                                            className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shrink-0"
+                                          >
+                                            <Edit className="w-3.5 h-3.5" />
+                                            <span>Edit Table</span>
+                                          </button>
+                                        )}
+                                        <div className="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 group-hover/hdr:text-slate-900 border border-slate-200/60 transition-all shrink-0">
+                                          <ChevronDown
+                                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                                              isSecondaryCutoffOpen ? "rotate-180 text-blue-600" : ""
+                                            }`}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Collapsible Accordion Body */}
+                                    <AnimatePresence initial={false}>
+                                      {isSecondaryCutoffOpen && (
+                                        <motion.div
+                                          initial={{ opacity: 0, height: 0 }}
+                                          animate={{ opacity: 1, height: "auto" }}
+                                          exit={{ opacity: 0, height: 0 }}
+                                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                                          className="overflow-hidden"
+                                        >
+                                          <div className="px-4 sm:px-5 pb-5 pt-1 space-y-3.5">
+                                            {/* Top Filter Pills Row matching reference image */}
+                                            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+                                              {/* Filter count icon pill */}
+                                              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300/80 bg-white text-slate-700 font-semibold shadow-2xs shrink-0 select-none">
+                                                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-600" />
+                                                <span className="text-xs font-bold text-slate-800">4</span>
+                                              </div>
+
+                                              {/* Rounds Dropdown Pill */}
+                                              <div className="relative shrink-0">
+                                                <button
+                                                  type="button"
+                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                >
+                                                  <span>Rounds</span>
+                                                  <ChevronDown className="w-3 h-3 text-slate-500" />
+                                                </button>
+                                              </div>
+
+                                              {/* Category Dropdown Pill */}
+                                              <div className="relative shrink-0">
+                                                <button
+                                                  type="button"
+                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                >
+                                                  <span>Category</span>
+                                                  <ChevronDown className="w-3 h-3 text-slate-500" />
+                                                </button>
+                                              </div>
+
+                                              {/* Quota Dropdown Pill */}
+                                              <div className="relative shrink-0">
+                                                <button
+                                                  type="button"
+                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                >
+                                                  <span>Quota</span>
+                                                  <ChevronDown className="w-3 h-3 text-slate-500" />
+                                                </button>
+                                              </div>
+
+                                              {/* Gender Dropdown Pill */}
+                                              <div className="relative shrink-0">
+                                                <button
+                                                  type="button"
+                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                >
+                                                  <span>Gender</span>
+                                                  <ChevronDown className="w-3 h-3 text-slate-500" />
+                                                </button>
+                                              </div>
+                                            </div>
+
+                                            {/* Subtitle */}
+                                            <h4 className="text-xs sm:text-[13.5px] font-bold font-outfit text-slate-800">
+                                              {secData.subtitle || `UCEED Last Round Closing Rank (General-All India)`}
+                                            </h4>
+
+                                            {/* Comparison Table with Light Dotted Dividers */}
+                                            <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                              <table className="w-full text-left border-collapse text-xs">
+                                                <thead>
+                                                  <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs border-b border-dotted border-slate-300/80">
+                                                    <th className="py-3 px-4 text-left font-bold font-outfit text-slate-900 border-r border-dotted border-slate-200/80">
+                                                      Course
+                                                    </th>
+                                                    <th className="py-3 px-4 text-center font-bold font-outfit text-slate-900 w-24 border-r border-dotted border-slate-200/80">
+                                                      {secYears[0]}
+                                                    </th>
+                                                    <th className="py-3 px-4 text-center font-bold font-outfit text-slate-900 w-24 border-r border-dotted border-slate-200/80">
+                                                      {secYears[1]}
+                                                    </th>
+                                                    <th className="py-3 px-4 text-center font-bold font-outfit text-slate-900 w-24">
+                                                      {secYears[2]}
+                                                    </th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody className="font-medium text-xs sm:text-[13px]">
+                                                  {secData.rows.map((row, rIdx) => (
+                                                    <tr key={rIdx} className="border-b border-dotted border-slate-300/70 last:border-b-0 hover:bg-slate-50/70 transition-colors">
+                                                      <td className="py-3 px-4 text-slate-800 font-medium text-left leading-snug border-r border-dotted border-slate-200/70">
+                                                        {row.course}
+                                                      </td>
+                                                      <td className="py-3 px-4 text-slate-600 text-center font-normal whitespace-nowrap border-r border-dotted border-slate-200/70">
+                                                        {row.year2024}
+                                                      </td>
+                                                      <td className="py-3 px-4 text-slate-600 text-center font-normal whitespace-nowrap border-r border-dotted border-slate-200/70">
+                                                        {row.year2025}
+                                                      </td>
+                                                      <td className="py-3 px-4 text-slate-600 text-center font-normal whitespace-nowrap">
+                                                        {row.year2026}
+                                                      </td>
+                                                    </tr>
+                                                  ))}
+                                                </tbody>
+                                              </table>
+                                            </div>
+
+                                            {/* Green Action / Download Cut-Off Details Button matching reference */}
+                                            <div className="pt-2 flex justify-center">
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  alert(`Downloading latest cutoff details for ${collegeShortName}...`);
+                                                }}
+                                                className="bg-[#00a859] hover:bg-[#008f4c] text-white text-xs sm:text-[13px] font-bold py-2.5 px-6 rounded-full shadow-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 select-none"
+                                              >
+                                                <Download className="w-4 h-4" />
+                                                <span>Cut-Off Details</span>
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                </div>
+                              );
+                            })()}
                           </div>
                         </motion.div>
                       )}
@@ -2087,6 +2309,8 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "fees" && "💰 Edit Tuition & Hostel Fees"}
                     {activeMiniModal === "placements" && "💼 Edit Placement Records & Recruiters"}
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
+                    {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
+                    {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
                     {activeMiniModal === "rankings" && "🏆 Edit Rankings"}
                     {activeMiniModal === "gallery" && "📸 Edit Photo Gallery"}
                     {activeMiniModal === "hostel" && "🏢 Edit Campus Facilities & Hostels"}
@@ -3298,6 +3522,265 @@ export default function CollegeDetailPage() {
                                     setTempData({
                                       ...tempData,
                                       cutoffComparison: {
+                                        ...cur,
+                                        rows: updated,
+                                      },
+                                    });
+                                  }}
+                                  placeholder="2026"
+                                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold text-blue-600"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL 7.6: SECONDARY CUTOFF 3-YEAR COMPARISON (UCEED / SPECIALIZED) */}
+                {activeMiniModal === "secondary_cutoff_comparison" && (
+                  <div className="space-y-4">
+                    <div className="p-3.5 bg-purple-50/50 border border-purple-200/80 rounded-2xl space-y-3">
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Accordion Box Header Title
+                        </label>
+                        <input
+                          type="text"
+                          value={tempData.secondaryCutoffComparison?.title || getCollegeSecondaryCutoffComparison(tempData).title || ""}
+                          onChange={(e) => {
+                            const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                            setTempData({
+                              ...tempData,
+                              secondaryCutoffComparison: {
+                                ...cur,
+                                title: e.target.value,
+                              },
+                            });
+                          }}
+                          placeholder="e.g. Cut Off 2026 for UCEED: Year-Wise rank"
+                          className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Subtitle & Round/Category Context
+                        </label>
+                        <input
+                          type="text"
+                          value={tempData.secondaryCutoffComparison?.subtitle || getCollegeSecondaryCutoffComparison(tempData).subtitle || ""}
+                          onChange={(e) => {
+                            const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                            setTempData({
+                              ...tempData,
+                              secondaryCutoffComparison: {
+                                ...cur,
+                                subtitle: e.target.value,
+                              },
+                            });
+                          }}
+                          placeholder="e.g. UCEED Last Round Closing Rank (General-All India)"
+                          className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold"
+                        />
+                      </div>
+
+                      {/* Year Labels */}
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-600 block mb-1">Year Column 1</label>
+                          <input
+                            type="text"
+                            value={tempData.secondaryCutoffComparison?.years?.[0] || "2024"}
+                            onChange={(e) => {
+                              const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                              const y = cur.years || ["2024", "2025", "2026"];
+                              setTempData({
+                                ...tempData,
+                                secondaryCutoffComparison: {
+                                  ...cur,
+                                  years: [e.target.value, y[1], y[2]],
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-600 block mb-1">Year Column 2</label>
+                          <input
+                            type="text"
+                            value={tempData.secondaryCutoffComparison?.years?.[1] || "2025"}
+                            onChange={(e) => {
+                              const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                              const y = cur.years || ["2024", "2025", "2026"];
+                              setTempData({
+                                ...tempData,
+                                secondaryCutoffComparison: {
+                                  ...cur,
+                                  years: [y[0], e.target.value, y[2]],
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-600 block mb-1">Year Column 3</label>
+                          <input
+                            type="text"
+                            value={tempData.secondaryCutoffComparison?.years?.[2] || "2026"}
+                            onChange={(e) => {
+                              const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                              const y = cur.years || ["2024", "2025", "2026"];
+                              setTempData({
+                                ...tempData,
+                                secondaryCutoffComparison: {
+                                  ...cur,
+                                  years: [y[0], y[1], e.target.value],
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Table Rows */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black text-slate-800 uppercase tracking-wide">
+                          Course Cutoff Comparison Rows
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                            setTempData({
+                              ...tempData,
+                              secondaryCutoffComparison: {
+                                ...cur,
+                                rows: [
+                                  ...(cur.rows || []),
+                                  {
+                                    course: "Bachelor of Design (B.Des.)",
+                                    year2024: 35,
+                                    year2025: 41,
+                                    year2026: 28,
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Course Row</span>
+                        </button>
+                      </div>
+
+                      <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                        {(tempData.secondaryCutoffComparison?.rows || getCollegeSecondaryCutoffComparison(tempData).rows || []).map((row, rIdx) => (
+                          <div key={rIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                                const updated = (cur.rows || []).filter((_, i) => i !== rIdx);
+                                setTempData({
+                                  ...tempData,
+                                  secondaryCutoffComparison: {
+                                    ...cur,
+                                    rows: updated,
+                                  },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Delete Row"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-4/5">
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Course Name</label>
+                              <input
+                                type="text"
+                                value={row.course}
+                                onChange={(e) => {
+                                  const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                                  const updated = [...(cur.rows || [])];
+                                  updated[rIdx] = { ...updated[rIdx], course: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    secondaryCutoffComparison: {
+                                      ...cur,
+                                      rows: updated,
+                                    },
+                                  });
+                                }}
+                                placeholder="Course (e.g. Bachelor of Design (B.Des.))"
+                                className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                              />
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2024 Rank</label>
+                                <input
+                                  type="text"
+                                  value={row.year2024}
+                                  onChange={(e) => {
+                                    const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                                    const updated = [...(cur.rows || [])];
+                                    updated[rIdx] = { ...updated[rIdx], year2024: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      secondaryCutoffComparison: {
+                                        ...cur,
+                                        rows: updated,
+                                      },
+                                    });
+                                  }}
+                                  placeholder="2024"
+                                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2025 Rank</label>
+                                <input
+                                  type="text"
+                                  value={row.year2025}
+                                  onChange={(e) => {
+                                    const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                                    const updated = [...(cur.rows || [])];
+                                    updated[rIdx] = { ...updated[rIdx], year2025: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      secondaryCutoffComparison: {
+                                        ...cur,
+                                        rows: updated,
+                                      },
+                                    });
+                                  }}
+                                  placeholder="2025"
+                                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2026 Rank</label>
+                                <input
+                                  type="text"
+                                  value={row.year2026}
+                                  onChange={(e) => {
+                                    const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                                    const updated = [...(cur.rows || [])];
+                                    updated[rIdx] = { ...updated[rIdx], year2026: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      secondaryCutoffComparison: {
                                         ...cur,
                                         rows: updated,
                                       },
