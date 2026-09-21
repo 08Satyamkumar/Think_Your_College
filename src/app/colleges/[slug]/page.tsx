@@ -155,6 +155,7 @@ interface CutoffRoundComparisonData {
   subtitle?: string;
   years?: [string, string, string];
   rows: CutoffComparisonRow[];
+  filterDatasets?: Record<string, CutoffComparisonRow[]>;
 }
 
 interface CollegeDetail {
@@ -700,14 +701,38 @@ export default function CollegeDetailPage() {
     setIsCutoffFilterModalOpen(true);
   };
 
-  const getFilteredCutoffRows = (baseRows: CutoffComparisonRow[], filters: typeof appliedCutoffFilters) => {
+  // Admin multi-category cutoff editing selector state
+  const [adminCutoffCategory, setAdminCutoffCategory] = useState("General");
+
+  const getFilteredCutoffRows = (secData: CutoffRoundComparisonData, filters: typeof appliedCutoffFilters) => {
+    const fullKey = `${filters.round}|${filters.category}|${filters.quota}|${filters.gender}`;
+    const roundCategoryKey = `${filters.round}|${filters.category}`;
+    const categoryKey = `${filters.category}`;
+
+    // 1. Check exact custom combination from Supabase/admin
+    if (secData.filterDatasets?.[fullKey] && secData.filterDatasets[fullKey].length > 0) {
+      return secData.filterDatasets[fullKey];
+    }
+    // 2. Check round + category combination
+    if (secData.filterDatasets?.[roundCategoryKey] && secData.filterDatasets[roundCategoryKey].length > 0) {
+      return secData.filterDatasets[roundCategoryKey];
+    }
+    // 3. Check category dataset
+    if (secData.filterDatasets?.[categoryKey] && secData.filterDatasets[categoryKey].length > 0) {
+      return secData.filterDatasets[categoryKey];
+    }
+
+    // 4. Smart realistic JoSAA / UCEED benchmark algorithm fallback based on base rows
+    const baseRows = secData.rows || [];
     let catMultiplier = 1;
-    if (filters.category === "OBC") catMultiplier = 1.6;
-    else if (filters.category === "SC") catMultiplier = 2.8;
+    if (filters.category === "OBC") catMultiplier = 1.65;
+    else if (filters.category === "SC") catMultiplier = 2.85;
     else if (filters.category === "ST") catMultiplier = 4.2;
-    else if (filters.category === "PWD") catMultiplier = 0.5;
+    else if (filters.category === "PWD") catMultiplier = 0.45;
     else if (filters.category === "Economically Weaker Section") catMultiplier = 1.35;
-    else if (filters.category.includes("PWD")) catMultiplier = 0.45;
+    else if (filters.category === "OBC Non-Creamy PWD") catMultiplier = 0.55;
+    else if (filters.category === "SC PWD") catMultiplier = 0.75;
+    else if (filters.category === "ST PWD") catMultiplier = 0.9;
 
     let roundOffset = 0;
     if (filters.round === "2") roundOffset = 2;
@@ -717,6 +742,7 @@ export default function CollegeDetailPage() {
     else if (filters.round === "Last Round") roundOffset = 10;
 
     let quotaOffset = filters.quota === "Home State" ? 4 : filters.quota === "Other State" ? -2 : 0;
+    let genderMultiplier = filters.gender === "Female-only (including Supernumerary)" ? 1.35 : 1;
 
     return baseRows.map((row) => {
       const r2024 = typeof row.year2024 === "number" ? row.year2024 : parseInt(String(row.year2024)) || 35;
@@ -725,9 +751,9 @@ export default function CollegeDetailPage() {
 
       return {
         course: row.course,
-        year2024: Math.max(1, Math.round(r2024 * catMultiplier) + roundOffset + quotaOffset),
-        year2025: Math.max(1, Math.round(r2025 * catMultiplier) + roundOffset + quotaOffset),
-        year2026: Math.max(1, Math.round(r2026 * catMultiplier) + roundOffset + quotaOffset),
+        year2024: Math.max(1, Math.round(r2024 * catMultiplier * genderMultiplier) + roundOffset + quotaOffset),
+        year2025: Math.max(1, Math.round(r2025 * catMultiplier * genderMultiplier) + roundOffset + quotaOffset),
+        year2026: Math.max(1, Math.round(r2026 * catMultiplier * genderMultiplier) + roundOffset + quotaOffset),
       };
     });
   };
@@ -2037,7 +2063,7 @@ export default function CollegeDetailPage() {
                             {(() => {
                               const secData = getCollegeSecondaryCutoffComparison(collegeData);
                               const secYears = secData.years || ["2024", "2025", "2026"];
-                              const displayedRows = getFilteredCutoffRows(secData.rows, appliedCutoffFilters);
+                              const displayedRows = getFilteredCutoffRows(secData, appliedCutoffFilters);
                               const examPrefix = secData.title?.includes("UCEED") ? "UCEED" : (collegeData.stream === "Medical" ? "NEET" : "Exam");
                               const roundLabel = appliedCutoffFilters.round === "Last Round" ? "Last Round" : `Round ${appliedCutoffFilters.round}`;
                               const genderLabel = appliedCutoffFilters.gender === "All" ? "" : `, ${appliedCutoffFilters.gender}`;
@@ -2092,15 +2118,22 @@ export default function CollegeDetailPage() {
                                           <div className="px-4 sm:px-5 pb-5 pt-1 space-y-3.5">
                                             {/* Top Filter Pills Row matching reference image */}
                                             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-                                              {/* Filter count icon pill */}
+                                              {/* Filter count icon pill with radiant saffron shining animation */}
                                               <button
                                                 type="button"
                                                 onClick={() => openCutoffFilterModal("rounds")}
-                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-purple-50/50 text-slate-700 font-semibold shadow-2xs shrink-0 select-none transition-all cursor-pointer active:scale-95"
+                                                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-300/90 bg-white hover:bg-amber-50/40 text-slate-700 font-semibold shadow-2xs shrink-0 select-none transition-all cursor-pointer active:scale-95 group relative"
                                                 title="Open All Filters"
                                               >
-                                                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-600" />
-                                                <span className="text-xs font-bold text-slate-800">4</span>
+                                                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-600 transition-colors" />
+                                                
+                                                {/* Saffron Glowing Badge */}
+                                                <div className="relative flex items-center justify-center">
+                                                  <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 opacity-80 blur-[3px] animate-pulse" />
+                                                  <span className="relative z-10 min-w-[18px] h-[18px] px-1 rounded-full bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400 text-white text-[10px] font-black flex items-center justify-center shadow-xs">
+                                                    4
+                                                  </span>
+                                                </div>
                                               </button>
 
                                               {/* Rounds Dropdown Pill */}
@@ -3750,152 +3783,222 @@ export default function CollegeDetailPage() {
                       </div>
                     </div>
 
-                    {/* Table Rows */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[11px] font-black text-slate-800 uppercase tracking-wide">
-                          Course Cutoff Comparison Rows
-                        </label>
+                    {/* Multi-Category Dataset Selector & Quick Generator */}
+                    <div className="p-3.5 bg-indigo-50/60 border border-indigo-200/80 rounded-2xl space-y-2.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                          <label className="text-[11px] font-black text-indigo-950 uppercase tracking-wide block">
+                            🎯 Select Category To Fill / Edit Cutoff Ranks
+                          </label>
+                          <p className="text-[11px] text-slate-500 font-medium">
+                            Choose a category to customize its exact ranks, or auto-generate realistic benchmark ranks.
+                          </p>
+                        </div>
                         <button
                           type="button"
                           onClick={() => {
                             const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                            const baseRows = cur.rows || [];
+                            const newDatasets: Record<string, CutoffComparisonRow[]> = { ...(cur.filterDatasets || {}) };
+                            const multipliers: Record<string, number> = {
+                              OBC: 1.65,
+                              SC: 2.85,
+                              ST: 4.2,
+                              PWD: 0.45,
+                              "Economically Weaker Section": 1.35,
+                              "OBC Non-Creamy PWD": 0.55,
+                              "SC PWD": 0.75,
+                              "ST PWD": 0.9,
+                            };
+                            Object.entries(multipliers).forEach(([cat, mult]) => {
+                              newDatasets[cat] = baseRows.map((r) => {
+                                const y24 = Number(r.year2024) || 35;
+                                const y25 = Number(r.year2025) || 41;
+                                const y26 = Number(r.year2026) || 28;
+                                return {
+                                  course: r.course,
+                                  year2024: Math.max(1, Math.round(y24 * mult)),
+                                  year2025: Math.max(1, Math.round(y25 * mult)),
+                                  year2026: Math.max(1, Math.round(y26 * mult)),
+                                };
+                              });
+                            });
                             setTempData({
                               ...tempData,
                               secondaryCutoffComparison: {
                                 ...cur,
-                                rows: [
-                                  ...(cur.rows || []),
+                                filterDatasets: newDatasets,
+                              },
+                            });
+                            alert("⚡ Successfully generated realistic cutoff ranks for all 8 categories based on General benchmarks!");
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold shadow-xs flex items-center gap-1.5 shrink-0 cursor-pointer active:scale-95"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Auto-Generate All Categories</span>
+                        </button>
+                      </div>
+
+                      {/* Category Pill Buttons */}
+                      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+                        {["General", ...CUTOFF_FILTER_OPTIONS.category.filter((c) => c !== "General")].map((cat) => {
+                          const isCurrent = adminCutoffCategory === cat;
+                          return (
+                            <button
+                              key={cat}
+                              type="button"
+                              onClick={() => setAdminCutoffCategory(cat)}
+                              className={`px-3 py-1 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer select-none ${
+                                isCurrent
+                                  ? "bg-indigo-600 text-white shadow-xs"
+                                  : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                              }`}
+                            >
+                              {cat}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Table Rows for Selected Category */}
+                    {(() => {
+                      const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
+                      const isGeneral = adminCutoffCategory === "General";
+                      const currentRows: CutoffComparisonRow[] = isGeneral
+                        ? cur.rows || []
+                        : cur.filterDatasets?.[adminCutoffCategory] ||
+                          getFilteredCutoffRows(cur, { round: "1", category: adminCutoffCategory, quota: "All India", gender: "All" });
+
+                      const updateRowsForCurrentCat = (newRows: CutoffComparisonRow[]) => {
+                        if (isGeneral) {
+                          setTempData({
+                            ...tempData,
+                            secondaryCutoffComparison: {
+                              ...cur,
+                              rows: newRows,
+                            },
+                          });
+                        } else {
+                          setTempData({
+                            ...tempData,
+                            secondaryCutoffComparison: {
+                              ...cur,
+                              filterDatasets: {
+                                ...(cur.filterDatasets || {}),
+                                [adminCutoffCategory]: newRows,
+                              },
+                            },
+                          });
+                        }
+                      };
+
+                      return (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <label className="text-[11px] font-black text-slate-800 uppercase tracking-wide">
+                              Editing Ranks for: <span className="text-indigo-600 font-extrabold">{adminCutoffCategory}</span>
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                updateRowsForCurrentCat([
+                                  ...currentRows,
                                   {
                                     course: "Bachelor of Design (B.Des.)",
                                     year2024: 35,
                                     year2025: 41,
                                     year2026: 28,
                                   },
-                                ],
-                              },
-                            });
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
-                        >
-                          <Plus className="w-3 h-3" />
-                          <span>Add Course Row</span>
-                        </button>
-                      </div>
-
-                      <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
-                        {(tempData.secondaryCutoffComparison?.rows || getCollegeSecondaryCutoffComparison(tempData).rows || []).map((row, rIdx) => (
-                          <div key={rIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 relative shadow-2xs">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
-                                const updated = (cur.rows || []).filter((_, i) => i !== rIdx);
-                                setTempData({
-                                  ...tempData,
-                                  secondaryCutoffComparison: {
-                                    ...cur,
-                                    rows: updated,
-                                  },
-                                });
+                                ]);
                               }}
-                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
-                              title="Delete Row"
+                              className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Plus className="w-3 h-3" />
+                              <span>Add Course Row</span>
                             </button>
-
-                            <div className="w-4/5">
-                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Course Name</label>
-                              <input
-                                type="text"
-                                value={row.course}
-                                onChange={(e) => {
-                                  const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
-                                  const updated = [...(cur.rows || [])];
-                                  updated[rIdx] = { ...updated[rIdx], course: e.target.value };
-                                  setTempData({
-                                    ...tempData,
-                                    secondaryCutoffComparison: {
-                                      ...cur,
-                                      rows: updated,
-                                    },
-                                  });
-                                }}
-                                placeholder="Course (e.g. Bachelor of Design (B.Des.))"
-                                className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
-                              />
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-2">
-                              <div>
-                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2024 Rank</label>
-                                <input
-                                  type="text"
-                                  value={row.year2024}
-                                  onChange={(e) => {
-                                    const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
-                                    const updated = [...(cur.rows || [])];
-                                    updated[rIdx] = { ...updated[rIdx], year2024: e.target.value };
-                                    setTempData({
-                                      ...tempData,
-                                      secondaryCutoffComparison: {
-                                        ...cur,
-                                        rows: updated,
-                                      },
-                                    });
-                                  }}
-                                  placeholder="2024"
-                                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
-                                />
-                              </div>
-                              <div>
-                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2025 Rank</label>
-                                <input
-                                  type="text"
-                                  value={row.year2025}
-                                  onChange={(e) => {
-                                    const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
-                                    const updated = [...(cur.rows || [])];
-                                    updated[rIdx] = { ...updated[rIdx], year2025: e.target.value };
-                                    setTempData({
-                                      ...tempData,
-                                      secondaryCutoffComparison: {
-                                        ...cur,
-                                        rows: updated,
-                                      },
-                                    });
-                                  }}
-                                  placeholder="2025"
-                                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
-                                />
-                              </div>
-                              <div>
-                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2026 Rank</label>
-                                <input
-                                  type="text"
-                                  value={row.year2026}
-                                  onChange={(e) => {
-                                    const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
-                                    const updated = [...(cur.rows || [])];
-                                    updated[rIdx] = { ...updated[rIdx], year2026: e.target.value };
-                                    setTempData({
-                                      ...tempData,
-                                      secondaryCutoffComparison: {
-                                        ...cur,
-                                        rows: updated,
-                                      },
-                                    });
-                                  }}
-                                  placeholder="2026"
-                                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold text-blue-600"
-                                />
-                              </div>
-                            </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
+
+                          <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                            {currentRows.map((row, rIdx) => (
+                              <div key={rIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 relative shadow-2xs">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = currentRows.filter((_, i) => i !== rIdx);
+                                    updateRowsForCurrentCat(updated);
+                                  }}
+                                  className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                                  title="Delete Row"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+
+                                <div className="w-4/5">
+                                  <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Course Name</label>
+                                  <input
+                                    type="text"
+                                    value={row.course}
+                                    onChange={(e) => {
+                                      const updated = [...currentRows];
+                                      updated[rIdx] = { ...updated[rIdx], course: e.target.value };
+                                      updateRowsForCurrentCat(updated);
+                                    }}
+                                    placeholder="Course (e.g. Bachelor of Design (B.Des.))"
+                                    className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-2">
+                                  <div>
+                                    <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2024 Rank</label>
+                                    <input
+                                      type="text"
+                                      value={row.year2024}
+                                      onChange={(e) => {
+                                        const updated = [...currentRows];
+                                        updated[rIdx] = { ...updated[rIdx], year2024: e.target.value };
+                                        updateRowsForCurrentCat(updated);
+                                      }}
+                                      placeholder="2024"
+                                      className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2025 Rank</label>
+                                    <input
+                                      type="text"
+                                      value={row.year2025}
+                                      onChange={(e) => {
+                                        const updated = [...currentRows];
+                                        updated[rIdx] = { ...updated[rIdx], year2025: e.target.value };
+                                        updateRowsForCurrentCat(updated);
+                                      }}
+                                      placeholder="2025"
+                                      className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-[10px] font-bold text-slate-500 block mb-0.5">2026 Rank</label>
+                                    <input
+                                      type="text"
+                                      value={row.year2026}
+                                      onChange={(e) => {
+                                        const updated = [...currentRows];
+                                        updated[rIdx] = { ...updated[rIdx], year2026: e.target.value };
+                                        updateRowsForCurrentCat(updated);
+                                      }}
+                                      placeholder="2026"
+                                      className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold text-blue-600"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
 
