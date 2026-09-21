@@ -701,7 +701,8 @@ export default function CollegeDetailPage() {
     setIsCutoffFilterModalOpen(true);
   };
 
-  // Admin multi-category cutoff editing selector state
+  // Admin multi-round & multi-category cutoff editing selector state
+  const [adminCutoffRound, setAdminCutoffRound] = useState("1");
   const [adminCutoffCategory, setAdminCutoffCategory] = useState("General");
 
   const getFilteredCutoffRows = (secData: CutoffRoundComparisonData, filters: typeof appliedCutoffFilters) => {
@@ -3783,15 +3784,15 @@ export default function CollegeDetailPage() {
                       </div>
                     </div>
 
-                    {/* Multi-Category Dataset Selector & Quick Generator */}
-                    <div className="p-3.5 bg-indigo-50/60 border border-indigo-200/80 rounded-2xl space-y-2.5">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    {/* Multi-Round & Multi-Category Dataset Selector & Quick Generator */}
+                    <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-2xl space-y-3.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                         <div>
-                          <label className="text-[11px] font-black text-indigo-950 uppercase tracking-wide block">
-                            🎯 Select Category To Fill / Edit Cutoff Ranks
+                          <label className="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">
+                            <span>🎯 Select Round & Category To Fill / Edit Cutoff Data</span>
                           </label>
-                          <p className="text-[11px] text-slate-500 font-medium">
-                            Choose a category to customize its exact ranks, or auto-generate realistic benchmark ranks.
+                          <p className="text-[11.5px] text-slate-600 font-medium">
+                            Choose any Round & Category combination to customize its exact ranks, or auto-generate all realistic datasets.
                           </p>
                         </div>
                         <button
@@ -3800,7 +3801,9 @@ export default function CollegeDetailPage() {
                             const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
                             const baseRows = cur.rows || [];
                             const newDatasets: Record<string, CutoffComparisonRow[]> = { ...(cur.filterDatasets || {}) };
+                            const roundsList = ["1", "2", "3", "4", "5", "Last Round"];
                             const multipliers: Record<string, number> = {
+                              General: 1,
                               OBC: 1.65,
                               SC: 2.85,
                               ST: 4.2,
@@ -3810,19 +3813,28 @@ export default function CollegeDetailPage() {
                               "SC PWD": 0.75,
                               "ST PWD": 0.9,
                             };
-                            Object.entries(multipliers).forEach(([cat, mult]) => {
-                              newDatasets[cat] = baseRows.map((r) => {
-                                const y24 = Number(r.year2024) || 35;
-                                const y25 = Number(r.year2025) || 41;
-                                const y26 = Number(r.year2026) || 28;
-                                return {
-                                  course: r.course,
-                                  year2024: Math.max(1, Math.round(y24 * mult)),
-                                  year2025: Math.max(1, Math.round(y25 * mult)),
-                                  year2026: Math.max(1, Math.round(y26 * mult)),
-                                };
+
+                            roundsList.forEach((r, rIdx) => {
+                              const rOffset = rIdx * 2;
+                              Object.entries(multipliers).forEach(([cat, mult]) => {
+                                const key = `${r}|${cat}`;
+                                newDatasets[key] = baseRows.map((row) => {
+                                  const y24 = Number(row.year2024) || 35;
+                                  const y25 = Number(row.year2025) || 41;
+                                  const y26 = Number(row.year2026) || 28;
+                                  return {
+                                    course: row.course,
+                                    year2024: Math.max(1, Math.round(y24 * mult) + rOffset),
+                                    year2025: Math.max(1, Math.round(y25 * mult) + rOffset),
+                                    year2026: Math.max(1, Math.round(y26 * mult) + rOffset),
+                                  };
+                                });
+                                if (r === "1") {
+                                  newDatasets[cat] = newDatasets[key];
+                                }
                               });
                             });
+
                             setTempData({
                               ...tempData,
                               secondaryCutoffComparison: {
@@ -3830,79 +3842,108 @@ export default function CollegeDetailPage() {
                                 filterDatasets: newDatasets,
                               },
                             });
-                            alert("⚡ Successfully generated realistic cutoff ranks for all 8 categories based on General benchmarks!");
+                            alert("⚡ Successfully auto-generated authentic cutoff datasets for all 6 Rounds × all 9 Categories (54 total combinations)!");
                           }}
-                          className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold shadow-xs flex items-center gap-1.5 shrink-0 cursor-pointer active:scale-95"
+                          className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm flex items-center justify-center gap-1.5 shrink-0 cursor-pointer active:scale-95"
                         >
                           <Sparkles className="w-3.5 h-3.5" />
-                          <span>Auto-Generate All Categories</span>
+                          <span>⚡ Auto-Generate All Ranks Matrix</span>
                         </button>
                       </div>
 
-                      {/* Category Pill Buttons */}
-                      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
-                        {["General", ...CUTOFF_FILTER_OPTIONS.category.filter((c) => c !== "General")].map((cat) => {
-                          const isCurrent = adminCutoffCategory === cat;
-                          return (
-                            <button
-                              key={cat}
-                              type="button"
-                              onClick={() => setAdminCutoffCategory(cat)}
-                              className={`px-3 py-1 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer select-none ${
-                                isCurrent
-                                  ? "bg-indigo-600 text-white shadow-xs"
-                                  : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
-                              }`}
-                            >
-                              {cat}
-                            </button>
-                          );
-                        })}
+                      {/* 1. Round Selector Row */}
+                      <div className="space-y-1.5 pt-1 border-t border-indigo-100">
+                        <label className="text-[10.5px] font-bold text-slate-700 block">
+                          Step 1: Select Counselling Round
+                        </label>
+                        <div className="flex flex-wrap gap-1.5">
+                          {["1", "2", "3", "4", "5", "Last Round"].map((r) => {
+                            const isCurrent = adminCutoffRound === r;
+                            return (
+                              <button
+                                key={r}
+                                type="button"
+                                onClick={() => setAdminCutoffRound(r)}
+                                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer select-none ${
+                                  isCurrent
+                                    ? "bg-[#2d1a47] text-white shadow-xs"
+                                    : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                                }`}
+                              >
+                                {r === "Last Round" ? "Last Round" : `Round ${r}`}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* 2. Category Selector (Full wrap, no clipped text) */}
+                      <div className="space-y-1.5 pt-1 border-t border-indigo-100">
+                        <label className="text-[10.5px] font-bold text-slate-700 block">
+                          Step 2: Select Category (All 9 Categories Visible)
+                        </label>
+                        <div className="flex flex-wrap gap-1.5">
+                          {["General", ...CUTOFF_FILTER_OPTIONS.category.filter((c) => c !== "General")].map((cat) => {
+                            const isCurrent = adminCutoffCategory === cat;
+                            return (
+                              <button
+                                key={cat}
+                                type="button"
+                                onClick={() => setAdminCutoffCategory(cat)}
+                                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer select-none text-left ${
+                                  isCurrent
+                                    ? "bg-indigo-600 text-white shadow-xs"
+                                    : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                                }`}
+                              >
+                                {cat}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Table Rows for Selected Category */}
+                    {/* Table Rows for Selected Round + Category */}
                     {(() => {
                       const cur = tempData.secondaryCutoffComparison || getCollegeSecondaryCutoffComparison(tempData);
-                      const isGeneral = adminCutoffCategory === "General";
-                      const currentRows: CutoffComparisonRow[] = isGeneral
-                        ? cur.rows || []
-                        : cur.filterDatasets?.[adminCutoffCategory] ||
-                          getFilteredCutoffRows(cur, { round: "1", category: adminCutoffCategory, quota: "All India", gender: "All" });
+                      const fullKey = `${adminCutoffRound}|${adminCutoffCategory}`;
+                      const isBase = adminCutoffRound === "1" && adminCutoffCategory === "General";
 
-                      const updateRowsForCurrentCat = (newRows: CutoffComparisonRow[]) => {
-                        if (isGeneral) {
-                          setTempData({
-                            ...tempData,
-                            secondaryCutoffComparison: {
-                              ...cur,
-                              rows: newRows,
-                            },
-                          });
-                        } else {
-                          setTempData({
-                            ...tempData,
-                            secondaryCutoffComparison: {
-                              ...cur,
-                              filterDatasets: {
-                                ...(cur.filterDatasets || {}),
-                                [adminCutoffCategory]: newRows,
-                              },
-                            },
-                          });
-                        }
+                      const currentRows: CutoffComparisonRow[] =
+                        cur.filterDatasets?.[fullKey] ||
+                        (isBase ? cur.rows || [] : cur.filterDatasets?.[adminCutoffCategory]) ||
+                        getFilteredCutoffRows(cur, { round: adminCutoffRound, category: adminCutoffCategory, quota: "All India", gender: "All" });
+
+                      const updateRowsForCurrentCombo = (newRows: CutoffComparisonRow[]) => {
+                        const updatedDatasets = {
+                          ...(cur.filterDatasets || {}),
+                          [fullKey]: newRows,
+                          [adminCutoffCategory]: newRows,
+                        };
+                        setTempData({
+                          ...tempData,
+                          secondaryCutoffComparison: {
+                            ...cur,
+                            rows: isBase ? newRows : cur.rows || [],
+                            filterDatasets: updatedDatasets,
+                          },
+                        });
                       };
 
                       return (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-[11px] font-black text-slate-800 uppercase tracking-wide">
-                              Editing Ranks for: <span className="text-indigo-600 font-extrabold">{adminCutoffCategory}</span>
+                            <label className="text-[11.5px] font-black text-slate-800 uppercase tracking-wide">
+                              Editing Cutoff Ranks for:{" "}
+                              <span className="text-indigo-600 font-extrabold bg-indigo-50 px-2 py-0.5 rounded-lg">
+                                {adminCutoffRound === "Last Round" ? "Last Round" : `Round ${adminCutoffRound}`} • {adminCutoffCategory}
+                              </span>
                             </label>
                             <button
                               type="button"
                               onClick={() => {
-                                updateRowsForCurrentCat([
+                                updateRowsForCurrentCombo([
                                   ...currentRows,
                                   {
                                     course: "Bachelor of Design (B.Des.)",
@@ -3926,7 +3967,7 @@ export default function CollegeDetailPage() {
                                   type="button"
                                   onClick={() => {
                                     const updated = currentRows.filter((_, i) => i !== rIdx);
-                                    updateRowsForCurrentCat(updated);
+                                    updateRowsForCurrentCombo(updated);
                                   }}
                                   className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
                                   title="Delete Row"
@@ -3942,7 +3983,7 @@ export default function CollegeDetailPage() {
                                     onChange={(e) => {
                                       const updated = [...currentRows];
                                       updated[rIdx] = { ...updated[rIdx], course: e.target.value };
-                                      updateRowsForCurrentCat(updated);
+                                      updateRowsForCurrentCombo(updated);
                                     }}
                                     placeholder="Course (e.g. Bachelor of Design (B.Des.))"
                                     className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
@@ -3958,7 +3999,7 @@ export default function CollegeDetailPage() {
                                       onChange={(e) => {
                                         const updated = [...currentRows];
                                         updated[rIdx] = { ...updated[rIdx], year2024: e.target.value };
-                                        updateRowsForCurrentCat(updated);
+                                        updateRowsForCurrentCombo(updated);
                                       }}
                                       placeholder="2024"
                                       className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
@@ -3972,7 +4013,7 @@ export default function CollegeDetailPage() {
                                       onChange={(e) => {
                                         const updated = [...currentRows];
                                         updated[rIdx] = { ...updated[rIdx], year2025: e.target.value };
-                                        updateRowsForCurrentCat(updated);
+                                        updateRowsForCurrentCombo(updated);
                                       }}
                                       placeholder="2025"
                                       className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-semibold"
@@ -3986,7 +4027,7 @@ export default function CollegeDetailPage() {
                                       onChange={(e) => {
                                         const updated = [...currentRows];
                                         updated[rIdx] = { ...updated[rIdx], year2026: e.target.value };
-                                        updateRowsForCurrentCat(updated);
+                                        updateRowsForCurrentCombo(updated);
                                       }}
                                       placeholder="2026"
                                       className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-center font-bold text-blue-600"
