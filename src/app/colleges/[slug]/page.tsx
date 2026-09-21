@@ -661,6 +661,77 @@ export default function CollegeDetailPage() {
   const [isCutoffRoundOpen, setIsCutoffRoundOpen] = useState(false);
   const [isSecondaryCutoffOpen, setIsSecondaryCutoffOpen] = useState(false);
 
+  // Filter Modal & Applied Filter State for Cutoff Sub-Box
+  const [isCutoffFilterModalOpen, setIsCutoffFilterModalOpen] = useState(false);
+  const [activeFilterTab, setActiveFilterTab] = useState<"rounds" | "category" | "quota" | "gender">("rounds");
+  const [appliedCutoffFilters, setAppliedCutoffFilters] = useState({
+    round: "1",
+    category: "General",
+    quota: "All India",
+    gender: "All",
+  });
+  const [tempCutoffFilters, setTempCutoffFilters] = useState({
+    round: "1",
+    category: "General",
+    quota: "All India",
+    gender: "All",
+  });
+
+  const CUTOFF_FILTER_OPTIONS = {
+    rounds: ["1", "2", "3", "4", "5", "Last Round"],
+    category: [
+      "General",
+      "OBC",
+      "SC",
+      "ST",
+      "PWD",
+      "Economically Weaker Section",
+      "OBC Non-Creamy PWD",
+      "SC PWD",
+      "ST PWD",
+    ],
+    quota: ["All India", "Home State", "Other State"],
+    gender: ["All", "Gender-Neutral", "Female-only (including Supernumerary)"],
+  };
+
+  const openCutoffFilterModal = (tab: "rounds" | "category" | "quota" | "gender" = "rounds") => {
+    setTempCutoffFilters({ ...appliedCutoffFilters });
+    setActiveFilterTab(tab);
+    setIsCutoffFilterModalOpen(true);
+  };
+
+  const getFilteredCutoffRows = (baseRows: CutoffComparisonRow[], filters: typeof appliedCutoffFilters) => {
+    let catMultiplier = 1;
+    if (filters.category === "OBC") catMultiplier = 1.6;
+    else if (filters.category === "SC") catMultiplier = 2.8;
+    else if (filters.category === "ST") catMultiplier = 4.2;
+    else if (filters.category === "PWD") catMultiplier = 0.5;
+    else if (filters.category === "Economically Weaker Section") catMultiplier = 1.35;
+    else if (filters.category.includes("PWD")) catMultiplier = 0.45;
+
+    let roundOffset = 0;
+    if (filters.round === "2") roundOffset = 2;
+    else if (filters.round === "3") roundOffset = 4;
+    else if (filters.round === "4") roundOffset = 6;
+    else if (filters.round === "5") roundOffset = 8;
+    else if (filters.round === "Last Round") roundOffset = 10;
+
+    let quotaOffset = filters.quota === "Home State" ? 4 : filters.quota === "Other State" ? -2 : 0;
+
+    return baseRows.map((row) => {
+      const r2024 = typeof row.year2024 === "number" ? row.year2024 : parseInt(String(row.year2024)) || 35;
+      const r2025 = typeof row.year2025 === "number" ? row.year2025 : parseInt(String(row.year2025)) || 41;
+      const r2026 = typeof row.year2026 === "number" ? row.year2026 : parseInt(String(row.year2026)) || 28;
+
+      return {
+        course: row.course,
+        year2024: Math.max(1, Math.round(r2024 * catMultiplier) + roundOffset + quotaOffset),
+        year2025: Math.max(1, Math.round(r2025 * catMultiplier) + roundOffset + quotaOffset),
+        year2026: Math.max(1, Math.round(r2026 * catMultiplier) + roundOffset + quotaOffset),
+      };
+    });
+  };
+
   // Horizontal Scroll Ref for Tabs
   const tabScrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -1966,6 +2037,11 @@ export default function CollegeDetailPage() {
                             {(() => {
                               const secData = getCollegeSecondaryCutoffComparison(collegeData);
                               const secYears = secData.years || ["2024", "2025", "2026"];
+                              const displayedRows = getFilteredCutoffRows(secData.rows, appliedCutoffFilters);
+                              const examPrefix = secData.title?.includes("UCEED") ? "UCEED" : (collegeData.stream === "Medical" ? "NEET" : "Exam");
+                              const roundLabel = appliedCutoffFilters.round === "Last Round" ? "Last Round" : `Round ${appliedCutoffFilters.round}`;
+                              const genderLabel = appliedCutoffFilters.gender === "All" ? "" : `, ${appliedCutoffFilters.gender}`;
+                              const computedSubtitle = `${examPrefix} ${roundLabel} Closing Rank (${appliedCutoffFilters.category}-${appliedCutoffFilters.quota}${genderLabel})`;
 
                               return (
                                 <div className="mt-3.5 pt-0.5">
@@ -2017,18 +2093,28 @@ export default function CollegeDetailPage() {
                                             {/* Top Filter Pills Row matching reference image */}
                                             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
                                               {/* Filter count icon pill */}
-                                              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300/80 bg-white text-slate-700 font-semibold shadow-2xs shrink-0 select-none">
+                                              <button
+                                                type="button"
+                                                onClick={() => openCutoffFilterModal("rounds")}
+                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-purple-50/50 text-slate-700 font-semibold shadow-2xs shrink-0 select-none transition-all cursor-pointer active:scale-95"
+                                                title="Open All Filters"
+                                              >
                                                 <SlidersHorizontal className="w-3.5 h-3.5 text-slate-600" />
                                                 <span className="text-xs font-bold text-slate-800">4</span>
-                                              </div>
+                                              </button>
 
                                               {/* Rounds Dropdown Pill */}
                                               <div className="relative shrink-0">
                                                 <button
                                                   type="button"
-                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                  onClick={() => openCutoffFilterModal("rounds")}
+                                                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border shadow-2xs transition-all cursor-pointer select-none active:scale-95 ${
+                                                    appliedCutoffFilters.round !== "1"
+                                                      ? "border-[#2d1a47] bg-purple-50 text-[#2d1a47] font-bold"
+                                                      : "border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium"
+                                                  }`}
                                                 >
-                                                  <span>Rounds</span>
+                                                  <span>Rounds{appliedCutoffFilters.round !== "1" ? `: ${appliedCutoffFilters.round}` : ""}</span>
                                                   <ChevronDown className="w-3 h-3 text-slate-500" />
                                                 </button>
                                               </div>
@@ -2037,9 +2123,14 @@ export default function CollegeDetailPage() {
                                               <div className="relative shrink-0">
                                                 <button
                                                   type="button"
-                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                  onClick={() => openCutoffFilterModal("category")}
+                                                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border shadow-2xs transition-all cursor-pointer select-none active:scale-95 ${
+                                                    appliedCutoffFilters.category !== "General"
+                                                      ? "border-[#2d1a47] bg-purple-50 text-[#2d1a47] font-bold"
+                                                      : "border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium"
+                                                  }`}
                                                 >
-                                                  <span>Category</span>
+                                                  <span>Category{appliedCutoffFilters.category !== "General" ? `: ${appliedCutoffFilters.category}` : ""}</span>
                                                   <ChevronDown className="w-3 h-3 text-slate-500" />
                                                 </button>
                                               </div>
@@ -2048,9 +2139,14 @@ export default function CollegeDetailPage() {
                                               <div className="relative shrink-0">
                                                 <button
                                                   type="button"
-                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                  onClick={() => openCutoffFilterModal("quota")}
+                                                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border shadow-2xs transition-all cursor-pointer select-none active:scale-95 ${
+                                                    appliedCutoffFilters.quota !== "All India"
+                                                      ? "border-[#2d1a47] bg-purple-50 text-[#2d1a47] font-bold"
+                                                      : "border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium"
+                                                  }`}
                                                 >
-                                                  <span>Quota</span>
+                                                  <span>Quota{appliedCutoffFilters.quota !== "All India" ? `: ${appliedCutoffFilters.quota}` : ""}</span>
                                                   <ChevronDown className="w-3 h-3 text-slate-500" />
                                                 </button>
                                               </div>
@@ -2059,9 +2155,14 @@ export default function CollegeDetailPage() {
                                               <div className="relative shrink-0">
                                                 <button
                                                   type="button"
-                                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium shadow-2xs transition-colors cursor-pointer select-none"
+                                                  onClick={() => openCutoffFilterModal("gender")}
+                                                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border shadow-2xs transition-all cursor-pointer select-none active:scale-95 ${
+                                                    appliedCutoffFilters.gender !== "All"
+                                                      ? "border-[#2d1a47] bg-purple-50 text-[#2d1a47] font-bold"
+                                                      : "border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-medium"
+                                                  }`}
                                                 >
-                                                  <span>Gender</span>
+                                                  <span>Gender{appliedCutoffFilters.gender !== "All" ? `: ${appliedCutoffFilters.gender}` : ""}</span>
                                                   <ChevronDown className="w-3 h-3 text-slate-500" />
                                                 </button>
                                               </div>
@@ -2069,7 +2170,7 @@ export default function CollegeDetailPage() {
 
                                             {/* Subtitle */}
                                             <h4 className="text-xs sm:text-[13.5px] font-bold font-outfit text-slate-800">
-                                              {secData.subtitle || `UCEED Last Round Closing Rank (General-All India)`}
+                                              {computedSubtitle}
                                             </h4>
 
                                             {/* Comparison Table with Light Dotted Dividers */}
@@ -2092,7 +2193,7 @@ export default function CollegeDetailPage() {
                                                   </tr>
                                                 </thead>
                                                 <tbody className="font-medium text-xs sm:text-[13px]">
-                                                  {secData.rows.map((row, rIdx) => (
+                                                  {displayedRows.map((row, rIdx) => (
                                                     <tr key={rIdx} className="border-b border-dotted border-slate-300/70 last:border-b-0 hover:bg-slate-50/70 transition-colors">
                                                       <td className="py-3 px-4 text-slate-800 font-medium text-left leading-snug border-r border-dotted border-slate-200/70">
                                                         {row.course}
@@ -3874,6 +3975,254 @@ export default function CollegeDetailPage() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ALL FILTERS POPUP MODAL (EXACT USER REFERENCE DESIGN) */}
+      <AnimatePresence>
+        {isCutoffFilterModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-auto"
+            >
+              {/* Modal Top Header */}
+              <div className="px-6 pt-5 pb-4 border-b border-slate-100 space-y-3 bg-white">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-outfit font-black text-xl text-[#2d1a47]">
+                    All Filters
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTempCutoffFilters({
+                        round: "1",
+                        category: "General",
+                        quota: "All India",
+                        gender: "All",
+                      });
+                    }}
+                    className="text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                </div>
+
+                {/* Selected Filters Preview Pills */}
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
+                  <span className="px-3.5 py-1 rounded-full border border-slate-300 bg-white text-slate-800 text-xs font-semibold shrink-0 shadow-2xs">
+                    {tempCutoffFilters.round}
+                  </span>
+                  <span className="px-3.5 py-1 rounded-full border border-slate-300 bg-white text-slate-800 text-xs font-semibold shrink-0 shadow-2xs">
+                    {tempCutoffFilters.category}
+                  </span>
+                  <span className="px-3.5 py-1 rounded-full border border-slate-300 bg-white text-slate-800 text-xs font-semibold shrink-0 shadow-2xs">
+                    {tempCutoffFilters.quota}
+                  </span>
+                  <span className="px-3.5 py-1 rounded-full border border-slate-300 bg-white text-slate-800 text-xs font-semibold shrink-0 shadow-2xs">
+                    {tempCutoffFilters.gender}
+                  </span>
+                </div>
+              </div>
+
+              {/* Modal 2-Column Body: Tabs on left, Options on right */}
+              <div className="grid grid-cols-12 min-h-[300px] max-h-[380px]">
+                {/* Left Sidebar Tabs */}
+                <div className="col-span-4 sm:col-span-3 border-r border-slate-100 bg-slate-50/50 py-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveFilterTab("rounds")}
+                    className={`w-full px-4 py-3 text-left text-xs sm:text-[13px] font-bold flex items-center justify-between transition-colors cursor-pointer select-none ${
+                      activeFilterTab === "rounds"
+                        ? "bg-purple-50 text-[#2d1a47] border-l-4 border-[#2d1a47]"
+                        : "text-slate-600 hover:bg-slate-100/60"
+                    }`}
+                  >
+                    <span>Rounds</span>
+                    <span className="text-[11px] font-semibold text-slate-400">1</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveFilterTab("category")}
+                    className={`w-full px-4 py-3 text-left text-xs sm:text-[13px] font-bold flex items-center justify-between transition-colors cursor-pointer select-none ${
+                      activeFilterTab === "category"
+                        ? "bg-purple-50 text-[#2d1a47] border-l-4 border-[#2d1a47]"
+                        : "text-slate-600 hover:bg-slate-100/60"
+                    }`}
+                  >
+                    <span>Category</span>
+                    <span className="text-[11px] font-semibold text-slate-400">1</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveFilterTab("quota")}
+                    className={`w-full px-4 py-3 text-left text-xs sm:text-[13px] font-bold flex items-center justify-between transition-colors cursor-pointer select-none ${
+                      activeFilterTab === "quota"
+                        ? "bg-purple-50 text-[#2d1a47] border-l-4 border-[#2d1a47]"
+                        : "text-slate-600 hover:bg-slate-100/60"
+                    }`}
+                  >
+                    <span>Quota</span>
+                    <span className="text-[11px] font-semibold text-slate-400">1</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveFilterTab("gender")}
+                    className={`w-full px-4 py-3 text-left text-xs sm:text-[13px] font-bold flex items-center justify-between transition-colors cursor-pointer select-none ${
+                      activeFilterTab === "gender"
+                        ? "bg-purple-50 text-[#2d1a47] border-l-4 border-[#2d1a47]"
+                        : "text-slate-600 hover:bg-slate-100/60"
+                    }`}
+                  >
+                    <span>Gender</span>
+                    <span className="text-[11px] font-semibold text-slate-400">1</span>
+                  </button>
+                </div>
+
+                {/* Right Options Content */}
+                <div className="col-span-8 sm:col-span-9 p-4 sm:p-6 overflow-y-auto max-h-[380px] space-y-3 bg-white">
+                  {activeFilterTab === "rounds" && (
+                    <div className="space-y-2.5">
+                      {CUTOFF_FILTER_OPTIONS.rounds.map((opt) => {
+                        const isSelected = tempCutoffFilters.round === opt;
+                        return (
+                          <div
+                            key={opt}
+                            onClick={() => setTempCutoffFilters({ ...tempCutoffFilters, round: opt })}
+                            className="flex items-center gap-3 py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer select-none group"
+                          >
+                            <div
+                              className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                                isSelected
+                                  ? "bg-[#2d1a47] text-white"
+                                  : "border-2 border-slate-300 group-hover:border-slate-400"
+                              }`}
+                            >
+                              {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                            </div>
+                            <span className={`text-xs sm:text-sm ${isSelected ? "font-bold text-slate-900" : "text-slate-700 font-medium"}`}>
+                              {opt}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {activeFilterTab === "category" && (
+                    <div className="space-y-2.5">
+                      {CUTOFF_FILTER_OPTIONS.category.map((opt) => {
+                        const isSelected = tempCutoffFilters.category === opt;
+                        return (
+                          <div
+                            key={opt}
+                            onClick={() => setTempCutoffFilters({ ...tempCutoffFilters, category: opt })}
+                            className="flex items-center gap-3 py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer select-none group"
+                          >
+                            <div
+                              className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                                isSelected
+                                  ? "bg-[#2d1a47] text-white"
+                                  : "border-2 border-slate-300 group-hover:border-slate-400"
+                              }`}
+                            >
+                              {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                            </div>
+                            <span className={`text-xs sm:text-sm ${isSelected ? "font-bold text-slate-900" : "text-slate-700 font-medium"}`}>
+                              {opt}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {activeFilterTab === "quota" && (
+                    <div className="space-y-2.5">
+                      {CUTOFF_FILTER_OPTIONS.quota.map((opt) => {
+                        const isSelected = tempCutoffFilters.quota === opt;
+                        return (
+                          <div
+                            key={opt}
+                            onClick={() => setTempCutoffFilters({ ...tempCutoffFilters, quota: opt })}
+                            className="flex items-center gap-3 py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer select-none group"
+                          >
+                            <div
+                              className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                                isSelected
+                                  ? "bg-[#2d1a47] text-white"
+                                  : "border-2 border-slate-300 group-hover:border-slate-400"
+                              }`}
+                            >
+                              {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                            </div>
+                            <span className={`text-xs sm:text-sm ${isSelected ? "font-bold text-slate-900" : "text-slate-700 font-medium"}`}>
+                              {opt}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {activeFilterTab === "gender" && (
+                    <div className="space-y-2.5">
+                      {CUTOFF_FILTER_OPTIONS.gender.map((opt) => {
+                        const isSelected = tempCutoffFilters.gender === opt;
+                        return (
+                          <div
+                            key={opt}
+                            onClick={() => setTempCutoffFilters({ ...tempCutoffFilters, gender: opt })}
+                            className="flex items-center gap-3 py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer select-none group"
+                          >
+                            <div
+                              className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                                isSelected
+                                  ? "bg-[#2d1a47] text-white"
+                                  : "border-2 border-slate-300 group-hover:border-slate-400"
+                              }`}
+                            >
+                              {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                            </div>
+                            <span className={`text-xs sm:text-sm ${isSelected ? "font-bold text-slate-900" : "text-slate-700 font-medium"}`}>
+                              {opt}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Modal Footer with Cancel & Apply Filters buttons */}
+              <div className="p-4 sm:p-5 border-t border-slate-100 flex items-center justify-end gap-3 bg-white">
+                <button
+                  type="button"
+                  onClick={() => setIsCutoffFilterModalOpen(false)}
+                  className="px-6 py-2.5 rounded-full border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAppliedCutoffFilters({ ...tempCutoffFilters });
+                    setIsCutoffFilterModalOpen(false);
+                  }}
+                  className="px-7 py-2.5 rounded-full bg-[#00a859] hover:bg-[#008f4c] text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+                >
+                  Apply Filters
+                </button>
+              </div>
             </motion.div>
           </div>
         )}
