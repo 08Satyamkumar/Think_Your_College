@@ -108,6 +108,7 @@ interface CutoffArticleData {
   calloutPdfUrl?: string;
   afterCalloutParagraphs?: string[];
   footerNote?: string;
+  faqs?: FaqItem[];
 }
 
 interface FaqItem {
@@ -299,6 +300,24 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
       "IIT Delhi also accepts **IIT JAM cutoff 2026** for admission to the MSc course. With the release of IIT JAM Round 6 closing ranks, MSc in Economics turned out to be the most competitive specialisation with the lowest rank of 22 for the General AI category. The lower the rank, the higher the competition. Hence, it is considered one of the toughest MSc course to get at IIT Delhi India.",
     ],
     footerNote: "Check IIT Delhi Cut Off 2026 for other programmes below:",
+    faqs: [
+      {
+        question: "Can I get IIT Delhi with a JEE Advanced cutoff rank of 100?",
+        answer: "Yes, candidate with rank 100 in JEE Advanced can get admission to BTech at IIT Delhi. Considering the IIT Delhi Round 5 Cutoff 2026, the closing rank for BTech in CSE stood at 128 for the General AI category. Hence, 100 is an eligible rank for IIT Delhi for General Category.\n\nApart from CSE, candidate can get admission to courses like BTech in Mathematics and Computing, BTech in Electrical Engineering and Chemical Engineering. For other categories, IIT Delhi Cutoff rank will vary.",
+      },
+      {
+        question: "What are the SC category opening and closing rank for BTech in Electrical Engineering at IIT Delhi?",
+        answer: "The SC Category opening and closing ranks for BTech in Electrical Engineering at IIT Delhi in JoSAA Round 5 generally range between 120 and 210 for All India seats. Candidates belonging to reserved categories can check the detailed category-wise seat allotment and opening-closing matrix in the JoSAA portal.",
+      },
+      {
+        question: "I want MSc in Economics. How much rank should I attain to admission at IIT Delhi?",
+        answer: "For admission to MSc in Economics at IIT Delhi through IIT JAM, candidates typically require an All India Rank (AIR) within the top 25 to 35 for the General category in the final round of counselling, making it one of the most competitive MSc specialisations.",
+      },
+      {
+        question: "Can I get IIT Delhi with 500 rank?",
+        answer: "Yes, with a JEE Advanced rank of 500 in the General AI category, you can comfortably secure admission to premier branches such as Electrical Engineering (Power and Automation), Mechanical Engineering, Mathematics & Computing Dual Degree, Chemical Engineering, and Civil Engineering at IIT Delhi.",
+      },
+    ],
   },
   cutoffComparison: {
     title: "Cut Off 2026 for JEE Advanced Latest Round",
@@ -661,6 +680,7 @@ export default function CollegeDetailPage() {
   const [isCutoffArticleExpanded, setIsCutoffArticleExpanded] = useState(false);
   const [isCutoffRoundOpen, setIsCutoffRoundOpen] = useState(false);
   const [isSecondaryCutoffOpen, setIsSecondaryCutoffOpen] = useState(false);
+  const [openCutoffFaqIdx, setOpenCutoffFaqIdx] = useState<number | null>(0);
 
   // Filter Modal & Applied Filter State for Cutoff Sub-Box
   const [isCutoffFilterModalOpen, setIsCutoffFilterModalOpen] = useState(false);
@@ -978,13 +998,36 @@ export default function CollegeDetailPage() {
   };
 
   const getCollegeCutoffArticle = (college: CollegeDetail): CutoffArticleData => {
-    if (college.cutoffArticle && college.cutoffArticle.paragraphs && college.cutoffArticle.paragraphs.length > 0) {
-      return college.cutoffArticle;
-    }
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
     const topBranch = college.cutoffs?.[0]?.branch || "Computer Science & Engineering (CSE)";
     const closeRank = college.cutoffs?.[0]?.closeRank ? String(college.cutoffs[0].closeRank) : "128";
     const round = college.cutoffs?.[0]?.round || "Round 5";
+
+    const defaultCutoffFaqs: FaqItem[] = [
+      {
+        question: `Can I get ${shortName} with a JEE Advanced cutoff rank of 100?`,
+        answer: `Yes, candidate with rank 100 in JEE Advanced can get admission to BTech at ${shortName}. Considering the ${shortName} Round 5 Cutoff 2026, the closing rank for BTech in CSE stood at 128 for the General AI category. Hence, 100 is an eligible rank for ${shortName} for General Category.\n\nApart from CSE, candidate can get admission to courses like BTech in Mathematics and Computing, BTech in Electrical Engineering and Chemical Engineering. For other categories, ${shortName} Cutoff rank will vary.`,
+      },
+      {
+        question: `What are the SC category opening and closing rank for BTech in Electrical Engineering at ${shortName}?`,
+        answer: `The SC Category opening and closing ranks for BTech in Electrical Engineering at ${shortName} in JoSAA Round 5 generally range between 120 and 210 for All India seats. Candidates belonging to reserved categories can check the detailed category-wise seat allotment and opening-closing matrix in the JoSAA portal.`,
+      },
+      {
+        question: `I want MSc in Economics. How much rank should I attain to admission at ${shortName}?`,
+        answer: `For admission to MSc in Economics at ${shortName} through IIT JAM, candidates typically require an All India Rank (AIR) within the top 25 to 35 for the General category in the final round of counselling, making it one of the most competitive MSc specialisations.`,
+      },
+      {
+        question: `Can I get ${shortName} with 500 rank?`,
+        answer: `Yes, with a JEE Advanced rank of 500 in the General AI category, you can comfortably secure admission to premier branches such as Electrical Engineering (Power and Automation), Mechanical Engineering, Mathematics & Computing Dual Degree, Chemical Engineering, and Civil Engineering at ${shortName}.`,
+      },
+    ];
+
+    if (college.cutoffArticle && college.cutoffArticle.paragraphs && college.cutoffArticle.paragraphs.length > 0) {
+      return {
+        ...college.cutoffArticle,
+        faqs: college.cutoffArticle.faqs && college.cutoffArticle.faqs.length > 0 ? college.cutoffArticle.faqs : defaultCutoffFaqs,
+      };
+    }
 
     return {
       paragraphs: [
@@ -999,7 +1042,8 @@ export default function CollegeDetailPage() {
       afterCalloutParagraphs: [
         `**${shortName}** also accepts national and state-level postgraduate entrance examinations for M.Tech, MBA, and M.Sc degree admissions with branch-wise cutoff percentiles released during seat allotment rounds.`
       ],
-      footerNote: `Check ${shortName} Cut Off 2026 for other programmes below:`
+      footerNote: `Check ${shortName} Cut Off 2026 for other programmes below:`,
+      faqs: defaultCutoffFaqs,
     };
   };
 
@@ -2268,6 +2312,150 @@ export default function CollegeDetailPage() {
                                 </div>
                               );
                             })()}
+
+                            {/* COMMONLY ASKED QUESTIONS ON CUTOFFS ACCORDION */}
+                            {cutData.faqs && cutData.faqs.length > 0 && (
+                              <div className="pt-6 mt-6 border-t border-slate-200/80 space-y-4">
+                                {/* Header Row with Yellow/Amber Q&A Badge */}
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-full bg-amber-100/90 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
+                                      <HelpCircle className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                      <h3 className="font-outfit font-bold text-sm sm:text-base text-slate-900 leading-tight">
+                                        Commonly asked questions
+                                      </h3>
+                                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                                        On Cutoffs
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => openMiniModal("cutoffs")}
+                                      className="px-3 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                                    >
+                                      <Edit className="w-3.5 h-3.5" />
+                                      <span>Edit Cutoff FAQs</span>
+                                    </button>
+                                  )}
+                                </div>
+
+                                {/* Accordion Questions List */}
+                                <div className="divide-y divide-slate-100/90 pt-1">
+                                  {cutData.faqs.map((faq, fIdx) => {
+                                    const isOpen = openCutoffFaqIdx === fIdx;
+                                    const rawQ = faq.question.trim();
+                                    const formattedQ = rawQ.startsWith("Q:") || rawQ.startsWith("Q.") ? rawQ : `Q: ${rawQ}`;
+                                    const rawA = faq.answer.trim();
+                                    const formattedA = rawA.startsWith("A:") || rawA.startsWith("A.") ? rawA : `A: ${rawA}`;
+
+                                    return (
+                                      <div key={fIdx} className="py-2.5 first:pt-1 last:pb-0">
+                                        <button
+                                          type="button"
+                                          onClick={() => setOpenCutoffFaqIdx(isOpen ? null : fIdx)}
+                                          className="w-full flex items-center justify-between gap-3 text-left py-1 text-slate-800 hover:text-blue-600 transition-colors cursor-pointer group/q"
+                                        >
+                                          <span className="font-outfit font-bold text-[13px] sm:text-[13.5px] leading-snug group-hover/q:text-blue-600 transition-colors">
+                                            {formattedQ}
+                                          </span>
+                                          <ChevronDown
+                                            className={`w-4 h-4 text-slate-500 group-hover/q:text-blue-600 shrink-0 transition-transform duration-200 ${
+                                              isOpen ? "rotate-180 text-blue-600" : ""
+                                            }`}
+                                          />
+                                        </button>
+
+                                        <AnimatePresence initial={false}>
+                                          {isOpen && (
+                                            <motion.div
+                                              initial={{ opacity: 0, height: 0 }}
+                                              animate={{ opacity: 1, height: "auto" }}
+                                              exit={{ opacity: 0, height: 0 }}
+                                              transition={{ duration: 0.2, ease: "easeInOut" }}
+                                              className="overflow-hidden"
+                                            >
+                                              <div className="pt-2 pb-3 space-y-3 pl-0.5 text-[13px] sm:text-[13.5px] text-slate-600 leading-relaxed font-normal">
+                                                {/* Multi-paragraph answer text */}
+                                                <div className="space-y-2">
+                                                  {formattedA.split("\n\n").map((para, pIdx) => (
+                                                    <p key={pIdx} className="leading-relaxed">
+                                                      {para}
+                                                    </p>
+                                                  ))}
+                                                </div>
+
+                                                {/* Admissions Guidance Counselor Callout Box */}
+                                                <div className="mt-3 p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-3">
+                                                  <div className="flex items-center gap-3">
+                                                    <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/80">
+                                                      <img
+                                                        src="/images/counselor_avatar.png"
+                                                        alt="Expert Counselor"
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                          (e.target as HTMLElement).style.display = "none";
+                                                        }}
+                                                      />
+                                                      <div className="w-full h-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-orange-700 font-black text-xs">
+                                                        SP
+                                                      </div>
+                                                      <span className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+                                                    </div>
+                                                    <div>
+                                                      <h5 className="font-outfit font-bold text-xs sm:text-[13px] text-slate-900 leading-tight">
+                                                        Get <span className="text-emerald-600 font-black italic">free</span> admissions guidance
+                                                      </h5>
+                                                      <p className="text-[11px] text-slate-400 font-semibold flex items-center gap-1 mt-0.5">
+                                                        <span>★ 0</span>
+                                                        <span>•</span>
+                                                        <span>0 review</span>
+                                                      </p>
+                                                    </div>
+                                                  </div>
+
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                      const leadEl = document.getElementById("lead-inquiry-box");
+                                                      if (leadEl) {
+                                                        leadEl.scrollIntoView({ behavior: "smooth" });
+                                                      }
+                                                    }}
+                                                    className="px-5 py-2 rounded-full bg-[#1c142e] hover:bg-[#2b2046] text-white text-xs font-bold transition-all shadow-2xs active:scale-95 cursor-pointer shrink-0"
+                                                  >
+                                                    Call Us
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+
+                                {/* View all cut-off Button matching reference */}
+                                <div className="pt-3 pb-1 flex justify-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setActiveTab("cutoffs");
+                                      window.scrollTo({ top: 400, behavior: "smooth" });
+                                    }}
+                                    className="rounded-full border border-slate-300/90 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-[13px] px-6 py-2.5 flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                                  >
+                                    <span>View all cut-off</span>
+                                    <ChevronRight className="w-4 h-4 text-slate-600" />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -3414,6 +3602,114 @@ export default function CollegeDetailPage() {
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Part 3: Commonly Asked Questions (Cutoff FAQs) Editor */}
+                    <div className="p-3.5 bg-amber-50/60 border border-amber-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-amber-950 uppercase tracking-wide flex items-center gap-1.5">
+                          <HelpCircle className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Commonly Asked Questions On Cutoffs</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                            const updatedFaqs = [
+                              ...(currentCut.faqs || []),
+                              {
+                                question: `Can I get ${tempData.name.split(" - ")[0]} with my rank?`,
+                                answer: "Detailed admission cutoff and counselling criteria for this candidate rank profile.",
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              cutoffArticle: {
+                                ...currentCut,
+                                faqs: updatedFaqs,
+                              },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Cutoff FAQ</span>
+                        </button>
+                      </div>
+
+                      {/* FAQs List */}
+                      <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                        {((tempData.cutoffArticle?.faqs && tempData.cutoffArticle.faqs.length > 0)
+                          ? tempData.cutoffArticle.faqs
+                          : (getCollegeCutoffArticle(tempData).faqs || [])
+                        ).map((faq, fIdx) => (
+                          <div key={fIdx} className="p-2.5 bg-white border border-amber-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                                const sourceFaqs = currentCut.faqs || [];
+                                const updated = sourceFaqs.filter((_, i) => i !== fIdx);
+                                setTempData({
+                                  ...tempData,
+                                  cutoffArticle: {
+                                    ...currentCut,
+                                    faqs: updated,
+                                  },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Delete Question"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-4/5">
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Question #{fIdx + 1}</label>
+                              <input
+                                type="text"
+                                value={faq.question}
+                                onChange={(e) => {
+                                  const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                                  const updated = [...(currentCut.faqs || [])];
+                                  updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    cutoffArticle: {
+                                      ...currentCut,
+                                      faqs: updated,
+                                    },
+                                  });
+                                }}
+                                placeholder="Cutoff Question (e.g. Can I get IIT Delhi with 100 rank?)"
+                                className="w-full px-2.5 py-1 bg-amber-50/40 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Answer Text</label>
+                              <textarea
+                                rows={2.5}
+                                value={faq.answer}
+                                onChange={(e) => {
+                                  const currentCut = tempData.cutoffArticle || getCollegeCutoffArticle(tempData);
+                                  const updated = [...(currentCut.faqs || [])];
+                                  updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    cutoffArticle: {
+                                      ...currentCut,
+                                      faqs: updated,
+                                    },
+                                  });
+                                }}
+                                placeholder="Answer text explaining cutoff nuances..."
+                                className="w-full px-2.5 py-1 bg-amber-50/40 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-700"
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
