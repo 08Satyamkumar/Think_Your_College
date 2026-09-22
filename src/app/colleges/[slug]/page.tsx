@@ -1067,6 +1067,7 @@ export default function CollegeDetailPage() {
             cutoffArticle: parsedData.cutoffArticle || IIT_DELHI_MASTER_DATA.cutoffArticle,
             cutoffComparison: parsedData.cutoffComparison || IIT_DELHI_MASTER_DATA.cutoffComparison,
             secondaryCutoffComparison: parsedData.secondaryCutoffComparison || IIT_DELHI_MASTER_DATA.secondaryCutoffComparison,
+            coursesFeesArticle: parsedData.coursesFeesArticle || IIT_DELHI_MASTER_DATA.coursesFeesArticle,
           };
 
           setCollegeData(baseDetail);
@@ -1286,9 +1287,15 @@ export default function CollegeDetailPage() {
   const getCollegeCoursesFeesArticle = (college: CollegeDetail): CoursesFeesArticleData => {
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
 
-    if (college.coursesFeesArticle && college.coursesFeesArticle.introParagraph1) {
+    if (college.coursesFeesArticle) {
       return {
-        ...college.coursesFeesArticle,
+        title: college.coursesFeesArticle.title || `${shortName} Courses & Fees 2026`,
+        introParagraph1:
+          college.coursesFeesArticle.introParagraph1 ||
+          `**${shortName}** offers undergraduate, postgraduate, doctoral, and certificate programmes across Engineering, Design, Sciences, Management, and Humanities. The **${shortName}** courses are available in **full-time**, **part-time**, and **online** modes.`,
+        introParagraph2:
+          college.coursesFeesArticle.introParagraph2 ||
+          `The courses offered are BTech, BS, BDes, MTech, MSc, MBA, MDes, MA, and PhD. **${shortName} popular programme** is BTech. The following are the course categories and top specialisations offered at **${shortName}**:`,
         courseSummaryGroups:
           college.coursesFeesArticle.courseSummaryGroups && college.coursesFeesArticle.courseSummaryGroups.length > 0
             ? college.coursesFeesArticle.courseSummaryGroups
@@ -1313,6 +1320,98 @@ export default function CollegeDetailPage() {
                   ],
                 },
               ],
+        specialisations: college.coursesFeesArticle.specialisations || [
+          {
+            category: "BTech specialisations",
+            list: "Computer Science & Engineering, Electrical Engineering, Mechanical Engineering, Chemical Engineering, Civil Engineering, and Textile Technology.",
+          },
+          {
+            category: "PG programmes",
+            list: "MTech, MSc, MBA, MDes, and MA",
+          },
+          {
+            category: "Certificate Programmes",
+            list: "Statistical Inference, Computational Geometry, Advanced Textile Printing Technology, and Project Management.",
+          },
+        ],
+        calloutPromoText:
+          college.coursesFeesArticle.calloutPromoText ||
+          "Explore engineering colleges accepting low JEE Main ranks, compare admission routes, and find the right BTech programme based on your score and preferences.",
+        calloutPdfUrl: college.coursesFeesArticle.calloutPdfUrl || "#",
+        popularCoursesHeading:
+          college.coursesFeesArticle.popularCoursesHeading ||
+          `Students can check out the ${shortName} fees 2026 for some popular courses below:`,
+        popularCourses: college.coursesFeesArticle.popularCourses || [
+          {
+            courseName: "B.E. / B.Tech",
+            coursesCount: "15 Courses",
+            tuitionFees: "INR 8 lakh",
+            totalFees: "INR 11.26 lakh - INR 11.72 lakh",
+          },
+          {
+            courseName: "B.Des",
+            coursesCount: "1 Courses",
+            tuitionFees: "INR 8 lakh",
+            totalFees: "INR 11.26 lakh",
+          },
+          {
+            courseName: "MBA/PGDM",
+            coursesCount: "2 Courses",
+            tuitionFees: "INR 12 lakh",
+            totalFees: "INR 13.82 lakh - INR 13.9 lakh",
+          },
+          {
+            courseName: "M.E./M.Tech",
+            coursesCount: "45 Courses",
+            tuitionFees: "INR 70,000- INR 3 lakh",
+            totalFees: "INR 4.82 lakh - INR 5.17 lakh",
+          },
+          {
+            courseName: "M.Sc.",
+            coursesCount: "25 Courses",
+            tuitionFees: "INR 30,000 - INR 3 lakh",
+            totalFees: "INR 2.12 lakh - INR 5.4 lakh",
+          },
+          {
+            courseName: "Ph.D.",
+            coursesCount: "28 Courses",
+            tuitionFees: "INR 45,000",
+            totalFees: "INR 45,000",
+          },
+          {
+            courseName: "M.A.",
+            coursesCount: "2 Courses",
+            tuitionFees: "INR 30,000 - INR 3 lakh",
+            totalFees: "INR 2.12 lakh - INR 5.05 lakh",
+          },
+          {
+            courseName: "M.Des",
+            coursesCount: "1 Courses",
+            tuitionFees: "INR 70,000",
+            totalFees: "INR 2.52 lakh",
+          },
+        ],
+        otherChargesNote: college.coursesFeesArticle.otherChargesNote || "*This is estimated fee information. Actual values may differ.",
+        otherChargesHeading: college.coursesFeesArticle.otherChargesHeading || `Other Charges included in ${shortName} fee structure:`,
+        otherCharges: college.coursesFeesArticle.otherCharges || [
+          {
+            component: "Hostel fees",
+            subtext:
+              "Meal Plan is included in this fee. The fees might include components other than hostel fees. Hostel fee mentioned is for cheapest option available.",
+            amount: "INR 1.29 lakh - 3.1 lakh",
+          },
+          {
+            component: "One-time payments",
+            subtext:
+              "One-time payment includes Admission fees, Student welfare fund, Modernization fees, Benevolent fund, Alumni fees, Training and Placement charges, Institute & Library Security fees.",
+            amount: "INR 16,150 – 23,000",
+          },
+          {
+            component: "Other fee",
+            amount: "INR 94,400",
+          },
+        ],
+        footerNote: college.coursesFeesArticle.footerNote || `Check more about ${shortName} courses below:`,
       };
     }
 
