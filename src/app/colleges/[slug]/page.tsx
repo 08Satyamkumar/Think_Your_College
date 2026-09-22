@@ -166,11 +166,20 @@ interface PlacementSubSection {
   content: string;
 }
 
+interface PlacementStatRow {
+  particular: string;
+  statCurrentYear: string;
+  statPrevYear: string;
+}
+
 interface PlacementsArticleData {
   title?: string;
   introParagraph?: string;
   subsections?: PlacementSubSection[];
   footerNote?: string;
+  statsTableTitle?: string;
+  statsTableCols?: [string, string, string];
+  statsTable?: PlacementStatRow[];
 }
 
 interface FaqItem {
@@ -592,6 +601,50 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
       },
     ],
     footerNote: "Check course-wise placement data of **IIT Delhi** below:",
+    statsTableTitle: "IIT Delhi Placements Highlights",
+    statsTableCols: ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"],
+    statsTable: [
+      {
+        particular: "Total No. Of Offers",
+        statCurrentYear: "1411 (53.1%)",
+        statPrevYear: "1300",
+      },
+      {
+        particular: "Total No. Of Companies",
+        statCurrentYear: "NA",
+        statPrevYear: "400",
+      },
+      {
+        particular: "Total Pre-placement Offers",
+        statCurrentYear: "NA",
+        statPrevYear: "260",
+      },
+      {
+        particular: "Total No. Of New Recruiters",
+        statCurrentYear: "NA",
+        statPrevYear: "Na",
+      },
+      {
+        particular: "Highest Package (Domestic)",
+        statCurrentYear: "NA",
+        statPrevYear: "INR 2 CPA",
+      },
+      {
+        particular: "Average Package",
+        statCurrentYear: "NA",
+        statPrevYear: "INR 22 LPA",
+      },
+      {
+        particular: "Top Recruiters",
+        statCurrentYear: "NA",
+        statPrevYear: "Google, ICICI Bank, Accenture",
+      },
+      {
+        particular: "Top New Recruiters",
+        statCurrentYear: "NA",
+        statPrevYear: "Capgemini, Texas Instruments",
+      },
+    ],
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -1640,6 +1693,55 @@ export default function CollegeDetailPage() {
       },
     ];
 
+    const defaultStatsTableCols: [string, string, string] = [
+      "Particulars",
+      "Placement Statistics 2025 (Ongoing)",
+      "Placement Statistics 2024",
+    ];
+
+    const defaultStatsTable: PlacementStatRow[] = [
+      {
+        particular: "Total No. Of Offers",
+        statCurrentYear: "1411 (53.1%)",
+        statPrevYear: "1300",
+      },
+      {
+        particular: "Total No. Of Companies",
+        statCurrentYear: "NA",
+        statPrevYear: "400",
+      },
+      {
+        particular: "Total Pre-placement Offers",
+        statCurrentYear: "NA",
+        statPrevYear: "260",
+      },
+      {
+        particular: "Total No. Of New Recruiters",
+        statCurrentYear: "NA",
+        statPrevYear: "Na",
+      },
+      {
+        particular: "Highest Package (Domestic)",
+        statCurrentYear: "NA",
+        statPrevYear: "INR 2 CPA",
+      },
+      {
+        particular: "Average Package",
+        statCurrentYear: "NA",
+        statPrevYear: "INR 22 LPA",
+      },
+      {
+        particular: "Top Recruiters",
+        statCurrentYear: "NA",
+        statPrevYear: "Google, ICICI Bank, Accenture",
+      },
+      {
+        particular: "Top New Recruiters",
+        statCurrentYear: "NA",
+        statPrevYear: "Capgemini, Texas Instruments",
+      },
+    ];
+
     if (college.placementsArticle) {
       return {
         title: college.placementsArticle.title || `${shortName} Placements 2026`,
@@ -1651,6 +1753,12 @@ export default function CollegeDetailPage() {
             ? college.placementsArticle.subsections
             : defaultSubsections,
         footerNote: college.placementsArticle.footerNote || `Check course-wise placement data of **${shortName}** below:`,
+        statsTableTitle: college.placementsArticle.statsTableTitle || `${shortName} Placements Highlights`,
+        statsTableCols: college.placementsArticle.statsTableCols || defaultStatsTableCols,
+        statsTable:
+          college.placementsArticle.statsTable && college.placementsArticle.statsTable.length > 0
+            ? college.placementsArticle.statsTable
+            : defaultStatsTable,
       };
     }
 
@@ -1659,6 +1767,9 @@ export default function CollegeDetailPage() {
       introParagraph: `**${shortName} Placements 2026** recorded **1,275 job** offers for students. **Over 300 pre-placement offers (PPOs)** secured and more than **1,140 students placed**, according 2025-26 placement season. ${shortName} students received more than 40 international offers from multiple global organisations located in Japan, the Netherlands, South Korea, Taiwan, the United Arab Emirates, the United Kingdom, and the United States. As per **IITD** overall report submitted for **NIRF 2026**, **(BTech) UG 4-year students’ median package** is **INR 20 LPA**. Median package for **(MTech)** PG students is **INR 19.25 LPA** in the **${shortName} Placements 2026**. The **average package of ${shortName}** and **${shortName} highest pacakge** are not available.`,
       subsections: defaultSubsections,
       footerNote: `Check course-wise placement data of **${shortName}** below:`,
+      statsTableTitle: `${shortName} Placements Highlights`,
+      statsTableCols: defaultStatsTableCols,
+      statsTable: defaultStatsTable,
     };
   };
 
@@ -3702,6 +3813,44 @@ export default function CollegeDetailPage() {
                                   >
                                     Read less
                                   </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Placement Statistics Comparison Table (Exact Image Reference) */}
+                            {plData.statsTable && plData.statsTable.length > 0 && (
+                              <div className="pt-2">
+                                <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                  <table className="w-full text-left border-collapse text-xs sm:text-[13px] min-w-[550px]">
+                                    <thead>
+                                      <tr className="bg-[#07264a] text-white font-bold font-outfit text-xs sm:text-[13px]">
+                                        <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-white border-r border-slate-700/60 w-1/3">
+                                          {plData.statsTableCols?.[0] || "Particulars"}
+                                        </th>
+                                        <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-white border-r border-slate-700/60 w-1/3">
+                                          {plData.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)"}
+                                        </th>
+                                        <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-white w-1/3">
+                                          {plData.statsTableCols?.[2] || "Placement Statistics 2024"}
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-300 font-normal">
+                                      {plData.statsTable.map((row, rIdx) => (
+                                        <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                                          <td className="py-3 px-4 sm:px-5 font-medium text-slate-800 border-r border-slate-300">
+                                            {row.particular}
+                                          </td>
+                                          <td className="py-3 px-4 sm:px-5 text-slate-700 border-r border-slate-300">
+                                            {row.statCurrentYear}
+                                          </td>
+                                          <td className="py-3 px-4 sm:px-5 text-slate-700">
+                                            {row.statPrevYear}
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
                                 </div>
                               </div>
                             )}
@@ -6080,6 +6229,182 @@ export default function CollegeDetailPage() {
                                 placeholder="Sub-section content details (supports **bold**)..."
                                 className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-700"
                               />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Part 3: Placement Statistics Highlights Table (3 Columns) Editor */}
+                    <div className="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-indigo-950 uppercase tracking-wide">
+                          Placement Statistics Table (3 Columns)
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                            const updated = [
+                              ...(cur.statsTable || []),
+                              {
+                                particular: "New Parameter",
+                                statCurrentYear: "NA",
+                                statPrevYear: "NA",
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              placementsArticle: { ...cur, statsTable: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Stat Row</span>
+                        </button>
+                      </div>
+
+                      {/* Column Header Titles */}
+                      <div className="grid grid-cols-3 gap-2 pb-2 border-b border-indigo-100">
+                        <div>
+                          <label className="text-[9.5px] font-bold text-slate-500 uppercase block mb-0.5">Col 1 Header</label>
+                          <input
+                            type="text"
+                            value={tempData.placementsArticle?.statsTableCols?.[0] || "Particulars"}
+                            onChange={(e) => {
+                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                              const cols: [string, string, string] = [
+                                e.target.value,
+                                cur.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)",
+                                cur.statsTableCols?.[2] || "Placement Statistics 2024",
+                              ];
+                              setTempData({
+                                ...tempData,
+                                placementsArticle: { ...cur, statsTableCols: cols },
+                              });
+                            }}
+                            className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[9.5px] font-bold text-slate-500 uppercase block mb-0.5">Col 2 Header</label>
+                          <input
+                            type="text"
+                            value={tempData.placementsArticle?.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)"}
+                            onChange={(e) => {
+                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                              const cols: [string, string, string] = [
+                                cur.statsTableCols?.[0] || "Particulars",
+                                e.target.value,
+                                cur.statsTableCols?.[2] || "Placement Statistics 2024",
+                              ];
+                              setTempData({
+                                ...tempData,
+                                placementsArticle: { ...cur, statsTableCols: cols },
+                              });
+                            }}
+                            className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[9.5px] font-bold text-slate-500 uppercase block mb-0.5">Col 3 Header</label>
+                          <input
+                            type="text"
+                            value={tempData.placementsArticle?.statsTableCols?.[2] || "Placement Statistics 2024"}
+                            onChange={(e) => {
+                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                              const cols: [string, string, string] = [
+                                cur.statsTableCols?.[0] || "Particulars",
+                                cur.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)",
+                                e.target.value,
+                              ];
+                              setTempData({
+                                ...tempData,
+                                placementsArticle: { ...cur, statsTableCols: cols },
+                              });
+                            }}
+                            className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Table Rows List */}
+                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        {(tempData.placementsArticle?.statsTable || getCollegePlacementsArticle(tempData).statsTable || []).map((row, rIdx) => (
+                          <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                const updated = (cur.statsTable || []).filter((_, i) => i !== rIdx);
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...cur, statsTable: updated },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Delete Row"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-4/5">
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Particulars / Parameter</label>
+                              <input
+                                type="text"
+                                value={row.particular}
+                                onChange={(e) => {
+                                  const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                  const updated = [...(cur.statsTable || [])];
+                                  updated[rIdx] = { ...updated[rIdx], particular: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...cur, statsTable: updated },
+                                  });
+                                }}
+                                placeholder="e.g. Total No. Of Offers"
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                              />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Current Year Stat</label>
+                                <input
+                                  type="text"
+                                  value={row.statCurrentYear}
+                                  onChange={(e) => {
+                                    const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                    const updated = [...(cur.statsTable || [])];
+                                    updated[rIdx] = { ...updated[rIdx], statCurrentYear: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: { ...cur, statsTable: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. 1411 (53.1%)"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Previous Year Stat</label>
+                                <input
+                                  type="text"
+                                  value={row.statPrevYear}
+                                  onChange={(e) => {
+                                    const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                    const updated = [...(cur.statsTable || [])];
+                                    updated[rIdx] = { ...updated[rIdx], statPrevYear: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: { ...cur, statsTable: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. 1300"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                                />
+                              </div>
                             </div>
                           </div>
                         ))}
