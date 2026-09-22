@@ -4053,14 +4053,15 @@ export default function CollegeDetailPage() {
                     </div>
 
                     {/* Part 1.5: Course Summary Sub-Box Table Editor (UG / PG Courses Grid) */}
-                    <div className="p-3.5 bg-slate-900 text-white rounded-2xl space-y-3 shadow-md">
+                    <div className="p-4 sm:p-5 bg-slate-50/80 border border-slate-200/90 rounded-2xl space-y-4 shadow-xs">
                       <div className="flex items-center justify-between">
                         <div>
-                          <span className="text-xs font-black uppercase tracking-wide text-sky-300">
-                            Course Summary Highlights Sub-Boxes (Table Cards)
+                          <span className="text-xs font-black uppercase tracking-wide text-slate-800 flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                            UG / PG Course Highlights Sub-Boxes
                           </span>
-                          <p className="text-[11px] text-slate-300 font-medium mt-0.5">
-                            Sub-box tables with navy header, course specs, fees, eligibility & selection
+                          <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                            Manage sub-box tables, group titles, course columns, fees, eligibility & selection
                           </p>
                         </div>
                         <button
@@ -4087,16 +4088,16 @@ export default function CollegeDetailPage() {
                               coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
                             });
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 text-[11px] font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus className="w-3.5 h-3.5" />
                           <span>Add Group</span>
                         </button>
                       </div>
 
-                      <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
+                      <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
                         {(tempData.coursesFeesArticle?.courseSummaryGroups || getCollegeCoursesFeesArticle(tempData).courseSummaryGroups || []).map((group, gIdx) => (
-                          <div key={gIdx} className="p-3 bg-slate-800/90 border border-slate-700 rounded-xl space-y-2.5 relative">
+                          <div key={gIdx} className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3.5 relative shadow-xs">
                             <button
                               type="button"
                               onClick={() => {
@@ -4107,14 +4108,14 @@ export default function CollegeDetailPage() {
                                   coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
                                 });
                               }}
-                              className="absolute top-2.5 right-2.5 p-1 text-red-400 hover:bg-red-950/60 rounded-lg cursor-pointer transition-colors"
+                              className="absolute top-3.5 right-3.5 p-1.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
                               title="Delete Sub-Box Group"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Trash2 className="w-4 h-4" />
                             </button>
 
                             <div className="w-3/4">
-                              <label className="text-[10px] font-bold text-sky-300 block mb-0.5">
+                              <label className="text-[11px] font-bold text-slate-700 block mb-1">
                                 Sub-box Group Title (e.g. UG Courses)
                               </label>
                               <input
@@ -4130,15 +4131,16 @@ export default function CollegeDetailPage() {
                                   });
                                 }}
                                 placeholder="e.g. UG Courses"
-                                className="w-full px-2.5 py-1 bg-slate-900 border border-slate-600 rounded-lg text-xs font-bold text-white placeholder-slate-500"
+                                className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-purple-500 focus:ring-1 focus:ring-purple-200 rounded-xl text-xs font-bold text-slate-900 transition-all"
                               />
                             </div>
 
                             {/* Courses in this Group */}
-                            <div className="space-y-2 pt-1 border-t border-slate-700/80">
+                            <div className="p-3 bg-slate-50/70 border border-slate-200/80 rounded-xl space-y-2.5">
                               <div className="flex items-center justify-between">
-                                <span className="text-[10.5px] font-bold text-slate-300">
-                                  Courses Columns in this Group ({group.courses.length})
+                                <span className="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block"></span>
+                                  Course Columns in this Group ({group.courses.length})
                                 </span>
                                 <button
                                   type="button"
@@ -4164,18 +4166,18 @@ export default function CollegeDetailPage() {
                                       coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
                                     });
                                   }}
-                                  className="px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-sky-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer"
                                 >
-                                  <Plus className="w-2.5 h-2.5" />
+                                  <Plus className="w-3 h-3" />
                                   <span>Add Course Column</span>
                                 </button>
                               </div>
 
-                              <div className="space-y-2">
+                              <div className="space-y-2.5">
                                 {group.courses.map((course, cIdx) => (
                                   <div
                                     key={cIdx}
-                                    className="p-2.5 bg-slate-900/90 border border-slate-700 rounded-lg space-y-1.5 relative"
+                                    className="p-3 bg-white border border-slate-200 rounded-xl space-y-2 relative shadow-2xs"
                                   >
                                     <button
                                       type="button"
@@ -4192,14 +4194,14 @@ export default function CollegeDetailPage() {
                                           coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
                                         });
                                       }}
-                                      className="absolute top-2 right-2 p-1 text-red-400 hover:bg-red-950/60 rounded cursor-pointer"
+                                      className="absolute top-2.5 right-2.5 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
                                       title="Delete Course Column"
                                     >
-                                      <Trash2 className="w-3 h-3" />
+                                      <Trash2 className="w-3.5 h-3.5" />
                                     </button>
 
                                     <div className="w-3/4">
-                                      <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Course Name</label>
+                                      <label className="text-[10px] font-bold text-slate-600 block mb-0.5">Course Name</label>
                                       <input
                                         type="text"
                                         value={course.courseName}
@@ -4215,13 +4217,13 @@ export default function CollegeDetailPage() {
                                           });
                                         }}
                                         placeholder="e.g. BTech"
-                                        className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs font-bold text-white placeholder-slate-500"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs font-bold text-slate-900 transition-all"
                                       />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">1st Year Fees</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">1st Year Fees</label>
                                         <input
                                           type="text"
                                           value={course.firstYearFees || ""}
@@ -4237,11 +4239,11 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. INR 2.55 Lakhs"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Duration</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Duration</label>
                                         <input
                                           type="text"
                                           value={course.duration || ""}
@@ -4257,14 +4259,14 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. 4 years"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Eligibility</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Eligibility</label>
                                         <input
                                           type="text"
                                           value={course.eligibility || ""}
@@ -4280,11 +4282,11 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. Class 10+2 with 75% marks"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Selection</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Selection</label>
                                         <input
                                           type="text"
                                           value={course.selection || ""}
@@ -4300,7 +4302,7 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. JEE Advanced + JoSAA Counselling"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                     </div>
@@ -4673,13 +4675,14 @@ export default function CollegeDetailPage() {
                 {/* MODAL 5.5: DEDICATED COURSE SUMMARY SUB-BOXES EDITOR */}
                 {activeMiniModal === "course_summary_box" && (
                   <div className="space-y-4">
-                    <div className="p-3.5 bg-slate-900 text-white rounded-2xl space-y-3 shadow-md">
+                    <div className="p-4 sm:p-5 bg-slate-50/80 border border-slate-200/90 rounded-2xl space-y-4 shadow-xs">
                       <div className="flex items-center justify-between">
                         <div>
-                          <span className="text-xs font-black uppercase tracking-wide text-sky-300">
+                          <span className="text-xs font-black uppercase tracking-wide text-slate-800 flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                             UG / PG Course Highlights Sub-Boxes
                           </span>
-                          <p className="text-[11px] text-slate-300 font-medium mt-0.5">
+                          <p className="text-[11px] text-slate-500 font-medium mt-0.5">
                             Manage sub-boxes, navy headers, fees, eligibility, duration and selection criteria
                           </p>
                         </div>
@@ -4707,16 +4710,16 @@ export default function CollegeDetailPage() {
                               coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
                             });
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 text-[11px] font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus className="w-3.5 h-3.5" />
                           <span>Add Group</span>
                         </button>
                       </div>
 
                       <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                         {(tempData.coursesFeesArticle?.courseSummaryGroups || getCollegeCoursesFeesArticle(tempData).courseSummaryGroups || []).map((group, gIdx) => (
-                          <div key={gIdx} className="p-3 bg-slate-800/90 border border-slate-700 rounded-xl space-y-2.5 relative">
+                          <div key={gIdx} className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3.5 relative shadow-xs">
                             <button
                               type="button"
                               onClick={() => {
@@ -4727,14 +4730,14 @@ export default function CollegeDetailPage() {
                                   coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
                                 });
                               }}
-                              className="absolute top-2.5 right-2.5 p-1 text-red-400 hover:bg-red-950/60 rounded-lg cursor-pointer transition-colors"
+                              className="absolute top-3.5 right-3.5 p-1.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
                               title="Delete Sub-Box Group"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Trash2 className="w-4 h-4" />
                             </button>
 
                             <div className="w-3/4">
-                              <label className="text-[10px] font-bold text-sky-300 block mb-0.5">
+                              <label className="text-[11px] font-bold text-slate-700 block mb-1">
                                 Sub-box Group Title (e.g. UG Courses)
                               </label>
                               <input
@@ -4750,15 +4753,16 @@ export default function CollegeDetailPage() {
                                   });
                                 }}
                                 placeholder="e.g. UG Courses"
-                                className="w-full px-2.5 py-1 bg-slate-900 border border-slate-600 rounded-lg text-xs font-bold text-white placeholder-slate-500"
+                                className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-purple-500 focus:ring-1 focus:ring-purple-200 rounded-xl text-xs font-bold text-slate-900 transition-all"
                               />
                             </div>
 
                             {/* Courses in this Group */}
-                            <div className="space-y-2 pt-1 border-t border-slate-700/80">
+                            <div className="p-3 bg-slate-50/70 border border-slate-200/80 rounded-xl space-y-2.5">
                               <div className="flex items-center justify-between">
-                                <span className="text-[10.5px] font-bold text-slate-300">
-                                  Courses Columns in this Group ({group.courses.length})
+                                <span className="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block"></span>
+                                  Course Columns in this Group ({group.courses.length})
                                 </span>
                                 <button
                                   type="button"
@@ -4784,18 +4788,18 @@ export default function CollegeDetailPage() {
                                       coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
                                     });
                                   }}
-                                  className="px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-sky-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer"
                                 >
-                                  <Plus className="w-2.5 h-2.5" />
+                                  <Plus className="w-3 h-3" />
                                   <span>Add Course Column</span>
                                 </button>
                               </div>
 
-                              <div className="space-y-2">
+                              <div className="space-y-2.5">
                                 {group.courses.map((course, cIdx) => (
                                   <div
                                     key={cIdx}
-                                    className="p-2.5 bg-slate-900/90 border border-slate-700 rounded-lg space-y-1.5 relative"
+                                    className="p-3 bg-white border border-slate-200 rounded-xl space-y-2 relative shadow-2xs"
                                   >
                                     <button
                                       type="button"
@@ -4812,14 +4816,14 @@ export default function CollegeDetailPage() {
                                           coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
                                         });
                                       }}
-                                      className="absolute top-2 right-2 p-1 text-red-400 hover:bg-red-950/60 rounded cursor-pointer"
+                                      className="absolute top-2.5 right-2.5 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
                                       title="Delete Course Column"
                                     >
-                                      <Trash2 className="w-3 h-3" />
+                                      <Trash2 className="w-3.5 h-3.5" />
                                     </button>
 
                                     <div className="w-3/4">
-                                      <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Course Name</label>
+                                      <label className="text-[10px] font-bold text-slate-600 block mb-0.5">Course Name</label>
                                       <input
                                         type="text"
                                         value={course.courseName}
@@ -4835,13 +4839,13 @@ export default function CollegeDetailPage() {
                                           });
                                         }}
                                         placeholder="e.g. BTech"
-                                        className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs font-bold text-white placeholder-slate-500"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs font-bold text-slate-900 transition-all"
                                       />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">1st Year Fees</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">1st Year Fees</label>
                                         <input
                                           type="text"
                                           value={course.firstYearFees || ""}
@@ -4857,11 +4861,11 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. INR 2.55 Lakhs"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Duration</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Duration</label>
                                         <input
                                           type="text"
                                           value={course.duration || ""}
@@ -4877,14 +4881,14 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. 4 years"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Eligibility</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Eligibility</label>
                                         <input
                                           type="text"
                                           value={course.eligibility || ""}
@@ -4900,11 +4904,11 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. Class 10+2 with 75% marks"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                       <div>
-                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Selection</label>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Selection</label>
                                         <input
                                           type="text"
                                           value={course.selection || ""}
@@ -4920,7 +4924,7 @@ export default function CollegeDetailPage() {
                                             });
                                           }}
                                           placeholder="e.g. JEE Advanced + JoSAA Counselling"
-                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 rounded-lg text-xs text-slate-800 font-medium transition-all"
                                         />
                                       </div>
                                     </div>
