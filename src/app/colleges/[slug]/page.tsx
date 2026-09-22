@@ -1367,7 +1367,7 @@ export default function CollegeDetailPage() {
       </section>
 
       {/* 2. GLASSMORPHIC SUB-HEADER TABS WITH SEPARATORS */}
-      <div className="sticky top-16 md:top-0 bg-white/85 backdrop-blur-xl z-30 border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] py-1 relative">
+      <div id="college-nav-tabs-bar" className="sticky top-16 md:top-0 bg-white/85 backdrop-blur-xl z-30 border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] py-1 relative scroll-mt-4">
         {canScrollLeft && (
           <div className="absolute left-0 inset-y-0 w-16 bg-gradient-to-r from-white via-white/90 to-transparent z-20 flex items-center pl-2 pointer-events-none">
             <button
@@ -2306,17 +2306,25 @@ export default function CollegeDetailPage() {
                                               </table>
                                             </div>
 
-                                            {/* Green Action / Download Cut-Off Details Button matching reference */}
-                                            <div className="pt-2 flex justify-center">
+                                             {/* Shining Emerald Green Action Button: Navigates to Header Cut-Offs Tab */}
+                                            <div className="pt-3 pb-1 flex justify-center">
                                               <button
                                                 type="button"
                                                 onClick={() => {
-                                                  alert(`Downloading latest cutoff details for ${collegeShortName}...`);
+                                                  setActiveTab("cutoffs");
+                                                  const navEl = document.getElementById("college-nav-tabs-bar");
+                                                  if (navEl) {
+                                                    navEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                                                  } else {
+                                                    window.scrollTo({ top: 380, behavior: "smooth" });
+                                                  }
                                                 }}
-                                                className="bg-[#00a859] hover:bg-[#008f4c] text-white text-xs sm:text-[13px] font-bold py-2.5 px-6 rounded-full shadow-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 select-none"
+                                                className="relative group overflow-hidden bg-gradient-to-r from-[#00b05b] via-[#00a859] to-[#00964e] hover:from-[#009e51] hover:to-[#008243] text-white text-xs sm:text-[13.5px] font-bold py-2.5 px-7 rounded-full shadow-[0_4px_14px_rgba(0,168,89,0.35)] hover:shadow-[0_6px_20px_rgba(0,168,89,0.5)] flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 select-none"
                                               >
-                                                <Download className="w-4 h-4" />
-                                                <span>Cut-Off Details</span>
+                                                {/* Shining sweep effect */}
+                                                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+                                                <Download className="w-4 h-4 transition-transform group-hover:-translate-y-0.5" />
+                                                <span className="tracking-tight">Cut-Off Details</span>
                                               </button>
                                             </div>
                                           </div>
@@ -2455,18 +2463,25 @@ export default function CollegeDetailPage() {
                                   })}
                                 </div>
 
-                                {/* View all cut-off Button matching reference */}
-                                <div className="pt-3 pb-1 flex justify-center">
+                                 {/* Shining Emerald Green Action Button: View all cut-off (Navigates to Header Cut-Offs Tab) */}
+                                <div className="pt-4 pb-1 flex justify-center">
                                   <button
                                     type="button"
                                     onClick={() => {
                                       setActiveTab("cutoffs");
-                                      window.scrollTo({ top: 400, behavior: "smooth" });
+                                      const navEl = document.getElementById("college-nav-tabs-bar");
+                                      if (navEl) {
+                                        navEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                                      } else {
+                                        window.scrollTo({ top: 380, behavior: "smooth" });
+                                      }
                                     }}
-                                    className="rounded-full border border-slate-300/90 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-[13px] px-6 py-2.5 flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                                    className="relative group overflow-hidden bg-gradient-to-r from-[#00b05b] via-[#00a859] to-[#00964e] hover:from-[#009e51] hover:to-[#008243] text-white text-xs sm:text-[13.5px] font-bold py-2.5 px-7 rounded-full shadow-[0_4px_14px_rgba(0,168,89,0.35)] hover:shadow-[0_6px_20px_rgba(0,168,89,0.5)] flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 select-none"
                                   >
-                                    <span>View all cut-off</span>
-                                    <ChevronRight className="w-4 h-4 text-slate-600" />
+                                    {/* Shining sweep effect */}
+                                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+                                    <span className="tracking-tight">View all cut-off</span>
+                                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                                   </button>
                                 </div>
                               </div>
