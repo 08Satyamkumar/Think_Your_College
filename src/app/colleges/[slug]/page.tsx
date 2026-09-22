@@ -867,7 +867,7 @@ const renderFormattedText = (text: string) => {
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={i} className="font-bold text-slate-900">
+        <strong key={i} className="font-semibold text-slate-900">
           {part.slice(2, -2)}
         </strong>
       );
@@ -3645,58 +3645,66 @@ export default function CollegeDetailPage() {
                           transition={{ duration: 0.25, ease: "easeInOut" }}
                           className="overflow-hidden"
                         >
-                          <div className="pt-4 space-y-4 border-t border-slate-100/90 mt-4 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
-                            {/* Intro Preview Paragraph */}
-                            <p className="leading-relaxed">
-                              {renderFormattedText(plData.introParagraph || "")}
-                            </p>
+                          <div className="pt-4 space-y-3.5 border-t border-slate-100/90 mt-4 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {/* Collapsed Preview vs Expanded Full Content */}
+                            {!isPlacementsArticleExpanded ? (
+                              <div className="relative pt-0.5">
+                                {/* Intro text with subtle bottom fade shadow mask */}
+                                <div className="relative max-h-[88px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_40%,rgba(0,0,0,0.35)_70%,transparent_100%)]">
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(plData.introParagraph || "")}
+                                  </p>
+                                </div>
 
-                            {/* Collapsible Extended Subsections */}
-                            <div className="relative">
-                              {!isPlacementsArticleExpanded ? (
-                                /* Collapsed state with Read more on bottom right */
-                                <div className="pt-1 flex justify-end">
+                                {/* Ultra-Premium Water & Glass Fade Overlay with Read more */}
+                                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white via-white/85 to-transparent flex items-end justify-end pointer-events-auto pr-0.5">
                                   <button
                                     type="button"
                                     onClick={() => setIsPlacementsArticleExpanded(true)}
-                                    className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] hover:underline cursor-pointer transition-all active:scale-95 select-none"
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors select-none"
                                   >
                                     Read more
                                   </button>
                                 </div>
-                              ) : (
-                                /* Expanded state with all subsections and Read less */
-                                <div className="space-y-4 pt-1">
-                                  {plData.subsections && plData.subsections.map((sub, sIdx) => (
-                                    <div key={sIdx} className="space-y-1.5">
-                                      <h3 className="font-outfit font-bold text-sm sm:text-[15px] text-slate-900 leading-snug">
-                                        {sub.heading}
-                                      </h3>
-                                      <p className="leading-relaxed text-slate-700">
-                                        {renderFormattedText(sub.content)}
-                                      </p>
-                                    </div>
-                                  ))}
+                              </div>
+                            ) : (
+                              /* Expanded state with all subsections and Read less */
+                              <div className="space-y-4 pt-0.5">
+                                {/* Full Intro Paragraph */}
+                                <p className="leading-relaxed">
+                                  {renderFormattedText(plData.introParagraph || "")}
+                                </p>
 
-                                  {plData.footerNote && (
-                                    <p className="text-xs sm:text-[13px] text-slate-600 font-medium pt-1">
-                                      {renderFormattedText(plData.footerNote)}
+                                {/* Subsections */}
+                                {plData.subsections && plData.subsections.map((sub, sIdx) => (
+                                  <div key={sIdx} className="space-y-1.5">
+                                    <h3 className="font-outfit font-bold text-sm sm:text-[14.5px] text-slate-900 leading-snug">
+                                      {sub.heading}
+                                    </h3>
+                                    <p className="leading-relaxed text-slate-700">
+                                      {renderFormattedText(sub.content)}
                                     </p>
-                                  )}
-
-                                  {/* Read less button on right */}
-                                  <div className="pt-1 flex justify-end">
-                                    <button
-                                      type="button"
-                                      onClick={() => setIsPlacementsArticleExpanded(false)}
-                                      className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] hover:underline cursor-pointer transition-all active:scale-95 select-none"
-                                    >
-                                      Read less
-                                    </button>
                                   </div>
+                                ))}
+
+                                {plData.footerNote && (
+                                  <p className="text-xs sm:text-[13px] text-slate-600 font-medium pt-1">
+                                    {renderFormattedText(plData.footerNote)}
+                                  </p>
+                                )}
+
+                                {/* Read less button on right */}
+                                <div className="pt-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsPlacementsArticleExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors select-none"
+                                  >
+                                    Read less
+                                  </button>
                                 </div>
-                              )}
-                            </div>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
