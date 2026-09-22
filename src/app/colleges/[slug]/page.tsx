@@ -161,6 +161,18 @@ interface CoursesFeesArticleData {
   faqs?: FaqItem[];
 }
 
+interface PlacementSubSection {
+  heading: string;
+  content: string;
+}
+
+interface PlacementsArticleData {
+  title?: string;
+  introParagraph?: string;
+  subsections?: PlacementSubSection[];
+  footerNote?: string;
+}
+
 interface FaqItem {
   question: string;
   answer: string;
@@ -248,6 +260,7 @@ interface CollegeDetail {
   cutoffComparison?: CutoffRoundComparisonData;
   secondaryCutoffComparison?: CutoffRoundComparisonData;
   coursesFeesArticle?: CoursesFeesArticleData;
+  placementsArticle?: PlacementsArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -556,6 +569,29 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
         answer: "Yes, Bachelor of Technology (BTech) is the flagship 4-year undergraduate programme at IIT Delhi. It is offered in premier engineering disciplines including Computer Science & Engineering, Electrical Engineering, Mechanical Engineering, Civil Engineering, Chemical Engineering, Energy Engineering, and Mathematics & Computing. Admission is strictly through JEE Advanced followed by JoSAA counselling.",
       },
     ],
+  },
+  placementsArticle: {
+    title: "IIT Delhi Placements 2026",
+    introParagraph:
+      "**IIT Delhi Placements 2026** recorded **1,275 job** offers for students. **Over 300 pre-placement offers (PPOs)** secured and more than **1,140 students placed**, according 2025-26 placement season. IIT Delhi students received more than 40 international offers from multiple global organisations located in Japan, the Netherlands, South Korea, Taiwan, the United Arab Emirates, the United Kingdom, and the United States. As per **IITD** overall report submitted for **NIRF 2026**, **(BTech) UG 4-year students’ median package** is **INR 20 LPA**. Median package for **(MTech)** PG students is **INR 19.25 LPA** in the **IIT Delhi Placements 2026**. The **average package of IIT Delhi** and **IIT Delhi highest pacakge** are not available.",
+    subsections: [
+      {
+        heading: "IIT Delhi Top Recruiters 2026",
+        content:
+          "Leading recruiters participating in **IIT Delhi BTech placements 2026** are Microsoft, Goldman Sachs, Texas Instruments, Bajaj Auto, Ola Electric, and Air India.",
+      },
+      {
+        heading: "IIT Delhi MBA Placements 2026",
+        content:
+          "The **IIT Delhi MBA placement report 2026** is yet to be released. As per the official 2025 placement report, **IIT Delhi MBA** recorded a 98% placement rate. The **IIT Delhi highest package** offered was **INR 43.55 LPA**. While the **average package of IIT Delhi** (MTech) was **INR 22.52 LPA**, and the **median** was **INR 22.5 LPA**.",
+      },
+      {
+        heading: "IIT Delhi MBA Placements 2026 Top Recruiters",
+        content:
+          "**IIT Delhi MBA placements'** top recruiter list includes leading companies such as Accenture, Paytm, EY, PwC, Godrej, and Flipkart.",
+      },
+    ],
+    footerNote: "Check course-wise placement data of **IIT Delhi** below:",
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -873,6 +909,8 @@ export default function CollegeDetailPage() {
   const [isCoursesArticleExpanded, setIsCoursesArticleExpanded] = useState(false);
   const [openCourseGroupIndices, setOpenCourseGroupIndices] = useState<Record<number, boolean>>({});
   const [openCoursesFaqIdx, setOpenCoursesFaqIdx] = useState<number | null>(0);
+  const [isPlacementsCardOpen, setIsPlacementsCardOpen] = useState(true);
+  const [isPlacementsArticleExpanded, setIsPlacementsArticleExpanded] = useState(false);
 
   const toggleCourseGroup = (idx: number) => {
     setOpenCourseGroupIndices((prev) => ({
@@ -1090,6 +1128,7 @@ export default function CollegeDetailPage() {
             cutoffComparison: parsedData.cutoffComparison || IIT_DELHI_MASTER_DATA.cutoffComparison,
             secondaryCutoffComparison: parsedData.secondaryCutoffComparison || IIT_DELHI_MASTER_DATA.secondaryCutoffComparison,
             coursesFeesArticle: parsedData.coursesFeesArticle || IIT_DELHI_MASTER_DATA.coursesFeesArticle,
+            placementsArticle: parsedData.placementsArticle || IIT_DELHI_MASTER_DATA.placementsArticle,
           };
 
           setCollegeData(baseDetail);
@@ -1580,6 +1619,46 @@ export default function CollegeDetailPage() {
       footerNote: `Check more about ${shortName} courses below:`,
       viewAllBtnText: "View All Courses & Fees",
       faqs: defaultCoursesFaqs,
+    };
+  };
+
+  const getCollegePlacementsArticle = (college: CollegeDetail): PlacementsArticleData => {
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+
+    const defaultSubsections: PlacementSubSection[] = [
+      {
+        heading: `${shortName} Top Recruiters 2026`,
+        content: `Leading recruiters participating in **${shortName} BTech placements 2026** are Microsoft, Goldman Sachs, Texas Instruments, Bajaj Auto, Ola Electric, and Air India.`,
+      },
+      {
+        heading: `${shortName} MBA Placements 2026`,
+        content: `The **${shortName} MBA placement report 2026** is yet to be released. As per the official 2025 placement report, **${shortName} MBA** recorded a 98% placement rate. The **${shortName} highest package** offered was **INR 43.55 LPA**. While the **average package of ${shortName}** (MTech) was **INR 22.52 LPA**, and the **median** was **INR 22.5 LPA**.`,
+      },
+      {
+        heading: `${shortName} MBA Placements 2026 Top Recruiters`,
+        content: `**${shortName} MBA placements'** top recruiter list includes leading companies such as Accenture, Paytm, EY, PwC, Godrej, and Flipkart.`,
+      },
+    ];
+
+    if (college.placementsArticle) {
+      return {
+        title: college.placementsArticle.title || `${shortName} Placements 2026`,
+        introParagraph:
+          college.placementsArticle.introParagraph ||
+          `**${shortName} Placements 2026** recorded **1,275 job** offers for students. **Over 300 pre-placement offers (PPOs)** secured and more than **1,140 students placed**, according 2025-26 placement season. ${shortName} students received more than 40 international offers from multiple global organisations located in Japan, the Netherlands, South Korea, Taiwan, the United Arab Emirates, the United Kingdom, and the United States. As per **IITD** overall report submitted for **NIRF 2026**, **(BTech) UG 4-year students’ median package** is **INR 20 LPA**. Median package for **(MTech)** PG students is **INR 19.25 LPA** in the **${shortName} Placements 2026**. The **average package of ${shortName}** and **${shortName} highest pacakge** are not available.`,
+        subsections:
+          college.placementsArticle.subsections && college.placementsArticle.subsections.length > 0
+            ? college.placementsArticle.subsections
+            : defaultSubsections,
+        footerNote: college.placementsArticle.footerNote || `Check course-wise placement data of **${shortName}** below:`,
+      };
+    }
+
+    return {
+      title: `${shortName} Placements 2026`,
+      introParagraph: `**${shortName} Placements 2026** recorded **1,275 job** offers for students. **Over 300 pre-placement offers (PPOs)** secured and more than **1,140 students placed**, according 2025-26 placement season. ${shortName} students received more than 40 international offers from multiple global organisations located in Japan, the Netherlands, South Korea, Taiwan, the United Arab Emirates, the United Kingdom, and the United States. As per **IITD** overall report submitted for **NIRF 2026**, **(BTech) UG 4-year students’ median package** is **INR 20 LPA**. Median package for **(MTech)** PG students is **INR 19.25 LPA** in the **${shortName} Placements 2026**. The **average package of ${shortName}** and **${shortName} highest pacakge** are not available.`,
+      subsections: defaultSubsections,
+      footerNote: `Check course-wise placement data of **${shortName}** below:`,
     };
   };
 
@@ -3514,6 +3593,117 @@ export default function CollegeDetailPage() {
                   </div>
                 );
               })()}
+
+              {/* 5. CARD 5: PLACEMENTS OVERVIEW ARTICLE (EXACT SHIKSHA FORMAT) */}
+              {(() => {
+                const plData = getCollegePlacementsArticle(collegeData);
+                return (
+                  <div
+                    id="placements-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-24"
+                  >
+                    {/* Top Header Row */}
+                    <div className="flex items-start justify-between gap-3">
+                      <h2 className="text-lg sm:text-xl font-black font-outfit text-slate-900 tracking-tight flex items-center gap-2">
+                        <span>{plData.title}</span>
+                      </h2>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("placements")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Placements</span>
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => setIsPlacementsCardOpen(!isPlacementsCardOpen)}
+                          aria-label={isPlacementsCardOpen ? "Collapse Placements Section" : "Expand Placements Section"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isPlacementsCardOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Card Body */}
+                    <AnimatePresence initial={false}>
+                      {isPlacementsCardOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4 space-y-4 border-t border-slate-100/90 mt-4 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {/* Intro Preview Paragraph */}
+                            <p className="leading-relaxed">
+                              {renderFormattedText(plData.introParagraph || "")}
+                            </p>
+
+                            {/* Collapsible Extended Subsections */}
+                            <div className="relative">
+                              {!isPlacementsArticleExpanded ? (
+                                /* Collapsed state with Read more on bottom right */
+                                <div className="pt-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsPlacementsArticleExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] hover:underline cursor-pointer transition-all active:scale-95 select-none"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              ) : (
+                                /* Expanded state with all subsections and Read less */
+                                <div className="space-y-4 pt-1">
+                                  {plData.subsections && plData.subsections.map((sub, sIdx) => (
+                                    <div key={sIdx} className="space-y-1.5">
+                                      <h3 className="font-outfit font-bold text-sm sm:text-[15px] text-slate-900 leading-snug">
+                                        {sub.heading}
+                                      </h3>
+                                      <p className="leading-relaxed text-slate-700">
+                                        {renderFormattedText(sub.content)}
+                                      </p>
+                                    </div>
+                                  ))}
+
+                                  {plData.footerNote && (
+                                    <p className="text-xs sm:text-[13px] text-slate-600 font-medium pt-1">
+                                      {renderFormattedText(plData.footerNote)}
+                                    </p>
+                                  )}
+
+                                  {/* Read less button on right */}
+                                  <div className="pt-1 flex justify-end">
+                                    <button
+                                      type="button"
+                                      onClick={() => setIsPlacementsArticleExpanded(false)}
+                                      className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] hover:underline cursor-pointer transition-all active:scale-95 select-none"
+                                    >
+                                      Read less
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
@@ -3686,6 +3876,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
                     {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
                     {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
+                    {activeMiniModal === "placements" && "💼 Edit Placements Section"}
                     {activeMiniModal === "rankings" && "🏆 Edit Rankings"}
                     {activeMiniModal === "gallery" && "📸 Edit Photo Gallery"}
                     {activeMiniModal === "hostel" && "🏢 Edit Campus Facilities & Hostels"}
@@ -5747,6 +5938,164 @@ export default function CollegeDetailPage() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL: PLACEMENTS ARTICLE EDITOR */}
+                {activeMiniModal === "placements" && (
+                  <div className="space-y-4">
+                    <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                      <span className="text-xs font-black text-slate-900 uppercase tracking-wide">
+                        Placements Article Details
+                      </span>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Article Title
+                        </label>
+                        <input
+                          type="text"
+                          value={tempData.placementsArticle?.title || `${tempData.name.split(" - ")[0]} Placements 2026`}
+                          onChange={(e) => {
+                            const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              placementsArticle: { ...cur, title: e.target.value },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Intro Paragraph (Always Visible / Preview)
+                        </label>
+                        <textarea
+                          rows={4}
+                          value={tempData.placementsArticle?.introParagraph || getCollegePlacementsArticle(tempData).introParagraph || ""}
+                          onChange={(e) => {
+                            const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              placementsArticle: { ...cur, introParagraph: e.target.value },
+                            });
+                          }}
+                          placeholder="Introductory paragraph..."
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium resize-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Subsections List (Top Recruiters, MBA Placements, etc.) */}
+                    <div className="p-3.5 bg-blue-50/50 border border-blue-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-blue-950 uppercase tracking-wide">
+                          Placements Sub-Sections (Expanded Content)
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                            const updated = [
+                              ...(cur.subsections || []),
+                              {
+                                heading: `${tempData.name.split(" - ")[0]} Additional Placements 2026`,
+                                content: "Detailed branch-wise placement statistics and highest packages.",
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              placementsArticle: { ...cur, subsections: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Sub-Section</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                        {(tempData.placementsArticle?.subsections || getCollegePlacementsArticle(tempData).subsections || []).map((sub, sIdx) => (
+                          <div key={sIdx} className="p-2.5 bg-white border border-blue-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                const updated = (cur.subsections || []).filter((_, i) => i !== sIdx);
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...cur, subsections: updated },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Delete Sub-Section"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-4/5">
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Subheading #{sIdx + 1}</label>
+                              <input
+                                type="text"
+                                value={sub.heading}
+                                onChange={(e) => {
+                                  const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                  const updated = [...(cur.subsections || [])];
+                                  updated[sIdx] = { ...updated[sIdx], heading: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...cur, subsections: updated },
+                                  });
+                                }}
+                                placeholder="e.g. IIT Delhi Top Recruiters 2026"
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Content</label>
+                              <textarea
+                                rows={2.5}
+                                value={sub.content}
+                                onChange={(e) => {
+                                  const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                  const updated = [...(cur.subsections || [])];
+                                  updated[sIdx] = { ...updated[sIdx], content: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...cur, subsections: updated },
+                                  });
+                                }}
+                                placeholder="Sub-section content details (supports **bold**)..."
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-700"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Footer Note */}
+                    <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                      <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                        Footer Note Text
+                      </label>
+                      <input
+                        type="text"
+                        value={tempData.placementsArticle?.footerNote || getCollegePlacementsArticle(tempData).footerNote || ""}
+                        onChange={(e) => {
+                          const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                          setTempData({
+                            ...tempData,
+                            placementsArticle: { ...cur, footerNote: e.target.value },
+                          });
+                        }}
+                        placeholder="e.g. Check course-wise placement data of IIT Delhi below:"
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900"
+                      />
                     </div>
                   </div>
                 )}
