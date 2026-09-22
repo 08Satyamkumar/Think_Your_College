@@ -537,7 +537,7 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
       },
     ],
     footerNote: "Check more about IIT Delhi courses below:",
-    viewAllBtnText: "View All 12 Courses",
+    viewAllBtnText: "View All Courses & Fees",
     faqs: [
       {
         question: "What is the career scope after MSc from IIT Delhi?",
@@ -1453,7 +1453,7 @@ export default function CollegeDetailPage() {
           },
         ],
         footerNote: college.coursesFeesArticle.footerNote || `Check more about ${shortName} courses below:`,
-        viewAllBtnText: college.coursesFeesArticle.viewAllBtnText || `View All ${college.courses?.length || 12} Courses`,
+        viewAllBtnText: college.coursesFeesArticle.viewAllBtnText || "View All Courses & Fees",
         faqs:
           college.coursesFeesArticle.faqs && college.coursesFeesArticle.faqs.length > 0
             ? college.coursesFeesArticle.faqs
@@ -1578,7 +1578,7 @@ export default function CollegeDetailPage() {
         },
       ],
       footerNote: `Check more about ${shortName} courses below:`,
-      viewAllBtnText: `View All ${college.courses?.length || 12} Courses`,
+      viewAllBtnText: "View All Courses & Fees",
       faqs: defaultCoursesFaqs,
     };
   };
@@ -3374,7 +3374,7 @@ export default function CollegeDetailPage() {
                               >
                                 {/* Shining sweep effect */}
                                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
-                                <span className="tracking-tight">{cfData.viewAllBtnText || `View All ${collegeData.courses?.length || 12} Courses`}</span>
+                                <span className="tracking-tight">{cfData.viewAllBtnText || "View All Courses & Fees"}</span>
                                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5" />
                               </button>
                             </div>
@@ -4986,11 +4986,11 @@ export default function CollegeDetailPage() {
                     <div className="p-3.5 bg-purple-50/50 border border-purple-200/80 rounded-2xl space-y-3">
                       <div>
                         <label className="text-[10px] font-bold text-slate-700 block mb-1">
-                          "View All Courses" Action Button Text
+                          "View All Courses & Fees" Action Button Text
                         </label>
                         <input
                           type="text"
-                          value={tempData.coursesFeesArticle?.viewAllBtnText || getCollegeCoursesFeesArticle(tempData).viewAllBtnText || `View All ${tempData.courses?.length || 12} Courses`}
+                          value={tempData.coursesFeesArticle?.viewAllBtnText || getCollegeCoursesFeesArticle(tempData).viewAllBtnText || "View All Courses & Fees"}
                           onChange={(e) => {
                             const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
                             setTempData({
@@ -4998,7 +4998,7 @@ export default function CollegeDetailPage() {
                               coursesFeesArticle: { ...cur, viewAllBtnText: e.target.value },
                             });
                           }}
-                          placeholder="e.g. View All 12 Courses"
+                          placeholder="e.g. View All Courses & Fees"
                           className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
                         />
                       </div>
