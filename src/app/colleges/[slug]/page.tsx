@@ -116,6 +116,19 @@ interface SpecialisationCategoryRow {
   list: string;
 }
 
+interface CourseSummaryCardItem {
+  courseName: string;
+  firstYearFees?: string;
+  eligibility?: string;
+  duration?: string;
+  selection?: string;
+}
+
+interface CourseSummaryCardGroup {
+  groupTitle: string;
+  courses: CourseSummaryCardItem[];
+}
+
 interface PopularCourseFeeRow {
   courseName: string;
   coursesCount?: string;
@@ -133,6 +146,7 @@ interface CoursesFeesArticleData {
   title?: string;
   introParagraph1?: string;
   introParagraph2?: string;
+  courseSummaryGroups?: CourseSummaryCardGroup[];
   specialisations?: SpecialisationCategoryRow[];
   calloutPromoText?: string;
   calloutPdfUrl?: string;
@@ -409,6 +423,27 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
       "**IIT Delhi** offers undergraduate, postgraduate, doctoral, and certificate programmes across Engineering, Design, Sciences, Management, and Humanities. The **IIT Delhi** courses are available in **full-time**, **part-time**, and **online** modes.",
     introParagraph2:
       "The courses offered are BTech, BS, BDes, MTech, MSc, MBA, MDes, MA, and PhD. **IIT Delhi popular programme** is BTech. The following are the course categories and top specialisations offered at **IIT Delhi**:",
+    courseSummaryGroups: [
+      {
+        groupTitle: "UG Courses",
+        courses: [
+          {
+            courseName: "BTech",
+            firstYearFees: "INR 2.55 Lakhs",
+            eligibility: "Class 10+2 with 75% marks",
+            duration: "4 years",
+            selection: "JEE Advanced + JoSAA Counselling",
+          },
+          {
+            courseName: "BDes",
+            firstYearFees: "INR 2.54 Lakhs",
+            eligibility: "Class 10+2 with 75% marks",
+            duration: "4 years",
+            selection: "UCEED Scores + Counselling",
+          },
+        ],
+      },
+    ],
     specialisations: [
       {
         category: "BTech specialisations",
@@ -1243,7 +1278,33 @@ export default function CollegeDetailPage() {
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
 
     if (college.coursesFeesArticle && college.coursesFeesArticle.introParagraph1) {
-      return college.coursesFeesArticle;
+      return {
+        ...college.coursesFeesArticle,
+        courseSummaryGroups:
+          college.coursesFeesArticle.courseSummaryGroups && college.coursesFeesArticle.courseSummaryGroups.length > 0
+            ? college.coursesFeesArticle.courseSummaryGroups
+            : [
+                {
+                  groupTitle: "UG Courses",
+                  courses: [
+                    {
+                      courseName: "BTech",
+                      firstYearFees: "INR 2.55 Lakhs",
+                      eligibility: "Class 10+2 with 75% marks",
+                      duration: "4 years",
+                      selection: "JEE Advanced + JoSAA Counselling",
+                    },
+                    {
+                      courseName: "BDes",
+                      firstYearFees: "INR 2.54 Lakhs",
+                      eligibility: "Class 10+2 with 75% marks",
+                      duration: "4 years",
+                      selection: "UCEED Scores + Counselling",
+                    },
+                  ],
+                },
+              ],
+      };
     }
 
     return {
@@ -1252,6 +1313,27 @@ export default function CollegeDetailPage() {
         `**${shortName}** offers undergraduate, postgraduate, doctoral, and certificate programmes across Engineering, Design, Sciences, Management, and Humanities. The **${shortName}** courses are available in **full-time**, **part-time**, and **online** modes.`,
       introParagraph2:
         `The courses offered are BTech, BS, BDes, MTech, MSc, MBA, MDes, MA, and PhD. **${shortName} popular programme** is BTech. The following are the course categories and top specialisations offered at **${shortName}**:`,
+      courseSummaryGroups: [
+        {
+          groupTitle: "UG Courses",
+          courses: [
+            {
+              courseName: "BTech",
+              firstYearFees: "INR 2.55 Lakhs",
+              eligibility: "Class 10+2 with 75% marks",
+              duration: "4 years",
+              selection: "JEE Advanced + JoSAA Counselling",
+            },
+            {
+              courseName: "BDes",
+              firstYearFees: "INR 2.54 Lakhs",
+              eligibility: "Class 10+2 with 75% marks",
+              duration: "4 years",
+              selection: "UCEED Scores + Counselling",
+            },
+          ],
+        },
+      ],
       specialisations: [
         {
           category: "BTech specialisations",
@@ -2823,14 +2905,88 @@ export default function CollegeDetailPage() {
                                   </p>
                                 )}
 
+                                {/* NEW SUB-BOX: UG / PG Course Summary Highlights Table (Exact User Image Reference) */}
+                                {cfData.courseSummaryGroups && cfData.courseSummaryGroups.length > 0 && (
+                                  <div className="space-y-4 pt-1">
+                                    {cfData.courseSummaryGroups.map((group, gIdx) => (
+                                      <div
+                                        key={gIdx}
+                                        className="rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.03)] overflow-hidden bg-white"
+                                      >
+                                        {/* Dark Navy Blue Banner Header */}
+                                        <div className="bg-[#07264a] text-white px-4 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between">
+                                          <h3 className="font-outfit font-bold text-xs sm:text-sm tracking-wide text-white">
+                                            {group.groupTitle}
+                                          </h3>
+                                        </div>
+
+                                        {/* Course Details Responsive Grid / Table */}
+                                        <div className="overflow-x-auto">
+                                          <div
+                                            className="grid min-w-[540px] sm:min-w-0"
+                                            style={{
+                                              gridTemplateColumns: `repeat(${Math.max(1, group.courses.length)}, minmax(0, 1fr))`,
+                                            }}
+                                          >
+                                            {/* Column Headers: Course Names */}
+                                            {group.courses.map((course, cIdx) => (
+                                              <div
+                                                key={`hdr-${cIdx}`}
+                                                className="px-4 sm:px-5 py-2.5 bg-white border-b border-r border-slate-300 last:border-r-0"
+                                              >
+                                                <h4 className="font-outfit font-bold text-slate-900 text-xs sm:text-[13.5px]">
+                                                  {course.courseName}
+                                                </h4>
+                                              </div>
+                                            ))}
+
+                                            {/* Column Bodies: Course Specs & Fees */}
+                                            {group.courses.map((course, cIdx) => (
+                                              <div
+                                                key={`body-${cIdx}`}
+                                                className="p-4 sm:p-5 bg-white border-r border-slate-300 last:border-r-0 space-y-2.5 text-xs sm:text-[13px] text-slate-700 font-normal leading-relaxed"
+                                              >
+                                                {course.firstYearFees && (
+                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                    <span className="text-slate-800 font-medium">1st Year Fees:</span>
+                                                    <span className="font-semibold text-slate-950">{course.firstYearFees}</span>
+                                                  </div>
+                                                )}
+                                                {course.eligibility && (
+                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                    <span className="text-slate-800 font-medium">Eligibility:</span>
+                                                    <span className="font-semibold text-slate-950">{course.eligibility}</span>
+                                                  </div>
+                                                )}
+                                                {course.duration && (
+                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                    <span className="text-slate-800 font-medium">Duration:</span>
+                                                    <span className="font-semibold text-slate-950">{course.duration}</span>
+                                                  </div>
+                                                )}
+                                                {course.selection && (
+                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                    <span className="text-slate-800 font-medium">Selection:</span>
+                                                    <span className="font-semibold text-slate-950">{course.selection}</span>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+
                                 {/* Table 1: Course Categories & Specialisations (Image 2) */}
                                 {cfData.specialisations && cfData.specialisations.length > 0 && (
-                                  <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                  <div className="overflow-x-auto rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
                                     <table className="w-full text-left border-collapse text-xs sm:text-[13.5px]">
-                                      <tbody className="divide-y divide-dotted divide-slate-300/80">
+                                      <tbody className="divide-y divide-slate-300">
                                         {cfData.specialisations.map((spec, sIdx) => (
                                           <tr key={sIdx} className="hover:bg-slate-50/70 transition-colors">
-                                            <td className="py-3.5 px-4 sm:px-5 font-semibold text-slate-900 align-top w-1/4 sm:w-1/5 border-r border-dotted border-slate-200/80">
+                                            <td className="py-3.5 px-4 sm:px-5 font-semibold text-slate-900 align-top w-1/4 sm:w-1/5 border-r border-slate-300">
                                               {spec.category}
                                             </td>
                                             <td className="py-3.5 px-4 sm:px-5 text-slate-600 font-normal leading-relaxed align-top">
@@ -2876,14 +3032,14 @@ export default function CollegeDetailPage() {
 
                                 {/* Table 2: Popular Courses & Total Tuition Fees Table (Image 3) */}
                                 {cfData.popularCourses && cfData.popularCourses.length > 0 && (
-                                  <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                  <div className="overflow-x-auto rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
                                     <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
                                       <thead>
-                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-dotted border-slate-300/80">
-                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-dotted border-slate-200/80">
+                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-slate-300">
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-slate-300">
                                             Course
                                           </th>
-                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-dotted border-slate-200/80">
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-slate-300">
                                             Total Tuition Fees
                                           </th>
                                           <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900">
@@ -2891,10 +3047,10 @@ export default function CollegeDetailPage() {
                                           </th>
                                         </tr>
                                       </thead>
-                                      <tbody className="font-normal divide-y divide-dotted divide-slate-300/70">
+                                      <tbody className="font-normal divide-y divide-slate-300">
                                         {cfData.popularCourses.map((cRow, cIdx) => (
                                           <tr key={cIdx} className="hover:bg-slate-50/70 transition-colors">
-                                            <td className="py-3 px-4 sm:px-5 font-medium border-r border-dotted border-slate-200/70">
+                                            <td className="py-3 px-4 sm:px-5 font-medium border-r border-slate-300">
                                               <span className="text-[#1a73e8] hover:text-[#0b57d0] hover:underline cursor-pointer font-medium">
                                                 {cRow.courseName}
                                               </span>
@@ -2904,7 +3060,7 @@ export default function CollegeDetailPage() {
                                                 </span>
                                               )}
                                             </td>
-                                            <td className="py-3 px-4 sm:px-5 text-slate-700 whitespace-nowrap border-r border-dotted border-slate-200/70">
+                                            <td className="py-3 px-4 sm:px-5 text-slate-700 whitespace-nowrap border-r border-slate-300">
                                               {cRow.tuitionFees}
                                             </td>
                                             <td className="py-3 px-4 sm:px-5 text-slate-700 whitespace-nowrap">
@@ -2933,11 +3089,11 @@ export default function CollegeDetailPage() {
 
                                 {/* Table 3: Other Charges Breakdown Table (Image 4) */}
                                 {cfData.otherCharges && cfData.otherCharges.length > 0 && (
-                                  <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                  <div className="overflow-x-auto rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
                                     <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
                                       <thead>
-                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-dotted border-slate-300/80">
-                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 w-1/2 border-r border-dotted border-slate-200/80">
+                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-slate-300">
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 w-1/2 border-r border-slate-300">
                                             Components
                                           </th>
                                           <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 w-1/2">
@@ -2945,10 +3101,10 @@ export default function CollegeDetailPage() {
                                           </th>
                                         </tr>
                                       </thead>
-                                      <tbody className="font-normal divide-y divide-dotted divide-slate-300/70">
+                                      <tbody className="font-normal divide-y divide-slate-300">
                                         {cfData.otherCharges.map((oRow, oIdx) => (
                                           <tr key={oIdx} className="hover:bg-slate-50/70 transition-colors">
-                                            <td className="py-3 px-4 sm:px-5 border-r border-dotted border-slate-200/70 align-top">
+                                            <td className="py-3 px-4 sm:px-5 border-r border-slate-300 align-top">
                                               <p className="font-medium text-slate-900">{oRow.component}</p>
                                               {oRow.subtext && (
                                                 <p className="text-[11.5px] sm:text-xs text-slate-500 italic mt-0.5 leading-relaxed">
@@ -3829,6 +3985,267 @@ export default function CollegeDetailPage() {
                           }}
                           className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium resize-none"
                         />
+                      </div>
+                    </div>
+
+                    {/* Part 1.5: Course Summary Sub-Box Table Editor (UG / PG Courses Grid) */}
+                    <div className="p-3.5 bg-slate-900 text-white rounded-2xl space-y-3 shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-black uppercase tracking-wide text-sky-300">
+                            Course Summary Highlights Sub-Boxes (Table Cards)
+                          </span>
+                          <p className="text-[11px] text-slate-300 font-medium mt-0.5">
+                            Sub-box tables with navy header, course specs, fees, eligibility & selection
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            const updated = [
+                              ...(cur.courseSummaryGroups || []),
+                              {
+                                groupTitle: "New Course Level (e.g. PG Courses)",
+                                courses: [
+                                  {
+                                    courseName: "MTech",
+                                    firstYearFees: "INR 1.50 Lakhs",
+                                    eligibility: "B.Tech with 60% marks",
+                                    duration: "2 years",
+                                    selection: "GATE + COAP Counselling",
+                                  },
+                                ],
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 text-[11px] font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Group</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
+                        {(tempData.coursesFeesArticle?.courseSummaryGroups || getCollegeCoursesFeesArticle(tempData).courseSummaryGroups || []).map((group, gIdx) => (
+                          <div key={gIdx} className="p-3 bg-slate-800/90 border border-slate-700 rounded-xl space-y-2.5 relative">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = (cur.courseSummaryGroups || []).filter((_, i) => i !== gIdx);
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
+                                });
+                              }}
+                              className="absolute top-2.5 right-2.5 p-1 text-red-400 hover:bg-red-950/60 rounded-lg cursor-pointer transition-colors"
+                              title="Delete Sub-Box Group"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-3/4">
+                              <label className="text-[10px] font-bold text-sky-300 block mb-0.5">
+                                Sub-box Group Title (e.g. UG Courses)
+                              </label>
+                              <input
+                                type="text"
+                                value={group.groupTitle}
+                                onChange={(e) => {
+                                  const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                  const updated = [...(cur.courseSummaryGroups || [])];
+                                  updated[gIdx] = { ...updated[gIdx], groupTitle: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
+                                  });
+                                }}
+                                placeholder="e.g. UG Courses"
+                                className="w-full px-2.5 py-1 bg-slate-900 border border-slate-600 rounded-lg text-xs font-bold text-white placeholder-slate-500"
+                              />
+                            </div>
+
+                            {/* Courses in this Group */}
+                            <div className="space-y-2 pt-1 border-t border-slate-700/80">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[10.5px] font-bold text-slate-300">
+                                  Courses Columns in this Group ({group.courses.length})
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                    const currentCourses = updatedGroups[gIdx]?.courses || [];
+                                    updatedGroups[gIdx] = {
+                                      ...updatedGroups[gIdx],
+                                      courses: [
+                                        ...currentCourses,
+                                        {
+                                          courseName: "New Degree",
+                                          firstYearFees: "INR 2.0 Lakhs",
+                                          eligibility: "Class 12th with 75%",
+                                          duration: "4 years",
+                                          selection: "Entrance Exam",
+                                        },
+                                      ],
+                                    };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                    });
+                                  }}
+                                  className="px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-sky-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-2.5 h-2.5" />
+                                  <span>Add Course Column</span>
+                                </button>
+                              </div>
+
+                              <div className="space-y-2">
+                                {group.courses.map((course, cIdx) => (
+                                  <div
+                                    key={cIdx}
+                                    className="p-2.5 bg-slate-900/90 border border-slate-700 rounded-lg space-y-1.5 relative"
+                                  >
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                        const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                        const currentCourses = (updatedGroups[gIdx]?.courses || []).filter((_, i) => i !== cIdx);
+                                        updatedGroups[gIdx] = {
+                                          ...updatedGroups[gIdx],
+                                          courses: currentCourses,
+                                        };
+                                        setTempData({
+                                          ...tempData,
+                                          coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                        });
+                                      }}
+                                      className="absolute top-2 right-2 p-1 text-red-400 hover:bg-red-950/60 rounded cursor-pointer"
+                                      title="Delete Course Column"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+
+                                    <div className="w-3/4">
+                                      <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Course Name</label>
+                                      <input
+                                        type="text"
+                                        value={course.courseName}
+                                        onChange={(e) => {
+                                          const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                          const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                          const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                          currentCourses[cIdx] = { ...currentCourses[cIdx], courseName: e.target.value };
+                                          updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                          setTempData({
+                                            ...tempData,
+                                            coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                          });
+                                        }}
+                                        placeholder="e.g. BTech"
+                                        className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs font-bold text-white placeholder-slate-500"
+                                      />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">1st Year Fees</label>
+                                        <input
+                                          type="text"
+                                          value={course.firstYearFees || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], firstYearFees: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. INR 2.55 Lakhs"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Duration</label>
+                                        <input
+                                          type="text"
+                                          value={course.duration || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], duration: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. 4 years"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Eligibility</label>
+                                        <input
+                                          type="text"
+                                          value={course.eligibility || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], eligibility: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. Class 10+2 with 75% marks"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Selection</label>
+                                        <input
+                                          type="text"
+                                          value={course.selection || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], selection: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. JEE Advanced + JoSAA Counselling"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
