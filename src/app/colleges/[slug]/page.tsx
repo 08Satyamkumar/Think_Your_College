@@ -2967,8 +2967,8 @@ export default function CollegeDetailPage() {
 
                                 {/* Table 2: Popular Courses & Total Tuition Fees Table (Image 3) */}
                                 {cfData.popularCourses && cfData.popularCourses.length > 0 && (
-                                  <div className="overflow-x-auto rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
-                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                  <div className="overflow-x-auto custom-scrollbar rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px] min-w-[500px]">
                                       <thead>
                                         <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-slate-300">
                                           <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-slate-300">
@@ -3024,8 +3024,8 @@ export default function CollegeDetailPage() {
 
                                 {/* Table 3: Other Charges Breakdown Table (Image 4) */}
                                 {cfData.otherCharges && cfData.otherCharges.length > 0 && (
-                                  <div className="overflow-x-auto rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
-                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                  <div className="overflow-x-auto custom-scrollbar rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px] min-w-[450px]">
                                       <thead>
                                         <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-slate-300">
                                           <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 w-1/2 border-r border-slate-300">
@@ -3144,20 +3144,22 @@ export default function CollegeDetailPage() {
                                                 </div>
 
                                                 {/* Table Body with Course Columns */}
-                                                <div className="overflow-x-auto">
+                                                <div className="overflow-x-auto custom-scrollbar">
                                                   <div
-                                                    className="grid min-w-[540px] sm:min-w-0"
+                                                    className="grid"
                                                     style={{
-                                                      gridTemplateColumns: `repeat(${Math.max(1, group.courses.length)}, minmax(0, 1fr))`,
+                                                      gridTemplateColumns: `repeat(${Math.max(1, group.courses.length)}, minmax(280px, 1fr))`,
+                                                      width: "max-content",
+                                                      minWidth: "100%",
                                                     }}
                                                   >
                                                     {/* Course Titles Row */}
                                                     {group.courses.map((course, cIdx) => (
                                                       <div
                                                         key={`hdr-${cIdx}`}
-                                                        className="px-4 sm:px-5 py-2.5 bg-white border-b border-r border-slate-300 last:border-r-0"
+                                                        className="px-4 sm:px-5 py-2.5 sm:py-3 bg-white border-b border-r border-slate-300 last:border-r-0 flex items-center"
                                                       >
-                                                        <h5 className="font-outfit font-bold text-slate-900 text-xs sm:text-[13.5px]">
+                                                        <h5 className="font-outfit font-bold text-slate-900 text-xs sm:text-[14px]">
                                                           {course.courseName}
                                                         </h5>
                                                       </div>
@@ -3170,26 +3172,26 @@ export default function CollegeDetailPage() {
                                                         className="p-4 sm:p-5 bg-white border-r border-slate-300 last:border-r-0 space-y-2.5 text-xs sm:text-[13px] text-slate-700 font-normal leading-relaxed"
                                                       >
                                                         {course.firstYearFees && (
-                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                            <span className="text-slate-800 font-medium">1st Year Fees:</span>
+                                                          <div className="flex items-baseline gap-1.5 flex-wrap">
+                                                            <span className="text-slate-800 font-medium shrink-0">1st Year Fees:</span>
                                                             <span className="font-semibold text-slate-950">{course.firstYearFees}</span>
                                                           </div>
                                                         )}
                                                         {course.eligibility && (
-                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                            <span className="text-slate-800 font-medium">Eligibility:</span>
+                                                          <div className="flex items-baseline gap-1.5 flex-wrap">
+                                                            <span className="text-slate-800 font-medium shrink-0">Eligibility:</span>
                                                             <span className="font-semibold text-slate-950">{course.eligibility}</span>
                                                           </div>
                                                         )}
                                                         {course.duration && (
-                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                            <span className="text-slate-800 font-medium">Duration:</span>
+                                                          <div className="flex items-baseline gap-1.5 flex-wrap">
+                                                            <span className="text-slate-800 font-medium shrink-0">Duration:</span>
                                                             <span className="font-semibold text-slate-950">{course.duration}</span>
                                                           </div>
                                                         )}
                                                         {course.selection && (
-                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                            <span className="text-slate-800 font-medium">Selection:</span>
+                                                          <div className="flex items-baseline gap-1.5 flex-wrap">
+                                                            <span className="text-slate-800 font-medium shrink-0">Selection:</span>
                                                             <span className="font-semibold text-slate-950">{course.selection}</span>
                                                           </div>
                                                         )}
