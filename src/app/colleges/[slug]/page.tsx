@@ -3358,7 +3358,7 @@ export default function CollegeDetailPage() {
                               </div>
                             )}
 
-                            {/* Oval Pill Action Button: View All Courses (Image 2) */}
+                            {/* Shining Light Green Oval Pill Action Button: View All Courses (Image 2) */}
                             <div className="pt-4 pb-1 flex justify-center">
                               <button
                                 type="button"
@@ -3371,10 +3371,12 @@ export default function CollegeDetailPage() {
                                     window.scrollTo({ top: 380, behavior: "smooth" });
                                   }
                                 }}
-                                className="group border border-[#2d1a47] hover:bg-[#2d1a47] text-[#2d1a47] hover:text-white font-bold py-2.5 px-8 rounded-full text-xs sm:text-[13.5px] flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-2xs hover:shadow-md active:scale-95 select-none"
+                                className="relative group overflow-hidden bg-gradient-to-r from-[#00b05b] via-[#10b981] to-[#00a859] hover:from-[#00c96b] hover:via-[#34d399] hover:to-[#00a859] text-white font-bold py-2.5 px-8 rounded-full text-xs sm:text-[13.5px] flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-[0_4px_16px_rgba(0,180,95,0.38)] hover:shadow-[0_6px_24px_rgba(0,180,95,0.55)] active:scale-95 select-none"
                               >
-                                <span>{cfData.viewAllBtnText || `View All ${collegeData.courses?.length || 12} Courses`}</span>
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                {/* Shining sweep effect */}
+                                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
+                                <span className="tracking-tight">{cfData.viewAllBtnText || `View All ${collegeData.courses?.length || 12} Courses`}</span>
+                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5" />
                               </button>
                             </div>
 
