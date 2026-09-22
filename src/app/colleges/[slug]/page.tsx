@@ -570,20 +570,20 @@ Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delh
   ],
   tableOfContents: [
     { label: "IIT Delhi Highlights 2026", targetId: "highlights-section", tabId: "info" },
-    { label: "IIT Delhi Cutoff 2026", targetId: "cutoffs-section", tabId: "cutoffs" },
-    { label: "IIT Delhi Courses & Fees 2026", targetId: "courses-section", tabId: "courses" },
-    { label: "IIT Delhi Placements 2026", targetId: "placements-section", tabId: "placements" },
-    { label: "IIT Delhi Admission & Application Process 2026", targetId: "admissions-section", tabId: "admissions" },
-    { label: "IIT Delhi Rankings 2026", targetId: "rankings-section", tabId: "rankings" },
-    { label: "IIT Delhi Student Reviews", targetId: "reviews-section", tabId: "reviews" },
-    { label: "IIT Delhi Scholarships 2026", targetId: "scholarships-section", tabId: "scholarships" },
-    { label: "IIT Delhi Popular Courses", targetId: "courses-section", tabId: "courses" },
-    { label: "IIT Delhi College comparison", targetId: "compare-section", tabId: "compare" },
-    { label: "IIT Delhi Campus & Facilities 2026", targetId: "campus-section", tabId: "hostel" },
-    { label: "IIT Delhi Colleges/Departments", targetId: "faculty-section", tabId: "faculty" },
-    { label: "Top online courses you might be interested in", targetId: "courses-section", tabId: "courses" },
+    { label: "IIT Delhi Cutoff 2026", targetId: "cutoffs-section", tabId: "info" },
+    { label: "IIT Delhi Courses & Fees 2026", targetId: "courses-section", tabId: "info" },
+    { label: "IIT Delhi Placements 2026", targetId: "placements-section", tabId: "info" },
+    { label: "IIT Delhi Admission & Application Process 2026", targetId: "admissions-section", tabId: "info" },
+    { label: "IIT Delhi Rankings 2026", targetId: "rankings-section", tabId: "info" },
+    { label: "IIT Delhi Student Reviews", targetId: "reviews-section", tabId: "info" },
+    { label: "IIT Delhi Scholarships 2026", targetId: "scholarships-section", tabId: "info" },
+    { label: "IIT Delhi Popular Courses", targetId: "courses-section", tabId: "info" },
+    { label: "IIT Delhi College comparison", targetId: "compare-section", tabId: "info" },
+    { label: "IIT Delhi Campus & Facilities 2026", targetId: "campus-section", tabId: "info" },
+    { label: "IIT Delhi Colleges/Departments", targetId: "faculty-section", tabId: "info" },
+    { label: "Top online courses you might be interested in", targetId: "courses-section", tabId: "info" },
     { label: "IIT Delhi Notable Alumni", targetId: "about-section", tabId: "info" },
-    { label: "IIT Delhi FAQs", targetId: "faq-section", tabId: "qa" },
+    { label: "IIT Delhi FAQs", targetId: "faq-section", tabId: "info" },
   ],
 };
 
@@ -1108,38 +1108,53 @@ export default function CollegeDetailPage() {
 
   const getCollegeTocList = (college: CollegeDetail): TableOfContentItem[] => {
     if (college.tableOfContents && college.tableOfContents.length > 0) {
-      return college.tableOfContents;
+      return college.tableOfContents.map((item) => ({
+        ...item,
+        tabId: "info",
+      }));
     }
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
     return [
       { label: `${shortName} Highlights 2026`, targetId: "highlights-section", tabId: "info" },
       { label: `${shortName} Cutoff 2026`, targetId: "cutoffs-section", tabId: "info" },
-      { label: `${shortName} Courses & Fees 2026`, targetId: "courses-section", tabId: "courses" },
-      { label: `${shortName} Placements 2026`, targetId: "placements-section", tabId: "placements" },
-      { label: `${shortName} Admission & Application Process 2026`, targetId: "admissions-section", tabId: "admissions" },
-      { label: `${shortName} Rankings 2026`, targetId: "rankings-section", tabId: "rankings" },
-      { label: `${shortName} Student Reviews`, targetId: "reviews-section", tabId: "reviews" },
-      { label: `${shortName} Scholarships 2026`, targetId: "scholarships-section", tabId: "scholarships" },
-      { label: `${shortName} Popular Courses`, targetId: "courses-section", tabId: "courses" },
-      { label: `${shortName} College comparison`, targetId: "compare-section", tabId: "compare" },
-      { label: `${shortName} Campus & Facilities 2026`, targetId: "campus-section", tabId: "hostel" },
-      { label: `${shortName} Colleges/Departments`, targetId: "faculty-section", tabId: "faculty" },
-      { label: `Top online courses you might be interested in`, targetId: "courses-section", tabId: "courses" },
+      { label: `${shortName} Courses & Fees 2026`, targetId: "courses-section", tabId: "info" },
+      { label: `${shortName} Placements 2026`, targetId: "placements-section", tabId: "info" },
+      { label: `${shortName} Admission & Application Process 2026`, targetId: "admissions-section", tabId: "info" },
+      { label: `${shortName} Rankings 2026`, targetId: "rankings-section", tabId: "info" },
+      { label: `${shortName} Student Reviews`, targetId: "reviews-section", tabId: "info" },
+      { label: `${shortName} Scholarships 2026`, targetId: "scholarships-section", tabId: "info" },
+      { label: `${shortName} Popular Courses`, targetId: "courses-section", tabId: "info" },
+      { label: `${shortName} College comparison`, targetId: "compare-section", tabId: "info" },
+      { label: `${shortName} Campus & Facilities 2026`, targetId: "campus-section", tabId: "info" },
+      { label: `${shortName} Colleges/Departments`, targetId: "faculty-section", tabId: "info" },
+      { label: `Top online courses you might be interested in`, targetId: "courses-section", tabId: "info" },
       { label: `${shortName} Notable Alumni`, targetId: "about-section", tabId: "info" },
-      { label: `${shortName} FAQs`, targetId: "faq-section", tabId: "qa" },
+      { label: `${shortName} FAQs`, targetId: "faq-section", tabId: "info" },
     ];
   };
 
   const handleTocClick = (item: TableOfContentItem) => {
-    if (item.tabId && item.tabId !== activeTab) {
-      setActiveTab(item.tabId);
+    // 1. Always stay in / switch to 'info' (Overview) where the master section boxes live
+    if (activeTab !== "info") {
+      setActiveTab("info");
     }
+
+    // 2. Expand target card if currently collapsed
+    if (item.targetId === "highlights-section") {
+      setIsHighlightsOpen(true);
+    } else if (item.targetId === "cutoffs-section") {
+      setIsCutoffCardOpen(true);
+    }
+
+    // 3. Smoothly scroll directly to the box with sticky header offset
     setTimeout(() => {
       const el = document.getElementById(item.targetId);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        const yOffset = -90; // sticky header offset
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: "smooth" });
       }
-    }, 120);
+    }, 80);
   };
 
   const openMiniModal = (modalId: MiniModalId) => {
@@ -2806,20 +2821,19 @@ export default function CollegeDetailPage() {
                             }}
                             className="px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 sm:w-44"
                           >
-                            <option value="highlights-section|info">Info - Highlights</option>
+                            <option value="highlights-section|info">Info - Highlights 2026</option>
+                            <option value="cutoffs-section|info">Info - Cutoff 2026 Box</option>
+                            <option value="courses-section|info">Info - Courses & Fees Box</option>
+                            <option value="placements-section|info">Info - Placements Box</option>
+                            <option value="admissions-section|info">Info - Admissions Box</option>
+                            <option value="rankings-section|info">Info - Rankings Box</option>
+                            <option value="reviews-section|info">Info - Reviews Box</option>
+                            <option value="scholarships-section|info">Info - Scholarships Box</option>
+                            <option value="campus-section|info">Info - Campus & Facilities</option>
+                            <option value="faculty-section|info">Info - Faculty Section</option>
+                            <option value="compare-section|info">Info - College Compare</option>
                             <option value="about-section|info">Info - About Overview</option>
-                            <option value="courses-section|courses">Courses Tab</option>
-                            <option value="fees-section|fees">Fees Structure Tab</option>
-                            <option value="cutoffs-section|cutoffs">Cut-Offs Tab</option>
-                            <option value="placements-section|placements">Placements Tab</option>
-                            <option value="admissions-section|admissions">Admissions Tab</option>
-                            <option value="rankings-section|rankings">Rankings Tab</option>
-                            <option value="reviews-section|reviews">Reviews Tab</option>
-                            <option value="scholarships-section|scholarships">Scholarships Tab</option>
-                            <option value="campus-section|hostel">Hostel & Campus Tab</option>
-                            <option value="faculty-section|faculty">Faculty Tab</option>
-                            <option value="compare-section|compare">College Compare Tab</option>
-                            <option value="faq-section|qa">Q&A / FAQs Tab</option>
+                            <option value="faq-section|info">Info - Q&A / FAQs Section</option>
                           </select>
 
                           <button
