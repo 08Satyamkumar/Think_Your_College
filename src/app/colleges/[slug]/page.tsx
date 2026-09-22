@@ -111,6 +111,39 @@ interface CutoffArticleData {
   faqs?: FaqItem[];
 }
 
+interface SpecialisationCategoryRow {
+  category: string;
+  list: string;
+}
+
+interface PopularCourseFeeRow {
+  courseName: string;
+  coursesCount?: string;
+  tuitionFees: string;
+  totalFees: string;
+}
+
+interface OtherFeeChargeRow {
+  component: string;
+  subtext?: string;
+  amount: string;
+}
+
+interface CoursesFeesArticleData {
+  title?: string;
+  introParagraph1?: string;
+  introParagraph2?: string;
+  specialisations?: SpecialisationCategoryRow[];
+  calloutPromoText?: string;
+  calloutPdfUrl?: string;
+  popularCoursesHeading?: string;
+  popularCourses?: PopularCourseFeeRow[];
+  otherChargesHeading?: string;
+  otherChargesNote?: string;
+  otherCharges?: OtherFeeChargeRow[];
+  footerNote?: string;
+}
+
 interface FaqItem {
   question: string;
   answer: string;
@@ -197,6 +230,7 @@ interface CollegeDetail {
   cutoffArticle?: CutoffArticleData;
   cutoffComparison?: CutoffRoundComparisonData;
   secondaryCutoffComparison?: CutoffRoundComparisonData;
+  coursesFeesArticle?: CoursesFeesArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -368,6 +402,103 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
         year2026: 28,
       },
     ],
+  },
+  coursesFeesArticle: {
+    title: "IIT Delhi Courses & Fees 2026",
+    introParagraph1:
+      "**IIT Delhi** offers undergraduate, postgraduate, doctoral, and certificate programmes across Engineering, Design, Sciences, Management, and Humanities. The **IIT Delhi** courses are available in **full-time**, **part-time**, and **online** modes.",
+    introParagraph2:
+      "The courses offered are BTech, BS, BDes, MTech, MSc, MBA, MDes, MA, and PhD. **IIT Delhi popular programme** is BTech. The following are the course categories and top specialisations offered at **IIT Delhi**:",
+    specialisations: [
+      {
+        category: "BTech specialisations",
+        list: "Computer Science & Engineering, Electrical Engineering, Mechanical Engineering, Chemical Engineering, Civil Engineering, and Textile Technology.",
+      },
+      {
+        category: "PG programmes",
+        list: "MTech, MSc, MBA, MDes, and MA",
+      },
+      {
+        category: "Certificate Programmes",
+        list: "Statistical Inference, Computational Geometry, Advanced Textile Printing Technology, and Project Management.",
+      },
+    ],
+    calloutPromoText:
+      "Explore engineering colleges accepting low JEE Main ranks, compare admission routes, and find the right BTech programme based on your score and preferences.",
+    calloutPdfUrl: "#",
+    popularCoursesHeading:
+      "Students can check out the IIT Delhi fees 2026 for some popular courses below:",
+    popularCourses: [
+      {
+        courseName: "B.E. / B.Tech",
+        coursesCount: "15 Courses",
+        tuitionFees: "INR 8 lakh",
+        totalFees: "INR 11.26 lakh - INR 11.72 lakh",
+      },
+      {
+        courseName: "B.Des",
+        coursesCount: "1 Courses",
+        tuitionFees: "INR 8 lakh",
+        totalFees: "INR 11.26 lakh",
+      },
+      {
+        courseName: "MBA/PGDM",
+        coursesCount: "2 Courses",
+        tuitionFees: "INR 12 lakh",
+        totalFees: "INR 13.82 lakh - INR 13.9 lakh",
+      },
+      {
+        courseName: "M.E./M.Tech",
+        coursesCount: "45 Courses",
+        tuitionFees: "INR 70,000- INR 3 lakh",
+        totalFees: "INR 4.82 lakh - INR 5.17 lakh",
+      },
+      {
+        courseName: "M.Sc.",
+        coursesCount: "25 Courses",
+        tuitionFees: "INR 30,000 - INR 3 lakh",
+        totalFees: "INR 2.12 lakh - INR 5.4 lakh",
+      },
+      {
+        courseName: "Ph.D.",
+        coursesCount: "28 Courses",
+        tuitionFees: "INR 45,000",
+        totalFees: "INR 45,000",
+      },
+      {
+        courseName: "M.A.",
+        coursesCount: "2 Courses",
+        tuitionFees: "INR 30,000 - INR 3 lakh",
+        totalFees: "INR 2.12 lakh - INR 5.05 lakh",
+      },
+      {
+        courseName: "M.Des",
+        coursesCount: "1 Courses",
+        tuitionFees: "INR 70,000",
+        totalFees: "INR 2.52 lakh",
+      },
+    ],
+    otherChargesNote: "*This is estimated fee information. Actual values may differ.",
+    otherChargesHeading: "Other Charges included in IITD fee structure:",
+    otherCharges: [
+      {
+        component: "Hostel fees",
+        subtext:
+          "Meal Plan is included in this fee. The fees might include components other than hostel fees. Hostel fee mentioned is for cheapest option available.",
+        amount: "INR 1.29 lakh - 3.1 lakh",
+      },
+      {
+        component: "One-time payments",
+        subtext:
+          "One-time payment includes Admission fees, Student welfare fund, Modernization fees, Benevolent fund, Alumni fees, Training and Placement charges, Institute & Library Security fees.",
+        amount: "INR 16,150 – 23,000",
+      },
+      {
+        component: "Other fee",
+        amount: "INR 94,400",
+      },
+    ],
+    footerNote: "Check more about IIT Delhi courses below:",
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -681,6 +812,8 @@ export default function CollegeDetailPage() {
   const [isCutoffRoundOpen, setIsCutoffRoundOpen] = useState(false);
   const [isSecondaryCutoffOpen, setIsSecondaryCutoffOpen] = useState(false);
   const [openCutoffFaqIdx, setOpenCutoffFaqIdx] = useState<number | null>(0);
+  const [isCoursesCardOpen, setIsCoursesCardOpen] = useState(true);
+  const [isCoursesArticleExpanded, setIsCoursesArticleExpanded] = useState(false);
 
   // Filter Modal & Applied Filter State for Cutoff Sub-Box
   const [isCutoffFilterModalOpen, setIsCutoffFilterModalOpen] = useState(false);
@@ -1103,6 +1236,112 @@ export default function CollegeDetailPage() {
       nirfCalloutDesc: `Explore verified performance metrics, faculty strength, and student outcomes.`,
       nirfReportUrl: "#",
       faqs: defaultFaqs,
+    };
+  };
+
+  const getCollegeCoursesFeesArticle = (college: CollegeDetail): CoursesFeesArticleData => {
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+
+    if (college.coursesFeesArticle && college.coursesFeesArticle.introParagraph1) {
+      return college.coursesFeesArticle;
+    }
+
+    return {
+      title: `${shortName} Courses & Fees 2026`,
+      introParagraph1:
+        `**${shortName}** offers undergraduate, postgraduate, doctoral, and certificate programmes across Engineering, Design, Sciences, Management, and Humanities. The **${shortName}** courses are available in **full-time**, **part-time**, and **online** modes.`,
+      introParagraph2:
+        `The courses offered are BTech, BS, BDes, MTech, MSc, MBA, MDes, MA, and PhD. **${shortName} popular programme** is BTech. The following are the course categories and top specialisations offered at **${shortName}**:`,
+      specialisations: [
+        {
+          category: "BTech specialisations",
+          list: "Computer Science & Engineering, Electrical Engineering, Mechanical Engineering, Chemical Engineering, Civil Engineering, and Textile Technology.",
+        },
+        {
+          category: "PG programmes",
+          list: "MTech, MSc, MBA, MDes, and MA",
+        },
+        {
+          category: "Certificate Programmes",
+          list: "Statistical Inference, Computational Geometry, Advanced Textile Printing Technology, and Project Management.",
+        },
+      ],
+      calloutPromoText:
+        "Explore engineering colleges accepting low JEE Main ranks, compare admission routes, and find the right BTech programme based on your score and preferences.",
+      calloutPdfUrl: "#",
+      popularCoursesHeading:
+        `Students can check out the ${shortName} fees 2026 for some popular courses below:`,
+      popularCourses: [
+        {
+          courseName: "B.E. / B.Tech",
+          coursesCount: "15 Courses",
+          tuitionFees: "INR 8 lakh",
+          totalFees: "INR 11.26 lakh - INR 11.72 lakh",
+        },
+        {
+          courseName: "B.Des",
+          coursesCount: "1 Courses",
+          tuitionFees: "INR 8 lakh",
+          totalFees: "INR 11.26 lakh",
+        },
+        {
+          courseName: "MBA/PGDM",
+          coursesCount: "2 Courses",
+          tuitionFees: "INR 12 lakh",
+          totalFees: "INR 13.82 lakh - INR 13.9 lakh",
+        },
+        {
+          courseName: "M.E./M.Tech",
+          coursesCount: "45 Courses",
+          tuitionFees: "INR 70,000- INR 3 lakh",
+          totalFees: "INR 4.82 lakh - INR 5.17 lakh",
+        },
+        {
+          courseName: "M.Sc.",
+          coursesCount: "25 Courses",
+          tuitionFees: "INR 30,000 - INR 3 lakh",
+          totalFees: "INR 2.12 lakh - INR 5.4 lakh",
+        },
+        {
+          courseName: "Ph.D.",
+          coursesCount: "28 Courses",
+          tuitionFees: "INR 45,000",
+          totalFees: "INR 45,000",
+        },
+        {
+          courseName: "M.A.",
+          coursesCount: "2 Courses",
+          tuitionFees: "INR 30,000 - INR 3 lakh",
+          totalFees: "INR 2.12 lakh - INR 5.05 lakh",
+        },
+        {
+          courseName: "M.Des",
+          coursesCount: "1 Courses",
+          tuitionFees: "INR 70,000",
+          totalFees: "INR 2.52 lakh",
+        },
+      ],
+      otherChargesNote: "*This is estimated fee information. Actual values may differ.",
+      otherChargesHeading: `Other Charges included in ${shortName} fee structure:`,
+      otherCharges: [
+        {
+          component: "Hostel fees",
+          subtext:
+            "Meal Plan is included in this fee. The fees might include components other than hostel fees. Hostel fee mentioned is for cheapest option available.",
+          amount: "INR 1.29 lakh - 3.1 lakh",
+        },
+        {
+          component: "One-time payments",
+          subtext:
+            "One-time payment includes Admission fees, Student welfare fund, Modernization fees, Benevolent fund, Alumni fees, Training and Placement charges, Institute & Library Security fees.",
+          amount: "INR 16,150 – 23,000",
+        },
+        {
+          component: "Other fee",
+          amount: "INR 94,400",
+        },
+      ],
+      footerNote: `Check more about ${shortName} courses below:`,
     };
   };
 
@@ -2493,6 +2732,269 @@ export default function CollegeDetailPage() {
                   </div>
                 );
               })()}
+
+              {/* 4. COURSES & FEES 2026 CARD (STEP 3 IN MASTER TEMPLATE) */}
+              {(() => {
+                const cfData = getCollegeCoursesFeesArticle(collegeData);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
+
+                return (
+                  <div
+                    id="courses-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-24"
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between gap-3">
+                      <h2 className="text-lg sm:text-xl font-bold font-outfit text-slate-900 tracking-tight">
+                        {cfData.title || `${collegeShortName} Courses & Fees 2026`}
+                      </h2>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("courses")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Courses & Fees</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setIsCoursesCardOpen(!isCoursesCardOpen)}
+                          aria-label={isCoursesCardOpen ? "Collapse Courses Card" : "Expand Courses Card"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isCoursesCardOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Card Body */}
+                    <AnimatePresence initial={false}>
+                      {isCoursesCardOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4 space-y-4 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {/* Paragraph 1 */}
+                            {cfData.introParagraph1 && (
+                              <p className="leading-relaxed">
+                                {renderFormattedText(cfData.introParagraph1)}
+                              </p>
+                            )}
+
+                            {/* Collapsed Preview vs Expanded Full Content */}
+                            {!isCoursesArticleExpanded ? (
+                              <div className="relative pt-0.5">
+                                {cfData.introParagraph2 && (
+                                  <div className="relative max-h-[46px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_30%,rgba(0,0,0,0.3)_65%,transparent_100%)]">
+                                    <p className="leading-relaxed">
+                                      {renderFormattedText(cfData.introParagraph2)}
+                                    </p>
+                                  </div>
+                                )}
+                                {/* Frosted Fade Overlay with Read more */}
+                                <div className="absolute inset-x-0 bottom-0 h-11 bg-gradient-to-t from-white via-white/85 to-transparent flex items-end justify-end pointer-events-auto pr-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsCoursesArticleExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-4 pt-0.5">
+                                {/* Paragraph 2 */}
+                                {cfData.introParagraph2 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(cfData.introParagraph2)}
+                                  </p>
+                                )}
+
+                                {/* Table 1: Course Categories & Specialisations (Image 2) */}
+                                {cfData.specialisations && cfData.specialisations.length > 0 && (
+                                  <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                    <table className="w-full text-left border-collapse text-xs sm:text-[13.5px]">
+                                      <tbody className="divide-y divide-dotted divide-slate-300/80">
+                                        {cfData.specialisations.map((spec, sIdx) => (
+                                          <tr key={sIdx} className="hover:bg-slate-50/70 transition-colors">
+                                            <td className="py-3.5 px-4 sm:px-5 font-semibold text-slate-900 align-top w-1/4 sm:w-1/5 border-r border-dotted border-slate-200/80">
+                                              {spec.category}
+                                            </td>
+                                            <td className="py-3.5 px-4 sm:px-5 text-slate-600 font-normal leading-relaxed align-top">
+                                              {spec.list}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+
+                                {/* Callout / Promo text with PDF Download link (Image 2) */}
+                                <div className="space-y-2 pt-1">
+                                  {cfData.calloutPromoText && (
+                                    <p className="italic text-slate-800 text-[13px] sm:text-[13.5px] leading-relaxed">
+                                      {cfData.calloutPromoText}
+                                    </p>
+                                  )}
+                                  <div className="pt-0.5">
+                                    <a
+                                      href={cfData.calloutPdfUrl || "#"}
+                                      onClick={(e) => {
+                                        if (!cfData.calloutPdfUrl || cfData.calloutPdfUrl === "#") {
+                                          e.preventDefault();
+                                          alert(`Downloading official courses & fee booklet for ${collegeShortName}...`);
+                                        }
+                                      }}
+                                      className="inline-flex items-center gap-1.5 text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13px] font-semibold hover:underline transition-colors"
+                                    >
+                                      <span className="text-red-500 font-bold">📕</span>
+                                      <span>Download Free PDF</span>
+                                    </a>
+                                  </div>
+                                </div>
+
+                                {/* Popular Courses Introductory Line (Image 3) */}
+                                {cfData.popularCoursesHeading && (
+                                  <p className="leading-relaxed pt-2 text-slate-800 font-medium">
+                                    {renderFormattedText(cfData.popularCoursesHeading)}
+                                  </p>
+                                )}
+
+                                {/* Table 2: Popular Courses & Total Tuition Fees Table (Image 3) */}
+                                {cfData.popularCourses && cfData.popularCourses.length > 0 && (
+                                  <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                      <thead>
+                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-dotted border-slate-300/80">
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-dotted border-slate-200/80">
+                                            Course
+                                          </th>
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 border-r border-dotted border-slate-200/80">
+                                            Total Tuition Fees
+                                          </th>
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900">
+                                            Total Fees
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody className="font-normal divide-y divide-dotted divide-slate-300/70">
+                                        {cfData.popularCourses.map((cRow, cIdx) => (
+                                          <tr key={cIdx} className="hover:bg-slate-50/70 transition-colors">
+                                            <td className="py-3 px-4 sm:px-5 font-medium border-r border-dotted border-slate-200/70">
+                                              <span className="text-[#1a73e8] hover:text-[#0b57d0] hover:underline cursor-pointer font-medium">
+                                                {cRow.courseName}
+                                              </span>
+                                              {cRow.coursesCount && (
+                                                <span className="text-slate-500 font-normal ml-1 text-xs">
+                                                  ({cRow.coursesCount})
+                                                </span>
+                                              )}
+                                            </td>
+                                            <td className="py-3 px-4 sm:px-5 text-slate-700 whitespace-nowrap border-r border-dotted border-slate-200/70">
+                                              {cRow.tuitionFees}
+                                            </td>
+                                            <td className="py-3 px-4 sm:px-5 text-slate-700 whitespace-nowrap">
+                                              {cRow.totalFees}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+
+                                {/* Estimated Note & Other Charges Heading (Image 4) */}
+                                <div className="space-y-1.5 pt-2">
+                                  {cfData.otherChargesNote && (
+                                    <p className="text-xs text-slate-500 font-normal">
+                                      {cfData.otherChargesNote}
+                                    </p>
+                                  )}
+                                  {cfData.otherChargesHeading && (
+                                    <p className="font-semibold text-slate-900 text-[13px] sm:text-[13.5px]">
+                                      {renderFormattedText(cfData.otherChargesHeading)}
+                                    </p>
+                                  )}
+                                </div>
+
+                                {/* Table 3: Other Charges Breakdown Table (Image 4) */}
+                                {cfData.otherCharges && cfData.otherCharges.length > 0 && (
+                                  <div className="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                      <thead>
+                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs sm:text-[13.5px] border-b border-dotted border-slate-300/80">
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 w-1/2 border-r border-dotted border-slate-200/80">
+                                            Components
+                                          </th>
+                                          <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-slate-900 w-1/2">
+                                            Amount
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody className="font-normal divide-y divide-dotted divide-slate-300/70">
+                                        {cfData.otherCharges.map((oRow, oIdx) => (
+                                          <tr key={oIdx} className="hover:bg-slate-50/70 transition-colors">
+                                            <td className="py-3 px-4 sm:px-5 border-r border-dotted border-slate-200/70 align-top">
+                                              <p className="font-medium text-slate-900">{oRow.component}</p>
+                                              {oRow.subtext && (
+                                                <p className="text-[11.5px] sm:text-xs text-slate-500 italic mt-0.5 leading-relaxed">
+                                                  {oRow.subtext}
+                                                </p>
+                                              )}
+                                            </td>
+                                            <td className="py-3 px-4 sm:px-5 text-slate-800 font-medium whitespace-nowrap align-top">
+                                              {oRow.amount}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+
+                                {/* Footer note & Read less toggle (Image 4) */}
+                                <div className="flex items-center justify-between gap-3 pt-3">
+                                  <p className="text-slate-800 text-xs sm:text-[13px] font-medium">
+                                    {renderFormattedText(cfData.footerNote || `Check more about ${collegeShortName} courses below:`)}
+                                  </p>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsCoursesArticleExpanded(false);
+                                      const el = document.getElementById("courses-section");
+                                      if (el) {
+                                        el.scrollIntoView({ behavior: "smooth", block: "start" });
+                                      }
+                                    }}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer shrink-0 transition-colors"
+                                  >
+                                    Read less
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
@@ -3268,102 +3770,422 @@ export default function CollegeDetailPage() {
 
                 {/* MODAL 5: COURSES & FEES */}
                 {activeMiniModal === "courses" && (
-                  <div className="space-y-3">
-                    <div className="max-h-72 overflow-y-auto space-y-3 pr-1">
-                      {tempData.courses.map((c, idx) => (
-                        <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 relative">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = tempData.courses.filter((_, i) => i !== idx);
-                              setTempData({ ...tempData, courses: updated });
-                            }}
-                            className="absolute top-2.5 right-2.5 p-1 text-red-500 hover:bg-red-100 rounded-lg"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                          <input
-                            type="text"
-                            value={c.name}
-                            onChange={(e) => {
-                              const updated = [...tempData.courses];
-                              updated[idx].name = e.target.value;
-                              setTempData({ ...tempData, courses: updated });
-                            }}
-                            placeholder="Course Name (e.g. B.Tech CSE)"
-                            className="w-5/6 px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold"
-                          />
-                          <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-4">
+                    {/* Part 1: Editorial Paragraphs & Heading */}
+                    <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                      <span className="text-xs font-black text-purple-900 uppercase tracking-wide">
+                        Courses & Fees Narrative
+                      </span>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Article Title
+                        </label>
+                        <input
+                          type="text"
+                          value={tempData.coursesFeesArticle?.title || `${tempData.name.split(" - ")[0]} Courses & Fees 2026`}
+                          onChange={(e) => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, title: e.target.value },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Paragraph 1 (Always Visible Preview)
+                        </label>
+                        <textarea
+                          rows={2.5}
+                          value={tempData.coursesFeesArticle?.introParagraph1 || getCollegeCoursesFeesArticle(tempData).introParagraph1 || ""}
+                          onChange={(e) => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, introParagraph1: e.target.value },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium resize-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                          Paragraph 2 (Expanded Full Text)
+                        </label>
+                        <textarea
+                          rows={2.5}
+                          value={tempData.coursesFeesArticle?.introParagraph2 || getCollegeCoursesFeesArticle(tempData).introParagraph2 || ""}
+                          onChange={(e) => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, introParagraph2: e.target.value },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium resize-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Part 2: Specialisations Table Editor */}
+                    <div className="p-3.5 bg-blue-50/50 border border-blue-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-blue-950 uppercase tracking-wide">
+                          Course Categories & Specialisations Table
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            const updated = [
+                              ...(cur.specialisations || []),
+                              { category: "New Programme Category", list: "Specialisation 1, Specialisation 2, Specialisation 3" },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, specialisations: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Category</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        {(tempData.coursesFeesArticle?.specialisations || getCollegeCoursesFeesArticle(tempData).specialisations || []).map((spec, sIdx) => (
+                          <div key={sIdx} className="p-2.5 bg-white border border-blue-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = (cur.specialisations || []).filter((_, i) => i !== sIdx);
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, specialisations: updated },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
                             <input
                               type="text"
-                              value={c.duration}
+                              value={spec.category}
                               onChange={(e) => {
-                                const updated = [...tempData.courses];
-                                updated[idx].duration = e.target.value;
-                                setTempData({ ...tempData, courses: updated });
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = [...(cur.specialisations || [])];
+                                updated[sIdx] = { ...updated[sIdx], category: e.target.value };
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, specialisations: updated },
+                                });
                               }}
-                              placeholder="Duration"
-                              className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                              placeholder="Category (e.g. BTech specialisations)"
+                              className="w-4/5 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
                             />
-                            <input
-                              type="text"
-                              value={c.fees}
+
+                            <textarea
+                              rows={2}
+                              value={spec.list}
                               onChange={(e) => {
-                                const updated = [...tempData.courses];
-                                updated[idx].fees = e.target.value;
-                                setTempData({ ...tempData, courses: updated });
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = [...(cur.specialisations || [])];
+                                updated[sIdx] = { ...updated[sIdx], list: e.target.value };
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, specialisations: updated },
+                                });
                               }}
-                              placeholder="Fees"
-                              className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
-                            />
-                            <input
-                              type="text"
-                              value={c.seats || ""}
-                              onChange={(e) => {
-                                const updated = [...tempData.courses];
-                                updated[idx].seats = e.target.value;
-                                setTempData({ ...tempData, courses: updated });
-                              }}
-                              placeholder="Seats"
-                              className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                              placeholder="Disciplines list..."
+                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none"
                             />
                           </div>
+                        ))}
+                      </div>
+
+                      {/* Promo Callout & PDF url */}
+                      <div className="pt-2 border-t border-blue-200/60 space-y-2">
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-0.5">Callout Promo Text</label>
                           <input
                             type="text"
-                            value={c.eligibility}
+                            value={tempData.coursesFeesArticle?.calloutPromoText || getCollegeCoursesFeesArticle(tempData).calloutPromoText || ""}
                             onChange={(e) => {
-                              const updated = [...tempData.courses];
-                              updated[idx].eligibility = e.target.value;
-                              setTempData({ ...tempData, courses: updated });
+                              const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                coursesFeesArticle: { ...cur, calloutPromoText: e.target.value },
+                              });
                             }}
-                            placeholder="Eligibility criteria & Exam"
-                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs"
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs italic"
                           />
                         </div>
-                      ))}
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-0.5">Download PDF Link URL</label>
+                          <input
+                            type="text"
+                            value={tempData.coursesFeesArticle?.calloutPdfUrl || "#"}
+                            onChange={(e) => {
+                              const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                coursesFeesArticle: { ...cur, calloutPdfUrl: e.target.value },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs text-blue-600"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setTempData({
-                          ...tempData,
-                          courses: [
-                            ...tempData.courses,
-                            {
-                              name: "New Degree Course",
-                              duration: "4 Years",
-                              fees: "₹2,00,000 / Yr",
-                              eligibility: "12th with 75% + Entrance Exam",
-                              seats: "60 Seats",
-                            },
-                          ],
-                        })
-                      }
-                      className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Add Course Row</span>
-                    </button>
+
+                    {/* Part 3: Popular Courses Fees Structure Table Editor */}
+                    <div className="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-indigo-950 uppercase tracking-wide">
+                          Popular Courses Fees Table (3 Columns)
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            const updated = [
+                              ...(cur.popularCourses || []),
+                              {
+                                courseName: "New Degree Course",
+                                coursesCount: "1 Courses",
+                                tuitionFees: "INR 1 lakh",
+                                totalFees: "INR 2 lakh",
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, popularCourses: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Course Fee Row</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        {(tempData.coursesFeesArticle?.popularCourses || getCollegeCoursesFeesArticle(tempData).popularCourses || []).map((row, rIdx) => (
+                          <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = (cur.popularCourses || []).filter((_, i) => i !== rIdx);
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, popularCourses: updated },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="grid grid-cols-2 gap-2 w-4/5">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Course Name</label>
+                                <input
+                                  type="text"
+                                  value={row.courseName}
+                                  onChange={(e) => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updated = [...(cur.popularCourses || [])];
+                                    updated[rIdx] = { ...updated[rIdx], courseName: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, popularCourses: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. B.E. / B.Tech"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-blue-600"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Courses Count</label>
+                                <input
+                                  type="text"
+                                  value={row.coursesCount || ""}
+                                  onChange={(e) => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updated = [...(cur.popularCourses || [])];
+                                    updated[rIdx] = { ...updated[rIdx], coursesCount: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, popularCourses: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. 15 Courses"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Total Tuition Fees</label>
+                                <input
+                                  type="text"
+                                  value={row.tuitionFees}
+                                  onChange={(e) => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updated = [...(cur.popularCourses || [])];
+                                    updated[rIdx] = { ...updated[rIdx], tuitionFees: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, popularCourses: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. INR 8 lakh"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Total Fees Range</label>
+                                <input
+                                  type="text"
+                                  value={row.totalFees}
+                                  onChange={(e) => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updated = [...(cur.popularCourses || [])];
+                                    updated[rIdx] = { ...updated[rIdx], totalFees: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, popularCourses: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. INR 11.26 lakh - INR 11.72 lakh"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Part 4: Other Charges Breakdown Table Editor */}
+                    <div className="p-3.5 bg-amber-50/50 border border-amber-200/80 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-amber-950 uppercase tracking-wide">
+                          Other Charges Fee Breakdown Table
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            const updated = [
+                              ...(cur.otherCharges || []),
+                              {
+                                component: "New Fee Component",
+                                subtext: "Explanation of what is included in this charge.",
+                                amount: "INR 50,000",
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, otherCharges: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Charge Row</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        {(tempData.coursesFeesArticle?.otherCharges || getCollegeCoursesFeesArticle(tempData).otherCharges || []).map((row, oIdx) => (
+                          <div key={oIdx} className="p-2.5 bg-white border border-amber-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = (cur.otherCharges || []).filter((_, i) => i !== oIdx);
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, otherCharges: updated },
+                                });
+                              }}
+                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="grid grid-cols-2 gap-2 w-4/5">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Component</label>
+                                <input
+                                  type="text"
+                                  value={row.component}
+                                  onChange={(e) => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updated = [...(cur.otherCharges || [])];
+                                    updated[oIdx] = { ...updated[oIdx], component: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, otherCharges: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. Hostel fees"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Amount Range</label>
+                                <input
+                                  type="text"
+                                  value={row.amount}
+                                  onChange={(e) => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updated = [...(cur.otherCharges || [])];
+                                    updated[oIdx] = { ...updated[oIdx], amount: e.target.value };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, otherCharges: updated },
+                                    });
+                                  }}
+                                  placeholder="e.g. INR 1.29 lakh - 3.1 lakh"
+                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Description Subtext</label>
+                              <textarea
+                                rows={2}
+                                value={row.subtext || ""}
+                                onChange={(e) => {
+                                  const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                  const updated = [...(cur.otherCharges || [])];
+                                  updated[oIdx] = { ...updated[oIdx], subtext: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    coursesFeesArticle: { ...cur, otherCharges: updated },
+                                  });
+                                }}
+                                placeholder="e.g. Meal Plan is included in this fee..."
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
