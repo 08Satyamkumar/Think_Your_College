@@ -778,8 +778,7 @@ Spanning over 320 acres in the historic and posh area of Hauz Khas in South Delh
 // Exact Shiksha Tabs List from User's Reference
 const SHIKSHA_NAV_TABS = [
   { id: "info", label: "College Info" },
-  { id: "courses", label: "Courses" },
-  { id: "fees", label: "Fees" },
+  { id: "courses", label: "Courses & Fees" },
   { id: "reviews", label: "Reviews" },
   { id: "admissions", label: "Admissions" },
   { id: "placements", label: "Placements" },
