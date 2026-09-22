@@ -779,6 +779,7 @@ type MiniModalId =
   | "info"
   | "highlights"
   | "courses"
+  | "course_summary_box"
   | "fees"
   | "reviews"
   | "admissions"
@@ -849,6 +850,14 @@ export default function CollegeDetailPage() {
   const [openCutoffFaqIdx, setOpenCutoffFaqIdx] = useState<number | null>(0);
   const [isCoursesCardOpen, setIsCoursesCardOpen] = useState(true);
   const [isCoursesArticleExpanded, setIsCoursesArticleExpanded] = useState(false);
+  const [openCourseGroupIndices, setOpenCourseGroupIndices] = useState<Record<number, boolean>>({});
+
+  const toggleCourseGroup = (idx: number) => {
+    setOpenCourseGroupIndices((prev) => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }));
+  };
 
   // Filter Modal & Applied Filter State for Cutoff Sub-Box
   const [isCutoffFilterModalOpen, setIsCutoffFilterModalOpen] = useState(false);
@@ -2905,80 +2914,6 @@ export default function CollegeDetailPage() {
                                   </p>
                                 )}
 
-                                {/* NEW SUB-BOX: UG / PG Course Summary Highlights Table (Exact User Image Reference) */}
-                                {cfData.courseSummaryGroups && cfData.courseSummaryGroups.length > 0 && (
-                                  <div className="space-y-4 pt-1">
-                                    {cfData.courseSummaryGroups.map((group, gIdx) => (
-                                      <div
-                                        key={gIdx}
-                                        className="rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.03)] overflow-hidden bg-white"
-                                      >
-                                        {/* Dark Navy Blue Banner Header */}
-                                        <div className="bg-[#07264a] text-white px-4 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between">
-                                          <h3 className="font-outfit font-bold text-xs sm:text-sm tracking-wide text-white">
-                                            {group.groupTitle}
-                                          </h3>
-                                        </div>
-
-                                        {/* Course Details Responsive Grid / Table */}
-                                        <div className="overflow-x-auto">
-                                          <div
-                                            className="grid min-w-[540px] sm:min-w-0"
-                                            style={{
-                                              gridTemplateColumns: `repeat(${Math.max(1, group.courses.length)}, minmax(0, 1fr))`,
-                                            }}
-                                          >
-                                            {/* Column Headers: Course Names */}
-                                            {group.courses.map((course, cIdx) => (
-                                              <div
-                                                key={`hdr-${cIdx}`}
-                                                className="px-4 sm:px-5 py-2.5 bg-white border-b border-r border-slate-300 last:border-r-0"
-                                              >
-                                                <h4 className="font-outfit font-bold text-slate-900 text-xs sm:text-[13.5px]">
-                                                  {course.courseName}
-                                                </h4>
-                                              </div>
-                                            ))}
-
-                                            {/* Column Bodies: Course Specs & Fees */}
-                                            {group.courses.map((course, cIdx) => (
-                                              <div
-                                                key={`body-${cIdx}`}
-                                                className="p-4 sm:p-5 bg-white border-r border-slate-300 last:border-r-0 space-y-2.5 text-xs sm:text-[13px] text-slate-700 font-normal leading-relaxed"
-                                              >
-                                                {course.firstYearFees && (
-                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                    <span className="text-slate-800 font-medium">1st Year Fees:</span>
-                                                    <span className="font-semibold text-slate-950">{course.firstYearFees}</span>
-                                                  </div>
-                                                )}
-                                                {course.eligibility && (
-                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                    <span className="text-slate-800 font-medium">Eligibility:</span>
-                                                    <span className="font-semibold text-slate-950">{course.eligibility}</span>
-                                                  </div>
-                                                )}
-                                                {course.duration && (
-                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                    <span className="text-slate-800 font-medium">Duration:</span>
-                                                    <span className="font-semibold text-slate-950">{course.duration}</span>
-                                                  </div>
-                                                )}
-                                                {course.selection && (
-                                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                                                    <span className="text-slate-800 font-medium">Selection:</span>
-                                                    <span className="font-semibold text-slate-950">{course.selection}</span>
-                                                  </div>
-                                                )}
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-
                                 {/* Table 1: Course Categories & Specialisations (Image 2) */}
                                 {cfData.specialisations && cfData.specialisations.length > 0 && (
                                   <div className="overflow-x-auto rounded-2xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
@@ -3142,6 +3077,134 @@ export default function CollegeDetailPage() {
                                     Read less
                                   </button>
                                 </div>
+                              </div>
+                            )}
+
+                            {/* SUB-BOX ACCORDION(S): UG / PG Courses Highlights Sub-Box (Exact User Reference Pattern) */}
+                            {cfData.courseSummaryGroups && cfData.courseSummaryGroups.length > 0 && (
+                              <div className="space-y-3.5 pt-2">
+                                {cfData.courseSummaryGroups.map((group, gIdx) => {
+                                  const isOpen = !!openCourseGroupIndices[gIdx];
+                                  return (
+                                    <div
+                                      key={gIdx}
+                                      className="bg-white/95 border border-slate-200/90 hover:border-slate-300/90 rounded-2xl overflow-hidden shadow-[0_2px_8px_-2px_rgba(0,0,0,0.03)] transition-all"
+                                    >
+                                      {/* Accordion Toggle Header */}
+                                      <div
+                                        onClick={() => toggleCourseGroup(gIdx)}
+                                        className="w-full p-4 sm:p-4.5 flex items-center justify-between text-left hover:bg-slate-50/70 transition-colors cursor-pointer group/hdr select-none"
+                                      >
+                                        <h3 className="text-sm sm:text-[15px] font-bold font-outfit text-slate-900 tracking-tight group-hover/hdr:text-blue-600 transition-colors">
+                                          {group.groupTitle}
+                                        </h3>
+
+                                        <div className="flex items-center gap-2">
+                                          {isAdmin && (
+                                            <button
+                                              type="button"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                openMiniModal("course_summary_box");
+                                              }}
+                                              className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shrink-0"
+                                            >
+                                              <Edit className="w-3.5 h-3.5" />
+                                              <span>Edit Table</span>
+                                            </button>
+                                          )}
+                                          <div className="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 group-hover/hdr:text-slate-900 border border-slate-200/60 transition-all shrink-0">
+                                            <ChevronDown
+                                              className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                                                isOpen ? "rotate-180 text-blue-600" : ""
+                                              }`}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Collapsible Accordion Body */}
+                                      <AnimatePresence initial={false}>
+                                        {isOpen && (
+                                          <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: "auto" }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            transition={{ duration: 0.25, ease: "easeInOut" }}
+                                            className="overflow-hidden"
+                                          >
+                                            <div className="px-4 sm:px-5 pb-5 pt-1">
+                                              {/* Exact Shiksha Sub-Box Table Card matching reference image */}
+                                              <div className="rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] overflow-hidden bg-white">
+                                                {/* Dark Navy Blue Banner Header */}
+                                                <div className="bg-[#07264a] text-white px-4 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between">
+                                                  <h4 className="font-outfit font-bold text-xs sm:text-sm tracking-wide text-white">
+                                                    {group.groupTitle}
+                                                  </h4>
+                                                </div>
+
+                                                {/* Table Body with Course Columns */}
+                                                <div className="overflow-x-auto">
+                                                  <div
+                                                    className="grid min-w-[540px] sm:min-w-0"
+                                                    style={{
+                                                      gridTemplateColumns: `repeat(${Math.max(1, group.courses.length)}, minmax(0, 1fr))`,
+                                                    }}
+                                                  >
+                                                    {/* Course Titles Row */}
+                                                    {group.courses.map((course, cIdx) => (
+                                                      <div
+                                                        key={`hdr-${cIdx}`}
+                                                        className="px-4 sm:px-5 py-2.5 bg-white border-b border-r border-slate-300 last:border-r-0"
+                                                      >
+                                                        <h5 className="font-outfit font-bold text-slate-900 text-xs sm:text-[13.5px]">
+                                                          {course.courseName}
+                                                        </h5>
+                                                      </div>
+                                                    ))}
+
+                                                    {/* Course Specs Rows */}
+                                                    {group.courses.map((course, cIdx) => (
+                                                      <div
+                                                        key={`body-${cIdx}`}
+                                                        className="p-4 sm:p-5 bg-white border-r border-slate-300 last:border-r-0 space-y-2.5 text-xs sm:text-[13px] text-slate-700 font-normal leading-relaxed"
+                                                      >
+                                                        {course.firstYearFees && (
+                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                            <span className="text-slate-800 font-medium">1st Year Fees:</span>
+                                                            <span className="font-semibold text-slate-950">{course.firstYearFees}</span>
+                                                          </div>
+                                                        )}
+                                                        {course.eligibility && (
+                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                            <span className="text-slate-800 font-medium">Eligibility:</span>
+                                                            <span className="font-semibold text-slate-950">{course.eligibility}</span>
+                                                          </div>
+                                                        )}
+                                                        {course.duration && (
+                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                            <span className="text-slate-800 font-medium">Duration:</span>
+                                                            <span className="font-semibold text-slate-950">{course.duration}</span>
+                                                          </div>
+                                                        )}
+                                                        {course.selection && (
+                                                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                                                            <span className="text-slate-800 font-medium">Selection:</span>
+                                                            <span className="font-semibold text-slate-950">{course.selection}</span>
+                                                          </div>
+                                                        )}
+                                                      </div>
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </motion.div>
+                                        )}
+                                      </AnimatePresence>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
@@ -3317,6 +3380,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "info" && "📝 Edit College Overview & Latest Updates"}
                     {activeMiniModal === "highlights" && "📊 Edit Key Highlights Table"}
                     {activeMiniModal === "courses" && "🎓 Edit Courses, Fees & Intake"}
+                    {activeMiniModal === "course_summary_box" && "🎓 Edit Course Highlights Sub-Boxes (UG / PG Courses)"}
                     {activeMiniModal === "fees" && "💰 Edit Tuition & Hostel Fees"}
                     {activeMiniModal === "placements" && "💼 Edit Placement Records & Recruiters"}
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
@@ -4598,6 +4662,271 @@ export default function CollegeDetailPage() {
                                 placeholder="e.g. Meal Plan is included in this fee..."
                                 className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none"
                               />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL 5.5: DEDICATED COURSE SUMMARY SUB-BOXES EDITOR */}
+                {activeMiniModal === "course_summary_box" && (
+                  <div className="space-y-4">
+                    <div className="p-3.5 bg-slate-900 text-white rounded-2xl space-y-3 shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-black uppercase tracking-wide text-sky-300">
+                            UG / PG Course Highlights Sub-Boxes
+                          </span>
+                          <p className="text-[11px] text-slate-300 font-medium mt-0.5">
+                            Manage sub-boxes, navy headers, fees, eligibility, duration and selection criteria
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                            const updated = [
+                              ...(cur.courseSummaryGroups || []),
+                              {
+                                groupTitle: "New Course Level (e.g. PG Courses)",
+                                courses: [
+                                  {
+                                    courseName: "MTech",
+                                    firstYearFees: "INR 1.50 Lakhs",
+                                    eligibility: "B.Tech with 60% marks",
+                                    duration: "2 years",
+                                    selection: "GATE + COAP Counselling",
+                                  },
+                                ],
+                              },
+                            ];
+                            setTempData({
+                              ...tempData,
+                              coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
+                            });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 text-[11px] font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Group</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                        {(tempData.coursesFeesArticle?.courseSummaryGroups || getCollegeCoursesFeesArticle(tempData).courseSummaryGroups || []).map((group, gIdx) => (
+                          <div key={gIdx} className="p-3 bg-slate-800/90 border border-slate-700 rounded-xl space-y-2.5 relative">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                const updated = (cur.courseSummaryGroups || []).filter((_, i) => i !== gIdx);
+                                setTempData({
+                                  ...tempData,
+                                  coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
+                                });
+                              }}
+                              className="absolute top-2.5 right-2.5 p-1 text-red-400 hover:bg-red-950/60 rounded-lg cursor-pointer transition-colors"
+                              title="Delete Sub-Box Group"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="w-3/4">
+                              <label className="text-[10px] font-bold text-sky-300 block mb-0.5">
+                                Sub-box Group Title (e.g. UG Courses)
+                              </label>
+                              <input
+                                type="text"
+                                value={group.groupTitle}
+                                onChange={(e) => {
+                                  const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                  const updated = [...(cur.courseSummaryGroups || [])];
+                                  updated[gIdx] = { ...updated[gIdx], groupTitle: e.target.value };
+                                  setTempData({
+                                    ...tempData,
+                                    coursesFeesArticle: { ...cur, courseSummaryGroups: updated },
+                                  });
+                                }}
+                                placeholder="e.g. UG Courses"
+                                className="w-full px-2.5 py-1 bg-slate-900 border border-slate-600 rounded-lg text-xs font-bold text-white placeholder-slate-500"
+                              />
+                            </div>
+
+                            {/* Courses in this Group */}
+                            <div className="space-y-2 pt-1 border-t border-slate-700/80">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[10.5px] font-bold text-slate-300">
+                                  Courses Columns in this Group ({group.courses.length})
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                    const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                    const currentCourses = updatedGroups[gIdx]?.courses || [];
+                                    updatedGroups[gIdx] = {
+                                      ...updatedGroups[gIdx],
+                                      courses: [
+                                        ...currentCourses,
+                                        {
+                                          courseName: "New Degree",
+                                          firstYearFees: "INR 2.0 Lakhs",
+                                          eligibility: "Class 12th with 75%",
+                                          duration: "4 years",
+                                          selection: "Entrance Exam",
+                                        },
+                                      ],
+                                    };
+                                    setTempData({
+                                      ...tempData,
+                                      coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                    });
+                                  }}
+                                  className="px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-sky-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-2.5 h-2.5" />
+                                  <span>Add Course Column</span>
+                                </button>
+                              </div>
+
+                              <div className="space-y-2">
+                                {group.courses.map((course, cIdx) => (
+                                  <div
+                                    key={cIdx}
+                                    className="p-2.5 bg-slate-900/90 border border-slate-700 rounded-lg space-y-1.5 relative"
+                                  >
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                        const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                        const currentCourses = (updatedGroups[gIdx]?.courses || []).filter((_, i) => i !== cIdx);
+                                        updatedGroups[gIdx] = {
+                                          ...updatedGroups[gIdx],
+                                          courses: currentCourses,
+                                        };
+                                        setTempData({
+                                          ...tempData,
+                                          coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                        });
+                                      }}
+                                      className="absolute top-2 right-2 p-1 text-red-400 hover:bg-red-950/60 rounded cursor-pointer"
+                                      title="Delete Course Column"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+
+                                    <div className="w-3/4">
+                                      <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Course Name</label>
+                                      <input
+                                        type="text"
+                                        value={course.courseName}
+                                        onChange={(e) => {
+                                          const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                          const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                          const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                          currentCourses[cIdx] = { ...currentCourses[cIdx], courseName: e.target.value };
+                                          updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                          setTempData({
+                                            ...tempData,
+                                            coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                          });
+                                        }}
+                                        placeholder="e.g. BTech"
+                                        className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs font-bold text-white placeholder-slate-500"
+                                      />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">1st Year Fees</label>
+                                        <input
+                                          type="text"
+                                          value={course.firstYearFees || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], firstYearFees: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. INR 2.55 Lakhs"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Duration</label>
+                                        <input
+                                          type="text"
+                                          value={course.duration || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], duration: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. 4 years"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Eligibility</label>
+                                        <input
+                                          type="text"
+                                          value={course.eligibility || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], eligibility: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. Class 10+2 with 75% marks"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-400 block mb-0.5">Selection</label>
+                                        <input
+                                          type="text"
+                                          value={course.selection || ""}
+                                          onChange={(e) => {
+                                            const cur = tempData.coursesFeesArticle || getCollegeCoursesFeesArticle(tempData);
+                                            const updatedGroups = [...(cur.courseSummaryGroups || [])];
+                                            const currentCourses = [...(updatedGroups[gIdx]?.courses || [])];
+                                            currentCourses[cIdx] = { ...currentCourses[cIdx], selection: e.target.value };
+                                            updatedGroups[gIdx] = { ...updatedGroups[gIdx], courses: currentCourses };
+                                            setTempData({
+                                              ...tempData,
+                                              coursesFeesArticle: { ...cur, courseSummaryGroups: updatedGroups },
+                                            });
+                                          }}
+                                          placeholder="e.g. JEE Advanced + JoSAA Counselling"
+                                          className="w-full px-2 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs text-white placeholder-slate-500"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         ))}
