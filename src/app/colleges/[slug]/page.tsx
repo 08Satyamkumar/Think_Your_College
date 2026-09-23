@@ -4173,20 +4173,20 @@ export default function CollegeDetailPage() {
                                   )}
                                 </div>
 
-                                <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white w-full">
+                                <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white w-full">
                                   {(() => {
                                     const cols = plData.statsTableCols && plData.statsTableCols.length > 0
                                       ? plData.statsTableCols
                                       : ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"];
                                     return (
-                                      <table className="w-full text-left border-collapse text-xs sm:text-[13px] min-w-max">
+                                      <table className="w-full text-left border-collapse text-xs sm:text-[13.5px] min-w-max">
                                         <thead>
-                                          <tr className="bg-[#07264a] text-white font-bold font-outfit text-xs sm:text-[13px]">
+                                          <tr className="bg-[#f0f5ff] text-[#1e293b] font-bold font-outfit text-xs sm:text-[13.5px]">
                                             {cols.map((colName, cIdx) => (
                                               <th
                                                 key={cIdx}
-                                                className={`py-3.5 px-4 sm:px-5 font-bold font-outfit text-white ${
-                                                  cIdx < cols.length - 1 ? "border-r border-slate-700/60" : ""
+                                                className={`py-3.5 px-4 sm:px-5 font-bold font-outfit text-slate-800 ${
+                                                  cIdx < cols.length - 1 ? "border-r border-slate-200/70" : ""
                                                 } ${cIdx === 0 ? "min-w-[200px] sm:min-w-[240px]" : "min-w-[180px] sm:min-w-[230px]"} whitespace-normal`}
                                               >
                                                 {colName}
@@ -4194,10 +4194,10 @@ export default function CollegeDetailPage() {
                                             ))}
                                           </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-slate-300 font-normal">
+                                        <tbody className="divide-y divide-dashed divide-slate-200 font-normal">
                                           {plData.statsTable.map((row, rIdx) => (
-                                            <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
-                                              <td className="py-3 px-4 sm:px-5 font-medium text-slate-800 border-r border-slate-300 min-w-[200px] sm:min-w-[240px]">
+                                            <tr key={rIdx} className="hover:bg-blue-50/20 transition-colors">
+                                              <td className="py-3.5 px-4 sm:px-5 font-normal sm:font-medium text-slate-800 border-r border-dashed border-slate-200/60 min-w-[200px] sm:min-w-[240px]">
                                                 {row.particular}
                                               </td>
                                               {cols.slice(1).map((_, cIdx) => {
@@ -4205,8 +4205,8 @@ export default function CollegeDetailPage() {
                                                 return (
                                                   <td
                                                     key={cIdx}
-                                                    className={`py-3 px-4 sm:px-5 text-slate-700 ${
-                                                      cIdx < cols.length - 2 ? "border-r border-slate-300" : ""
+                                                    className={`py-3.5 px-4 sm:px-5 text-slate-700 ${
+                                                      cIdx < cols.length - 2 ? "border-r border-dashed border-slate-200/60" : ""
                                                     } min-w-[180px] sm:min-w-[230px]`}
                                                   >
                                                     {cellVal}
