@@ -233,6 +233,12 @@ interface CourseAdmissionBoxItem {
   downloadDatesUrl?: string;
 }
 
+interface AdmissionFaqItem {
+  question: string;
+  answer: string;
+  upvotes?: number;
+}
+
 interface AdmissionArticleData {
   title?: string;
   introParagraph1?: string;
@@ -242,6 +248,10 @@ interface AdmissionArticleData {
   afterBulletsParagraph2?: string;
   footerNote?: string;
   courseAdmissionBoxes?: CourseAdmissionBoxItem[];
+  faqsHeading?: string;
+  faqsSubtitle?: string;
+  faqsButtonText?: string;
+  faqs?: AdmissionFaqItem[];
 }
 
 interface PlacementsArticleData {
@@ -1169,6 +1179,7 @@ type MiniModalId =
   | "placements_insights"
   | "placements_faqs"
   | "admission"
+  | "admission_faqs"
   | "cutoffs"
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
@@ -1382,7 +1393,8 @@ export default function CollegeDetailPage() {
   const [isAdmissionCardOpen, setIsAdmissionCardOpen] = useState(true);
   const [isAdmissionArticleExpanded, setIsAdmissionArticleExpanded] = useState(false);
   const [openAdmissionBoxes, setOpenAdmissionBoxes] = useState<Record<number, boolean>>({});
-  const [admissionModalTab, setAdmissionModalTab] = useState<"article" | "boxes">("article");
+  const [openAdmissionFaqIdx, setOpenAdmissionFaqIdx] = useState<number | null>(null);
+  const [admissionModalTab, setAdmissionModalTab] = useState<"article" | "boxes" | "faqs">("article");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -2326,6 +2338,27 @@ export default function CollegeDetailPage() {
       },
     ];
 
+    const defaultAdmissionFaqs: AdmissionFaqItem[] = [
+      {
+        question: `How do I get admission to ${shortName}?`,
+        answer: `Admission to undergraduate programs (such as BTech) at ${shortName} is based on rank in JEE Advanced followed by JoSAA counselling. For PG programs, admissions require qualifying GATE/CAT/CEED exams depending on the course.`,
+        upvotes: 2,
+      },
+      {
+        question: `Can I take admission at ${shortName} MTech course without GATE?`,
+        answer: `Direct admission for regular full-time MTech without GATE is generally offered only to IIT graduates with a CGPA of 8.0 or above. Other candidates must have a valid GATE score followed by written assessment or interview.`,
+      },
+      {
+        question: `Can I get Admission into ${shortName} without JEE Main?`,
+        answer: `For BTech courses, JEE Main is mandatory to qualify for JEE Advanced. However, other programs like B.Des accept UCEED, MBA accepts CAT, and MSc courses accept IIT JAM scores.`,
+      },
+      {
+        question: `How can I get BTech Admission at ${shortName}?`,
+        answer: `Candidates must pass Class 12 with minimum 75% marks (or top 20 percentile), qualify JEE Main, secure a top rank in JEE Advanced, and participate in JoSAA centralized seat allocation counselling.`,
+        upvotes: 5,
+      },
+    ];
+
     const currentArticle = college.admissionArticle as AdmissionArticleData | undefined;
     if (currentArticle) {
       return {
@@ -2334,6 +2367,13 @@ export default function CollegeDetailPage() {
           currentArticle.courseAdmissionBoxes && currentArticle.courseAdmissionBoxes.length > 0
             ? currentArticle.courseAdmissionBoxes
             : defaultCourseBoxes,
+        faqsHeading: currentArticle.faqsHeading || "Commonly asked questions",
+        faqsSubtitle: currentArticle.faqsSubtitle || "On Admissions",
+        faqsButtonText: currentArticle.faqsButtonText || "Admission Details for all courses",
+        faqs:
+          currentArticle.faqs && currentArticle.faqs.length > 0
+            ? currentArticle.faqs
+            : defaultAdmissionFaqs,
       };
     }
 
@@ -2359,6 +2399,10 @@ export default function CollegeDetailPage() {
       afterBulletsParagraph2: `Candidates are then required to fill out the **${shortName} MTech application form** through the official website. For MDes, MBA and PhD admissions, candidates are required to fill the form available on the official **${shortName}** portal.`,
       footerNote: `Check out course-specific details for **${shortName} admission 2026** below:`,
       courseAdmissionBoxes: defaultCourseBoxes,
+      faqsHeading: "Commonly asked questions",
+      faqsSubtitle: "On Admissions",
+      faqsButtonText: "Admission Details for all courses",
+      faqs: defaultAdmissionFaqs,
     };
   };
 
@@ -5285,6 +5329,109 @@ export default function CollegeDetailPage() {
                                 })}
                               </div>
                             )}
+
+                            {/* Separator line & COMMONLY ASKED QUESTIONS ON ADMISSIONS ACCORDION */}
+                            {admData.faqs && admData.faqs.length > 0 && (
+                              <div className="pt-5 mt-4 border-t border-slate-200/80 space-y-3.5">
+                                {/* Header Row with Yellow/Amber Q&A Badge */}
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-full bg-amber-100/90 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
+                                      <HelpCircle className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                      <h4 className="font-outfit font-bold text-sm sm:text-base text-slate-900 leading-tight">
+                                        {admData.faqsHeading || "Commonly asked questions"}
+                                      </h4>
+                                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                                        {admData.faqsSubtitle || "On Admissions"}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => openMiniModal("admission_faqs")}
+                                      className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                      <span>Edit Admission FAQs</span>
+                                    </button>
+                                  )}
+                                </div>
+
+                                {/* Accordion Questions List */}
+                                <div className="divide-y divide-slate-100/90 pt-1">
+                                  {admData.faqs.map((faq, fIdx) => {
+                                    const isOpen = openAdmissionFaqIdx === fIdx;
+                                    const rawQ = faq.question.trim();
+                                    const formattedQ = rawQ.startsWith("Q:") || rawQ.startsWith("Q.") ? rawQ : `Q: ${rawQ}`;
+                                    const rawA = faq.answer.trim();
+                                    const formattedA = rawA.startsWith("A:") || rawA.startsWith("A.") ? rawA : `A: ${rawA}`;
+
+                                    return (
+                                      <div key={fIdx} className="py-2.5 first:pt-1 last:pb-0">
+                                        <button
+                                          type="button"
+                                          onClick={() => setOpenAdmissionFaqIdx(isOpen ? null : fIdx)}
+                                          className="w-full flex items-center justify-between gap-3 text-left py-1 text-slate-800 hover:text-blue-600 transition-colors cursor-pointer group/q"
+                                        >
+                                          <span className="font-outfit font-bold text-[13px] sm:text-[13.5px] leading-snug group-hover/q:text-blue-600 transition-colors">
+                                            {formattedQ}
+                                          </span>
+                                          <div className="flex items-center gap-2 shrink-0">
+                                            {faq.upvotes && faq.upvotes > 0 ? (
+                                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/70 text-[11px] font-bold">
+                                                {faq.upvotes} 👍
+                                              </span>
+                                            ) : null}
+                                            <ChevronDown
+                                              className={`w-4 h-4 text-slate-500 group-hover/q:text-blue-600 transition-transform duration-200 ${
+                                                isOpen ? "rotate-180 text-blue-600" : ""
+                                              }`}
+                                            />
+                                          </div>
+                                        </button>
+
+                                        <AnimatePresence initial={false}>
+                                          {isOpen && (
+                                            <motion.div
+                                              initial={{ opacity: 0, height: 0 }}
+                                              animate={{ opacity: 1, height: "auto" }}
+                                              exit={{ opacity: 0, height: 0 }}
+                                              transition={{ duration: 0.22, ease: "easeInOut" }}
+                                              className="overflow-hidden"
+                                            >
+                                              <div className="pt-2 pb-2 pl-0.5 text-[13px] sm:text-[13.5px] text-slate-600 leading-relaxed font-normal">
+                                                <p className="leading-relaxed">
+                                                  {formattedA}
+                                                </p>
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+
+                                {/* Centered 'Admission Details for all courses ->' Outline Pill Button */}
+                                <div className="flex justify-center pt-3 pb-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setActiveTab("admissions");
+                                      document.getElementById("college-nav-tabs-bar")?.scrollIntoView({ behavior: "smooth" });
+                                    }}
+                                    className="px-6 py-2.5 rounded-full border border-[#2d114d] hover:border-[#1a0830] text-[#2d114d] hover:text-[#1a0830] hover:bg-purple-50/50 font-bold text-xs sm:text-[13.5px] transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-2xs cursor-pointer select-none"
+                                  >
+                                    <span>{admData.faqsButtonText || "Admission Details for all courses"}</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -5478,6 +5625,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "scholarships" && "🎁 Edit Scholarship Schemes"}
                     {activeMiniModal === "reviews" && "⭐ Edit Verified Reviews"}
                     {activeMiniModal === "admission" && "🎓 Edit Admission & Application Process"}
+                    {activeMiniModal === "admission_faqs" && "❓ Edit Admission FAQs"}
                   </h3>
                   <p className="text-xs text-purple-600 font-bold">
                     Editing: {collegeData.name} ({slug})
@@ -10395,6 +10543,17 @@ export default function CollegeDetailPage() {
                             >
                               Course Admission Boxes (${boxesList.length})
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => setAdmissionModalTab("faqs")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                admissionModalTab === "faqs"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              Admission FAQs (${(curAdm.faqs || []).length})
+                            </button>
                           </div>
 
                           {admissionModalTab === "article" ? (
@@ -10555,7 +10714,7 @@ export default function CollegeDetailPage() {
                                 />
                               </div>
                             </div>
-                          ) : (
+                          ) : admissionModalTab === "boxes" ? (
                             /* Tab 2: Course Admission Boxes */
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
@@ -10797,8 +10956,403 @@ export default function CollegeDetailPage() {
                                 ))}
                               </div>
                             </div>
+                          ) : (
+                            /* TAB 3: ADMISSION FAQS */
+                            <div className="p-3.5 bg-gradient-to-br from-purple-50/60 via-white to-purple-50/30 border border-purple-200/80 rounded-2xl space-y-3.5">
+                              {(() => {
+                                const faqs = curAdm.faqs || getCollegeAdmissionArticle(tempData).faqs || [];
+
+                                return (
+                                  <>
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <div>
+                                        <span className="text-xs font-black text-purple-950 uppercase tracking-wide block">
+                                          ❓ Commonly Asked Questions on Admissions
+                                        </span>
+                                        <span className="text-[10px] text-slate-500 font-medium">
+                                          Admission FAQs list ({faqs.length} questions)
+                                        </span>
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = [
+                                            ...faqs,
+                                            {
+                                              question: "",
+                                              answer: "",
+                                              upvotes: 0,
+                                            },
+                                          ];
+                                          setTempData({
+                                            ...tempData,
+                                            admissionArticle: {
+                                              ...curAdm,
+                                              faqs: updated,
+                                            },
+                                          });
+                                        }}
+                                        className="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                      >
+                                        <Plus className="w-3 h-3" />
+                                        <span>Add FAQ Item</span>
+                                      </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Section Main Title
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curAdm.faqsHeading || "Commonly asked questions"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, faqsHeading: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. Commonly asked questions"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Subtitle / Topic
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curAdm.faqsSubtitle || "On Admissions"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, faqsSubtitle: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. On Admissions"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Bottom Button Text
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curAdm.faqsButtonText || "Admission Details for all courses"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, faqsButtonText: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. Admission Details for all courses"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    {/* FAQ Questions List */}
+                                    <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+                                      {faqs.map((faq, fIdx) => (
+                                        <div
+                                          key={fIdx}
+                                          className="p-3 bg-white border border-slate-200/90 hover:border-purple-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                                        >
+                                          <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                              <span className="text-purple-700 font-black">Q{fIdx + 1}:</span> {faq.question ? (faq.question.length > 50 ? `${faq.question.slice(0, 50)}...` : faq.question) : "Untitled Question"}
+                                            </span>
+                                            <button
+                                              type="button"
+                                              onClick={() => {
+                                                const updated = faqs.filter((_, i) => i !== fIdx);
+                                                setTempData({
+                                                  ...tempData,
+                                                  admissionArticle: { ...curAdm, faqs: updated },
+                                                });
+                                              }}
+                                              className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                              title="Delete FAQ"
+                                            >
+                                              <Trash2 className="w-3 h-3" />
+                                              <span>Delete</span>
+                                            </button>
+                                          </div>
+
+                                          <div className="space-y-2">
+                                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                                              <div className="sm:col-span-3">
+                                                <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                                  Question *
+                                                </label>
+                                                <input
+                                                  type="text"
+                                                  required
+                                                  value={faq.question}
+                                                  onChange={(e) => {
+                                                    const updated = [...faqs];
+                                                    updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                                    setTempData({
+                                                      ...tempData,
+                                                      admissionArticle: { ...curAdm, faqs: updated },
+                                                    });
+                                                  }}
+                                                  placeholder="e.g. How do I get admission to IIT Delhi?"
+                                                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                                />
+                                              </div>
+                                              <div>
+                                                <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                                  Upvotes Badge (optional)
+                                                </label>
+                                                <input
+                                                  type="number"
+                                                  min={0}
+                                                  value={faq.upvotes || 0}
+                                                  onChange={(e) => {
+                                                    const updated = [...faqs];
+                                                    updated[fIdx] = { ...updated[fIdx], upvotes: parseInt(e.target.value) || 0 };
+                                                    setTempData({
+                                                      ...tempData,
+                                                      admissionArticle: { ...curAdm, faqs: updated },
+                                                    });
+                                                  }}
+                                                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                                />
+                                              </div>
+                                            </div>
+
+                                            <div>
+                                              <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                                Answer *
+                                              </label>
+                                              <textarea
+                                                rows={3}
+                                                required
+                                                value={faq.answer}
+                                                onChange={(e) => {
+                                                  const updated = [...faqs];
+                                                  updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                                  setTempData({
+                                                    ...tempData,
+                                                    admissionArticle: { ...curAdm, faqs: updated },
+                                                  });
+                                                }}
+                                                placeholder="e.g. Admission to undergraduate programs at IIT Delhi..."
+                                                className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none leading-relaxed"
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </div>
                           )}
                         </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: ADMISSION FAQS STANDALONE */}
+                {activeMiniModal === "admission_faqs" && (
+                  <div className="p-3.5 bg-gradient-to-br from-purple-50/60 via-white to-purple-50/30 border border-purple-200/80 rounded-2xl space-y-3.5">
+                    {(() => {
+                      const curAdm = tempData.admissionArticle || getCollegeAdmissionArticle(tempData);
+                      const faqs = curAdm.faqs || getCollegeAdmissionArticle(tempData).faqs || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-purple-950 uppercase tracking-wide block">
+                                ❓ Commonly Asked Questions on Admissions
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Admission FAQs list ({faqs.length} questions)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = [
+                                  ...faqs,
+                                  {
+                                    question: "",
+                                    answer: "",
+                                    upvotes: 0,
+                                  },
+                                ];
+                                setTempData({
+                                  ...tempData,
+                                  admissionArticle: {
+                                    ...curAdm,
+                                    faqs: updated,
+                                  },
+                                });
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add FAQ Item</span>
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Section Main Title
+                              </label>
+                              <input
+                                type="text"
+                                value={curAdm.faqsHeading || "Commonly asked questions"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    admissionArticle: { ...curAdm, faqsHeading: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Commonly asked questions"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Subtitle / Topic
+                              </label>
+                              <input
+                                type="text"
+                                value={curAdm.faqsSubtitle || "On Admissions"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    admissionArticle: { ...curAdm, faqsSubtitle: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. On Admissions"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Bottom Button Text
+                              </label>
+                              <input
+                                type="text"
+                                value={curAdm.faqsButtonText || "Admission Details for all courses"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    admissionArticle: { ...curAdm, faqsButtonText: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Admission Details for all courses"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                          </div>
+
+                          {/* FAQ Questions List */}
+                          <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+                            {faqs.map((faq, fIdx) => (
+                              <div
+                                key={fIdx}
+                                className="p-3 bg-white border border-slate-200/90 hover:border-purple-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                              >
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                    <span className="text-purple-700 font-black">Q{fIdx + 1}:</span> {faq.question ? (faq.question.length > 50 ? `${faq.question.slice(0, 50)}...` : faq.question) : "Untitled Question"}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = faqs.filter((_, i) => i !== fIdx);
+                                      setTempData({
+                                        ...tempData,
+                                        admissionArticle: { ...curAdm, faqs: updated },
+                                      });
+                                    }}
+                                    className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                    title="Delete FAQ"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                    <span>Delete</span>
+                                  </button>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                                    <div className="sm:col-span-3">
+                                      <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                        Question *
+                                      </label>
+                                      <input
+                                        type="text"
+                                        required
+                                        value={faq.question}
+                                        onChange={(e) => {
+                                          const updated = [...faqs];
+                                          updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            admissionArticle: { ...curAdm, faqs: updated },
+                                          });
+                                        }}
+                                        placeholder="e.g. How do I get admission to IIT Delhi?"
+                                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                        Upvotes Badge (optional)
+                                      </label>
+                                      <input
+                                        type="number"
+                                        min={0}
+                                        value={faq.upvotes || 0}
+                                        onChange={(e) => {
+                                          const updated = [...faqs];
+                                          updated[fIdx] = { ...updated[fIdx], upvotes: parseInt(e.target.value) || 0 };
+                                          setTempData({
+                                            ...tempData,
+                                            admissionArticle: { ...curAdm, faqs: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Answer *
+                                    </label>
+                                    <textarea
+                                      rows={3}
+                                      required
+                                      value={faq.answer}
+                                      onChange={(e) => {
+                                        const updated = [...faqs];
+                                        updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          admissionArticle: { ...curAdm, faqs: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. Admission to undergraduate programs at IIT Delhi..."
+                                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none leading-relaxed"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
                       );
                     })()}
                   </div>
