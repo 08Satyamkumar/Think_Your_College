@@ -4410,88 +4410,69 @@ export default function CollegeDetailPage() {
                               <div className="pt-3 border-t border-slate-200/70">
                                 <div className="flex items-center justify-between gap-2 mb-3">
                                   <div className="flex items-center gap-3">
-                                    {/* Animated Sunlight Lightbulb */}
-                                    <div className="relative flex items-center justify-center">
-                                      {/* Sunlight Glow Aura behind Bulb */}
+                                    {/* Animated Sunlight Lightbulb (5-Second On/Off Cycle) */}
+                                    <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11">
+                                      {/* Sunlight Glow Aura behind Bulb (Turns ON with radiant sunlight, turns completely OFF) */}
                                       <motion.div
                                         animate={{
-                                          scale: [1, 1.28, 1.05, 1.35, 1],
-                                          opacity: [0.35, 0.95, 0.45, 1, 0.35],
+                                          scale: [0.8, 0.8, 1.45, 1.35, 0.8, 0.8],
+                                          opacity: [0, 0, 0.95, 0.85, 0, 0],
                                         }}
                                         transition={{
-                                          duration: 3,
+                                          duration: 5,
                                           repeat: Infinity,
+                                          times: [0, 0.06, 0.18, 0.55, 0.68, 1],
                                           ease: "easeInOut",
                                         }}
-                                        className="absolute -inset-1.5 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-200 blur-md pointer-events-none"
+                                        className="absolute -inset-2 rounded-full bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-200 blur-lg pointer-events-none"
                                       />
                                       
                                       {/* Sunbeam Light Rays Flare */}
                                       <motion.div
                                         animate={{
-                                          rotate: [0, 180, 360],
-                                          opacity: [0.2, 0.7, 0.2],
+                                          rotate: [0, 30, 180, 220, 360, 360],
+                                          opacity: [0, 0, 0.75, 0.6, 0, 0],
+                                          scale: [0.8, 0.8, 1.5, 1.35, 0.8, 0.8],
                                         }}
                                         transition={{
-                                          duration: 8,
+                                          duration: 5,
                                           repeat: Infinity,
-                                          ease: "linear",
-                                        }}
-                                        className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-amber-400/30 via-yellow-200/40 to-transparent blur-sm pointer-events-none"
-                                      />
-
-                                      {/* Bulb Housing with Pulsing Sunlight Shadows */}
-                                      <motion.div
-                                        animate={{
-                                          boxShadow: [
-                                            "0 0 10px rgba(245, 158, 11, 0.35), 0 0 20px rgba(251, 191, 36, 0.2)",
-                                            "0 0 22px rgba(245, 158, 11, 0.85), 0 0 38px rgba(251, 191, 36, 0.6), inset 0 0 12px rgba(254, 240, 138, 0.8)",
-                                            "0 0 12px rgba(245, 158, 11, 0.4), 0 0 22px rgba(251, 191, 36, 0.25)",
-                                            "0 0 26px rgba(245, 158, 11, 0.95), 0 0 45px rgba(251, 191, 36, 0.7), inset 0 0 15px rgba(254, 240, 138, 0.9)",
-                                            "0 0 10px rgba(245, 158, 11, 0.35), 0 0 20px rgba(251, 191, 36, 0.2)",
-                                          ],
-                                          backgroundColor: [
-                                            "#fffbeb",
-                                            "#fef3c7",
-                                            "#fffbeb",
-                                            "#fef9c3",
-                                            "#fffbeb",
-                                          ],
-                                          borderColor: [
-                                            "rgba(251, 191, 36, 0.6)",
-                                            "rgba(245, 158, 11, 1)",
-                                            "rgba(251, 191, 36, 0.7)",
-                                            "rgba(234, 179, 8, 1)",
-                                            "rgba(251, 191, 36, 0.6)",
-                                          ]
-                                        }}
-                                        transition={{
-                                          duration: 3,
-                                          repeat: Infinity,
+                                          times: [0, 0.06, 0.18, 0.55, 0.68, 1],
                                           ease: "easeInOut",
                                         }}
-                                        className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-2xl border-2 flex items-center justify-center z-10"
-                                      >
+                                        className="absolute -inset-3 rounded-full bg-gradient-to-r from-amber-400/40 via-yellow-200/50 to-transparent blur-md pointer-events-none"
+                                      />
+
+                                      {/* Bulb Housing (NO BORDER) */}
+                                      <div className="relative w-full h-full flex items-center justify-center z-10">
+                                        {/* Inactive / OFF Bulb state */}
+                                        <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7 text-slate-400 stroke-[2] transition-opacity" />
+
+                                        {/* Active / ON Glowing Sunlight Bulb state */}
                                         <motion.div
                                           animate={{
-                                            scale: [0.95, 1.15, 0.98, 1.2, 0.95],
+                                            opacity: [0, 0, 1, 1, 0, 0],
+                                            scale: [0.92, 0.92, 1.15, 1.12, 0.92, 0.92],
                                             filter: [
-                                              "drop-shadow(0 0 2px rgba(245, 158, 11, 0.5))",
-                                              "drop-shadow(0 0 8px rgba(245, 158, 11, 0.95)) drop-shadow(0 0 14px rgba(253, 224, 71, 0.9))",
-                                              "drop-shadow(0 0 3px rgba(245, 158, 11, 0.6))",
-                                              "drop-shadow(0 0 10px rgba(245, 158, 11, 1)) drop-shadow(0 0 18px rgba(253, 224, 71, 0.95))",
-                                              "drop-shadow(0 0 2px rgba(245, 158, 11, 0.5))",
+                                              "drop-shadow(0 0 0px rgba(245, 158, 11, 0))",
+                                              "drop-shadow(0 0 0px rgba(245, 158, 11, 0))",
+                                              "drop-shadow(0 0 10px rgba(245, 158, 11, 1)) drop-shadow(0 0 22px rgba(253, 224, 71, 0.95))",
+                                              "drop-shadow(0 0 8px rgba(245, 158, 11, 0.9)) drop-shadow(0 0 18px rgba(253, 224, 71, 0.85))",
+                                              "drop-shadow(0 0 0px rgba(245, 158, 11, 0))",
+                                              "drop-shadow(0 0 0px rgba(245, 158, 11, 0))",
                                             ],
                                           }}
                                           transition={{
-                                            duration: 3,
+                                            duration: 5,
                                             repeat: Infinity,
+                                            times: [0, 0.06, 0.18, 0.55, 0.68, 1],
                                             ease: "easeInOut",
                                           }}
+                                          className="absolute inset-0 flex items-center justify-center pointer-events-none"
                                         >
                                           <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7 text-amber-500 fill-amber-400 stroke-[2.2]" />
                                         </motion.div>
-                                      </motion.div>
+                                      </div>
                                     </div>
 
                                     {/* Title with matching width underline */}
