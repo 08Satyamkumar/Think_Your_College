@@ -4574,13 +4574,15 @@ export default function CollegeDetailPage() {
                                       key={inIdx}
                                       className="shrink-0 p-4 bg-white border border-slate-200/90 hover:border-indigo-300 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.06)] min-w-[240px] sm:min-w-[270px] max-w-[290px] flex flex-col justify-start"
                                     >
-                                      <div className="flex items-start gap-2 mb-1.5">
-                                        <span className="text-indigo-600 font-black text-sm shrink-0 mt-0.5">✧</span>
-                                        <h5 className="font-outfit font-bold text-xs sm:text-[13px] text-slate-900 leading-snug">
+                                      <div className="flex items-start gap-2.5 mb-1.5">
+                                        <svg className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-indigo-600 shrink-0 mt-0.5 fill-indigo-600" viewBox="0 0 24 24">
+                                          <path d="M12 0L14.7 9.3L24 12L14.7 14.7L12 24L9.3 14.7L0 12L9.3 9.3L12 0Z" />
+                                        </svg>
+                                        <h5 className="font-outfit font-extrabold text-sm sm:text-[15px] text-slate-900 leading-snug">
                                           {insight.title}
                                         </h5>
                                       </div>
-                                      <p className="text-xs text-slate-600 font-medium pl-4 leading-relaxed">
+                                      <p className="text-xs text-slate-600 font-medium pl-6 leading-relaxed">
                                         {insight.description}
                                       </p>
                                     </div>
