@@ -52,6 +52,7 @@ import {
   Plus,
   Trash2,
   ArrowRight,
+  Lightbulb,
 } from "lucide-react";
 
 interface CourseItem {
@@ -206,6 +207,11 @@ interface TopRecruiterItem {
   websiteUrl?: string;
 }
 
+interface PlacementInsightItem {
+  title: string;
+  description: string;
+}
+
 interface PlacementsArticleData {
   title?: string;
   introParagraph?: string;
@@ -219,6 +225,9 @@ interface PlacementsArticleData {
   salaryTable?: CourseSalaryRow[];
   topRecruitersTitle?: string;
   topRecruiters?: TopRecruiterItem[];
+  insightsTitle?: string;
+  insightsSubtitle?: string;
+  insights?: PlacementInsightItem[];
 }
 
 interface FaqItem {
@@ -775,6 +784,38 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
         websiteUrl: "https://www.ti.com",
       },
     ],
+    insightsTitle: "Insights on Placements",
+    insightsSubtitle: "Based on 281 Student Responses",
+    insights: [
+      {
+        title: "Internships and industry projects",
+        description: "Students can work with faculty on research projects",
+      },
+      {
+        title: "Employment opportunities",
+        description: "Many students started their own start-ups",
+      },
+      {
+        title: "Higher studies preferences",
+        description: "Majority opted in outside India",
+      },
+      {
+        title: "Placement support",
+        description: "Organized & proactive placement process",
+      },
+      {
+        title: "Alumni network",
+        description: "Strong alumni network that help with placement opportunities",
+      },
+      {
+        title: "Entrepreneurship cell",
+        description: "Very Active and resourceful, college is also involved",
+      },
+      {
+        title: "Overall feeling of students",
+        description: "Love being in college",
+      },
+    ],
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -1028,6 +1069,7 @@ type MiniModalId =
   | "placements_stats"
   | "placements_salary"
   | "placements_recruiters"
+  | "placements_insights"
   | "cutoffs"
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
@@ -1236,7 +1278,7 @@ export default function CollegeDetailPage() {
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeMiniModal, setActiveMiniModal] = useState<MiniModalId>(null);
-  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary" | "recruiters">("article");
+  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary" | "recruiters" | "insights">("article");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -1969,6 +2011,37 @@ export default function CollegeDetailPage() {
       },
     ];
 
+    const defaultPlacementInsights: PlacementInsightItem[] = [
+      {
+        title: "Internships and industry projects",
+        description: "Students can work with faculty on research projects",
+      },
+      {
+        title: "Employment opportunities",
+        description: "Many students started their own start-ups",
+      },
+      {
+        title: "Higher studies preferences",
+        description: "Majority opted in outside India",
+      },
+      {
+        title: "Placement support",
+        description: "Organized & proactive placement process",
+      },
+      {
+        title: "Alumni network",
+        description: "Strong alumni network that help with placement opportunities",
+      },
+      {
+        title: "Entrepreneurship cell",
+        description: "Very Active and resourceful, college is also involved",
+      },
+      {
+        title: "Overall feeling of students",
+        description: "Love being in college",
+      },
+    ];
+
     if (college.placementsArticle) {
       return {
         title: college.placementsArticle.title || `${shortName} Placements 2026`,
@@ -1997,6 +2070,12 @@ export default function CollegeDetailPage() {
           college.placementsArticle.topRecruiters && college.placementsArticle.topRecruiters.length > 0
             ? college.placementsArticle.topRecruiters
             : defaultTopRecruitersList,
+        insightsTitle: college.placementsArticle.insightsTitle || "Insights on Placements",
+        insightsSubtitle: college.placementsArticle.insightsSubtitle || "Based on 281 Student Responses",
+        insights:
+          college.placementsArticle.insights && college.placementsArticle.insights.length > 0
+            ? college.placementsArticle.insights
+            : defaultPlacementInsights,
       };
     }
 
@@ -2013,6 +2092,9 @@ export default function CollegeDetailPage() {
       salaryTable: defaultSalaryTable,
       topRecruitersTitle: "Top Recruiters",
       topRecruiters: defaultTopRecruitersList,
+      insightsTitle: "Insights on Placements",
+      insightsSubtitle: "Based on 281 Student Responses",
+      insights: defaultPlacementInsights,
     };
   };
 
@@ -4322,6 +4404,91 @@ export default function CollegeDetailPage() {
                                 </div>
                               </div>
                             )}
+
+                            {/* Separator line & Insights on Placements Section */}
+                            {plData.insights && plData.insights.length > 0 && (
+                              <div className="pt-3 border-t border-slate-200/70">
+                                <div className="flex items-center justify-between gap-2 mb-3">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-full bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-500 shadow-2xs">
+                                      <Lightbulb className="w-4 h-4 text-amber-500" />
+                                    </div>
+                                    <div>
+                                      <h4 className="font-outfit font-black text-sm sm:text-[15px] text-slate-900 leading-tight">
+                                        {plData.insightsTitle || "Insights on Placements"}
+                                      </h4>
+                                      {plData.insightsSubtitle && (
+                                        <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+                                          {plData.insightsSubtitle}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center gap-1.5">
+                                    {isAdmin && (
+                                      <button
+                                        type="button"
+                                        onClick={() => openMiniModal("placements_insights")}
+                                        className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                      >
+                                        <Edit className="w-3 h-3" />
+                                        <span>Edit Insights</span>
+                                      </button>
+                                    )}
+
+                                    {/* Slider Navigation Arrows */}
+                                    <div className="flex items-center gap-1">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const el = document.getElementById("insights-scroll-list");
+                                          if (el) el.scrollBy({ left: -280, behavior: "smooth" });
+                                        }}
+                                        className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-90"
+                                        title="Scroll Left"
+                                      >
+                                        <ChevronLeft className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const el = document.getElementById("insights-scroll-list");
+                                          if (el) el.scrollBy({ left: 280, behavior: "smooth" });
+                                        }}
+                                        className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-90"
+                                        title="Scroll Right"
+                                      >
+                                        <ChevronRight className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Horizontal Scroll Cards Container */}
+                                <div
+                                  id="insights-scroll-list"
+                                  className="flex items-stretch gap-3 overflow-x-auto custom-scrollbar py-2 px-0.5 scroll-smooth"
+                                >
+                                  {plData.insights.map((insight, inIdx) => (
+                                    <div
+                                      key={inIdx}
+                                      className="shrink-0 p-4 bg-white border border-slate-200/90 hover:border-indigo-300 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.06)] min-w-[240px] sm:min-w-[270px] max-w-[290px] flex flex-col justify-start"
+                                    >
+                                      <div className="flex items-start gap-2 mb-1.5">
+                                        <span className="text-indigo-600 font-black text-sm shrink-0 mt-0.5">✧</span>
+                                        <h5 className="font-outfit font-bold text-xs sm:text-[13px] text-slate-900 leading-snug">
+                                          {insight.title}
+                                        </h5>
+                                      </div>
+                                      <p className="text-xs text-slate-600 font-medium pl-4 leading-relaxed">
+                                        {insight.description}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -4502,6 +4669,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "placements_stats" && "📊 Edit Placement Statistics Highlights Table"}
                     {activeMiniModal === "placements_salary" && "💰 Edit Course-wise Median Salary Table"}
                     {activeMiniModal === "placements_recruiters" && "🏢 Edit Top Recruiters & Company Logos"}
+                    {activeMiniModal === "placements_insights" && "💡 Edit Placement Student Insights"}
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
                     {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
                     {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
@@ -7264,6 +7432,17 @@ export default function CollegeDetailPage() {
                       >
                         🏢 4. Top Recruiters
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setPlacementsModalTab("insights")}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          placementsModalTab === "insights"
+                            ? "bg-white text-indigo-900 shadow-2xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        💡 5. Student Insights
+                      </button>
                     </div>
 
                     {/* Tab 1: Article Content */}
@@ -8094,6 +8273,166 @@ export default function CollegeDetailPage() {
                         })()}
                       </div>
                     )}
+
+                    {/* Tab 5: Student Insights */}
+                    {placementsModalTab === "insights" && (
+                      <div className="p-3.5 bg-gradient-to-br from-amber-50/60 via-white to-orange-50/40 border border-amber-200/80 rounded-2xl space-y-3.5">
+                        {(() => {
+                          const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                          const insights = curArticle.insights || getCollegePlacementsArticle(tempData).insights || [];
+
+                          return (
+                            <>
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                  <span className="text-xs font-black text-amber-950 uppercase tracking-wide block">
+                                    💡 Placement Student Insights & Feedback
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 font-medium">
+                                    Student response quotes & experiential insight cards ({insights.length} cards)
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = [
+                                      ...insights,
+                                      {
+                                        title: "New Student Insight",
+                                        description: "Insight description regarding campus placement experience...",
+                                      },
+                                    ];
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: {
+                                        ...curArticle,
+                                        insights: updated,
+                                      },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Insight Card</span>
+                                </button>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                    Section Title
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={curArticle.insightsTitle || "Insights on Placements"}
+                                    onChange={(e) => {
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, insightsTitle: e.target.value },
+                                      });
+                                    }}
+                                    placeholder="e.g. Insights on Placements"
+                                    className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                    Subtitle / Survey Note
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={curArticle.insightsSubtitle || "Based on 281 Student Responses"}
+                                    onChange={(e) => {
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, insightsSubtitle: e.target.value },
+                                      });
+                                    }}
+                                    placeholder="e.g. Based on 281 Student Responses"
+                                    className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Insights Items List */}
+                              <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                                {insights.map((ins, inIdx) => (
+                                  <div
+                                    key={inIdx}
+                                    className="p-3 bg-white border border-slate-200/90 hover:border-amber-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                                  >
+                                    <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                      <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                        <span className="text-amber-500 font-black">✧</span> #{inIdx + 1} {ins.title || "Untitled Card"}
+                                      </span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = insights.filter((_, i) => i !== inIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, insights: updated },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                        title="Remove Insight Card"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                        <span>Remove</span>
+                                      </button>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                          Card Title / Topic *
+                                        </label>
+                                        <input
+                                          type="text"
+                                          required
+                                          value={ins.title}
+                                          onChange={(e) => {
+                                            const updated = [...insights];
+                                            updated[inIdx] = { ...updated[inIdx], title: e.target.value };
+                                            setTempData({
+                                              ...tempData,
+                                              placementsArticle: { ...curArticle, insights: updated },
+                                            });
+                                          }}
+                                          placeholder="e.g. Internships and industry projects"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                          Description / Student Feedback *
+                                        </label>
+                                        <textarea
+                                          rows={2}
+                                          required
+                                          value={ins.description}
+                                          onChange={(e) => {
+                                            const updated = [...insights];
+                                            updated[inIdx] = { ...updated[inIdx], description: e.target.value };
+                                            setTempData({
+                                              ...tempData,
+                                              placementsArticle: { ...curArticle, insights: updated },
+                                            });
+                                          }}
+                                          placeholder="e.g. Students can work with faculty on research projects"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -8274,6 +8613,166 @@ export default function CollegeDetailPage() {
                                 </div>
                               );
                             })}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: PLACEMENT STUDENT INSIGHTS (INDIVIDUAL) */}
+                {activeMiniModal === "placements_insights" && (
+                  <div className="p-3.5 bg-gradient-to-br from-amber-50/60 via-white to-orange-50/40 border border-amber-200/80 rounded-2xl space-y-3.5">
+                    {(() => {
+                      const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                      const insights = curArticle.insights || getCollegePlacementsArticle(tempData).insights || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-amber-950 uppercase tracking-wide block">
+                                💡 Placement Student Insights & Feedback
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Student response quotes & experiential insight cards ({insights.length} cards)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = [
+                                  ...insights,
+                                  {
+                                    title: "New Student Insight",
+                                    description: "Insight description regarding campus placement experience...",
+                                  },
+                                ];
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: {
+                                    ...curArticle,
+                                    insights: updated,
+                                  },
+                                });
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add Insight Card</span>
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Section Title
+                              </label>
+                              <input
+                                type="text"
+                                value={curArticle.insightsTitle || "Insights on Placements"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...curArticle, insightsTitle: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Insights on Placements"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Subtitle / Survey Note
+                              </label>
+                              <input
+                                type="text"
+                                value={curArticle.insightsSubtitle || "Based on 281 Student Responses"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...curArticle, insightsSubtitle: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Based on 281 Student Responses"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Insights Items List */}
+                          <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                            {insights.map((ins, inIdx) => (
+                              <div
+                                key={inIdx}
+                                className="p-3 bg-white border border-slate-200/90 hover:border-amber-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                              >
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                    <span className="text-amber-500 font-black">✧</span> #{inIdx + 1} {ins.title || "Untitled Card"}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = insights.filter((_, i) => i !== inIdx);
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, insights: updated },
+                                      });
+                                    }}
+                                    className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                    title="Remove Insight Card"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                    <span>Remove</span>
+                                  </button>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Card Title / Topic *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      required
+                                      value={ins.title}
+                                      onChange={(e) => {
+                                        const updated = [...insights];
+                                        updated[inIdx] = { ...updated[inIdx], title: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, insights: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. Internships and industry projects"
+                                      className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                    />
+                                  </div>
+
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Description / Student Feedback *
+                                    </label>
+                                    <textarea
+                                      rows={2}
+                                      required
+                                      value={ins.description}
+                                      onChange={(e) => {
+                                        const updated = [...insights];
+                                        updated[inIdx] = { ...updated[inIdx], description: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, insights: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. Students can work with faculty on research projects"
+                                      className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </>
                       );
