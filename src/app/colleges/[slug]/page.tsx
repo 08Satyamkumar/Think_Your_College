@@ -53,6 +53,7 @@ import {
   Trash2,
   ArrowRight,
   Lightbulb,
+  Bell,
 } from "lucide-react";
 
 interface CourseItem {
@@ -216,6 +217,22 @@ interface AdmissionBulletItem {
   text: string;
 }
 
+interface AdmissionDateEventRow {
+  dates: string;
+  event: string;
+  isTentative?: boolean;
+}
+
+interface CourseAdmissionBoxItem {
+  id?: string;
+  courseTitle: string;
+  courseMeta: string;
+  eligibilityBullets: string[];
+  datesHeading?: string;
+  datesTable: AdmissionDateEventRow[];
+  downloadDatesUrl?: string;
+}
+
 interface AdmissionArticleData {
   title?: string;
   introParagraph1?: string;
@@ -224,6 +241,7 @@ interface AdmissionArticleData {
   afterBulletsParagraph1?: string;
   afterBulletsParagraph2?: string;
   footerNote?: string;
+  courseAdmissionBoxes?: CourseAdmissionBoxItem[];
 }
 
 interface PlacementsArticleData {
@@ -1363,6 +1381,8 @@ export default function CollegeDetailPage() {
   const [openPlacementsFaqIdx, setOpenPlacementsFaqIdx] = useState<number | null>(null);
   const [isAdmissionCardOpen, setIsAdmissionCardOpen] = useState(true);
   const [isAdmissionArticleExpanded, setIsAdmissionArticleExpanded] = useState(false);
+  const [openAdmissionBoxes, setOpenAdmissionBoxes] = useState<Record<number, boolean>>({});
+  const [admissionModalTab, setAdmissionModalTab] = useState<"article" | "boxes">("article");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -2225,6 +2245,98 @@ export default function CollegeDetailPage() {
       return college.admissionArticle;
     }
 
+    const defaultCourseBoxes: CourseAdmissionBoxItem[] = [
+      {
+        courseTitle: "B.E. / B.Tech Admissions 2026",
+        courseMeta: "17 Courses • 4 years-5 years",
+        eligibilityBullets: [
+          "10+2 with 75% aggregate",
+          "Accepting Exams: **JEE Main, JEE Advanced, UCEED**",
+        ],
+        datesHeading: "Important dates",
+        datesTable: [
+          {
+            dates: "Oct '26 - Nov '26",
+            event: "JEE Main 2027 Registration Session 1",
+            isTentative: true,
+          },
+          {
+            dates: "Jan '27",
+            event: "JEE Main Admit Card 2027 Session 1",
+            isTentative: true,
+          },
+          {
+            dates: "22 Jan '27 - 24 Jan '27",
+            event: "JEE Main 2027 Exam Date Session 1",
+            isTentative: false,
+          },
+        ],
+      },
+      {
+        courseTitle: "M.E. / M.Tech Admissions 2026",
+        courseMeta: "45 Courses • 2 years",
+        eligibilityBullets: [
+          "Bachelor degree in relevant engineering discipline with minimum 60% aggregate or 6.0 CGPA",
+          "Accepting Exams: **GATE, COAP Counselling**",
+        ],
+        datesHeading: "Important dates",
+        datesTable: [
+          {
+            dates: "Aug '26 - Sep '26",
+            event: "GATE 2027 Application Form Window",
+            isTentative: true,
+          },
+          {
+            dates: "Jan '27",
+            event: "GATE 2027 Admit Card Download",
+            isTentative: false,
+          },
+          {
+            dates: "Feb '27",
+            event: "GATE 2027 Examination Dates",
+            isTentative: false,
+          },
+        ],
+      },
+      {
+        courseTitle: "MBA / PGDM Admissions 2026",
+        courseMeta: "2 Courses • 2 years",
+        eligibilityBullets: [
+          "Graduation degree in any stream with minimum 60% marks or equivalent CGPA",
+          "Accepting Exams: **CAT, Written Test / Personal Interview (PI)**",
+        ],
+        datesHeading: "Important dates",
+        datesTable: [
+          {
+            dates: "Aug '26 - Sep '26",
+            event: "CAT 2026 Online Registration Window",
+            isTentative: false,
+          },
+          {
+            dates: "Oct '26",
+            event: "CAT 2026 Admit Card Available",
+            isTentative: false,
+          },
+          {
+            dates: "Nov '26",
+            event: "CAT 2026 Entrance Examination",
+            isTentative: false,
+          },
+        ],
+      },
+    ];
+
+    const currentArticle = college.admissionArticle as AdmissionArticleData | undefined;
+    if (currentArticle) {
+      return {
+        ...currentArticle,
+        courseAdmissionBoxes:
+          currentArticle.courseAdmissionBoxes && currentArticle.courseAdmissionBoxes.length > 0
+            ? currentArticle.courseAdmissionBoxes
+            : defaultCourseBoxes,
+      };
+    }
+
     return {
       title: `${shortName} Admission & Application Process 2026`,
       introParagraph1: `**${shortName} offers UG, PG, and doctoral research courses**, like **BTech, BSc, BDes, MTech, MSc, MBA, MDes** and **PhD**. Among ${shortName} aspirants, **BTech** and **MTech** programmes are the most popular. The institute **does not offer direct admissions**. **${shortName} course admissions** are based on entrance exams, followed by counselling or a personal interview (PI), depending on the course.`,
@@ -2246,6 +2358,7 @@ export default function CollegeDetailPage() {
       afterBulletsParagraph1: `**${shortName} Admission 2026** are entrance based. **${shortName} Application 2026 window** opens through its official website, i.e. ${officialWebsite}. For **${shortName} BTech admissions**, candidates are required to apply through JoSAA. **${shortName} MTech Admissions** are conducted through COAP.`,
       afterBulletsParagraph2: `Candidates are then required to fill out the **${shortName} MTech application form** through the official website. For MDes, MBA and PhD admissions, candidates are required to fill the form available on the official **${shortName}** portal.`,
       footerNote: `Check out course-specific details for **${shortName} admission 2026** below:`,
+      courseAdmissionBoxes: defaultCourseBoxes,
     };
   };
 
@@ -5019,6 +5132,159 @@ export default function CollegeDetailPage() {
                                 </div>
                               </div>
                             )}
+
+                            {/* COURSE ADMISSION ACCORDION BOXES LIST */}
+                            {admData.courseAdmissionBoxes && admData.courseAdmissionBoxes.length > 0 && (
+                              <div className="pt-3 space-y-3">
+                                {admData.courseAdmissionBoxes.map((box, bIdx) => {
+                                  const isBoxOpen = openAdmissionBoxes[bIdx] ?? false;
+
+                                  return (
+                                    <div
+                                      key={bIdx}
+                                      className="rounded-2xl border border-slate-200/90 bg-white overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-all"
+                                    >
+                                      {/* Box Header */}
+                                      <div
+                                        onClick={() => {
+                                          setOpenAdmissionBoxes((prev) => ({
+                                            ...prev,
+                                            [bIdx]: !prev[bIdx],
+                                          }));
+                                        }}
+                                        className="w-full p-4 sm:p-5 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50/60 transition-colors select-none group/boxhdr"
+                                      >
+                                        <div>
+                                          <h4 className="font-outfit font-extrabold text-base sm:text-lg text-slate-900 group-hover/boxhdr:text-blue-600 transition-colors leading-tight">
+                                            {box.courseTitle}
+                                          </h4>
+                                          {box.courseMeta && (
+                                            <p className="text-xs text-slate-500 font-medium mt-1">
+                                              {box.courseMeta}
+                                            </p>
+                                          )}
+                                        </div>
+
+                                        <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500 group-hover/boxhdr:text-slate-900 border border-slate-200/60 transition-all shrink-0">
+                                          <ChevronDown
+                                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                                              isBoxOpen ? "rotate-180 text-blue-600" : ""
+                                            }`}
+                                          />
+                                        </div>
+                                      </div>
+
+                                      {/* Collapsible Box Body */}
+                                      <AnimatePresence initial={false}>
+                                        {isBoxOpen && (
+                                          <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: "auto" }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            transition={{ duration: 0.25, ease: "easeInOut" }}
+                                            className="overflow-hidden border-t border-slate-100"
+                                          >
+                                            <div className="p-4 sm:p-5 pt-3 space-y-4">
+                                              {/* Eligibility Section */}
+                                              {box.eligibilityBullets && box.eligibilityBullets.length > 0 && (
+                                                <div className="space-y-2">
+                                                  <div className="flex items-center gap-2 font-outfit font-bold text-sm sm:text-[14.5px] text-slate-900">
+                                                    <CheckCircle2 className="w-4 h-4 text-slate-700 shrink-0" />
+                                                    <span>Eligibility</span>
+                                                  </div>
+                                                  <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+                                                    {box.eligibilityBullets.map((el, elIdx) => (
+                                                      <li key={elIdx} className="pl-1">
+                                                        {renderFormattedText(el)}
+                                                      </li>
+                                                    ))}
+                                                  </ul>
+                                                </div>
+                                              )}
+
+                                              {/* Important Dates Section */}
+                                              <div className="space-y-3 pt-1">
+                                                <div className="flex items-center justify-between gap-3">
+                                                  <div className="flex items-center gap-2 font-outfit font-bold text-sm sm:text-[14.5px] text-slate-900">
+                                                    <Calendar className="w-4 h-4 text-slate-700 shrink-0" />
+                                                    <span>{box.datesHeading || "Important dates"}</span>
+                                                  </div>
+
+                                                  {/* Green 'Keep Me Notified' Button */}
+                                                  <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                      e.stopPropagation();
+                                                      alert("Notification alert enabled for " + box.courseTitle + "! You will receive date updates.");
+                                                    }}
+                                                    className="px-4 py-1.5 rounded-full bg-[#00a859] hover:bg-[#00964e] text-white text-xs sm:text-[12.5px] font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer select-none"
+                                                  >
+                                                    <Bell className="w-3.5 h-3.5 fill-white" />
+                                                    <span>Keep Me Notified</span>
+                                                  </button>
+                                                </div>
+
+                                                {/* Dates & Events Table */}
+                                                {box.datesTable && box.datesTable.length > 0 && (
+                                                  <div className="overflow-x-auto rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                                    <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                                      <thead>
+                                                        <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs border-b border-slate-200/80">
+                                                          <th className="py-2.5 px-4 font-bold font-outfit text-slate-900 w-1/3 border-r border-slate-200/80">
+                                                            Dates
+                                                          </th>
+                                                          <th className="py-2.5 px-4 font-bold font-outfit text-slate-900 w-2/3">
+                                                            Events
+                                                          </th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody className="divide-y divide-slate-100">
+                                                        {box.datesTable.map((dRow, dIdx) => (
+                                                          <tr key={dIdx} className="hover:bg-slate-50/70 transition-colors">
+                                                            <td className="py-3 px-4 font-semibold text-slate-900 whitespace-nowrap align-middle border-r border-slate-100">
+                                                              {dRow.dates}
+                                                            </td>
+                                                            <td className="py-3 px-4 text-slate-700 align-middle">
+                                                              <div className="flex flex-wrap items-center gap-2">
+                                                                <span>{dRow.event}</span>
+                                                                {dRow.isTentative && (
+                                                                  <span className="px-2 py-0.5 rounded-md bg-[#5c94e8] text-white text-[10px] font-bold shadow-2xs">
+                                                                    Tentative
+                                                                  </span>
+                                                                )}
+                                                              </div>
+                                                            </td>
+                                                          </tr>
+                                                        ))}
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                )}
+
+                                                {/* Centered 'Download dates' Outline Button */}
+                                                <div className="flex justify-center pt-3 pb-0.5">
+                                                  <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                      e.stopPropagation();
+                                                      alert("Dates schedule downloaded for " + box.courseTitle);
+                                                    }}
+                                                    className="px-5 py-2 rounded-full border border-slate-700/80 hover:border-slate-950 text-slate-800 hover:text-slate-950 font-bold text-xs sm:text-[13px] transition-all duration-200 active:scale-95 flex items-center gap-1.5 shadow-2xs hover:bg-slate-50 cursor-pointer select-none"
+                                                  >
+                                                    <span>Download dates</span>
+                                                    <Download className="w-3.5 h-3.5" />
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </motion.div>
+                                        )}
+                                      </AnimatePresence>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -5210,6 +5476,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "qa" && "❓ Edit Student Q&A FAQs"}
                     {activeMiniModal === "scholarships" && "🎁 Edit Scholarship Schemes"}
                     {activeMiniModal === "reviews" && "⭐ Edit Verified Reviews"}
+                    {activeMiniModal === "admission" && "🎓 Edit Admission & Application Process"}
                   </h3>
                   <p className="text-xs text-purple-600 font-bold">
                     Editing: {collegeData.name} ({slug})
@@ -9933,6 +10200,450 @@ export default function CollegeDetailPage() {
                 )}
 
                 {/* MODAL 8: FAQS */}
+                {/* MODAL: ADMISSION & APPLICATION PROCESS EDITOR */}
+                {activeMiniModal === "admission" && (
+                  <div className="p-3.5 bg-purple-50/50 border border-purple-200/80 rounded-2xl space-y-3">
+                    {(() => {
+                      const curAdm = tempData.admissionArticle || getCollegeAdmissionArticle(tempData);
+                      const bulletsList = curAdm.bullets || [];
+                      const boxesList = curAdm.courseAdmissionBoxes || [];
+
+                      return (
+                        <div className="space-y-3">
+                          {/* Modal Nav Tabs */}
+                          <div className="flex items-center gap-2 border-b border-purple-200 pb-2">
+                            <button
+                              type="button"
+                              onClick={() => setAdmissionModalTab("article")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                admissionModalTab === "article"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              Overview Article
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setAdmissionModalTab("boxes")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                admissionModalTab === "boxes"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              Course Admission Boxes (${boxesList.length})
+                            </button>
+                          </div>
+
+                          {admissionModalTab === "article" ? (
+                            /* Tab 1: Overview Article */
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-black text-purple-950 uppercase tracking-wide">
+                                  Admission & Application Process Overview
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updatedBullets = [
+                                      ...bulletsList,
+                                      { text: `New admission criteria for ${tempData.name.split(" - ")[0]}.` },
+                                    ];
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: {
+                                        ...curAdm,
+                                        bullets: updatedBullets,
+                                      },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Bullet</span>
+                                </button>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Section Title</label>
+                                <input
+                                  type="text"
+                                  value={curAdm.title || `${tempData.name.split(" - ")[0]} Admission & Application Process 2026`}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: { ...curAdm, title: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Intro Paragraph 1 (Overview)</label>
+                                <textarea
+                                  rows={3}
+                                  value={curAdm.introParagraph1 || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: { ...curAdm, introParagraph1: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-800"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Intro Paragraph 2 (Pre-Bullet Info)</label>
+                                <textarea
+                                  rows={2.5}
+                                  value={curAdm.introParagraph2 || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: { ...curAdm, introParagraph2: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-800"
+                                />
+                              </div>
+
+                              {/* Bullets Editor */}
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-slate-700 block">Programme Admission Bullets</label>
+                                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                                  {bulletsList.map((b, bIdx) => (
+                                    <div key={bIdx} className="p-2 bg-white border border-purple-200/70 rounded-xl relative shadow-2xs">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = bulletsList.filter((_, i) => i !== bIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            admissionArticle: { ...curAdm, bullets: updated },
+                                          });
+                                        }}
+                                        className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                                        title="Delete Bullet"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                      <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5">Bullet #{bIdx + 1}</label>
+                                      <textarea
+                                        rows={2}
+                                        value={b.text}
+                                        onChange={(e) => {
+                                          const updated = [...bulletsList];
+                                          updated[bIdx] = { ...updated[bIdx], text: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            admissionArticle: { ...curAdm, bullets: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-800"
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">After-Bullets Paragraph 1 (Portals / JoSAA / COAP)</label>
+                                <textarea
+                                  rows={2.5}
+                                  value={curAdm.afterBulletsParagraph1 || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: { ...curAdm, afterBulletsParagraph1: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-800"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">After-Bullets Paragraph 2 (Application Forms)</label>
+                                <textarea
+                                  rows={2.5}
+                                  value={curAdm.afterBulletsParagraph2 || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: { ...curAdm, afterBulletsParagraph2: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-800"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Footer Note Text</label>
+                                <input
+                                  type="text"
+                                  value={curAdm.footerNote || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: { ...curAdm, footerNote: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            /* Tab 2: Course Admission Boxes */
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-black text-purple-950 uppercase tracking-wide">
+                                  Course Admission Boxes
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newBox: CourseAdmissionBoxItem = {
+                                      courseTitle: "New Course Admissions 2026",
+                                      courseMeta: "5 Courses • 3 years",
+                                      eligibilityBullets: ["10+2 with 60% marks", "Accepting Exams: **Entrance Test**"],
+                                      datesHeading: "Important dates",
+                                      datesTable: [
+                                        { dates: "Jan '27 - Feb '27", event: "Application Window", isTentative: true },
+                                        { dates: "Mar '27", event: "Exam Date", isTentative: false },
+                                      ],
+                                    };
+                                    setTempData({
+                                      ...tempData,
+                                      admissionArticle: {
+                                        ...curAdm,
+                                        courseAdmissionBoxes: [...boxesList, newBox],
+                                      },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Course Box</span>
+                                </button>
+                              </div>
+
+                              <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                                {boxesList.map((box, bIdx) => (
+                                  <div key={bIdx} className="p-3 bg-white border border-purple-200 rounded-xl space-y-2.5 relative shadow-2xs">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = boxesList.filter((_, i) => i !== bIdx);
+                                        setTempData({
+                                          ...tempData,
+                                          admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                        });
+                                      }}
+                                      className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                                      title="Delete Course Box"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+
+                                    <div className="grid grid-cols-2 gap-2 w-11/12">
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Course Title</label>
+                                        <input
+                                          type="text"
+                                          value={box.courseTitle}
+                                          onChange={(e) => {
+                                            const updated = [...boxesList];
+                                            updated[bIdx] = { ...updated[bIdx], courseTitle: e.target.value };
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                            });
+                                          }}
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Courses & Duration Meta</label>
+                                        <input
+                                          type="text"
+                                          value={box.courseMeta}
+                                          onChange={(e) => {
+                                            const updated = [...boxesList];
+                                            updated[bIdx] = { ...updated[bIdx], courseMeta: e.target.value };
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                            });
+                                          }}
+                                          placeholder="e.g. 17 Courses • 4 years-5 years"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    {/* Eligibility bullets in box */}
+                                    <div className="space-y-1.5 pt-1 border-t border-slate-100">
+                                      <div className="flex items-center justify-between">
+                                        <label className="text-[10px] font-bold text-slate-700">Eligibility Bullets</label>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = [...boxesList];
+                                            const curB = updated[bIdx].eligibilityBullets || [];
+                                            updated[bIdx] = { ...updated[bIdx], eligibilityBullets: [...curB, "New eligibility condition"] };
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                            });
+                                          }}
+                                          className="text-[10.5px] text-purple-600 font-bold hover:underline cursor-pointer"
+                                        >
+                                          + Add Condition
+                                        </button>
+                                      </div>
+                                      {(box.eligibilityBullets || []).map((el, elIdx) => (
+                                        <div key={elIdx} className="flex items-center gap-1.5">
+                                          <input
+                                            type="text"
+                                            value={el}
+                                            onChange={(e) => {
+                                              const updated = [...boxesList];
+                                              const curB = [...(updated[bIdx].eligibilityBullets || [])];
+                                              curB[elIdx] = e.target.value;
+                                              updated[bIdx] = { ...updated[bIdx], eligibilityBullets: curB };
+                                              setTempData({
+                                                ...tempData,
+                                                admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                              });
+                                            }}
+                                            className="w-full px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-xs"
+                                          />
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const updated = [...boxesList];
+                                              const curB = (updated[bIdx].eligibilityBullets || []).filter((_, i) => i !== elIdx);
+                                              updated[bIdx] = { ...updated[bIdx], eligibilityBullets: curB };
+                                              setTempData({
+                                                ...tempData,
+                                                admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                              });
+                                            }}
+                                            className="p-1 text-red-500 hover:bg-red-50 rounded"
+                                          >
+                                            <Trash2 className="w-3 h-3" />
+                                          </button>
+                                        </div>
+                                      ))}
+                                    </div>
+
+                                    {/* Dates table in box */}
+                                    <div className="space-y-1.5 pt-1 border-t border-slate-100">
+                                      <div className="flex items-center justify-between">
+                                        <label className="text-[10px] font-bold text-slate-700">Important Dates Table</label>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = [...boxesList];
+                                            const curD = updated[bIdx].datesTable || [];
+                                            updated[bIdx] = {
+                                              ...updated[bIdx],
+                                              datesTable: [...curD, { dates: "TBA", event: "New Event Name", isTentative: true }],
+                                            };
+                                            setTempData({
+                                              ...tempData,
+                                              admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                            });
+                                          }}
+                                          className="text-[10.5px] text-purple-600 font-bold hover:underline cursor-pointer"
+                                        >
+                                          + Add Date Row
+                                        </button>
+                                      </div>
+                                      {(box.datesTable || []).map((dRow, dIdx) => (
+                                        <div key={dIdx} className="grid grid-cols-12 gap-1.5 items-center">
+                                          <input
+                                            type="text"
+                                            value={dRow.dates}
+                                            onChange={(e) => {
+                                              const updated = [...boxesList];
+                                              const curD = [...(updated[bIdx].datesTable || [])];
+                                              curD[dIdx] = { ...curD[dIdx], dates: e.target.value };
+                                              updated[bIdx] = { ...updated[bIdx], datesTable: curD };
+                                              setTempData({
+                                                ...tempData,
+                                                admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                              });
+                                            }}
+                                            placeholder="Dates (e.g. Jan '27)"
+                                            className="col-span-4 px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-xs font-semibold"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={dRow.event}
+                                            onChange={(e) => {
+                                              const updated = [...boxesList];
+                                              const curD = [...(updated[bIdx].datesTable || [])];
+                                              curD[dIdx] = { ...curD[dIdx], event: e.target.value };
+                                              updated[bIdx] = { ...updated[bIdx], datesTable: curD };
+                                              setTempData({
+                                                ...tempData,
+                                                admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                              });
+                                            }}
+                                            placeholder="Event Name"
+                                            className="col-span-5 px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-xs"
+                                          />
+                                          <label className="col-span-2 flex items-center gap-1 text-[10px] text-slate-600 cursor-pointer">
+                                            <input
+                                              type="checkbox"
+                                              checked={dRow.isTentative ?? false}
+                                              onChange={(e) => {
+                                                const updated = [...boxesList];
+                                                const curD = [...(updated[bIdx].datesTable || [])];
+                                                curD[dIdx] = { ...curD[dIdx], isTentative: e.target.checked };
+                                                updated[bIdx] = { ...updated[bIdx], datesTable: curD };
+                                                setTempData({
+                                                  ...tempData,
+                                                  admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                                });
+                                              }}
+                                              className="w-3 h-3 text-purple-600 rounded"
+                                            />
+                                            <span>Tentative</span>
+                                          </label>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const updated = [...boxesList];
+                                              const curD = (updated[bIdx].datesTable || []).filter((_, i) => i !== dIdx);
+                                              updated[bIdx] = { ...updated[bIdx], datesTable: curD };
+                                              setTempData({
+                                                ...tempData,
+                                                admissionArticle: { ...curAdm, courseAdmissionBoxes: updated },
+                                              });
+                                            }}
+                                            className="col-span-1 p-1 text-red-500 hover:bg-red-50 rounded flex justify-center"
+                                          >
+                                            <Trash2 className="w-3 h-3" />
+                                          </button>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: QA */}
                 {activeMiniModal === "qa" && (
                   <div className="space-y-3">
                     <div className="max-h-72 overflow-y-auto space-y-3 pr-1">
