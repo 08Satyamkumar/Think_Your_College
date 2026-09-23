@@ -278,6 +278,59 @@ interface CutoffRoundComparisonData {
   filterDatasets?: Record<string, CutoffComparisonRow[]>;
 }
 
+function ScrollProgressIndicator({ targetId }: { targetId: string }) {
+  const [progress, setProgress] = useState(0);
+  const [thumbRatio, setThumbRatio] = useState(0.28);
+  const [canScroll, setCanScroll] = useState(false);
+
+  useEffect(() => {
+    const el = document.getElementById(targetId);
+    if (!el) return;
+
+    const updateScroll = () => {
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll > 6) {
+        setCanScroll(true);
+        const currentProgress = el.scrollLeft / maxScroll;
+        setProgress(Math.max(0, Math.min(1, currentProgress)));
+        const ratio = Math.max(0.2, Math.min(0.45, el.clientWidth / el.scrollWidth));
+        setThumbRatio(ratio);
+      } else {
+        setCanScroll(false);
+      }
+    };
+
+    updateScroll();
+    el.addEventListener("scroll", updateScroll, { passive: true });
+    window.addEventListener("resize", updateScroll);
+
+    const observer = new MutationObserver(updateScroll);
+    observer.observe(el, { childList: true, subtree: true });
+
+    return () => {
+      el.removeEventListener("scroll", updateScroll);
+      window.removeEventListener("resize", updateScroll);
+      observer.disconnect();
+    };
+  }, [targetId]);
+
+  if (!canScroll) return null;
+
+  return (
+    <div className="flex justify-center items-center pt-2.5 pb-0.5 w-full">
+      <div className="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-full relative overflow-hidden flex items-center">
+        <div
+          className="h-full bg-slate-800 rounded-full transition-all duration-100 ease-out"
+          style={{
+            width: `${Math.max(18, Math.round(thumbRatio * 100))}%`,
+            marginLeft: `${Math.round(progress * (1 - thumbRatio) * 100)}%`,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 interface CollegeDetail {
   name: string;
   fullName?: string;
@@ -4348,7 +4401,7 @@ export default function CollegeDetailPage() {
                                 {/* Horizontal Scroll Cards Container */}
                                 <div
                                   id="top-recruiters-scroll-list"
-                                  className="flex items-stretch gap-3 sm:gap-3.5 overflow-x-auto custom-scrollbar py-2 px-0.5 scroll-smooth"
+                                  className="flex items-stretch gap-3 sm:gap-3.5 overflow-x-auto no-scrollbar py-2 px-0.5 scroll-smooth"
                                 >
                                   {plData.topRecruiters.map((rec, rIdx) => {
                                     const fallbackInitials = rec.name.replace(/[^a-zA-Z]/g, "").slice(0, 2).toUpperCase() || "TC";
@@ -4402,6 +4455,7 @@ export default function CollegeDetailPage() {
                                     );
                                   })}
                                 </div>
+                                <ScrollProgressIndicator targetId="top-recruiters-scroll-list" />
                               </div>
                             )}
 
@@ -4567,7 +4621,7 @@ export default function CollegeDetailPage() {
                                 {/* Horizontal Scroll Cards Container */}
                                 <div
                                   id="insights-scroll-list"
-                                  className="flex items-stretch gap-3 overflow-x-auto custom-scrollbar py-2 px-0.5 scroll-smooth"
+                                  className="flex items-stretch gap-3 overflow-x-auto no-scrollbar py-2 px-0.5 scroll-smooth"
                                 >
                                   {plData.insights.map((insight, inIdx) => (
                                     <div
@@ -4588,6 +4642,7 @@ export default function CollegeDetailPage() {
                                     </div>
                                   ))}
                                 </div>
+                                <ScrollProgressIndicator targetId="insights-scroll-list" />
                               </div>
                             )}
                           </div>
