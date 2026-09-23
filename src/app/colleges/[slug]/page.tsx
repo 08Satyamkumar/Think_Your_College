@@ -184,6 +184,22 @@ const getStatRowCellValue = (row: PlacementStatRow, colIdx: number): string => {
   return "NA";
 };
 
+interface CourseSalaryRow {
+  course: string;
+  salary?: string;
+  values?: string[];
+}
+
+const getCourseSalaryCellValue = (row: CourseSalaryRow, colIdx: number): string => {
+  if (colIdx === 0) return row.course || "";
+  const valIdx = colIdx - 1;
+  if (row.values && row.values.length > valIdx) {
+    return row.values[valIdx] ?? "NA";
+  }
+  if (valIdx === 0 && row.salary !== undefined) return row.salary;
+  return "NA";
+};
+
 interface PlacementsArticleData {
   title?: string;
   introParagraph?: string;
@@ -192,6 +208,9 @@ interface PlacementsArticleData {
   statsTableTitle?: string;
   statsTableCols?: string[];
   statsTable?: PlacementStatRow[];
+  salaryTableTitle?: string;
+  salaryTableCols?: string[];
+  salaryTable?: CourseSalaryRow[];
 }
 
 interface FaqItem {
@@ -665,6 +684,16 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
         statPrevYear: "Capgemini, Texas Instruments",
       },
     ],
+    salaryTableTitle: "IIT Delhi Course-wise Median Salary",
+    salaryTableCols: ["Course", "Median Salary"],
+    salaryTable: [
+      { course: "B.E. / B.Tech", values: ["₹20 LPA"], salary: "₹20 LPA" },
+      { course: "M.E./M.Tech", values: ["₹16 LPA"], salary: "₹16 LPA" },
+      { course: "M.Sc.", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+      { course: "MBA/PGDM", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+      { course: "M.A.", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+      { course: "M.Des", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+    ],
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -914,6 +943,9 @@ type MiniModalId =
   | "reviews"
   | "admissions"
   | "placements"
+  | "placements_article"
+  | "placements_stats"
+  | "placements_salary"
   | "cutoffs"
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
@@ -1122,6 +1154,7 @@ export default function CollegeDetailPage() {
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeMiniModal, setActiveMiniModal] = useState<MiniModalId>(null);
+  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary">("article");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -1770,6 +1803,17 @@ export default function CollegeDetailPage() {
       },
     ];
 
+    const defaultSalaryTableCols: string[] = ["Course", "Median Salary"];
+
+    const defaultSalaryTable: CourseSalaryRow[] = [
+      { course: "B.E. / B.Tech", values: ["₹20 LPA"], salary: "₹20 LPA" },
+      { course: "M.E./M.Tech", values: ["₹16 LPA"], salary: "₹16 LPA" },
+      { course: "M.Sc.", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+      { course: "MBA/PGDM", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+      { course: "M.A.", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+      { course: "M.Des", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
+    ];
+
     if (college.placementsArticle) {
       return {
         title: college.placementsArticle.title || `${shortName} Placements 2026`,
@@ -1787,6 +1831,12 @@ export default function CollegeDetailPage() {
           college.placementsArticle.statsTable && college.placementsArticle.statsTable.length > 0
             ? college.placementsArticle.statsTable
             : defaultStatsTable,
+        salaryTableTitle: college.placementsArticle.salaryTableTitle || `${shortName} Course-wise Median Salary`,
+        salaryTableCols: college.placementsArticle.salaryTableCols || defaultSalaryTableCols,
+        salaryTable:
+          college.placementsArticle.salaryTable && college.placementsArticle.salaryTable.length > 0
+            ? college.placementsArticle.salaryTable
+            : defaultSalaryTable,
       };
     }
 
@@ -1798,6 +1848,9 @@ export default function CollegeDetailPage() {
       statsTableTitle: `${shortName} Placements Highlights`,
       statsTableCols: defaultStatsTableCols,
       statsTable: defaultStatsTable,
+      salaryTableTitle: `${shortName} Course-wise Median Salary`,
+      salaryTableCols: defaultSalaryTableCols,
+      salaryTable: defaultSalaryTable,
     };
   };
 
@@ -3747,16 +3800,28 @@ export default function CollegeDetailPage() {
                         <span>{plData.title}</span>
                       </h2>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         {isAdmin && (
-                          <button
-                            type="button"
-                            onClick={() => openMiniModal("placements")}
-                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
-                          >
-                            <Edit className="w-3.5 h-3.5" />
-                            <span>Edit Placements</span>
-                          </button>
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => openMiniModal("placements_article")}
+                              className="px-2.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                              title="Edit Article Text & Subsections"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                              <span className="hidden sm:inline">Edit Article</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => openMiniModal("placements")}
+                              className="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                              title="Open Placements Hub"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                              <span>Hub</span>
+                            </button>
+                          </>
                         )}
 
                         <button
@@ -3784,7 +3849,7 @@ export default function CollegeDetailPage() {
                           transition={{ duration: 0.25, ease: "easeInOut" }}
                           className="overflow-hidden"
                         >
-                          <div className="pt-4 space-y-3.5 border-t border-slate-100/90 mt-4 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                          <div className="pt-4 space-y-4 border-t border-slate-100/90 mt-4 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
                             {/* Collapsed Preview vs Expanded Full Content */}
                             {!isPlacementsArticleExpanded ? (
                               <div className="relative pt-0.5">
@@ -3845,9 +3910,25 @@ export default function CollegeDetailPage() {
                               </div>
                             )}
 
-                            {/* Placement Statistics Comparison Table (Dynamic Multi-Column) */}
+                            {/* Table 1: Placement Statistics Comparison Highlights Table (Dynamic Multi-Column) */}
                             {plData.statsTable && plData.statsTable.length > 0 && (
-                              <div className="pt-2">
+                              <div className="pt-2 space-y-2">
+                                <div className="flex items-center justify-between gap-2">
+                                  <h3 className="font-outfit font-bold text-sm sm:text-[15px] text-slate-900 flex items-center gap-1.5">
+                                    <span>{plData.statsTableTitle || `${collegeData.name.split(" - ")[0]} Placements Highlights`}</span>
+                                  </h3>
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => openMiniModal("placements_stats")}
+                                      className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-bold border border-indigo-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                      <span>Edit Table</span>
+                                    </button>
+                                  )}
+                                </div>
+
                                 <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white w-full">
                                   {(() => {
                                     const cols = plData.statsTableCols && plData.statsTableCols.length > 0
@@ -3883,6 +3964,75 @@ export default function CollegeDetailPage() {
                                                     className={`py-3 px-4 sm:px-5 text-slate-700 ${
                                                       cIdx < cols.length - 2 ? "border-r border-slate-300" : ""
                                                     } min-w-[180px] sm:min-w-[230px]`}
+                                                  >
+                                                    {cellVal}
+                                                  </td>
+                                                );
+                                              })}
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    );
+                                  })()}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Table 2: Course-wise Median Salary Table (Exact Image Reference) */}
+                            {plData.salaryTable && plData.salaryTable.length > 0 && (
+                              <div className="pt-3 space-y-2">
+                                <div className="flex items-center justify-between gap-2">
+                                  <h3 className="font-outfit font-bold text-sm sm:text-[15px] text-slate-900 flex items-center gap-1.5">
+                                    <span>{plData.salaryTableTitle || `${collegeData.name.split(" - ")[0]} Course-wise Median Salary`}</span>
+                                  </h3>
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => openMiniModal("placements_salary")}
+                                      className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold border border-emerald-200 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                      <span>Edit Salary Table</span>
+                                    </button>
+                                  )}
+                                </div>
+
+                                <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white w-full">
+                                  {(() => {
+                                    const cols = plData.salaryTableCols && plData.salaryTableCols.length > 0
+                                      ? plData.salaryTableCols
+                                      : ["Course", "Median Salary"];
+                                    return (
+                                      <table className="w-full text-left border-collapse text-xs sm:text-[13.5px] min-w-max">
+                                        <thead>
+                                          <tr className="bg-[#f0f5ff] text-[#1e293b] font-bold font-outfit text-xs sm:text-[13.5px]">
+                                            {cols.map((colName, cIdx) => (
+                                              <th
+                                                key={cIdx}
+                                                className={`py-3.5 px-5 font-bold font-outfit text-slate-800 ${
+                                                  cIdx < cols.length - 1 ? "border-r border-slate-200/70" : ""
+                                                } ${cIdx === 0 ? "min-w-[200px] sm:min-w-[240px]" : "min-w-[180px] sm:min-w-[220px]"} whitespace-normal`}
+                                              >
+                                                {colName}
+                                              </th>
+                                            ))}
+                                          </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-dashed divide-slate-200 font-normal">
+                                          {plData.salaryTable.map((row, rIdx) => (
+                                            <tr key={rIdx} className="hover:bg-blue-50/20 transition-colors">
+                                              <td className="py-3.5 px-5 font-normal sm:font-medium text-slate-800 border-r border-dashed border-slate-200/60 min-w-[200px] sm:min-w-[240px]">
+                                                {row.course}
+                                              </td>
+                                              {cols.slice(1).map((_, cIdx) => {
+                                                const cellVal = getCourseSalaryCellValue(row, cIdx + 1);
+                                                return (
+                                                  <td
+                                                    key={cIdx}
+                                                    className={`py-3.5 px-5 text-slate-700 ${
+                                                      cIdx < cols.length - 2 ? "border-r border-dashed border-slate-200/60" : ""
+                                                    } min-w-[180px] sm:min-w-[220px]`}
                                                   >
                                                     {cellVal}
                                                   </td>
@@ -4072,11 +4222,13 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "courses" && "🎓 Edit Courses, Fees & Intake"}
                     {activeMiniModal === "course_summary_box" && "🎓 Edit Course Highlights Sub-Boxes (UG / PG Courses)"}
                     {activeMiniModal === "fees" && "💰 Edit Tuition & Hostel Fees"}
-                    {activeMiniModal === "placements" && "💼 Edit Placement Records & Recruiters"}
+                    {activeMiniModal === "placements" && "💼 Placements Management Hub"}
+                    {activeMiniModal === "placements_article" && "📝 Edit Placements Article & Subsections"}
+                    {activeMiniModal === "placements_stats" && "📊 Edit Placement Statistics Highlights Table"}
+                    {activeMiniModal === "placements_salary" && "💰 Edit Course-wise Median Salary Table"}
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
                     {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
                     {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
-                    {activeMiniModal === "placements" && "💼 Edit Placements Section"}
                     {activeMiniModal === "rankings" && "🏆 Edit Rankings"}
                     {activeMiniModal === "gallery" && "📸 Edit Photo Gallery"}
                     {activeMiniModal === "hostel" && "🏢 Edit Campus Facilities & Hostels"}
@@ -6142,8 +6294,8 @@ export default function CollegeDetailPage() {
                   </div>
                 )}
 
-                {/* MODAL: PLACEMENTS ARTICLE EDITOR */}
-                {activeMiniModal === "placements" && (
+                {/* MODAL: PLACEMENTS ARTICLE (INDIVIDUAL) */}
+                {activeMiniModal === "placements_article" && (
                   <div className="space-y-4">
                     <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
                       <span className="text-xs font-black text-slate-900 uppercase tracking-wide">
@@ -6278,230 +6430,6 @@ export default function CollegeDetailPage() {
                       </div>
                     </div>
 
-                    {/* Part 3: Placement Statistics Highlights Table (Dynamic Multi-Column) Editor */}
-                    <div className="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-3">
-                      {(() => {
-                        const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                        const cols = curArticle.statsTableCols && curArticle.statsTableCols.length > 0
-                          ? curArticle.statsTableCols
-                          : ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"];
-                        const rows = curArticle.statsTable || getCollegePlacementsArticle(tempData).statsTable || [];
-
-                        return (
-                          <>
-                            <div className="flex flex-wrap items-center justify-between gap-2">
-                              <div>
-                                <span className="text-xs font-black text-indigo-950 uppercase tracking-wide block">
-                                  Placement Statistics Table & Columns
-                                </span>
-                                <span className="text-[10px] text-slate-500 font-medium">
-                                  Dynamic multi-year statistics table ({cols.length} columns, {rows.length} rows)
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const nextYear = new Date().getFullYear();
-                                    const newColTitle = `Placement Statistics ${nextYear}`;
-                                    const newCols = [...cols, newColTitle];
-                                    const updatedRows = rows.map((r) => {
-                                      const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
-                                      return {
-                                        ...r,
-                                        values: [...existingValues, "NA"],
-                                      };
-                                    });
-                                    setTempData({
-                                      ...tempData,
-                                      placementsArticle: {
-                                        ...curArticle,
-                                        statsTableCols: newCols,
-                                        statsTable: updatedRows,
-                                      },
-                                    });
-                                  }}
-                                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
-                                  title="Add a new year/statistics column to table"
-                                >
-                                  <Plus className="w-3 h-3" />
-                                  <span>Add Column</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const extraColsCount = Math.max(1, cols.length - 1);
-                                    const newValues = Array(extraColsCount).fill("NA");
-                                    const updatedRows = [
-                                      ...rows,
-                                      {
-                                        particular: "New Parameter",
-                                        values: newValues,
-                                      },
-                                    ];
-                                    setTempData({
-                                      ...tempData,
-                                      placementsArticle: {
-                                        ...curArticle,
-                                        statsTableCols: cols,
-                                        statsTable: updatedRows,
-                                      },
-                                    });
-                                  }}
-                                  className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
-                                >
-                                  <Plus className="w-3 h-3" />
-                                  <span>Add Row</span>
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Column Headers Section */}
-                            <div className="bg-white/80 p-2.5 rounded-xl border border-indigo-100 space-y-2">
-                              <span className="text-[10.5px] font-bold text-slate-700 block uppercase tracking-wider">
-                                Table Columns ({cols.length})
-                              </span>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                                {cols.map((colName, cIdx) => (
-                                  <div key={cIdx} className="space-y-1">
-                                    <div className="flex items-center justify-between">
-                                      <label className="text-[9.5px] font-bold text-slate-500 uppercase">
-                                        {cIdx === 0 ? "Col 1 (Fixed Parameter)" : `Col ${cIdx + 1} (Stat Metric)`}
-                                      </label>
-                                      {cIdx > 0 && cols.length > 2 && (
-                                        <button
-                                          type="button"
-                                          onClick={() => {
-                                            const newCols = cols.filter((_, i) => i !== cIdx);
-                                            const valIdxToDelete = cIdx - 1;
-                                            const updatedRows = rows.map((r) => {
-                                              const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
-                                              const updatedValues = existingValues.filter((_, i) => i !== valIdxToDelete);
-                                              return {
-                                                ...r,
-                                                values: updatedValues,
-                                              };
-                                            });
-                                            setTempData({
-                                              ...tempData,
-                                              placementsArticle: {
-                                                ...curArticle,
-                                                statsTableCols: newCols,
-                                                statsTable: updatedRows,
-                                              },
-                                            });
-                                          }}
-                                          className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center gap-0.5 cursor-pointer"
-                                          title={`Delete column "${colName}"`}
-                                        >
-                                          <Trash2 className="w-2.5 h-2.5" />
-                                          <span>Remove</span>
-                                        </button>
-                                      )}
-                                    </div>
-                                    <input
-                                      type="text"
-                                      value={colName}
-                                      onChange={(e) => {
-                                        const newCols = [...cols];
-                                        newCols[cIdx] = e.target.value;
-                                        setTempData({
-                                          ...tempData,
-                                          placementsArticle: { ...curArticle, statsTableCols: newCols },
-                                        });
-                                      }}
-                                      placeholder={cIdx === 0 ? "Particulars" : `Placement Statistics Year`}
-                                      className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
-                                    />
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Table Rows List */}
-                            <div className="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
-                              {rows.map((row, rIdx) => (
-                                <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-2 relative shadow-2xs">
-                                  <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                                    <span className="text-[10px] font-bold text-indigo-900 uppercase">
-                                      Row #{rIdx + 1}
-                                    </span>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const updatedRows = rows.filter((_, i) => i !== rIdx);
-                                        setTempData({
-                                          ...tempData,
-                                          placementsArticle: { ...curArticle, statsTable: updatedRows },
-                                        });
-                                      }}
-                                      className="p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold"
-                                      title="Delete Row"
-                                    >
-                                      <Trash2 className="w-3 h-3" />
-                                      <span>Delete Row</span>
-                                    </button>
-                                  </div>
-
-                                  <div>
-                                    <label className="text-[10px] font-bold text-slate-500 block mb-0.5">
-                                      {cols[0] || "Particulars / Parameter"}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={row.particular}
-                                      onChange={(e) => {
-                                        const updatedRows = [...rows];
-                                        updatedRows[rIdx] = { ...updatedRows[rIdx], particular: e.target.value };
-                                        setTempData({
-                                          ...tempData,
-                                          placementsArticle: { ...curArticle, statsTable: updatedRows },
-                                        });
-                                      }}
-                                      placeholder="e.g. Total No. Of Offers"
-                                      className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
-                                    />
-                                  </div>
-
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                                    {cols.slice(1).map((colTitle, cIdx) => {
-                                      const cellVal = getStatRowCellValue(row, cIdx + 1);
-                                      return (
-                                        <div key={cIdx}>
-                                          <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5 truncate" title={colTitle}>
-                                            {colTitle}
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={cellVal}
-                                            onChange={(e) => {
-                                              const updatedRows = [...rows];
-                                              const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(row, i + 1));
-                                              existingValues[cIdx] = e.target.value;
-                                              updatedRows[rIdx] = {
-                                                ...updatedRows[rIdx],
-                                                values: existingValues,
-                                              };
-                                              setTempData({
-                                                ...tempData,
-                                                placementsArticle: { ...curArticle, statsTable: updatedRows },
-                                              });
-                                            }}
-                                            placeholder="Stat value (e.g. INR 22 LPA, NA)"
-                                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
-                                          />
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        );
-                      })()}
-                    </div>
-
                     {/* Footer Note */}
                     <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
                       <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
@@ -6521,6 +6449,1180 @@ export default function CollegeDetailPage() {
                         className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900"
                       />
                     </div>
+                  </div>
+                )}
+
+                {/* MODAL: PLACEMENTS STATS TABLE (INDIVIDUAL) */}
+                {activeMiniModal === "placements_stats" && (
+                  <div className="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-3">
+                    {(() => {
+                      const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                      const cols = curArticle.statsTableCols && curArticle.statsTableCols.length > 0
+                        ? curArticle.statsTableCols
+                        : ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"];
+                      const rows = curArticle.statsTable || getCollegePlacementsArticle(tempData).statsTable || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-indigo-950 uppercase tracking-wide block">
+                                Placement Highlights Table & Columns
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Dynamic multi-year comparison table ({cols.length} columns, {rows.length} rows)
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const nextYear = new Date().getFullYear();
+                                  const newColTitle = `Placement Statistics ${nextYear}`;
+                                  const newCols = [...cols, newColTitle];
+                                  const updatedRows = rows.map((r) => {
+                                    const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
+                                    return {
+                                      ...r,
+                                      values: [...existingValues, "NA"],
+                                    };
+                                  });
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: {
+                                      ...curArticle,
+                                      statsTableCols: newCols,
+                                      statsTable: updatedRows,
+                                    },
+                                  });
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                title="Add a new year/statistics column to table"
+                              >
+                                <Plus className="w-3 h-3" />
+                                <span>Add Column</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const extraColsCount = Math.max(1, cols.length - 1);
+                                  const newValues = Array(extraColsCount).fill("NA");
+                                  const updatedRows = [
+                                    ...rows,
+                                    {
+                                      particular: "New Parameter",
+                                      values: newValues,
+                                    },
+                                  ];
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: {
+                                      ...curArticle,
+                                      statsTableCols: cols,
+                                      statsTable: updatedRows,
+                                    },
+                                  });
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                              >
+                                <Plus className="w-3 h-3" />
+                                <span>Add Row</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                              Table Title
+                            </label>
+                            <input
+                              type="text"
+                              value={curArticle.statsTableTitle || `${tempData.name.split(" - ")[0]} Placements Highlights`}
+                              onChange={(e) => {
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...curArticle, statsTableTitle: e.target.value },
+                                });
+                              }}
+                              placeholder="e.g. IIT Delhi Placements Highlights"
+                              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                            />
+                          </div>
+
+                          {/* Column Headers Section */}
+                          <div className="bg-white/80 p-2.5 rounded-xl border border-indigo-100 space-y-2">
+                            <span className="text-[10.5px] font-bold text-slate-700 block uppercase tracking-wider">
+                              Table Columns ({cols.length})
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                              {cols.map((colName, cIdx) => (
+                                <div key={cIdx} className="space-y-1">
+                                  <div className="flex items-center justify-between">
+                                    <label className="text-[9.5px] font-bold text-slate-500 uppercase">
+                                      {cIdx === 0 ? "Col 1 (Fixed Parameter)" : `Col ${cIdx + 1} (Stat Metric)`}
+                                    </label>
+                                    {cIdx > 0 && cols.length > 2 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const newCols = cols.filter((_, i) => i !== cIdx);
+                                          const valIdxToDelete = cIdx - 1;
+                                          const updatedRows = rows.map((r) => {
+                                            const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
+                                            const updatedValues = existingValues.filter((_, i) => i !== valIdxToDelete);
+                                            return {
+                                              ...r,
+                                              values: updatedValues,
+                                            };
+                                          });
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: {
+                                              ...curArticle,
+                                              statsTableCols: newCols,
+                                              statsTable: updatedRows,
+                                            },
+                                          });
+                                        }}
+                                        className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center gap-0.5 cursor-pointer"
+                                        title={`Delete column "${colName}"`}
+                                      >
+                                        <Trash2 className="w-2.5 h-2.5" />
+                                        <span>Remove</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                  <input
+                                    type="text"
+                                    value={colName}
+                                    onChange={(e) => {
+                                      const newCols = [...cols];
+                                      newCols[cIdx] = e.target.value;
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, statsTableCols: newCols },
+                                      });
+                                    }}
+                                    placeholder={cIdx === 0 ? "Particulars" : `Placement Statistics Year`}
+                                    className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Table Rows List */}
+                          <div className="space-y-2 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                            {rows.map((row, rIdx) => (
+                              <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-2 relative shadow-2xs">
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                                  <span className="text-[10px] font-bold text-indigo-900 uppercase">
+                                    Row #{rIdx + 1}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updatedRows = rows.filter((_, i) => i !== rIdx);
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                      });
+                                    }}
+                                    className="p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold"
+                                    title="Delete Row"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                    <span>Delete Row</span>
+                                  </button>
+                                </div>
+
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-500 block mb-0.5">
+                                    {cols[0] || "Particulars / Parameter"}
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={row.particular}
+                                    onChange={(e) => {
+                                      const updatedRows = [...rows];
+                                      updatedRows[rIdx] = { ...updatedRows[rIdx], particular: e.target.value };
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                      });
+                                    }}
+                                    placeholder="e.g. Total No. Of Offers"
+                                    className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                  {cols.slice(1).map((colTitle, cIdx) => {
+                                    const cellVal = getStatRowCellValue(row, cIdx + 1);
+                                    return (
+                                      <div key={cIdx}>
+                                        <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5 truncate" title={colTitle}>
+                                          {colTitle}
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={cellVal}
+                                          onChange={(e) => {
+                                            const updatedRows = [...rows];
+                                            const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(row, i + 1));
+                                            existingValues[cIdx] = e.target.value;
+                                            updatedRows[rIdx] = {
+                                              ...updatedRows[rIdx],
+                                              values: existingValues,
+                                            };
+                                            setTempData({
+                                              ...tempData,
+                                              placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                            });
+                                          }}
+                                          placeholder="Stat value (e.g. INR 22 LPA, NA)"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: COURSE-WISE MEDIAN SALARY TABLE (INDIVIDUAL) */}
+                {activeMiniModal === "placements_salary" && (
+                  <div className="p-3.5 bg-emerald-50/50 border border-emerald-200/80 rounded-2xl space-y-3">
+                    {(() => {
+                      const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                      const cols = curArticle.salaryTableCols && curArticle.salaryTableCols.length > 0
+                        ? curArticle.salaryTableCols
+                        : ["Course", "Median Salary"];
+                      const rows = curArticle.salaryTable || getCollegePlacementsArticle(tempData).salaryTable || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-emerald-950 uppercase tracking-wide block">
+                                Course-wise Median Salary Table & Columns
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Dynamic course salary breakdown ({cols.length} columns, {rows.length} rows)
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newColTitle = `Salary Metric ${cols.length}`;
+                                  const newCols = [...cols, newColTitle];
+                                  const updatedRows = rows.map((r) => {
+                                    const existingValues = cols.slice(1).map((_, i) => getCourseSalaryCellValue(r, i + 1));
+                                    return {
+                                      ...r,
+                                      values: [...existingValues, "NA"],
+                                    };
+                                  });
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: {
+                                      ...curArticle,
+                                      salaryTableCols: newCols,
+                                      salaryTable: updatedRows,
+                                    },
+                                  });
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                title="Add a new salary metric column"
+                              >
+                                <Plus className="w-3 h-3" />
+                                <span>Add Column</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const extraColsCount = Math.max(1, cols.length - 1);
+                                  const newValues = Array(extraColsCount).fill("₹15 LPA");
+                                  const updatedRows = [
+                                    ...rows,
+                                    {
+                                      course: "New Course",
+                                      values: newValues,
+                                    },
+                                  ];
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: {
+                                      ...curArticle,
+                                      salaryTableCols: cols,
+                                      salaryTable: updatedRows,
+                                    },
+                                  });
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                              >
+                                <Plus className="w-3 h-3" />
+                                <span>Add Course Row</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                              Table Title
+                            </label>
+                            <input
+                              type="text"
+                              value={curArticle.salaryTableTitle || `${tempData.name.split(" - ")[0]} Course-wise Median Salary`}
+                              onChange={(e) => {
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...curArticle, salaryTableTitle: e.target.value },
+                                });
+                              }}
+                              placeholder="e.g. IIT Delhi Course-wise Median Salary"
+                              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                            />
+                          </div>
+
+                          {/* Column Headers Section */}
+                          <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-100 space-y-2">
+                            <span className="text-[10.5px] font-bold text-slate-700 block uppercase tracking-wider">
+                              Table Columns ({cols.length})
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                              {cols.map((colName, cIdx) => (
+                                <div key={cIdx} className="space-y-1">
+                                  <div className="flex items-center justify-between">
+                                    <label className="text-[9.5px] font-bold text-slate-500 uppercase">
+                                      {cIdx === 0 ? "Col 1 (Course Name)" : `Col ${cIdx + 1} (Salary Metric)`}
+                                    </label>
+                                    {cIdx > 0 && cols.length > 2 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const newCols = cols.filter((_, i) => i !== cIdx);
+                                          const valIdxToDelete = cIdx - 1;
+                                          const updatedRows = rows.map((r) => {
+                                            const existingValues = cols.slice(1).map((_, i) => getCourseSalaryCellValue(r, i + 1));
+                                            const updatedValues = existingValues.filter((_, i) => i !== valIdxToDelete);
+                                            return {
+                                              ...r,
+                                              values: updatedValues,
+                                            };
+                                          });
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: {
+                                              ...curArticle,
+                                              salaryTableCols: newCols,
+                                              salaryTable: updatedRows,
+                                            },
+                                          });
+                                        }}
+                                        className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center gap-0.5 cursor-pointer"
+                                        title={`Delete column "${colName}"`}
+                                      >
+                                        <Trash2 className="w-2.5 h-2.5" />
+                                        <span>Remove</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                  <input
+                                    type="text"
+                                    value={colName}
+                                    onChange={(e) => {
+                                      const newCols = [...cols];
+                                      newCols[cIdx] = e.target.value;
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, salaryTableCols: newCols },
+                                      });
+                                    }}
+                                    placeholder={cIdx === 0 ? "Course" : `Median Salary`}
+                                    className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Table Rows List */}
+                          <div className="space-y-2 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                            {rows.map((row, rIdx) => (
+                              <div key={rIdx} className="p-2.5 bg-white border border-emerald-200/80 rounded-xl space-y-2 relative shadow-2xs">
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                                  <span className="text-[10px] font-bold text-emerald-900 uppercase">
+                                    Row #{rIdx + 1}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updatedRows = rows.filter((_, i) => i !== rIdx);
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, salaryTable: updatedRows },
+                                      });
+                                    }}
+                                    className="p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold"
+                                    title="Delete Row"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                    <span>Delete Row</span>
+                                  </button>
+                                </div>
+
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-500 block mb-0.5">
+                                    {cols[0] || "Course Name"}
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={row.course}
+                                    onChange={(e) => {
+                                      const updatedRows = [...rows];
+                                      updatedRows[rIdx] = { ...updatedRows[rIdx], course: e.target.value };
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, salaryTable: updatedRows },
+                                      });
+                                    }}
+                                    placeholder="e.g. B.E. / B.Tech"
+                                    className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                  {cols.slice(1).map((colTitle, cIdx) => {
+                                    const cellVal = getCourseSalaryCellValue(row, cIdx + 1);
+                                    return (
+                                      <div key={cIdx}>
+                                        <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5 truncate" title={colTitle}>
+                                          {colTitle}
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={cellVal}
+                                          onChange={(e) => {
+                                            const updatedRows = [...rows];
+                                            const existingValues = cols.slice(1).map((_, i) => getCourseSalaryCellValue(row, i + 1));
+                                            existingValues[cIdx] = e.target.value;
+                                            updatedRows[rIdx] = {
+                                              ...updatedRows[rIdx],
+                                              values: existingValues,
+                                            };
+                                            setTempData({
+                                              ...tempData,
+                                              placementsArticle: { ...curArticle, salaryTable: updatedRows },
+                                            });
+                                          }}
+                                          placeholder="e.g. ₹20 LPA"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: PLACEMENTS HUB (TABBED MULTI-SECTION) */}
+                {activeMiniModal === "placements" && (
+                  <div className="space-y-3">
+                    {/* Clean Section Switcher Tabs */}
+                    <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => setPlacementsModalTab("article")}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          placementsModalTab === "article"
+                            ? "bg-white text-indigo-900 shadow-2xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        📝 1. Article Text
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPlacementsModalTab("stats")}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          placementsModalTab === "stats"
+                            ? "bg-white text-indigo-900 shadow-2xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        📊 2. Highlights Table
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPlacementsModalTab("salary")}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          placementsModalTab === "salary"
+                            ? "bg-white text-indigo-900 shadow-2xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        💰 3. Median Salary Table
+                      </button>
+                    </div>
+
+                    {/* Tab 1: Article Content */}
+                    {placementsModalTab === "article" && (
+                      <div className="space-y-3">
+                        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                          <span className="text-xs font-black text-slate-900 uppercase tracking-wide">
+                            Placements Article Details
+                          </span>
+
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                              Article Title
+                            </label>
+                            <input
+                              type="text"
+                              value={tempData.placementsArticle?.title || `${tempData.name.split(" - ")[0]} Placements 2026`}
+                              onChange={(e) => {
+                                const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...cur, title: e.target.value },
+                                });
+                              }}
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                              Intro Paragraph (Always Visible / Preview)
+                            </label>
+                            <textarea
+                              rows={4}
+                              value={tempData.placementsArticle?.introParagraph || getCollegePlacementsArticle(tempData).introParagraph || ""}
+                              onChange={(e) => {
+                                const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...cur, introParagraph: e.target.value },
+                                });
+                              }}
+                              placeholder="Introductory paragraph..."
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium resize-none"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Subsections List (Top Recruiters, MBA Placements, etc.) */}
+                        <div className="p-3.5 bg-blue-50/50 border border-blue-200/80 rounded-2xl space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-black text-blue-950 uppercase tracking-wide">
+                              Placements Sub-Sections (Expanded Content)
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                const updated = [
+                                  ...(cur.subsections || []),
+                                  {
+                                    heading: `${tempData.name.split(" - ")[0]} Additional Placements 2026`,
+                                    content: "Detailed branch-wise placement statistics and highest packages.",
+                                  },
+                                ];
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...cur, subsections: updated },
+                                });
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add Sub-Section</span>
+                            </button>
+                          </div>
+
+                          <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                            {(tempData.placementsArticle?.subsections || getCollegePlacementsArticle(tempData).subsections || []).map((sub, sIdx) => (
+                              <div key={sIdx} className="p-2.5 bg-white border border-blue-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                    const updated = (cur.subsections || []).filter((_, i) => i !== sIdx);
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: { ...cur, subsections: updated },
+                                    });
+                                  }}
+                                  className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                                  title="Delete Sub-Section"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+
+                                <div className="w-4/5">
+                                  <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Subheading #{sIdx + 1}</label>
+                                  <input
+                                    type="text"
+                                    value={sub.heading}
+                                    onChange={(e) => {
+                                      const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                      const updated = [...(cur.subsections || [])];
+                                      updated[sIdx] = { ...updated[sIdx], heading: e.target.value };
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...cur, subsections: updated },
+                                      });
+                                    }}
+                                    placeholder="e.g. IIT Delhi Top Recruiters 2026"
+                                    className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Content</label>
+                                  <textarea
+                                    rows={2.5}
+                                    value={sub.content}
+                                    onChange={(e) => {
+                                      const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                                      const updated = [...(cur.subsections || [])];
+                                      updated[sIdx] = { ...updated[sIdx], content: e.target.value };
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...cur, subsections: updated },
+                                      });
+                                    }}
+                                    placeholder="Sub-section content details (supports **bold**)..."
+                                    className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs resize-none font-medium text-slate-700"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Footer Note */}
+                        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                          <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                            Footer Note Text
+                          </label>
+                          <input
+                            type="text"
+                            value={tempData.placementsArticle?.footerNote || getCollegePlacementsArticle(tempData).footerNote || ""}
+                            onChange={(e) => {
+                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                              setTempData({
+                                ...tempData,
+                                placementsArticle: { ...cur, footerNote: e.target.value },
+                              });
+                            }}
+                            placeholder="e.g. Check course-wise placement data of IIT Delhi below:"
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Tab 2: Placement Statistics Table */}
+                    {placementsModalTab === "stats" && (
+                      <div className="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-3">
+                        {(() => {
+                          const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                          const cols = curArticle.statsTableCols && curArticle.statsTableCols.length > 0
+                            ? curArticle.statsTableCols
+                            : ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"];
+                          const rows = curArticle.statsTable || getCollegePlacementsArticle(tempData).statsTable || [];
+
+                          return (
+                            <>
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                  <span className="text-xs font-black text-indigo-950 uppercase tracking-wide block">
+                                    Placement Highlights Table & Columns
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 font-medium">
+                                    Dynamic multi-year comparison table ({cols.length} columns, {rows.length} rows)
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const nextYear = new Date().getFullYear();
+                                      const newColTitle = `Placement Statistics ${nextYear}`;
+                                      const newCols = [...cols, newColTitle];
+                                      const updatedRows = rows.map((r) => {
+                                        const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
+                                        return {
+                                          ...r,
+                                          values: [...existingValues, "NA"],
+                                        };
+                                      });
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: {
+                                          ...curArticle,
+                                          statsTableCols: newCols,
+                                          statsTable: updatedRows,
+                                        },
+                                      });
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                    title="Add a new year/statistics column to table"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                    <span>Add Column</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const extraColsCount = Math.max(1, cols.length - 1);
+                                      const newValues = Array(extraColsCount).fill("NA");
+                                      const updatedRows = [
+                                        ...rows,
+                                        {
+                                          particular: "New Parameter",
+                                          values: newValues,
+                                        },
+                                      ];
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: {
+                                          ...curArticle,
+                                          statsTableCols: cols,
+                                          statsTable: updatedRows,
+                                        },
+                                      });
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                    <span>Add Row</span>
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                  Table Title
+                                </label>
+                                <input
+                                  type="text"
+                                  value={curArticle.statsTableTitle || `${tempData.name.split(" - ")[0]} Placements Highlights`}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: { ...curArticle, statsTableTitle: e.target.value },
+                                    });
+                                  }}
+                                  placeholder="e.g. IIT Delhi Placements Highlights"
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              {/* Column Headers Section */}
+                              <div className="bg-white/80 p-2.5 rounded-xl border border-indigo-100 space-y-2">
+                                <span className="text-[10.5px] font-bold text-slate-700 block uppercase tracking-wider">
+                                  Table Columns ({cols.length})
+                                </span>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                  {cols.map((colName, cIdx) => (
+                                    <div key={cIdx} className="space-y-1">
+                                      <div className="flex items-center justify-between">
+                                        <label className="text-[9.5px] font-bold text-slate-500 uppercase">
+                                          {cIdx === 0 ? "Col 1 (Fixed Parameter)" : `Col ${cIdx + 1} (Stat Metric)`}
+                                        </label>
+                                        {cIdx > 0 && cols.length > 2 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newCols = cols.filter((_, i) => i !== cIdx);
+                                              const valIdxToDelete = cIdx - 1;
+                                              const updatedRows = rows.map((r) => {
+                                                const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
+                                                const updatedValues = existingValues.filter((_, i) => i !== valIdxToDelete);
+                                                return {
+                                                  ...r,
+                                                  values: updatedValues,
+                                                };
+                                              });
+                                              setTempData({
+                                                ...tempData,
+                                                placementsArticle: {
+                                                  ...curArticle,
+                                                  statsTableCols: newCols,
+                                                  statsTable: updatedRows,
+                                                },
+                                              });
+                                            }}
+                                            className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center gap-0.5 cursor-pointer"
+                                            title={`Delete column "${colName}"`}
+                                          >
+                                            <Trash2 className="w-2.5 h-2.5" />
+                                            <span>Remove</span>
+                                          </button>
+                                        )}
+                                      </div>
+                                      <input
+                                        type="text"
+                                        value={colName}
+                                        onChange={(e) => {
+                                          const newCols = [...cols];
+                                          newCols[cIdx] = e.target.value;
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, statsTableCols: newCols },
+                                          });
+                                        }}
+                                        placeholder={cIdx === 0 ? "Particulars" : `Placement Statistics Year`}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Table Rows List */}
+                              <div className="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                                {rows.map((row, rIdx) => (
+                                  <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-2 relative shadow-2xs">
+                                    <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                                      <span className="text-[10px] font-bold text-indigo-900 uppercase">
+                                        Row #{rIdx + 1}
+                                      </span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updatedRows = rows.filter((_, i) => i !== rIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold"
+                                        title="Delete Row"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                        <span>Delete Row</span>
+                                      </button>
+                                    </div>
+
+                                    <div>
+                                      <label className="text-[10px] font-bold text-slate-500 block mb-0.5">
+                                        {cols[0] || "Particulars / Parameter"}
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={row.particular}
+                                        onChange={(e) => {
+                                          const updatedRows = [...rows];
+                                          updatedRows[rIdx] = { ...updatedRows[rIdx], particular: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                          });
+                                        }}
+                                        placeholder="e.g. Total No. Of Offers"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                      {cols.slice(1).map((colTitle, cIdx) => {
+                                        const cellVal = getStatRowCellValue(row, cIdx + 1);
+                                        return (
+                                          <div key={cIdx}>
+                                            <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5 truncate" title={colTitle}>
+                                              {colTitle}
+                                            </label>
+                                            <input
+                                              type="text"
+                                              value={cellVal}
+                                              onChange={(e) => {
+                                                const updatedRows = [...rows];
+                                                const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(row, i + 1));
+                                                existingValues[cIdx] = e.target.value;
+                                                updatedRows[rIdx] = {
+                                                  ...updatedRows[rIdx],
+                                                  values: existingValues,
+                                                };
+                                                setTempData({
+                                                  ...tempData,
+                                                  placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                                });
+                                              }}
+                                              placeholder="Stat value (e.g. INR 22 LPA, NA)"
+                                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                            />
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
+
+                    {/* Tab 3: Course-wise Median Salary Table */}
+                    {placementsModalTab === "salary" && (
+                      <div className="p-3.5 bg-emerald-50/50 border border-emerald-200/80 rounded-2xl space-y-3">
+                        {(() => {
+                          const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                          const cols = curArticle.salaryTableCols && curArticle.salaryTableCols.length > 0
+                            ? curArticle.salaryTableCols
+                            : ["Course", "Median Salary"];
+                          const rows = curArticle.salaryTable || getCollegePlacementsArticle(tempData).salaryTable || [];
+
+                          return (
+                            <>
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                  <span className="text-xs font-black text-emerald-950 uppercase tracking-wide block">
+                                    Course-wise Median Salary Table & Columns
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 font-medium">
+                                    Dynamic course salary breakdown ({cols.length} columns, {rows.length} rows)
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newColTitle = `Salary Metric ${cols.length}`;
+                                      const newCols = [...cols, newColTitle];
+                                      const updatedRows = rows.map((r) => {
+                                        const existingValues = cols.slice(1).map((_, i) => getCourseSalaryCellValue(r, i + 1));
+                                        return {
+                                          ...r,
+                                          values: [...existingValues, "NA"],
+                                        };
+                                      });
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: {
+                                          ...curArticle,
+                                          salaryTableCols: newCols,
+                                          salaryTable: updatedRows,
+                                        },
+                                      });
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                    title="Add a new salary metric column"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                    <span>Add Column</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const extraColsCount = Math.max(1, cols.length - 1);
+                                      const newValues = Array(extraColsCount).fill("₹15 LPA");
+                                      const updatedRows = [
+                                        ...rows,
+                                        {
+                                          course: "New Course",
+                                          values: newValues,
+                                        },
+                                      ];
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: {
+                                          ...curArticle,
+                                          salaryTableCols: cols,
+                                          salaryTable: updatedRows,
+                                        },
+                                      });
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                    <span>Add Course Row</span>
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                  Table Title
+                                </label>
+                                <input
+                                  type="text"
+                                  value={curArticle.salaryTableTitle || `${tempData.name.split(" - ")[0]} Course-wise Median Salary`}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: { ...curArticle, salaryTableTitle: e.target.value },
+                                    });
+                                  }}
+                                  placeholder="e.g. IIT Delhi Course-wise Median Salary"
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              {/* Column Headers Section */}
+                              <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-100 space-y-2">
+                                <span className="text-[10.5px] font-bold text-slate-700 block uppercase tracking-wider">
+                                  Table Columns ({cols.length})
+                                </span>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                  {cols.map((colName, cIdx) => (
+                                    <div key={cIdx} className="space-y-1">
+                                      <div className="flex items-center justify-between">
+                                        <label className="text-[9.5px] font-bold text-slate-500 uppercase">
+                                          {cIdx === 0 ? "Col 1 (Course Name)" : `Col ${cIdx + 1} (Salary Metric)`}
+                                        </label>
+                                        {cIdx > 0 && cols.length > 2 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newCols = cols.filter((_, i) => i !== cIdx);
+                                              const valIdxToDelete = cIdx - 1;
+                                              const updatedRows = rows.map((r) => {
+                                                const existingValues = cols.slice(1).map((_, i) => getCourseSalaryCellValue(r, i + 1));
+                                                const updatedValues = existingValues.filter((_, i) => i !== valIdxToDelete);
+                                                return {
+                                                  ...r,
+                                                  values: updatedValues,
+                                                };
+                                              });
+                                              setTempData({
+                                                ...tempData,
+                                                placementsArticle: {
+                                                  ...curArticle,
+                                                  salaryTableCols: newCols,
+                                                  salaryTable: updatedRows,
+                                                },
+                                              });
+                                            }}
+                                            className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center gap-0.5 cursor-pointer"
+                                            title={`Delete column "${colName}"`}
+                                          >
+                                            <Trash2 className="w-2.5 h-2.5" />
+                                            <span>Remove</span>
+                                          </button>
+                                        )}
+                                      </div>
+                                      <input
+                                        type="text"
+                                        value={colName}
+                                        onChange={(e) => {
+                                          const newCols = [...cols];
+                                          newCols[cIdx] = e.target.value;
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, salaryTableCols: newCols },
+                                          });
+                                        }}
+                                        placeholder={cIdx === 0 ? "Course" : `Median Salary`}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Table Rows List */}
+                              <div className="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                                {rows.map((row, rIdx) => (
+                                  <div key={rIdx} className="p-2.5 bg-white border border-emerald-200/80 rounded-xl space-y-2 relative shadow-2xs">
+                                    <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                                      <span className="text-[10px] font-bold text-emerald-900 uppercase">
+                                        Row #{rIdx + 1}
+                                      </span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updatedRows = rows.filter((_, i) => i !== rIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, salaryTable: updatedRows },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold"
+                                        title="Delete Row"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                        <span>Delete Row</span>
+                                      </button>
+                                    </div>
+
+                                    <div>
+                                      <label className="text-[10px] font-bold text-slate-500 block mb-0.5">
+                                        {cols[0] || "Course Name"}
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={row.course}
+                                        onChange={(e) => {
+                                          const updatedRows = [...rows];
+                                          updatedRows[rIdx] = { ...updatedRows[rIdx], course: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, salaryTable: updatedRows },
+                                          });
+                                        }}
+                                        placeholder="e.g. B.E. / B.Tech"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                      {cols.slice(1).map((colTitle, cIdx) => {
+                                        const cellVal = getCourseSalaryCellValue(row, cIdx + 1);
+                                        return (
+                                          <div key={cIdx}>
+                                            <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5 truncate" title={colTitle}>
+                                              {colTitle}
+                                            </label>
+                                            <input
+                                              type="text"
+                                              value={cellVal}
+                                              onChange={(e) => {
+                                                const updatedRows = [...rows];
+                                                const existingValues = cols.slice(1).map((_, i) => getCourseSalaryCellValue(row, i + 1));
+                                                existingValues[cIdx] = e.target.value;
+                                                updatedRows[rIdx] = {
+                                                  ...updatedRows[rIdx],
+                                                  values: existingValues,
+                                                };
+                                                setTempData({
+                                                  ...tempData,
+                                                  placementsArticle: { ...curArticle, salaryTable: updatedRows },
+                                                });
+                                              }}
+                                              placeholder="e.g. ₹20 LPA"
+                                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                            />
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
                   </div>
                 )}
 
