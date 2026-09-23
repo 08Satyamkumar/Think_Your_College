@@ -4797,8 +4797,10 @@ export default function CollegeDetailPage() {
                                               transition={{ duration: 0.22, ease: "easeInOut" }}
                                               className="overflow-hidden"
                                             >
-                                              <div className="pt-2 pb-2 pl-3 text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal border-l-2 border-amber-300 ml-1 mt-1 bg-amber-50/40 rounded-r-xl pr-3">
-                                                {formattedA}
+                                              <div className="pt-2 pb-2 pl-0.5 text-[13px] sm:text-[13.5px] text-slate-600 leading-relaxed font-normal">
+                                                <p className="leading-relaxed">
+                                                  {formattedA}
+                                                </p>
                                               </div>
                                             </motion.div>
                                           )}
