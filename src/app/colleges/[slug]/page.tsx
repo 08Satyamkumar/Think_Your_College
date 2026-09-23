@@ -212,6 +212,20 @@ interface PlacementInsightItem {
   description: string;
 }
 
+interface AdmissionBulletItem {
+  text: string;
+}
+
+interface AdmissionArticleData {
+  title?: string;
+  introParagraph1?: string;
+  introParagraph2?: string;
+  bullets?: AdmissionBulletItem[];
+  afterBulletsParagraph1?: string;
+  afterBulletsParagraph2?: string;
+  footerNote?: string;
+}
+
 interface PlacementsArticleData {
   title?: string;
   introParagraph?: string;
@@ -382,6 +396,7 @@ interface CollegeDetail {
   secondaryCutoffComparison?: CutoffRoundComparisonData;
   coursesFeesArticle?: CoursesFeesArticleData;
   placementsArticle?: PlacementsArticleData;
+  admissionArticle?: AdmissionArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -1135,6 +1150,7 @@ type MiniModalId =
   | "placements_recruiters"
   | "placements_insights"
   | "placements_faqs"
+  | "admission"
   | "cutoffs"
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
@@ -1345,6 +1361,8 @@ export default function CollegeDetailPage() {
   const [activeMiniModal, setActiveMiniModal] = useState<MiniModalId>(null);
   const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary" | "recruiters" | "insights" | "faqs">("article");
   const [openPlacementsFaqIdx, setOpenPlacementsFaqIdx] = useState<number | null>(null);
+  const [isAdmissionCardOpen, setIsAdmissionCardOpen] = useState(true);
+  const [isAdmissionArticleExpanded, setIsAdmissionArticleExpanded] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -1425,6 +1443,7 @@ export default function CollegeDetailPage() {
             secondaryCutoffComparison: parsedData.secondaryCutoffComparison || IIT_DELHI_MASTER_DATA.secondaryCutoffComparison,
             coursesFeesArticle: parsedData.coursesFeesArticle || IIT_DELHI_MASTER_DATA.coursesFeesArticle,
             placementsArticle: parsedData.placementsArticle || IIT_DELHI_MASTER_DATA.placementsArticle,
+            admissionArticle: parsedData.admissionArticle || IIT_DELHI_MASTER_DATA.admissionArticle,
           };
 
           setCollegeData(baseDetail);
@@ -2196,6 +2215,40 @@ export default function CollegeDetailPage() {
     };
   };
 
+  const getCollegeAdmissionArticle = (college: CollegeDetail): AdmissionArticleData => {
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    const officialWebsite = shortName.toLowerCase().includes("iit") && shortName.toLowerCase().includes("delhi")
+      ? "iitd.ac.in"
+      : `${shortName.toLowerCase().replace(/[^a-z0-9]/g, "")}.ac.in`;
+
+    if (college.admissionArticle) {
+      return college.admissionArticle;
+    }
+
+    return {
+      title: `${shortName} Admission & Application Process 2026`,
+      introParagraph1: `**${shortName} offers UG, PG, and doctoral research courses**, like **BTech, BSc, BDes, MTech, MSc, MBA, MDes** and **PhD**. Among ${shortName} aspirants, **BTech** and **MTech** programmes are the most popular. The institute **does not offer direct admissions**. **${shortName} course admissions** are based on entrance exams, followed by counselling or a personal interview (PI), depending on the course.`,
+      introParagraph2: `For admission to ${shortName}'s BTech and MTech programmes, candidates have to appear for **JEE Advanced 2026** and **GATE 2026**, respectively. More details around ${shortName} admissions are below:`,
+      bullets: [
+        {
+          text: `Admission to the **MSc programme** is possible only with a valid **JAM 2026 Score**.`,
+        },
+        {
+          text: `A valid **CAT 2026 score** is mandatory for admission to the **${shortName} MBA programme**.`,
+        },
+        {
+          text: `${shortName} accepts the **UCEED score** for admission to the **BDes** programme.`,
+        },
+        {
+          text: `**CEED 2026 score** is mandatory for admission to the **${shortName} MDes programme**. It's the only programme at **${shortName}** where candidates are required to appear for a Studio Test along with a Personal Interview.`,
+        },
+      ],
+      afterBulletsParagraph1: `**${shortName} Admission 2026** are entrance based. **${shortName} Application 2026 window** opens through its official website, i.e. ${officialWebsite}. For **${shortName} BTech admissions**, candidates are required to apply through JoSAA. **${shortName} MTech Admissions** are conducted through COAP.`,
+      afterBulletsParagraph2: `Candidates are then required to fill out the **${shortName} MTech application form** through the official website. For MDes, MBA and PhD admissions, candidates are required to fill the form available on the official **${shortName}** portal.`,
+      footerNote: `Check out course-specific details for **${shortName} admission 2026** below:`,
+    };
+  };
+
   const getCollegeTocList = (college: CollegeDetail): TableOfContentItem[] => {
     if (college.tableOfContents && college.tableOfContents.length > 0) {
       return college.tableOfContents.map((item) => ({
@@ -2234,6 +2287,8 @@ export default function CollegeDetailPage() {
       setIsHighlightsOpen(true);
     } else if (item.targetId === "cutoffs-section") {
       setIsCutoffCardOpen(true);
+    } else if (item.targetId === "admissions-section") {
+      setIsAdmissionCardOpen(true);
     }
 
     // 3. Smoothly scroll directly to the box with sticky header offset
@@ -4808,6 +4863,159 @@ export default function CollegeDetailPage() {
                                       </div>
                                     );
                                   })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 5. ADMISSION & APPLICATION PROCESS 2026 SUB-BOX */}
+              {(() => {
+                const admData = getCollegeAdmissionArticle(collegeData);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
+
+                return (
+                  <div
+                    id="admissions-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-20"
+                  >
+                    {/* Top Header Row */}
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-outfit font-black text-lg sm:text-xl text-[#2d114d] tracking-tight">
+                        {admData.title || `${collegeShortName} Admission & Application Process 2026`}
+                      </h3>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("admission")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Admission</span>
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => setIsAdmissionCardOpen(!isAdmissionCardOpen)}
+                          aria-label={isAdmissionCardOpen ? "Collapse Admission Card" : "Expand Admission Card"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isAdmissionCardOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Card Body */}
+                    <AnimatePresence initial={false}>
+                      {isAdmissionCardOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-3.5 space-y-3.5 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {!isAdmissionArticleExpanded ? (
+                              /* Collapsed / Preview State (Image 1) */
+                              <div className="space-y-3 relative pt-0.5">
+                                {admData.introParagraph1 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(admData.introParagraph1)}
+                                  </p>
+                                )}
+                                {admData.introParagraph2 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(admData.introParagraph2)}
+                                  </p>
+                                )}
+
+                                {/* Bullet preview with frosted gradient fade */}
+                                {admData.bullets && admData.bullets.length > 0 && (
+                                  <div className="relative max-h-[32px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_15%,rgba(0,0,0,0.3)_55%,transparent_100%)]">
+                                    <ul className="list-disc pl-5 space-y-1.5 text-slate-700">
+                                      <li>
+                                        {renderFormattedText(admData.bullets[0].text)}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                )}
+
+                                {/* Read more overlay */}
+                                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-end pointer-events-auto pr-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsAdmissionArticleExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              /* Fully Expanded State (Images 2 & 3) */
+                              <div className="space-y-3.5 relative pt-0.5">
+                                {admData.introParagraph1 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(admData.introParagraph1)}
+                                  </p>
+                                )}
+                                {admData.introParagraph2 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(admData.introParagraph2)}
+                                  </p>
+                                )}
+
+                                {/* Bullet Points List */}
+                                {admData.bullets && admData.bullets.length > 0 && (
+                                  <ul className="list-disc pl-5 space-y-2.5 text-slate-700">
+                                    {admData.bullets.map((b, bIdx) => (
+                                      <li key={bIdx} className="leading-relaxed pl-1">
+                                        {renderFormattedText(b.text)}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+
+                                {admData.afterBulletsParagraph1 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(admData.afterBulletsParagraph1)}
+                                  </p>
+                                )}
+
+                                {admData.afterBulletsParagraph2 && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(admData.afterBulletsParagraph2)}
+                                  </p>
+                                )}
+
+                                {admData.footerNote && (
+                                  <p className="leading-relaxed font-normal text-slate-800 pt-1">
+                                    {renderFormattedText(admData.footerNote)}
+                                  </p>
+                                )}
+
+                                {/* Read less button */}
+                                <div className="flex justify-end pt-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsAdmissionArticleExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] text-xs sm:text-[13.5px] font-bold hover:underline cursor-pointer transition-colors"
+                                  >
+                                    Read less
+                                  </button>
                                 </div>
                               </div>
                             )}
