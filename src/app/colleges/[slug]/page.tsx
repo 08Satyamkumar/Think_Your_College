@@ -5466,6 +5466,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "placements_salary" && "💰 Edit Course-wise Median Salary Table"}
                     {activeMiniModal === "placements_recruiters" && "🏢 Edit Top Recruiters & Company Logos"}
                     {activeMiniModal === "placements_insights" && "💡 Edit Placement Student Insights"}
+                    {activeMiniModal === "placements_faqs" && "❓ Edit Placement FAQs"}
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
                     {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
                     {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
@@ -9565,6 +9566,166 @@ export default function CollegeDetailPage() {
                                       }}
                                       placeholder="e.g. Students can work with faculty on research projects"
                                       className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: PLACEMENT FAQS */}
+                {activeMiniModal === "placements_faqs" && (
+                  <div className="p-3.5 bg-gradient-to-br from-amber-50/60 via-white to-amber-50/30 border border-amber-200/80 rounded-2xl space-y-3.5">
+                    {(() => {
+                      const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                      const faqs = curArticle.faqs || getCollegePlacementsArticle(tempData).faqs || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-amber-950 uppercase tracking-wide block">
+                                ❓ Commonly Asked Questions on Placements
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Placement FAQs list ({faqs.length} questions)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = [
+                                  ...faqs,
+                                  {
+                                    question: "",
+                                    answer: "",
+                                  },
+                                ];
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: {
+                                    ...curArticle,
+                                    faqs: updated,
+                                  },
+                                });
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add FAQ Item</span>
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Section Main Title
+                              </label>
+                              <input
+                                type="text"
+                                value={curArticle.faqsHeading || "Commonly asked questions"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...curArticle, faqsHeading: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Commonly asked questions"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Subtitle / Topic
+                              </label>
+                              <input
+                                type="text"
+                                value={curArticle.faqsSubtitle || "On Placements"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    placementsArticle: { ...curArticle, faqsSubtitle: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. On Placements"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                          </div>
+
+                          {/* FAQ Questions List */}
+                          <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+                            {faqs.map((faq, fIdx) => (
+                              <div
+                                key={fIdx}
+                                className="p-3 bg-white border border-slate-200/90 hover:border-amber-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                              >
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                    <span className="text-amber-600 font-black">Q{fIdx + 1}:</span> {faq.question ? (faq.question.length > 50 ? `${faq.question.slice(0, 50)}...` : faq.question) : "Untitled Question"}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = faqs.filter((_, i) => i !== fIdx);
+                                      setTempData({
+                                        ...tempData,
+                                        placementsArticle: { ...curArticle, faqs: updated },
+                                      });
+                                    }}
+                                    className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                    title="Delete FAQ"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                    <span>Delete</span>
+                                  </button>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Question *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      required
+                                      value={faq.question}
+                                      onChange={(e) => {
+                                        const updated = [...faqs];
+                                        updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, faqs: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. Can I take admission at IIT Delhi MTech course without GATE?"
+                                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                    />
+                                  </div>
+
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Answer *
+                                    </label>
+                                    <textarea
+                                      rows={3}
+                                      required
+                                      value={faq.answer}
+                                      onChange={(e) => {
+                                        const updated = [...faqs];
+                                        updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, faqs: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. Direct admission for regular full-time MTech..."
+                                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none leading-relaxed"
                                     />
                                   </div>
                                 </div>
