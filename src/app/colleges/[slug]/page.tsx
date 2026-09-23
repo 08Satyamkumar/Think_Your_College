@@ -168,9 +168,21 @@ interface PlacementSubSection {
 
 interface PlacementStatRow {
   particular: string;
-  statCurrentYear: string;
-  statPrevYear: string;
+  values?: string[];
+  statCurrentYear?: string;
+  statPrevYear?: string;
 }
+
+const getStatRowCellValue = (row: PlacementStatRow, colIdx: number): string => {
+  if (colIdx === 0) return row.particular || "";
+  const valIdx = colIdx - 1;
+  if (row.values && row.values.length > valIdx) {
+    return row.values[valIdx] ?? "NA";
+  }
+  if (valIdx === 0 && row.statCurrentYear !== undefined) return row.statCurrentYear;
+  if (valIdx === 1 && row.statPrevYear !== undefined) return row.statPrevYear;
+  return "NA";
+};
 
 interface PlacementsArticleData {
   title?: string;
@@ -178,7 +190,7 @@ interface PlacementsArticleData {
   subsections?: PlacementSubSection[];
   footerNote?: string;
   statsTableTitle?: string;
-  statsTableCols?: [string, string, string];
+  statsTableCols?: string[];
   statsTable?: PlacementStatRow[];
 }
 
@@ -606,41 +618,49 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
     statsTable: [
       {
         particular: "Total No. Of Offers",
+        values: ["1411 (53.1%)", "1300"],
         statCurrentYear: "1411 (53.1%)",
         statPrevYear: "1300",
       },
       {
         particular: "Total No. Of Companies",
+        values: ["NA", "400"],
         statCurrentYear: "NA",
         statPrevYear: "400",
       },
       {
         particular: "Total Pre-placement Offers",
+        values: ["NA", "260"],
         statCurrentYear: "NA",
         statPrevYear: "260",
       },
       {
         particular: "Total No. Of New Recruiters",
+        values: ["NA", "Na"],
         statCurrentYear: "NA",
         statPrevYear: "Na",
       },
       {
         particular: "Highest Package (Domestic)",
+        values: ["NA", "INR 2 CPA"],
         statCurrentYear: "NA",
         statPrevYear: "INR 2 CPA",
       },
       {
         particular: "Average Package",
+        values: ["NA", "INR 22 LPA"],
         statCurrentYear: "NA",
         statPrevYear: "INR 22 LPA",
       },
       {
         particular: "Top Recruiters",
+        values: ["NA", "Google, ICICI Bank, Accenture"],
         statCurrentYear: "NA",
         statPrevYear: "Google, ICICI Bank, Accenture",
       },
       {
         particular: "Top New Recruiters",
+        values: ["NA", "Capgemini, Texas Instruments"],
         statCurrentYear: "NA",
         statPrevYear: "Capgemini, Texas Instruments",
       },
@@ -1693,7 +1713,7 @@ export default function CollegeDetailPage() {
       },
     ];
 
-    const defaultStatsTableCols: [string, string, string] = [
+    const defaultStatsTableCols: string[] = [
       "Particulars",
       "Placement Statistics 2025 (Ongoing)",
       "Placement Statistics 2024",
@@ -1702,41 +1722,49 @@ export default function CollegeDetailPage() {
     const defaultStatsTable: PlacementStatRow[] = [
       {
         particular: "Total No. Of Offers",
+        values: ["1411 (53.1%)", "1300"],
         statCurrentYear: "1411 (53.1%)",
         statPrevYear: "1300",
       },
       {
         particular: "Total No. Of Companies",
+        values: ["NA", "400"],
         statCurrentYear: "NA",
         statPrevYear: "400",
       },
       {
         particular: "Total Pre-placement Offers",
+        values: ["NA", "260"],
         statCurrentYear: "NA",
         statPrevYear: "260",
       },
       {
         particular: "Total No. Of New Recruiters",
+        values: ["NA", "Na"],
         statCurrentYear: "NA",
         statPrevYear: "Na",
       },
       {
         particular: "Highest Package (Domestic)",
+        values: ["NA", "INR 2 CPA"],
         statCurrentYear: "NA",
         statPrevYear: "INR 2 CPA",
       },
       {
         particular: "Average Package",
+        values: ["NA", "INR 22 LPA"],
         statCurrentYear: "NA",
         statPrevYear: "INR 22 LPA",
       },
       {
         particular: "Top Recruiters",
+        values: ["NA", "Google, ICICI Bank, Accenture"],
         statCurrentYear: "NA",
         statPrevYear: "Google, ICICI Bank, Accenture",
       },
       {
         particular: "Top New Recruiters",
+        values: ["NA", "Capgemini, Texas Instruments"],
         statCurrentYear: "NA",
         statPrevYear: "Capgemini, Texas Instruments",
       },
@@ -3817,40 +3845,55 @@ export default function CollegeDetailPage() {
                               </div>
                             )}
 
-                            {/* Placement Statistics Comparison Table (Exact Image Reference) */}
+                            {/* Placement Statistics Comparison Table (Dynamic Multi-Column) */}
                             {plData.statsTable && plData.statsTable.length > 0 && (
                               <div className="pt-2">
-                                <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
-                                  <table className="w-full text-left border-collapse text-xs sm:text-[13px] min-w-[550px]">
-                                    <thead>
-                                      <tr className="bg-[#07264a] text-white font-bold font-outfit text-xs sm:text-[13px]">
-                                        <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-white border-r border-slate-700/60 w-1/3">
-                                          {plData.statsTableCols?.[0] || "Particulars"}
-                                        </th>
-                                        <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-white border-r border-slate-700/60 w-1/3">
-                                          {plData.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)"}
-                                        </th>
-                                        <th className="py-3 px-4 sm:px-5 font-bold font-outfit text-white w-1/3">
-                                          {plData.statsTableCols?.[2] || "Placement Statistics 2024"}
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-300 font-normal">
-                                      {plData.statsTable.map((row, rIdx) => (
-                                        <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
-                                          <td className="py-3 px-4 sm:px-5 font-medium text-slate-800 border-r border-slate-300">
-                                            {row.particular}
-                                          </td>
-                                          <td className="py-3 px-4 sm:px-5 text-slate-700 border-r border-slate-300">
-                                            {row.statCurrentYear}
-                                          </td>
-                                          <td className="py-3 px-4 sm:px-5 text-slate-700">
-                                            {row.statPrevYear}
-                                          </td>
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
+                                <div className="overflow-x-auto custom-scrollbar rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white w-full">
+                                  {(() => {
+                                    const cols = plData.statsTableCols && plData.statsTableCols.length > 0
+                                      ? plData.statsTableCols
+                                      : ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"];
+                                    return (
+                                      <table className="w-full text-left border-collapse text-xs sm:text-[13px] min-w-max">
+                                        <thead>
+                                          <tr className="bg-[#07264a] text-white font-bold font-outfit text-xs sm:text-[13px]">
+                                            {cols.map((colName, cIdx) => (
+                                              <th
+                                                key={cIdx}
+                                                className={`py-3.5 px-4 sm:px-5 font-bold font-outfit text-white ${
+                                                  cIdx < cols.length - 1 ? "border-r border-slate-700/60" : ""
+                                                } ${cIdx === 0 ? "min-w-[200px] sm:min-w-[240px]" : "min-w-[180px] sm:min-w-[230px]"} whitespace-normal`}
+                                              >
+                                                {colName}
+                                              </th>
+                                            ))}
+                                          </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-300 font-normal">
+                                          {plData.statsTable.map((row, rIdx) => (
+                                            <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                                              <td className="py-3 px-4 sm:px-5 font-medium text-slate-800 border-r border-slate-300 min-w-[200px] sm:min-w-[240px]">
+                                                {row.particular}
+                                              </td>
+                                              {cols.slice(1).map((_, cIdx) => {
+                                                const cellVal = getStatRowCellValue(row, cIdx + 1);
+                                                return (
+                                                  <td
+                                                    key={cIdx}
+                                                    className={`py-3 px-4 sm:px-5 text-slate-700 ${
+                                                      cIdx < cols.length - 2 ? "border-r border-slate-300" : ""
+                                                    } min-w-[180px] sm:min-w-[230px]`}
+                                                  >
+                                                    {cellVal}
+                                                  </td>
+                                                );
+                                              })}
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    );
+                                  })()}
                                 </div>
                               </div>
                             )}
@@ -6235,180 +6278,228 @@ export default function CollegeDetailPage() {
                       </div>
                     </div>
 
-                    {/* Part 3: Placement Statistics Highlights Table (3 Columns) Editor */}
+                    {/* Part 3: Placement Statistics Highlights Table (Dynamic Multi-Column) Editor */}
                     <div className="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-indigo-950 uppercase tracking-wide">
-                          Placement Statistics Table (3 Columns)
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                            const updated = [
-                              ...(cur.statsTable || []),
-                              {
-                                particular: "New Parameter",
-                                statCurrentYear: "NA",
-                                statPrevYear: "NA",
-                              },
-                            ];
-                            setTempData({
-                              ...tempData,
-                              placementsArticle: { ...cur, statsTable: updated },
-                            });
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
-                        >
-                          <Plus className="w-3 h-3" />
-                          <span>Add Stat Row</span>
-                        </button>
-                      </div>
+                      {(() => {
+                        const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                        const cols = curArticle.statsTableCols && curArticle.statsTableCols.length > 0
+                          ? curArticle.statsTableCols
+                          : ["Particulars", "Placement Statistics 2025 (Ongoing)", "Placement Statistics 2024"];
+                        const rows = curArticle.statsTable || getCollegePlacementsArticle(tempData).statsTable || [];
 
-                      {/* Column Header Titles */}
-                      <div className="grid grid-cols-3 gap-2 pb-2 border-b border-indigo-100">
-                        <div>
-                          <label className="text-[9.5px] font-bold text-slate-500 uppercase block mb-0.5">Col 1 Header</label>
-                          <input
-                            type="text"
-                            value={tempData.placementsArticle?.statsTableCols?.[0] || "Particulars"}
-                            onChange={(e) => {
-                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                              const cols: [string, string, string] = [
-                                e.target.value,
-                                cur.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)",
-                                cur.statsTableCols?.[2] || "Placement Statistics 2024",
-                              ];
-                              setTempData({
-                                ...tempData,
-                                placementsArticle: { ...cur, statsTableCols: cols },
-                              });
-                            }}
-                            className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[9.5px] font-bold text-slate-500 uppercase block mb-0.5">Col 2 Header</label>
-                          <input
-                            type="text"
-                            value={tempData.placementsArticle?.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)"}
-                            onChange={(e) => {
-                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                              const cols: [string, string, string] = [
-                                cur.statsTableCols?.[0] || "Particulars",
-                                e.target.value,
-                                cur.statsTableCols?.[2] || "Placement Statistics 2024",
-                              ];
-                              setTempData({
-                                ...tempData,
-                                placementsArticle: { ...cur, statsTableCols: cols },
-                              });
-                            }}
-                            className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[9.5px] font-bold text-slate-500 uppercase block mb-0.5">Col 3 Header</label>
-                          <input
-                            type="text"
-                            value={tempData.placementsArticle?.statsTableCols?.[2] || "Placement Statistics 2024"}
-                            onChange={(e) => {
-                              const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                              const cols: [string, string, string] = [
-                                cur.statsTableCols?.[0] || "Particulars",
-                                cur.statsTableCols?.[1] || "Placement Statistics 2025 (Ongoing)",
-                                e.target.value,
-                              ];
-                              setTempData({
-                                ...tempData,
-                                placementsArticle: { ...cur, statsTableCols: cols },
-                              });
-                            }}
-                            className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Table Rows List */}
-                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
-                        {(tempData.placementsArticle?.statsTable || getCollegePlacementsArticle(tempData).statsTable || []).map((row, rIdx) => (
-                          <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-1.5 relative shadow-2xs">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                                const updated = (cur.statsTable || []).filter((_, i) => i !== rIdx);
-                                setTempData({
-                                  ...tempData,
-                                  placementsArticle: { ...cur, statsTable: updated },
-                                });
-                              }}
-                              className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
-                              title="Delete Row"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-
-                            <div className="w-4/5">
-                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Particulars / Parameter</label>
-                              <input
-                                type="text"
-                                value={row.particular}
-                                onChange={(e) => {
-                                  const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                                  const updated = [...(cur.statsTable || [])];
-                                  updated[rIdx] = { ...updated[rIdx], particular: e.target.value };
-                                  setTempData({
-                                    ...tempData,
-                                    placementsArticle: { ...cur, statsTable: updated },
-                                  });
-                                }}
-                                placeholder="e.g. Total No. Of Offers"
-                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
-                              />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
+                        return (
+                          <>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
                               <div>
-                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Current Year Stat</label>
-                                <input
-                                  type="text"
-                                  value={row.statCurrentYear}
-                                  onChange={(e) => {
-                                    const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                                    const updated = [...(cur.statsTable || [])];
-                                    updated[rIdx] = { ...updated[rIdx], statCurrentYear: e.target.value };
+                                <span className="text-xs font-black text-indigo-950 uppercase tracking-wide block">
+                                  Placement Statistics Table & Columns
+                                </span>
+                                <span className="text-[10px] text-slate-500 font-medium">
+                                  Dynamic multi-year statistics table ({cols.length} columns, {rows.length} rows)
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const nextYear = new Date().getFullYear();
+                                    const newColTitle = `Placement Statistics ${nextYear}`;
+                                    const newCols = [...cols, newColTitle];
+                                    const updatedRows = rows.map((r) => {
+                                      const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
+                                      return {
+                                        ...r,
+                                        values: [...existingValues, "NA"],
+                                      };
+                                    });
                                     setTempData({
                                       ...tempData,
-                                      placementsArticle: { ...cur, statsTable: updated },
+                                      placementsArticle: {
+                                        ...curArticle,
+                                        statsTableCols: newCols,
+                                        statsTable: updatedRows,
+                                      },
                                     });
                                   }}
-                                  placeholder="e.g. 1411 (53.1%)"
-                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
-                                />
-                              </div>
-                              <div>
-                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Previous Year Stat</label>
-                                <input
-                                  type="text"
-                                  value={row.statPrevYear}
-                                  onChange={(e) => {
-                                    const cur = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
-                                    const updated = [...(cur.statsTable || [])];
-                                    updated[rIdx] = { ...updated[rIdx], statPrevYear: e.target.value };
+                                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                  title="Add a new year/statistics column to table"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Column</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const extraColsCount = Math.max(1, cols.length - 1);
+                                    const newValues = Array(extraColsCount).fill("NA");
+                                    const updatedRows = [
+                                      ...rows,
+                                      {
+                                        particular: "New Parameter",
+                                        values: newValues,
+                                      },
+                                    ];
                                     setTempData({
                                       ...tempData,
-                                      placementsArticle: { ...cur, statsTable: updated },
+                                      placementsArticle: {
+                                        ...curArticle,
+                                        statsTableCols: cols,
+                                        statsTable: updatedRows,
+                                      },
                                     });
                                   }}
-                                  placeholder="e.g. 1300"
-                                  className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
-                                />
+                                  className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Row</span>
+                                </button>
                               </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
+
+                            {/* Column Headers Section */}
+                            <div className="bg-white/80 p-2.5 rounded-xl border border-indigo-100 space-y-2">
+                              <span className="text-[10.5px] font-bold text-slate-700 block uppercase tracking-wider">
+                                Table Columns ({cols.length})
+                              </span>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                {cols.map((colName, cIdx) => (
+                                  <div key={cIdx} className="space-y-1">
+                                    <div className="flex items-center justify-between">
+                                      <label className="text-[9.5px] font-bold text-slate-500 uppercase">
+                                        {cIdx === 0 ? "Col 1 (Fixed Parameter)" : `Col ${cIdx + 1} (Stat Metric)`}
+                                      </label>
+                                      {cIdx > 0 && cols.length > 2 && (
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const newCols = cols.filter((_, i) => i !== cIdx);
+                                            const valIdxToDelete = cIdx - 1;
+                                            const updatedRows = rows.map((r) => {
+                                              const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(r, i + 1));
+                                              const updatedValues = existingValues.filter((_, i) => i !== valIdxToDelete);
+                                              return {
+                                                ...r,
+                                                values: updatedValues,
+                                              };
+                                            });
+                                            setTempData({
+                                              ...tempData,
+                                              placementsArticle: {
+                                                ...curArticle,
+                                                statsTableCols: newCols,
+                                                statsTable: updatedRows,
+                                              },
+                                            });
+                                          }}
+                                          className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center gap-0.5 cursor-pointer"
+                                          title={`Delete column "${colName}"`}
+                                        >
+                                          <Trash2 className="w-2.5 h-2.5" />
+                                          <span>Remove</span>
+                                        </button>
+                                      )}
+                                    </div>
+                                    <input
+                                      type="text"
+                                      value={colName}
+                                      onChange={(e) => {
+                                        const newCols = [...cols];
+                                        newCols[cIdx] = e.target.value;
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, statsTableCols: newCols },
+                                        });
+                                      }}
+                                      placeholder={cIdx === 0 ? "Particulars" : `Placement Statistics Year`}
+                                      className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Table Rows List */}
+                            <div className="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                              {rows.map((row, rIdx) => (
+                                <div key={rIdx} className="p-2.5 bg-white border border-indigo-200/80 rounded-xl space-y-2 relative shadow-2xs">
+                                  <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                                    <span className="text-[10px] font-bold text-indigo-900 uppercase">
+                                      Row #{rIdx + 1}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updatedRows = rows.filter((_, i) => i !== rIdx);
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                        });
+                                      }}
+                                      className="p-1 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold"
+                                      title="Delete Row"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                      <span>Delete Row</span>
+                                    </button>
+                                  </div>
+
+                                  <div>
+                                    <label className="text-[10px] font-bold text-slate-500 block mb-0.5">
+                                      {cols[0] || "Particulars / Parameter"}
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={row.particular}
+                                      onChange={(e) => {
+                                        const updatedRows = [...rows];
+                                        updatedRows[rIdx] = { ...updatedRows[rIdx], particular: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                        });
+                                      }}
+                                      placeholder="e.g. Total No. Of Offers"
+                                      className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                    />
+                                  </div>
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                    {cols.slice(1).map((colTitle, cIdx) => {
+                                      const cellVal = getStatRowCellValue(row, cIdx + 1);
+                                      return (
+                                        <div key={cIdx}>
+                                          <label className="text-[9.5px] font-bold text-slate-500 block mb-0.5 truncate" title={colTitle}>
+                                            {colTitle}
+                                          </label>
+                                          <input
+                                            type="text"
+                                            value={cellVal}
+                                            onChange={(e) => {
+                                              const updatedRows = [...rows];
+                                              const existingValues = cols.slice(1).map((_, i) => getStatRowCellValue(row, i + 1));
+                                              existingValues[cIdx] = e.target.value;
+                                              updatedRows[rIdx] = {
+                                                ...updatedRows[rIdx],
+                                                values: existingValues,
+                                              };
+                                              setTempData({
+                                                ...tempData,
+                                                placementsArticle: { ...curArticle, statsTable: updatedRows },
+                                              });
+                                            }}
+                                            placeholder="Stat value (e.g. INR 22 LPA, NA)"
+                                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800"
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
 
                     {/* Footer Note */}
