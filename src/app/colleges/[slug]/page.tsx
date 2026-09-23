@@ -705,73 +705,73 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
     topRecruitersTitle: "Top Recruiters",
     topRecruiters: [
       {
-        name: "ACCENTURE",
-        logoUrl: "https://logo.clearbit.com/accenture.com",
+        name: "Accenture",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture.svg",
         websiteUrl: "https://www.accenture.com",
       },
       {
-        name: "Barclays Bank",
-        logoUrl: "https://logo.clearbit.com/barclays.com",
+        name: "Barclays",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Barclays_logo.svg",
         websiteUrl: "https://www.barclays.com",
       },
       {
         name: "Capgemini",
-        logoUrl: "https://logo.clearbit.com/capgemini.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/Capgemini_201x_logo.svg",
         websiteUrl: "https://www.capgemini.com",
       },
       {
         name: "Deloitte",
-        logoUrl: "https://logo.clearbit.com/deloitte.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg",
         websiteUrl: "https://www.deloitte.com",
       },
       {
         name: "Flipkart",
-        logoUrl: "https://logo.clearbit.com/flipkart.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7a/Flipkart_logo.svg",
         websiteUrl: "https://www.flipkart.com",
       },
       {
-        name: "GAIL (Gas Authority Of India Ltd)",
-        logoUrl: "https://logo.clearbit.com/gailonline.com",
+        name: "GAIL",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/en/6/6f/GAIL_Logo.svg",
         websiteUrl: "https://www.gailonline.com",
       },
       {
         name: "Hindustan Unilever",
-        logoUrl: "https://logo.clearbit.com/hul.co.in",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/en/e/e4/Unilever.svg",
         websiteUrl: "https://www.hul.co.in",
       },
       {
         name: "ICICI Securities",
-        logoUrl: "https://logo.clearbit.com/icicisecurities.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg",
         websiteUrl: "https://www.icicisecurities.com",
       },
       {
         name: "JP Morgan Chase",
-        logoUrl: "https://logo.clearbit.com/jpmorganchase.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/af/J_P_Morgan_Chase_Logo_2008_1.svg",
         websiteUrl: "https://www.jpmorganchase.com",
       },
       {
         name: "KPMG",
-        logoUrl: "https://logo.clearbit.com/kpmg.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg",
         websiteUrl: "https://www.kpmg.com",
       },
       {
         name: "Google",
-        logoUrl: "https://logo.clearbit.com/google.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
         websiteUrl: "https://www.google.com",
       },
       {
         name: "Microsoft",
-        logoUrl: "https://logo.clearbit.com/microsoft.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
         websiteUrl: "https://www.microsoft.com",
       },
       {
         name: "Amazon",
-        logoUrl: "https://logo.clearbit.com/amazon.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
         websiteUrl: "https://www.amazon.com",
       },
       {
         name: "Texas Instruments",
-        logoUrl: "https://logo.clearbit.com/ti.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/8/85/Texas_Instruments_logo.svg",
         websiteUrl: "https://www.ti.com",
       },
     ],
@@ -1898,73 +1898,73 @@ export default function CollegeDetailPage() {
 
     const defaultTopRecruitersList: TopRecruiterItem[] = [
       {
-        name: "ACCENTURE",
-        logoUrl: "https://logo.clearbit.com/accenture.com",
+        name: "Accenture",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture.svg",
         websiteUrl: "https://www.accenture.com",
       },
       {
-        name: "Barclays Bank",
-        logoUrl: "https://logo.clearbit.com/barclays.com",
+        name: "Barclays",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Barclays_logo.svg",
         websiteUrl: "https://www.barclays.com",
       },
       {
         name: "Capgemini",
-        logoUrl: "https://logo.clearbit.com/capgemini.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/Capgemini_201x_logo.svg",
         websiteUrl: "https://www.capgemini.com",
       },
       {
         name: "Deloitte",
-        logoUrl: "https://logo.clearbit.com/deloitte.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg",
         websiteUrl: "https://www.deloitte.com",
       },
       {
         name: "Flipkart",
-        logoUrl: "https://logo.clearbit.com/flipkart.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7a/Flipkart_logo.svg",
         websiteUrl: "https://www.flipkart.com",
       },
       {
-        name: "GAIL (Gas Authority Of India Ltd)",
-        logoUrl: "https://logo.clearbit.com/gailonline.com",
+        name: "GAIL",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/en/6/6f/GAIL_Logo.svg",
         websiteUrl: "https://www.gailonline.com",
       },
       {
         name: "Hindustan Unilever",
-        logoUrl: "https://logo.clearbit.com/hul.co.in",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/en/e/e4/Unilever.svg",
         websiteUrl: "https://www.hul.co.in",
       },
       {
         name: "ICICI Securities",
-        logoUrl: "https://logo.clearbit.com/icicisecurities.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg",
         websiteUrl: "https://www.icicisecurities.com",
       },
       {
         name: "JP Morgan Chase",
-        logoUrl: "https://logo.clearbit.com/jpmorganchase.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/af/J_P_Morgan_Chase_Logo_2008_1.svg",
         websiteUrl: "https://www.jpmorganchase.com",
       },
       {
         name: "KPMG",
-        logoUrl: "https://logo.clearbit.com/kpmg.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg",
         websiteUrl: "https://www.kpmg.com",
       },
       {
         name: "Google",
-        logoUrl: "https://logo.clearbit.com/google.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
         websiteUrl: "https://www.google.com",
       },
       {
         name: "Microsoft",
-        logoUrl: "https://logo.clearbit.com/microsoft.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
         websiteUrl: "https://www.microsoft.com",
       },
       {
         name: "Amazon",
-        logoUrl: "https://logo.clearbit.com/amazon.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
         websiteUrl: "https://www.amazon.com",
       },
       {
         name: "Texas Instruments",
-        logoUrl: "https://logo.clearbit.com/ti.com",
+        logoUrl: "https://upload.wikimedia.org/wikipedia/commons/8/85/Texas_Instruments_logo.svg",
         websiteUrl: "https://www.ti.com",
       },
     ];
@@ -4276,17 +4276,23 @@ export default function CollegeDetailPage() {
                                         href={rec.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(rec.name + " company")}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group/rec shrink-0 flex flex-col items-center justify-between p-3.5 sm:p-4 bg-gradient-to-b from-slate-50/90 to-slate-100/60 hover:from-white hover:to-indigo-50/40 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_24px_-4px_rgba(15,23,42,0.1)] hover:-translate-y-1 active:scale-95 cursor-pointer text-center min-w-[155px] sm:min-w-[180px] max-w-[200px]"
-                                        title={`Visit ${rec.name} official page`}
+                                        className="group/rec shrink-0 flex flex-col items-center justify-between p-3 sm:p-3.5 bg-gradient-to-b from-slate-50/90 to-slate-100/60 hover:from-white hover:to-indigo-50/40 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_24px_-4px_rgba(15,23,42,0.1)] hover:-translate-y-1 active:scale-95 cursor-pointer text-center min-w-[170px] sm:min-w-[195px] max-w-[220px]"
                                       >
                                         {/* Logo Container (Large, wide, seamless blend without harsh borders) */}
-                                        <div className="w-full h-16 sm:h-20 mb-2 flex items-center justify-center p-1.5 transition-transform duration-300 group-hover/rec:scale-108">
+                                        <div className="w-full h-20 sm:h-24 flex items-center justify-center px-2 py-1 transition-transform duration-300 group-hover/rec:scale-105">
                                           <img
                                             src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
                                             alt={rec.name}
-                                            className="max-h-12 sm:max-h-16 max-w-full w-auto h-auto object-contain filter drop-shadow-xs"
+                                            className="max-h-16 sm:max-h-20 max-w-[94%] w-auto h-auto object-contain filter drop-shadow-xs"
                                             onError={(e) => {
                                               const target = e.currentTarget;
+                                              const domainGuess = rec.websiteUrl ? new URL(rec.websiteUrl).hostname : `${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`;
+                                              const googleFavicon = `https://www.google.com/s2/favicons?domain=${domainGuess}&sz=128`;
+                                              if (!target.getAttribute("data-tried-fallback")) {
+                                                target.setAttribute("data-tried-fallback", "true");
+                                                target.src = googleFavicon;
+                                                return;
+                                              }
                                               target.style.display = "none";
                                               const parent = target.parentElement;
                                               if (parent && !parent.querySelector(".rec-fallback-badge")) {
@@ -4300,14 +4306,14 @@ export default function CollegeDetailPage() {
                                         </div>
 
                                         {/* Company Name */}
-                                        <div className="w-full">
+                                        <div className="w-full mt-1.5">
                                           <span className="font-outfit font-bold text-xs sm:text-[13px] text-slate-800 group-hover/rec:text-indigo-600 transition-colors line-clamp-2 leading-tight">
                                             {rec.name}
                                           </span>
                                         </div>
 
                                         {/* Subtle Visit hint */}
-                                        <span className="text-[10px] text-slate-400 group-hover/rec:text-indigo-500 font-semibold flex items-center gap-0.5 mt-2 opacity-70 group-hover/rec:opacity-100 transition-opacity">
+                                        <span className="text-[10.5px] text-indigo-500/80 group-hover/rec:text-indigo-600 font-semibold flex items-center gap-0.5 mt-1.5 opacity-80 group-hover/rec:opacity-100 transition-opacity">
                                           Visit ↗
                                         </span>
                                       </a>
