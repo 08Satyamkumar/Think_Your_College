@@ -4266,7 +4266,7 @@ export default function CollegeDetailPage() {
                                 {/* Horizontal Scroll Cards Container */}
                                 <div
                                   id="top-recruiters-scroll-list"
-                                  className="flex items-stretch gap-2.5 sm:gap-3 overflow-x-auto custom-scrollbar py-2 px-0.5 scroll-smooth"
+                                  className="flex items-stretch gap-3 sm:gap-3.5 overflow-x-auto custom-scrollbar py-2 px-0.5 scroll-smooth"
                                 >
                                   {plData.topRecruiters.map((rec, rIdx) => {
                                     const fallbackInitials = rec.name.replace(/[^a-zA-Z]/g, "").slice(0, 2).toUpperCase() || "TC";
@@ -4276,22 +4276,22 @@ export default function CollegeDetailPage() {
                                         href={rec.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(rec.name + " company")}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group/rec shrink-0 flex flex-col items-center justify-between p-3 sm:p-3.5 bg-gradient-to-b from-slate-50/90 to-slate-100/60 hover:from-white hover:to-indigo-50/40 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08)] hover:-translate-y-1 active:scale-95 cursor-pointer text-center min-w-[130px] sm:min-w-[145px] max-w-[160px]"
+                                        className="group/rec shrink-0 flex flex-col items-center justify-between p-3.5 sm:p-4 bg-gradient-to-b from-slate-50/90 to-slate-100/60 hover:from-white hover:to-indigo-50/40 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_24px_-4px_rgba(15,23,42,0.1)] hover:-translate-y-1 active:scale-95 cursor-pointer text-center min-w-[155px] sm:min-w-[180px] max-w-[200px]"
                                         title={`Visit ${rec.name} official page`}
                                       >
-                                        {/* Logo Container (No harsh inner box border, seamless blend) */}
-                                        <div className="w-12 h-12 sm:w-14 sm:h-14 mb-2 flex items-center justify-center p-1 transition-transform duration-300 group-hover/rec:scale-110">
+                                        {/* Logo Container (Large, wide, seamless blend without harsh borders) */}
+                                        <div className="w-full h-16 sm:h-20 mb-2 flex items-center justify-center p-1.5 transition-transform duration-300 group-hover/rec:scale-108">
                                           <img
                                             src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
                                             alt={rec.name}
-                                            className="max-h-full max-w-full object-contain filter drop-shadow-xs"
+                                            className="max-h-12 sm:max-h-16 max-w-full w-auto h-auto object-contain filter drop-shadow-xs"
                                             onError={(e) => {
                                               const target = e.currentTarget;
                                               target.style.display = "none";
                                               const parent = target.parentElement;
                                               if (parent && !parent.querySelector(".rec-fallback-badge")) {
                                                 const fb = document.createElement("div");
-                                                fb.className = "rec-fallback-badge w-10 h-10 rounded-xl bg-[#07264a] text-white flex items-center justify-center font-black text-xs font-outfit shadow-2xs";
+                                                fb.className = "rec-fallback-badge w-14 h-14 rounded-2xl bg-[#07264a] text-white flex items-center justify-center font-black text-sm font-outfit shadow-sm";
                                                 fb.innerText = fallbackInitials;
                                                 parent.appendChild(fb);
                                               }
@@ -4301,13 +4301,13 @@ export default function CollegeDetailPage() {
 
                                         {/* Company Name */}
                                         <div className="w-full">
-                                          <span className="font-outfit font-bold text-xs sm:text-[12.5px] text-slate-800 group-hover/rec:text-indigo-600 transition-colors line-clamp-2 leading-snug">
+                                          <span className="font-outfit font-bold text-xs sm:text-[13px] text-slate-800 group-hover/rec:text-indigo-600 transition-colors line-clamp-2 leading-tight">
                                             {rec.name}
                                           </span>
                                         </div>
 
                                         {/* Subtle Visit hint */}
-                                        <span className="text-[9.5px] text-slate-400 group-hover/rec:text-indigo-500 font-semibold flex items-center gap-0.5 mt-1.5 opacity-60 group-hover/rec:opacity-100 transition-opacity">
+                                        <span className="text-[10px] text-slate-400 group-hover/rec:text-indigo-500 font-semibold flex items-center gap-0.5 mt-2 opacity-70 group-hover/rec:opacity-100 transition-opacity">
                                           Visit ↗
                                         </span>
                                       </a>
@@ -7977,8 +7977,8 @@ export default function CollegeDetailPage() {
                                       className="p-3 bg-white border border-slate-200/90 hover:border-indigo-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
                                     >
                                       <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200/80 flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+                                        <div className="flex items-center gap-2.5">
+                                          <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center p-1 overflow-hidden shrink-0 shadow-2xs">
                                             <img
                                               src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
                                               alt={rec.name}
@@ -7989,14 +7989,14 @@ export default function CollegeDetailPage() {
                                                 const parent = target.parentElement;
                                                 if (parent && !parent.querySelector(".rec-modal-badge")) {
                                                   const fb = document.createElement("div");
-                                                  fb.className = "rec-modal-badge w-full h-full bg-[#07264a] text-white flex items-center justify-center font-black text-[9px]";
+                                                  fb.className = "rec-modal-badge w-full h-full bg-[#07264a] text-white flex items-center justify-center font-black text-[10px]";
                                                   fb.innerText = fallbackInitials;
                                                   parent.appendChild(fb);
                                                 }
                                               }}
                                             />
                                           </div>
-                                          <span className="text-[11px] font-bold text-slate-800">
+                                          <span className="text-xs font-bold text-slate-800">
                                             #{rIdx + 1} {rec.name || "Unnamed Company"}
                                           </span>
                                         </div>
@@ -8163,8 +8163,8 @@ export default function CollegeDetailPage() {
                                   className="p-3 bg-white border border-slate-200/90 hover:border-indigo-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
                                 >
                                   <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200/80 flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+                                    <div className="flex items-center gap-2.5">
+                                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center p-1 overflow-hidden shrink-0 shadow-2xs">
                                         <img
                                           src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
                                           alt={rec.name}
@@ -8175,14 +8175,14 @@ export default function CollegeDetailPage() {
                                             const parent = target.parentElement;
                                             if (parent && !parent.querySelector(".rec-modal-badge")) {
                                               const fb = document.createElement("div");
-                                              fb.className = "rec-modal-badge w-full h-full bg-[#07264a] text-white flex items-center justify-center font-black text-[9px]";
+                                              fb.className = "rec-modal-badge w-full h-full bg-[#07264a] text-white flex items-center justify-center font-black text-[10px]";
                                               fb.innerText = fallbackInitials;
                                               parent.appendChild(fb);
                                             }
                                           }}
                                         />
                                       </div>
-                                      <span className="text-[11px] font-bold text-slate-800">
+                                      <span className="text-xs font-bold text-slate-800">
                                         #{rIdx + 1} {rec.name || "Unnamed Company"}
                                       </span>
                                     </div>
