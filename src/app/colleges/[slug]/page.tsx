@@ -200,6 +200,12 @@ const getCourseSalaryCellValue = (row: CourseSalaryRow, colIdx: number): string 
   return "NA";
 };
 
+interface TopRecruiterItem {
+  name: string;
+  logoUrl?: string;
+  websiteUrl?: string;
+}
+
 interface PlacementsArticleData {
   title?: string;
   introParagraph?: string;
@@ -211,6 +217,8 @@ interface PlacementsArticleData {
   salaryTableTitle?: string;
   salaryTableCols?: string[];
   salaryTable?: CourseSalaryRow[];
+  topRecruitersTitle?: string;
+  topRecruiters?: TopRecruiterItem[];
 }
 
 interface FaqItem {
@@ -694,6 +702,79 @@ const IIT_DELHI_MASTER_DATA: CollegeDetail = {
       { course: "M.A.", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
       { course: "M.Des", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
     ],
+    topRecruitersTitle: "Top Recruiters",
+    topRecruiters: [
+      {
+        name: "ACCENTURE",
+        logoUrl: "https://logo.clearbit.com/accenture.com",
+        websiteUrl: "https://www.accenture.com",
+      },
+      {
+        name: "Barclays Bank",
+        logoUrl: "https://logo.clearbit.com/barclays.com",
+        websiteUrl: "https://www.barclays.com",
+      },
+      {
+        name: "Capgemini",
+        logoUrl: "https://logo.clearbit.com/capgemini.com",
+        websiteUrl: "https://www.capgemini.com",
+      },
+      {
+        name: "Deloitte",
+        logoUrl: "https://logo.clearbit.com/deloitte.com",
+        websiteUrl: "https://www.deloitte.com",
+      },
+      {
+        name: "Flipkart",
+        logoUrl: "https://logo.clearbit.com/flipkart.com",
+        websiteUrl: "https://www.flipkart.com",
+      },
+      {
+        name: "GAIL (Gas Authority Of India Ltd)",
+        logoUrl: "https://logo.clearbit.com/gailonline.com",
+        websiteUrl: "https://www.gailonline.com",
+      },
+      {
+        name: "Hindustan Unilever",
+        logoUrl: "https://logo.clearbit.com/hul.co.in",
+        websiteUrl: "https://www.hul.co.in",
+      },
+      {
+        name: "ICICI Securities",
+        logoUrl: "https://logo.clearbit.com/icicisecurities.com",
+        websiteUrl: "https://www.icicisecurities.com",
+      },
+      {
+        name: "JP Morgan Chase",
+        logoUrl: "https://logo.clearbit.com/jpmorganchase.com",
+        websiteUrl: "https://www.jpmorganchase.com",
+      },
+      {
+        name: "KPMG",
+        logoUrl: "https://logo.clearbit.com/kpmg.com",
+        websiteUrl: "https://www.kpmg.com",
+      },
+      {
+        name: "Google",
+        logoUrl: "https://logo.clearbit.com/google.com",
+        websiteUrl: "https://www.google.com",
+      },
+      {
+        name: "Microsoft",
+        logoUrl: "https://logo.clearbit.com/microsoft.com",
+        websiteUrl: "https://www.microsoft.com",
+      },
+      {
+        name: "Amazon",
+        logoUrl: "https://logo.clearbit.com/amazon.com",
+        websiteUrl: "https://www.amazon.com",
+      },
+      {
+        name: "Texas Instruments",
+        logoUrl: "https://logo.clearbit.com/ti.com",
+        websiteUrl: "https://www.ti.com",
+      },
+    ],
   },
   description: `Indian Institute of Technology Delhi (IIT Delhi) is one of the premier public technical and research universities in India. Established in 1961 as the College of Engineering, it was declared an 'Institute of National Importance' under the Institutes of Technology Act.
 
@@ -946,6 +1027,7 @@ type MiniModalId =
   | "placements_article"
   | "placements_stats"
   | "placements_salary"
+  | "placements_recruiters"
   | "cutoffs"
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
@@ -1154,7 +1236,7 @@ export default function CollegeDetailPage() {
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeMiniModal, setActiveMiniModal] = useState<MiniModalId>(null);
-  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary">("article");
+  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary" | "recruiters">("article");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -1814,6 +1896,79 @@ export default function CollegeDetailPage() {
       { course: "M.Des", values: ["₹15.59 LPA"], salary: "₹15.59 LPA" },
     ];
 
+    const defaultTopRecruitersList: TopRecruiterItem[] = [
+      {
+        name: "ACCENTURE",
+        logoUrl: "https://logo.clearbit.com/accenture.com",
+        websiteUrl: "https://www.accenture.com",
+      },
+      {
+        name: "Barclays Bank",
+        logoUrl: "https://logo.clearbit.com/barclays.com",
+        websiteUrl: "https://www.barclays.com",
+      },
+      {
+        name: "Capgemini",
+        logoUrl: "https://logo.clearbit.com/capgemini.com",
+        websiteUrl: "https://www.capgemini.com",
+      },
+      {
+        name: "Deloitte",
+        logoUrl: "https://logo.clearbit.com/deloitte.com",
+        websiteUrl: "https://www.deloitte.com",
+      },
+      {
+        name: "Flipkart",
+        logoUrl: "https://logo.clearbit.com/flipkart.com",
+        websiteUrl: "https://www.flipkart.com",
+      },
+      {
+        name: "GAIL (Gas Authority Of India Ltd)",
+        logoUrl: "https://logo.clearbit.com/gailonline.com",
+        websiteUrl: "https://www.gailonline.com",
+      },
+      {
+        name: "Hindustan Unilever",
+        logoUrl: "https://logo.clearbit.com/hul.co.in",
+        websiteUrl: "https://www.hul.co.in",
+      },
+      {
+        name: "ICICI Securities",
+        logoUrl: "https://logo.clearbit.com/icicisecurities.com",
+        websiteUrl: "https://www.icicisecurities.com",
+      },
+      {
+        name: "JP Morgan Chase",
+        logoUrl: "https://logo.clearbit.com/jpmorganchase.com",
+        websiteUrl: "https://www.jpmorganchase.com",
+      },
+      {
+        name: "KPMG",
+        logoUrl: "https://logo.clearbit.com/kpmg.com",
+        websiteUrl: "https://www.kpmg.com",
+      },
+      {
+        name: "Google",
+        logoUrl: "https://logo.clearbit.com/google.com",
+        websiteUrl: "https://www.google.com",
+      },
+      {
+        name: "Microsoft",
+        logoUrl: "https://logo.clearbit.com/microsoft.com",
+        websiteUrl: "https://www.microsoft.com",
+      },
+      {
+        name: "Amazon",
+        logoUrl: "https://logo.clearbit.com/amazon.com",
+        websiteUrl: "https://www.amazon.com",
+      },
+      {
+        name: "Texas Instruments",
+        logoUrl: "https://logo.clearbit.com/ti.com",
+        websiteUrl: "https://www.ti.com",
+      },
+    ];
+
     if (college.placementsArticle) {
       return {
         title: college.placementsArticle.title || `${shortName} Placements 2026`,
@@ -1837,6 +1992,11 @@ export default function CollegeDetailPage() {
           college.placementsArticle.salaryTable && college.placementsArticle.salaryTable.length > 0
             ? college.placementsArticle.salaryTable
             : defaultSalaryTable,
+        topRecruitersTitle: college.placementsArticle.topRecruitersTitle || "Top Recruiters",
+        topRecruiters:
+          college.placementsArticle.topRecruiters && college.placementsArticle.topRecruiters.length > 0
+            ? college.placementsArticle.topRecruiters
+            : defaultTopRecruitersList,
       };
     }
 
@@ -1851,6 +2011,8 @@ export default function CollegeDetailPage() {
       salaryTableTitle: `${shortName} Course-wise Median Salary`,
       salaryTableCols: defaultSalaryTableCols,
       salaryTable: defaultSalaryTable,
+      topRecruitersTitle: "Top Recruiters",
+      topRecruiters: defaultTopRecruitersList,
     };
   };
 
@@ -4047,6 +4209,113 @@ export default function CollegeDetailPage() {
                                 </div>
                               </div>
                             )}
+
+                            {/* Table 3: Top Recruiters (Seamless Logo & Direct Link Integration) */}
+                            {plData.topRecruiters && plData.topRecruiters.length > 0 && (
+                              <div className="pt-3 space-y-2.5">
+                                <div className="flex items-center justify-between gap-2">
+                                  <div>
+                                    <h3 className="font-outfit font-bold text-sm sm:text-[15px] text-slate-900 flex items-center gap-1.5">
+                                      <span>{plData.topRecruitersTitle || "Top Recruiters"}</span>
+                                    </h3>
+                                    <span className="text-[11px] text-slate-500 font-medium hidden sm:inline">
+                                      Leading recruiters visiting {collegeData.name.split(" - ")[0]} for campus placements
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center gap-1.5">
+                                    {isAdmin && (
+                                      <button
+                                        type="button"
+                                        onClick={() => openMiniModal("placements_recruiters")}
+                                        className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-bold border border-indigo-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                      >
+                                        <Edit className="w-3 h-3" />
+                                        <span>Edit Recruiters</span>
+                                      </button>
+                                    )}
+
+                                    {/* Slider Navigation Arrows */}
+                                    <div className="flex items-center gap-1">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const el = document.getElementById("top-recruiters-scroll-list");
+                                          if (el) el.scrollBy({ left: -260, behavior: "smooth" });
+                                        }}
+                                        className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-90"
+                                        title="Scroll Left"
+                                      >
+                                        <ChevronLeft className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const el = document.getElementById("top-recruiters-scroll-list");
+                                          if (el) el.scrollBy({ left: 260, behavior: "smooth" });
+                                        }}
+                                        className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-90"
+                                        title="Scroll Right"
+                                      >
+                                        <ChevronRight className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Horizontal Scroll Cards Container */}
+                                <div
+                                  id="top-recruiters-scroll-list"
+                                  className="flex items-stretch gap-2.5 sm:gap-3 overflow-x-auto custom-scrollbar py-2 px-0.5 scroll-smooth"
+                                >
+                                  {plData.topRecruiters.map((rec, rIdx) => {
+                                    const fallbackInitials = rec.name.replace(/[^a-zA-Z]/g, "").slice(0, 2).toUpperCase() || "TC";
+                                    return (
+                                      <a
+                                        key={rIdx}
+                                        href={rec.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(rec.name + " company")}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group/rec shrink-0 flex flex-col items-center justify-between p-3 sm:p-3.5 bg-gradient-to-b from-slate-50/90 to-slate-100/60 hover:from-white hover:to-indigo-50/40 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08)] hover:-translate-y-1 active:scale-95 cursor-pointer text-center min-w-[130px] sm:min-w-[145px] max-w-[160px]"
+                                        title={`Visit ${rec.name} official page`}
+                                      >
+                                        {/* Logo Container (No harsh inner box border, seamless blend) */}
+                                        <div className="w-12 h-12 sm:w-14 sm:h-14 mb-2 flex items-center justify-center p-1 transition-transform duration-300 group-hover/rec:scale-110">
+                                          <img
+                                            src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
+                                            alt={rec.name}
+                                            className="max-h-full max-w-full object-contain filter drop-shadow-xs"
+                                            onError={(e) => {
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                              const parent = target.parentElement;
+                                              if (parent && !parent.querySelector(".rec-fallback-badge")) {
+                                                const fb = document.createElement("div");
+                                                fb.className = "rec-fallback-badge w-10 h-10 rounded-xl bg-[#07264a] text-white flex items-center justify-center font-black text-xs font-outfit shadow-2xs";
+                                                fb.innerText = fallbackInitials;
+                                                parent.appendChild(fb);
+                                              }
+                                            }}
+                                          />
+                                        </div>
+
+                                        {/* Company Name */}
+                                        <div className="w-full">
+                                          <span className="font-outfit font-bold text-xs sm:text-[12.5px] text-slate-800 group-hover/rec:text-indigo-600 transition-colors line-clamp-2 leading-snug">
+                                            {rec.name}
+                                          </span>
+                                        </div>
+
+                                        {/* Subtle Visit hint */}
+                                        <span className="text-[9.5px] text-slate-400 group-hover/rec:text-indigo-500 font-semibold flex items-center gap-0.5 mt-1.5 opacity-60 group-hover/rec:opacity-100 transition-opacity">
+                                          Visit ↗
+                                        </span>
+                                      </a>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -4226,6 +4495,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "placements_article" && "📝 Edit Placements Article & Subsections"}
                     {activeMiniModal === "placements_stats" && "📊 Edit Placement Statistics Highlights Table"}
                     {activeMiniModal === "placements_salary" && "💰 Edit Course-wise Median Salary Table"}
+                    {activeMiniModal === "placements_recruiters" && "🏢 Edit Top Recruiters & Company Logos"}
                     {activeMiniModal === "cutoffs" && "📈 Edit Cutoff Ranks Table"}
                     {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
                     {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
@@ -6977,6 +7247,17 @@ export default function CollegeDetailPage() {
                       >
                         💰 3. Median Salary Table
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setPlacementsModalTab("recruiters")}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          placementsModalTab === "recruiters"
+                            ? "bg-white text-indigo-900 shadow-2xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        🏢 4. Top Recruiters
+                      </button>
                     </div>
 
                     {/* Tab 1: Article Content */}
@@ -7623,6 +7904,374 @@ export default function CollegeDetailPage() {
                         })()}
                       </div>
                     )}
+
+                    {/* Tab 4: Top Recruiters */}
+                    {placementsModalTab === "recruiters" && (
+                      <div className="p-3.5 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/30 border border-indigo-200/80 rounded-2xl space-y-3.5">
+                        {(() => {
+                          const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                          const recruiters = curArticle.topRecruiters || getCollegePlacementsArticle(tempData).topRecruiters || [];
+
+                          return (
+                            <>
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                  <span className="text-xs font-black text-indigo-950 uppercase tracking-wide block">
+                                    🏢 Top Recruiters & Company Logos
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 font-medium">
+                                    Manage recruiting partners, logos, and clickable company links ({recruiters.length} companies)
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updatedRecruiters = [
+                                      ...recruiters,
+                                      {
+                                        name: "New Recruiter",
+                                        logoUrl: "",
+                                        websiteUrl: "",
+                                      },
+                                    ];
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: {
+                                        ...curArticle,
+                                        topRecruiters: updatedRecruiters,
+                                      },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Recruiter</span>
+                                </button>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                  Section Title
+                                </label>
+                                <input
+                                  type="text"
+                                  value={curArticle.topRecruitersTitle || "Top Recruiters"}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      placementsArticle: { ...curArticle, topRecruitersTitle: e.target.value },
+                                    });
+                                  }}
+                                  placeholder="e.g. Top Recruiters"
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              {/* Recruiter Items List */}
+                              <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                                {recruiters.map((rec, rIdx) => {
+                                  const fallbackInitials = rec.name.replace(/[^a-zA-Z]/g, "").slice(0, 2).toUpperCase() || "TC";
+                                  return (
+                                    <div
+                                      key={rIdx}
+                                      className="p-3 bg-white border border-slate-200/90 hover:border-indigo-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                                    >
+                                      <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200/80 flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+                                            <img
+                                              src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
+                                              alt={rec.name}
+                                              className="max-h-full max-w-full object-contain"
+                                              onError={(e) => {
+                                                const target = e.currentTarget;
+                                                target.style.display = "none";
+                                                const parent = target.parentElement;
+                                                if (parent && !parent.querySelector(".rec-modal-badge")) {
+                                                  const fb = document.createElement("div");
+                                                  fb.className = "rec-modal-badge w-full h-full bg-[#07264a] text-white flex items-center justify-center font-black text-[9px]";
+                                                  fb.innerText = fallbackInitials;
+                                                  parent.appendChild(fb);
+                                                }
+                                              }}
+                                            />
+                                          </div>
+                                          <span className="text-[11px] font-bold text-slate-800">
+                                            #{rIdx + 1} {rec.name || "Unnamed Company"}
+                                          </span>
+                                        </div>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = recruiters.filter((_, i) => i !== rIdx);
+                                            setTempData({
+                                              ...tempData,
+                                              placementsArticle: { ...curArticle, topRecruiters: updated },
+                                            });
+                                          }}
+                                          className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                          title="Remove Recruiter"
+                                        >
+                                          <Trash2 className="w-3 h-3" />
+                                          <span>Remove</span>
+                                        </button>
+                                      </div>
+
+                                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                        <div>
+                                          <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                            Company Name *
+                                          </label>
+                                          <input
+                                            type="text"
+                                            required
+                                            value={rec.name}
+                                            onChange={(e) => {
+                                              const updated = [...recruiters];
+                                              updated[rIdx] = { ...updated[rIdx], name: e.target.value };
+                                              setTempData({
+                                                ...tempData,
+                                                placementsArticle: { ...curArticle, topRecruiters: updated },
+                                              });
+                                            }}
+                                            placeholder="e.g. Google"
+                                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                          />
+                                        </div>
+
+                                        <div>
+                                          <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                            Logo Image URL
+                                          </label>
+                                          <input
+                                            type="text"
+                                            value={rec.logoUrl || ""}
+                                            onChange={(e) => {
+                                              const updated = [...recruiters];
+                                              updated[rIdx] = { ...updated[rIdx], logoUrl: e.target.value };
+                                              setTempData({
+                                                ...tempData,
+                                                placementsArticle: { ...curArticle, topRecruiters: updated },
+                                              });
+                                            }}
+                                            placeholder="e.g. https://... or auto logo"
+                                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800"
+                                          />
+                                        </div>
+
+                                        <div>
+                                          <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                            Website / Career Link URL
+                                          </label>
+                                          <input
+                                            type="text"
+                                            value={rec.websiteUrl || ""}
+                                            onChange={(e) => {
+                                              const updated = [...recruiters];
+                                              updated[rIdx] = { ...updated[rIdx], websiteUrl: e.target.value };
+                                              setTempData({
+                                                ...tempData,
+                                                placementsArticle: { ...curArticle, topRecruiters: updated },
+                                              });
+                                            }}
+                                            placeholder="e.g. https://careers.google.com"
+                                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* MODAL: TOP RECRUITERS & COMPANY LOGOS (INDIVIDUAL) */}
+                {activeMiniModal === "placements_recruiters" && (
+                  <div className="p-3.5 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/30 border border-indigo-200/80 rounded-2xl space-y-3.5">
+                    {(() => {
+                      const curArticle = tempData.placementsArticle || getCollegePlacementsArticle(tempData);
+                      const recruiters = curArticle.topRecruiters || getCollegePlacementsArticle(tempData).topRecruiters || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-indigo-950 uppercase tracking-wide block">
+                                🏢 Top Recruiters & Company Logos
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Manage recruiting partners, logos, and clickable company links ({recruiters.length} companies)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updatedRecruiters = [
+                                  ...recruiters,
+                                  {
+                                    name: "New Recruiter",
+                                    logoUrl: "",
+                                    websiteUrl: "",
+                                  },
+                                ];
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: {
+                                    ...curArticle,
+                                    topRecruiters: updatedRecruiters,
+                                  },
+                                });
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add Recruiter</span>
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                              Section Title
+                            </label>
+                            <input
+                              type="text"
+                              value={curArticle.topRecruitersTitle || "Top Recruiters"}
+                              onChange={(e) => {
+                                setTempData({
+                                  ...tempData,
+                                  placementsArticle: { ...curArticle, topRecruitersTitle: e.target.value },
+                                });
+                              }}
+                              placeholder="e.g. Top Recruiters"
+                              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                            />
+                          </div>
+
+                          {/* Recruiter Items List */}
+                          <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                            {recruiters.map((rec, rIdx) => {
+                              const fallbackInitials = rec.name.replace(/[^a-zA-Z]/g, "").slice(0, 2).toUpperCase() || "TC";
+                              return (
+                                <div
+                                  key={rIdx}
+                                  className="p-3 bg-white border border-slate-200/90 hover:border-indigo-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                                >
+                                  <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200/80 flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+                                        <img
+                                          src={rec.logoUrl || `https://logo.clearbit.com/${rec.name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`}
+                                          alt={rec.name}
+                                          className="max-h-full max-w-full object-contain"
+                                          onError={(e) => {
+                                            const target = e.currentTarget;
+                                            target.style.display = "none";
+                                            const parent = target.parentElement;
+                                            if (parent && !parent.querySelector(".rec-modal-badge")) {
+                                              const fb = document.createElement("div");
+                                              fb.className = "rec-modal-badge w-full h-full bg-[#07264a] text-white flex items-center justify-center font-black text-[9px]";
+                                              fb.innerText = fallbackInitials;
+                                              parent.appendChild(fb);
+                                            }
+                                          }}
+                                        />
+                                      </div>
+                                      <span className="text-[11px] font-bold text-slate-800">
+                                        #{rIdx + 1} {rec.name || "Unnamed Company"}
+                                      </span>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = recruiters.filter((_, i) => i !== rIdx);
+                                        setTempData({
+                                          ...tempData,
+                                          placementsArticle: { ...curArticle, topRecruiters: updated },
+                                        });
+                                      }}
+                                      className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                      title="Remove Recruiter"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                      <span>Remove</span>
+                                    </button>
+                                  </div>
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                    <div>
+                                      <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                        Company Name *
+                                      </label>
+                                      <input
+                                        type="text"
+                                        required
+                                        value={rec.name}
+                                        onChange={(e) => {
+                                          const updated = [...recruiters];
+                                          updated[rIdx] = { ...updated[rIdx], name: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, topRecruiters: updated },
+                                          });
+                                        }}
+                                        placeholder="e.g. Google"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                        Logo Image URL
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={rec.logoUrl || ""}
+                                        onChange={(e) => {
+                                          const updated = [...recruiters];
+                                          updated[rIdx] = { ...updated[rIdx], logoUrl: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, topRecruiters: updated },
+                                          });
+                                        }}
+                                        placeholder="e.g. https://... or auto logo"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800"
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                        Website / Career Link URL
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={rec.websiteUrl || ""}
+                                        onChange={(e) => {
+                                          const updated = [...recruiters];
+                                          updated[rIdx] = { ...updated[rIdx], websiteUrl: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            placementsArticle: { ...curArticle, topRecruiters: updated },
+                                          });
+                                        }}
+                                        placeholder="e.g. https://careers.google.com"
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 )}
 
