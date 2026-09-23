@@ -3797,10 +3797,10 @@ export default function CollegeDetailPage() {
                                           >
                                             <div className="px-4 sm:px-5 pb-5 pt-1">
                                               {/* Exact Shiksha Sub-Box Table Card matching reference image */}
-                                              <div className="rounded-xl border border-slate-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)] overflow-hidden bg-white">
-                                                {/* Dark Navy Blue Banner Header */}
-                                                <div className="bg-[#07264a] text-white px-4 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between">
-                                                  <h4 className="font-outfit font-bold text-xs sm:text-sm tracking-wide text-white">
+                                              <div className="rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] overflow-hidden bg-white">
+                                                {/* Light Soft Blue Banner Header */}
+                                                <div className="bg-[#f0f5ff] text-[#1e293b] px-4 sm:px-5 py-2.5 sm:py-3 border-b border-slate-200/80 flex items-center justify-between">
+                                                  <h4 className="font-outfit font-bold text-xs sm:text-sm tracking-wide text-slate-900">
                                                     {group.groupTitle}
                                                   </h4>
                                                 </div>
@@ -3819,7 +3819,7 @@ export default function CollegeDetailPage() {
                                                     {group.courses.map((course, cIdx) => (
                                                       <div
                                                         key={`hdr-${cIdx}`}
-                                                        className="px-4 sm:px-5 py-2.5 sm:py-3 bg-white border-b border-r border-slate-300 last:border-r-0 flex items-center"
+                                                        className="px-4 sm:px-5 py-2.5 sm:py-3 bg-white border-b border-r border-slate-200/80 last:border-r-0 flex items-center"
                                                       >
                                                         <h5 className="font-outfit font-bold text-slate-900 text-xs sm:text-[14px]">
                                                           {course.courseName}
@@ -3831,7 +3831,7 @@ export default function CollegeDetailPage() {
                                                     {group.courses.map((course, cIdx) => (
                                                       <div
                                                         key={`body-${cIdx}`}
-                                                        className="p-4 sm:p-5 bg-white border-r border-slate-300 last:border-r-0 space-y-2.5 text-xs sm:text-[13px] text-slate-700 font-normal leading-relaxed"
+                                                        className="p-4 sm:p-5 bg-white border-r border-slate-200/80 last:border-r-0 space-y-2.5 text-xs sm:text-[13px] text-slate-700 font-normal leading-relaxed"
                                                       >
                                                         {course.firstYearFees && (
                                                           <div className="flex items-baseline gap-1.5 flex-wrap">
