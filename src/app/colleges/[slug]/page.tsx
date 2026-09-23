@@ -228,6 +228,9 @@ interface PlacementsArticleData {
   insightsTitle?: string;
   insightsSubtitle?: string;
   insights?: PlacementInsightItem[];
+  faqsHeading?: string;
+  faqsSubtitle?: string;
+  faqs?: FaqItem[];
 }
 
 interface FaqItem {
@@ -1131,6 +1134,7 @@ type MiniModalId =
   | "placements_salary"
   | "placements_recruiters"
   | "placements_insights"
+  | "placements_faqs"
   | "cutoffs"
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
@@ -1339,7 +1343,8 @@ export default function CollegeDetailPage() {
   // Admin Session and In-Page Editing States
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeMiniModal, setActiveMiniModal] = useState<MiniModalId>(null);
-  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary" | "recruiters" | "insights">("article");
+  const [placementsModalTab, setPlacementsModalTab] = useState<"article" | "stats" | "salary" | "recruiters" | "insights" | "faqs">("article");
+  const [openPlacementsFaqIdx, setOpenPlacementsFaqIdx] = useState<number | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -2103,6 +2108,29 @@ export default function CollegeDetailPage() {
       },
     ];
 
+    const defaultPlacementFaqs: FaqItem[] = [
+      {
+        question: `What is the placement percentage recorded during ${shortName} placements?`,
+        answer: `${shortName} recorded an exceptional placement rate with over 85-90% eligible registered candidates successfully securing premium employment and international offers across core engineering, analytics, IT, and management sectors.`,
+      },
+      {
+        question: `How are the BTech placements at ${shortName}?`,
+        answer: `BTech placements at ${shortName} are among the highest ranked in the nation, with the undergraduate median package reaching INR 20 LPA and international/domestic highest compensation packages exceeding INR 2 Crore per annum.`,
+      },
+      {
+        question: `Can I take admission at ${shortName} MTech course without GATE?`,
+        answer: `Direct admission for regular full-time MTech without GATE is typically open only to graduating IITians with a CGPA of 8.0 and above. Candidates from other recognized institutions require a valid GATE percentile followed by written assessment or interview.`,
+      },
+      {
+        question: `How can I get BTech Admission at ${shortName}?`,
+        answer: `Undergraduate BTech admission at ${shortName} is strictly merit-based through qualifying JEE Advanced with high cut-off ranks followed by centralized seat allocation via JoSAA counselling.`,
+      },
+      {
+        question: `Which are the top recruiters of ${shortName}?`,
+        answer: `Premier global recruiters visiting campus include Google, Microsoft, Amazon, Texas Instruments, Accenture, Deloitte, Goldman Sachs, Apple, Qualcomm, and KPMG, offering domestic and overseas roles.`,
+      },
+    ];
+
     if (college.placementsArticle) {
       return {
         title: college.placementsArticle.title || `${shortName} Placements 2026`,
@@ -2137,6 +2165,12 @@ export default function CollegeDetailPage() {
           college.placementsArticle.insights && college.placementsArticle.insights.length > 0
             ? college.placementsArticle.insights
             : defaultPlacementInsights,
+        faqsHeading: college.placementsArticle.faqsHeading || "Commonly asked questions",
+        faqsSubtitle: college.placementsArticle.faqsSubtitle || "On Placements",
+        faqs:
+          college.placementsArticle.faqs && college.placementsArticle.faqs.length > 0
+            ? college.placementsArticle.faqs
+            : defaultPlacementFaqs,
       };
     }
 
@@ -2156,6 +2190,9 @@ export default function CollegeDetailPage() {
       insightsTitle: "Insights on Placements",
       insightsSubtitle: "Based on 281 Student Responses",
       insights: defaultPlacementInsights,
+      faqsHeading: "Commonly asked questions",
+      faqsSubtitle: "On Placements",
+      faqs: defaultPlacementFaqs,
     };
   };
 
@@ -4683,6 +4720,92 @@ export default function CollegeDetailPage() {
                                     <span>View placement details</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
                                   </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Separator line & COMMONLY ASKED QUESTIONS ON PLACEMENTS ACCORDION */}
+                            {plData.faqs && plData.faqs.length > 0 && (
+                              <div className="pt-5 mt-4 border-t border-slate-200/80 space-y-3.5">
+                                {/* Header Row with Yellow/Amber Q&A Badge */}
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-full bg-amber-100/90 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
+                                      <HelpCircle className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                      <h4 className="font-outfit font-bold text-sm sm:text-base text-slate-900 leading-tight">
+                                        {plData.faqsHeading || "Commonly asked questions"}
+                                      </h4>
+                                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                                        {plData.faqsSubtitle || "On Placements"}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => openMiniModal("placements_faqs")}
+                                      className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                      <span>Edit Placement FAQs</span>
+                                    </button>
+                                  )}
+                                </div>
+
+                                {/* Accordion Questions List */}
+                                <div className="divide-y divide-slate-100/90 pt-1">
+                                  {plData.faqs.map((faq, fIdx) => {
+                                    const isOpen = openPlacementsFaqIdx === fIdx;
+                                    const rawQ = faq.question.trim();
+                                    const formattedQ = rawQ.startsWith("Q:") || rawQ.startsWith("Q.") ? rawQ : `Q: ${rawQ}`;
+                                    const rawA = faq.answer.trim();
+                                    const formattedA = rawA.startsWith("A:") || rawA.startsWith("A.") ? rawA : `A: ${rawA}`;
+
+                                    return (
+                                      <div key={fIdx} className="py-2.5 first:pt-1 last:pb-0">
+                                        <button
+                                          type="button"
+                                          onClick={() => setOpenPlacementsFaqIdx(isOpen ? null : fIdx)}
+                                          className="w-full flex items-center justify-between gap-3 text-left py-1 text-slate-800 hover:text-blue-600 transition-colors cursor-pointer group/q"
+                                        >
+                                          <span className="font-outfit font-bold text-[13px] sm:text-[13.5px] leading-snug group-hover/q:text-blue-600 transition-colors">
+                                            {formattedQ}
+                                          </span>
+                                          <div className="flex items-center gap-2 shrink-0">
+                                            {fIdx === 3 && (
+                                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/70 text-[11px] font-bold">
+                                                5 👍
+                                              </span>
+                                            )}
+                                            <ChevronDown
+                                              className={`w-4 h-4 text-slate-500 group-hover/q:text-blue-600 transition-transform duration-200 ${
+                                                isOpen ? "rotate-180 text-blue-600" : ""
+                                              }`}
+                                            />
+                                          </div>
+                                        </button>
+
+                                        <AnimatePresence initial={false}>
+                                          {isOpen && (
+                                            <motion.div
+                                              initial={{ opacity: 0, height: 0 }}
+                                              animate={{ opacity: 1, height: "auto" }}
+                                              exit={{ opacity: 0, height: 0 }}
+                                              transition={{ duration: 0.22, ease: "easeInOut" }}
+                                              className="overflow-hidden"
+                                            >
+                                              <div className="pt-2 pb-2 pl-3 text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal border-l-2 border-amber-300 ml-1 mt-1 bg-amber-50/40 rounded-r-xl pr-3">
+                                                {formattedA}
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             )}
