@@ -278,7 +278,7 @@ interface CutoffRoundComparisonData {
   filterDatasets?: Record<string, CutoffComparisonRow[]>;
 }
 
-function ScrollProgressIndicator({ targetId }: { targetId: string }) {
+function ScrollProgressIndicator({ targetId, standalone = true }: { targetId: string; standalone?: boolean }) {
   const [progress, setProgress] = useState(0);
   const [thumbRatio, setThumbRatio] = useState(0.28);
   const [canScroll, setCanScroll] = useState(false);
@@ -316,17 +316,25 @@ function ScrollProgressIndicator({ targetId }: { targetId: string }) {
 
   if (!canScroll) return null;
 
+  const bar = (
+    <div className="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-full relative overflow-hidden flex items-center">
+      <div
+        className="h-full bg-slate-800 rounded-full transition-all duration-100 ease-out"
+        style={{
+          width: `${Math.max(18, Math.round(thumbRatio * 100))}%`,
+          marginLeft: `${Math.round(progress * (1 - thumbRatio) * 100)}%`,
+        }}
+      />
+    </div>
+  );
+
+  if (!standalone) {
+    return bar;
+  }
+
   return (
     <div className="flex justify-center items-center pt-2.5 pb-0.5 w-full">
-      <div className="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-full relative overflow-hidden flex items-center">
-        <div
-          className="h-full bg-slate-800 rounded-full transition-all duration-100 ease-out"
-          style={{
-            width: `${Math.max(18, Math.round(thumbRatio * 100))}%`,
-            marginLeft: `${Math.round(progress * (1 - thumbRatio) * 100)}%`,
-          }}
-        />
-      </div>
+      {bar}
     </div>
   );
 }
@@ -4642,7 +4650,40 @@ export default function CollegeDetailPage() {
                                     </div>
                                   ))}
                                 </div>
-                                <ScrollProgressIndicator targetId="insights-scroll-list" />
+                                {/* Scroll indicator & View All row */}
+                                <div className="relative flex items-center justify-center pt-3 pb-1 w-full min-h-[32px]">
+                                  <ScrollProgressIndicator targetId="insights-scroll-list" standalone={false} />
+
+                                  {/* Right-aligned 'View All ->' (Navigates to Reviews section) */}
+                                  <div className="absolute right-0 top-1/2 -translate-y-1/2">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveTab("reviews");
+                                        document.getElementById("college-nav-tabs-bar")?.scrollIntoView({ behavior: "smooth" });
+                                      }}
+                                      className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] flex items-center gap-1 hover:underline cursor-pointer transition-all active:scale-95"
+                                    >
+                                      <span>View All</span>
+                                      <ArrowRight className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Centered 'View placement details ->' button (Navigates to Placements section) */}
+                                <div className="flex justify-center items-center mt-2.5 pb-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setActiveTab("placements");
+                                      document.getElementById("college-nav-tabs-bar")?.scrollIntoView({ behavior: "smooth" });
+                                    }}
+                                    className="px-5 py-2 rounded-full border border-slate-700/80 hover:border-slate-950 text-slate-800 hover:text-slate-950 font-bold text-xs sm:text-[13px] transition-all duration-200 active:scale-95 flex items-center gap-1.5 shadow-2xs hover:bg-slate-50 cursor-pointer"
+                                  >
+                                    <span>View placement details</span>
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </div>
