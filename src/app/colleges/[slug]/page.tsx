@@ -245,6 +245,20 @@ interface RankingTableRow {
   rank: string;
 }
 
+interface CourseRankingTableRow {
+  publisher: string;
+  rank2024: string;
+  rank2025: string;
+  rank2026: string;
+}
+
+interface CourseRankingBoxItem {
+  title: string;
+  yearsHeader?: string[];
+  tableRows: CourseRankingTableRow[];
+  highlightBadge?: string;
+}
+
 interface RankingsArticleData {
   title?: string;
   introParagraph?: string;
@@ -253,6 +267,7 @@ interface RankingsArticleData {
   nationalHeading?: string;
   nationalRows?: RankingTableRow[];
   footerNote?: string;
+  courseRankingBoxes?: CourseRankingBoxItem[];
 }
 
 interface AdmissionArticleData {
@@ -1414,7 +1429,8 @@ export default function CollegeDetailPage() {
   const [admissionModalTab, setAdmissionModalTab] = useState<"article" | "boxes" | "faqs">("article");
   const [isRankingsCardOpen, setIsRankingsCardOpen] = useState(true);
   const [isRankingsArticleExpanded, setIsRankingsArticleExpanded] = useState(false);
-  const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national">("overview");
+  const [openCourseRankingBoxes, setOpenCourseRankingBoxes] = useState<Record<number, boolean>>({});
+  const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national" | "course_boxes">("overview");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -2447,6 +2463,42 @@ export default function CollegeDetailPage() {
       { body: "NIRF 2025", category: "Innovation", rank: "7" },
     ];
 
+    const defaultCourseRankingBoxes: CourseRankingBoxItem[] = [
+      {
+        title: "B.E. / B.Tech Ranking",
+        yearsHeader: ["Publisher", "2024", "2025", "2026"],
+        tableRows: [
+          { publisher: "NIRF", rank2024: "2", rank2025: "2", rank2026: "- / -" },
+          { publisher: "India Today", rank2024: "1", rank2025: "2", rank2026: "1" },
+          { publisher: "The Week", rank2024: "- / -", rank2025: "1", rank2026: "2" },
+          { publisher: "QS World University Rankings", rank2024: "- / -", rank2025: "26", rank2026: "36" },
+        ],
+        highlightBadge: `Best Among NIRF Ranked Colleges In Delhi In 2025 →`,
+      },
+      {
+        title: "M.E. / M.Tech Ranking",
+        yearsHeader: ["Publisher", "2024", "2025", "2026"],
+        tableRows: [
+          { publisher: "NIRF", rank2024: "2", rank2025: "2", rank2026: "2" },
+          { publisher: "QS World University Rankings (Engineering & Tech)", rank2024: "48", rank2025: "45", rank2026: "41" },
+          { publisher: "India Today", rank2024: "1", rank2025: "1", rank2026: "1" },
+          { publisher: "Outlook", rank2024: "2", rank2025: "2", rank2026: "2" },
+        ],
+        highlightBadge: `Top Ranked Engineering Master's Institute in India →`,
+      },
+      {
+        title: "MBA / PGDM Ranking",
+        yearsHeader: ["Publisher", "2024", "2025", "2026"],
+        tableRows: [
+          { publisher: "NIRF", rank2024: "5", rank2025: "4", rank2026: "4" },
+          { publisher: "Business Today", rank2024: "8", rank2025: "7", rank2026: "6" },
+          { publisher: "Outlook-ICARE", rank2024: "5", rank2025: "4", rank2026: "4" },
+          { publisher: "The Week", rank2024: "6", rank2025: "5", rank2026: "5" },
+        ],
+        highlightBadge: `Ranked #4 by NIRF 2025 in Management Category →`,
+      },
+    ];
+
     if (college.rankingsArticle) {
       return {
         title: college.rankingsArticle.title || `${shortName} Rankings 2026`,
@@ -2470,6 +2522,10 @@ export default function CollegeDetailPage() {
         footerNote:
           college.rankingsArticle.footerNote ||
           `Check course-specific **${shortName} rankings** below:`,
+        courseRankingBoxes:
+          college.rankingsArticle.courseRankingBoxes && college.rankingsArticle.courseRankingBoxes.length > 0
+            ? college.rankingsArticle.courseRankingBoxes
+            : defaultCourseRankingBoxes,
       };
     }
 
@@ -2481,6 +2537,7 @@ export default function CollegeDetailPage() {
       nationalHeading: `${shortName} National Rankings 2025, 2026`,
       nationalRows: defaultNationalRows,
       footerNote: `Check course-specific **${shortName} rankings** below:`,
+      courseRankingBoxes: defaultCourseRankingBoxes,
     };
   };
 
@@ -5707,6 +5764,110 @@ export default function CollegeDetailPage() {
                                     Show less
                                   </button>
                                 </div>
+                              </div>
+                            )}
+
+                            {/* COURSE RANKINGS ACCORDION BOXES */}
+                            {rkData.courseRankingBoxes && rkData.courseRankingBoxes.length > 0 && (
+                              <div className="space-y-3 pt-2">
+                                {rkData.courseRankingBoxes.map((box, bIdx) => {
+                                  const isBoxOpen = !!openCourseRankingBoxes[bIdx];
+
+                                  return (
+                                    <div
+                                      key={bIdx}
+                                      className="rounded-2xl border border-slate-200/90 bg-white overflow-hidden shadow-2xs transition-all duration-200"
+                                    >
+                                      {/* Header Row */}
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          setOpenCourseRankingBoxes((prev) => ({
+                                            ...prev,
+                                            [bIdx]: !prev[bIdx],
+                                          }))
+                                        }
+                                        className="w-full flex items-center justify-between p-4 sm:p-5 text-left bg-white hover:bg-slate-50/70 transition-colors cursor-pointer select-none"
+                                      >
+                                        <h4 className="font-outfit font-extrabold text-sm sm:text-base text-[#2d114d] tracking-tight">
+                                          {box.title}
+                                        </h4>
+                                        <ChevronDown
+                                          className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${
+                                            isBoxOpen ? "rotate-180 text-blue-600" : ""
+                                          }`}
+                                        />
+                                      </button>
+
+                                      {/* Expanded Body */}
+                                      <AnimatePresence initial={false}>
+                                        {isBoxOpen && (
+                                          <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: "auto" }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            transition={{ duration: 0.25, ease: "easeInOut" }}
+                                            className="overflow-hidden border-t border-slate-100"
+                                          >
+                                            <div className="p-4 sm:p-5 space-y-4">
+                                              {/* Ranking Years Table */}
+                                              {box.tableRows && box.tableRows.length > 0 && (
+                                                <div className="overflow-x-auto rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                                  <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                                    <thead>
+                                                      <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs border-b border-slate-200/80">
+                                                        <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-1/2 border-r border-slate-200/80">
+                                                          {box.yearsHeader?.[0] || "Publisher"}
+                                                        </th>
+                                                        <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-1/6 text-center border-r border-slate-200/80">
+                                                          {box.yearsHeader?.[1] || "2024"}
+                                                        </th>
+                                                        <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-1/6 text-center border-r border-slate-200/80">
+                                                          {box.yearsHeader?.[2] || "2025"}
+                                                        </th>
+                                                        <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-1/6 text-center">
+                                                          {box.yearsHeader?.[3] || "2026"}
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-slate-100">
+                                                      {box.tableRows.map((r, rIdx) => (
+                                                        <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                                                          <td className="py-3 px-4 font-semibold text-slate-900 align-middle border-r border-slate-100">
+                                                            {r.publisher}
+                                                          </td>
+                                                          <td className="py-3 px-4 text-slate-700 text-center align-middle border-r border-slate-100">
+                                                            {r.rank2024}
+                                                          </td>
+                                                          <td className="py-3 px-4 text-slate-700 text-center align-middle border-r border-slate-100">
+                                                            {r.rank2025}
+                                                          </td>
+                                                          <td className="py-3 px-4 font-bold text-slate-900 text-center align-middle">
+                                                            {r.rank2026}
+                                                          </td>
+                                                        </tr>
+                                                      ))}
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              )}
+
+                                              {/* Highlight Note Banner (Image 2) */}
+                                              {box.highlightBadge && (
+                                                <div className="p-3 sm:p-3.5 rounded-xl bg-[#fef9ee] border border-amber-200/70 flex items-center gap-2.5 text-xs sm:text-[13px] text-amber-950 font-bold shadow-2xs">
+                                                  <div className="w-6 h-6 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0">
+                                                    <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                                                  </div>
+                                                  <span className="leading-snug">{box.highlightBadge}</span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          </motion.div>
+                                        )}
+                                      </AnimatePresence>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
@@ -11680,6 +11841,17 @@ export default function CollegeDetailPage() {
                             >
                               National Rankings (${natRows.length})
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => setRankingsModalTab("course_boxes")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                rankingsModalTab === "course_boxes"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              Course Ranking Boxes (${(curRk.courseRankingBoxes || []).length})
+                            </button>
                           </div>
 
                           {rankingsModalTab === "overview" ? (
@@ -11848,7 +12020,7 @@ export default function CollegeDetailPage() {
                                 ))}
                               </div>
                             </div>
-                          ) : (
+                          ) : rankingsModalTab === "national" ? (
                             /* Tab 3: National Rankings Table */
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
@@ -11960,6 +12132,217 @@ export default function CollegeDetailPage() {
                                       >
                                         <Trash2 className="w-3.5 h-3.5" />
                                       </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ) : (
+                            /* Tab 4: Course Ranking Boxes Editor */
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <span className="text-xs font-black text-purple-950 uppercase tracking-wide block">
+                                    Course Ranking Accordion Boxes
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 font-medium">
+                                    Manage Course-wise 3-year ranking tables & highlight banners
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newBox: CourseRankingBoxItem = {
+                                      title: "New Course Ranking",
+                                      yearsHeader: ["Publisher", "2024", "2025", "2026"],
+                                      tableRows: [
+                                        { publisher: "NIRF", rank2024: "1", rank2025: "1", rank2026: "1" },
+                                        { publisher: "India Today", rank2024: "1", rank2025: "1", rank2026: "1" },
+                                      ],
+                                      highlightBadge: "Top Ranked Course in Delhi →",
+                                    };
+                                    const updated = [...(curRk.courseRankingBoxes || []), newBox];
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Course Box</span>
+                                </button>
+                              </div>
+
+                              <div className="space-y-3 max-h-96 overflow-y-auto pr-1 custom-scrollbar">
+                                {(curRk.courseRankingBoxes || []).map((box, bIdx) => (
+                                  <div key={bIdx} className="p-3 bg-white border border-purple-200 rounded-xl space-y-3 relative shadow-2xs">
+                                    <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                      <span className="text-xs font-bold text-slate-800">
+                                        #{bIdx + 1} {box.title || "Untitled Box"}
+                                      </span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = (curRk.courseRankingBoxes || []).filter((_, i) => i !== bIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:bg-red-50 rounded cursor-pointer"
+                                        title="Delete Box"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">Box Title *</label>
+                                        <input
+                                          type="text"
+                                          value={box.title}
+                                          onChange={(e) => {
+                                            const updated = [...(curRk.courseRankingBoxes || [])];
+                                            updated[bIdx] = { ...updated[bIdx], title: e.target.value };
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                            });
+                                          }}
+                                          placeholder="e.g. B.E. / B.Tech Ranking"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-bold"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">Highlight Badge Note</label>
+                                        <input
+                                          type="text"
+                                          value={box.highlightBadge || ""}
+                                          onChange={(e) => {
+                                            const updated = [...(curRk.courseRankingBoxes || [])];
+                                            updated[bIdx] = { ...updated[bIdx], highlightBadge: e.target.value };
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                            });
+                                          }}
+                                          placeholder="e.g. Best Among NIRF Ranked Colleges In Delhi In 2025 →"
+                                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-medium"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    {/* Rows list */}
+                                    <div className="space-y-1.5 pt-1">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-slate-600 uppercase">Ranking Rows</span>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = [...(curRk.courseRankingBoxes || [])];
+                                            const curRows = updated[bIdx].tableRows || [];
+                                            updated[bIdx] = {
+                                              ...updated[bIdx],
+                                              tableRows: [...curRows, { publisher: "New Agency", rank2024: "-", rank2025: "-", rank2026: "-" }],
+                                            };
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                            });
+                                          }}
+                                          className="text-[10px] text-purple-700 font-bold hover:underline cursor-pointer flex items-center gap-0.5"
+                                        >
+                                          <Plus className="w-2.5 h-2.5" />
+                                          <span>Add Row</span>
+                                        </button>
+                                      </div>
+
+                                      {box.tableRows.map((r, rIdx) => (
+                                        <div key={rIdx} className="grid grid-cols-12 gap-1.5 items-center bg-slate-50 p-1.5 rounded-lg border border-slate-200/80">
+                                          <input
+                                            type="text"
+                                            value={r.publisher}
+                                            onChange={(e) => {
+                                              const updated = [...(curRk.courseRankingBoxes || [])];
+                                              const curRows = [...updated[bIdx].tableRows];
+                                              curRows[rIdx] = { ...curRows[rIdx], publisher: e.target.value };
+                                              updated[bIdx] = { ...updated[bIdx], tableRows: curRows };
+                                              setTempData({
+                                                ...tempData,
+                                                rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                              });
+                                            }}
+                                            placeholder="Publisher"
+                                            className="col-span-5 px-2 py-1 bg-white border border-slate-200 rounded text-xs font-semibold"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={r.rank2024}
+                                            onChange={(e) => {
+                                              const updated = [...(curRk.courseRankingBoxes || [])];
+                                              const curRows = [...updated[bIdx].tableRows];
+                                              curRows[rIdx] = { ...curRows[rIdx], rank2024: e.target.value };
+                                              updated[bIdx] = { ...updated[bIdx], tableRows: curRows };
+                                              setTempData({
+                                                ...tempData,
+                                                rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                              });
+                                            }}
+                                            placeholder="2024"
+                                            className="col-span-2 px-1 py-1 bg-white border border-slate-200 rounded text-xs text-center font-medium"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={r.rank2025}
+                                            onChange={(e) => {
+                                              const updated = [...(curRk.courseRankingBoxes || [])];
+                                              const curRows = [...updated[bIdx].tableRows];
+                                              curRows[rIdx] = { ...curRows[rIdx], rank2025: e.target.value };
+                                              updated[bIdx] = { ...updated[bIdx], tableRows: curRows };
+                                              setTempData({
+                                                ...tempData,
+                                                rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                              });
+                                            }}
+                                            placeholder="2025"
+                                            className="col-span-2 px-1 py-1 bg-white border border-slate-200 rounded text-xs text-center font-medium"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={r.rank2026}
+                                            onChange={(e) => {
+                                              const updated = [...(curRk.courseRankingBoxes || [])];
+                                              const curRows = [...updated[bIdx].tableRows];
+                                              curRows[rIdx] = { ...curRows[rIdx], rank2026: e.target.value };
+                                              updated[bIdx] = { ...updated[bIdx], tableRows: curRows };
+                                              setTempData({
+                                                ...tempData,
+                                                rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                              });
+                                            }}
+                                            placeholder="2026"
+                                            className="col-span-2 px-1 py-1 bg-white border border-slate-200 rounded text-xs text-center font-bold text-purple-700"
+                                          />
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const updated = [...(curRk.courseRankingBoxes || [])];
+                                              const curRows = updated[bIdx].tableRows.filter((_, i) => i !== rIdx);
+                                              updated[bIdx] = { ...updated[bIdx], tableRows: curRows };
+                                              setTempData({
+                                                ...tempData,
+                                                rankingsArticle: { ...curRk, courseRankingBoxes: updated },
+                                              });
+                                            }}
+                                            className="col-span-1 p-1 text-red-500 hover:bg-red-50 rounded flex justify-center"
+                                            title="Remove Row"
+                                          >
+                                            <Trash2 className="w-3 h-3" />
+                                          </button>
+                                        </div>
+                                      ))}
                                     </div>
                                   </div>
                                 ))}
