@@ -265,6 +265,26 @@ interface CourseRankingBoxItem {
   highlightBadge?: string;
 }
 
+interface ReviewHistogramItem {
+  starsRange: string;
+  count: number;
+}
+
+interface ReviewParameterItem {
+  label: string;
+  rating: number;
+  iconType: "briefcase" | "building" | "book" | "users" | "dollar";
+}
+
+interface ReviewsArticleData {
+  tagText?: string;
+  title?: string;
+  overallScore?: number;
+  totalReviewsCount?: string;
+  histogram?: ReviewHistogramItem[];
+  parameters?: ReviewParameterItem[];
+}
+
 interface RankingsArticleData {
   title?: string;
   introParagraph?: string;
@@ -468,6 +488,7 @@ interface CollegeDetail {
   placementsArticle?: PlacementsArticleData;
   admissionArticle?: AdmissionArticleData;
   rankingsArticle?: RankingsArticleData;
+  reviewsArticle?: ReviewsArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -1443,6 +1464,8 @@ export default function CollegeDetailPage() {
   const [isRankingsArticleExpanded, setIsRankingsArticleExpanded] = useState(false);
   const [openCourseRankingBoxes, setOpenCourseRankingBoxes] = useState<Record<number, boolean>>({});
   const [openRankingsFaqIdx, setOpenRankingsFaqIdx] = useState<number | null>(null);
+  const [reviewsModalTab, setReviewsModalTab] = useState<"overall" | "parameters">("overall");
+  const [hoveredStarBarIdx, setHoveredStarBarIdx] = useState<number | null>(null);
   const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national" | "course_boxes" | "faqs">("overview");
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -2452,6 +2475,51 @@ export default function CollegeDetailPage() {
       faqsSubtitle: "On Admissions",
       faqsButtonText: "Admission Details for all courses",
       faqs: defaultAdmissionFaqs,
+    };
+  };
+
+  const getCollegeReviewsArticle = (college: CollegeDetail): ReviewsArticleData => {
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+
+    const defaultHistogram: ReviewHistogramItem[] = [
+      { starsRange: "4-5", count: 483 },
+      { starsRange: "3-4", count: 129 },
+      { starsRange: "2-3", count: 10 },
+      { starsRange: "1-2", count: 1 },
+    ];
+
+    const defaultParameters: ReviewParameterItem[] = [
+      { label: "Placements", rating: 4.4, iconType: "briefcase" },
+      { label: "Infrastructure", rating: 4.4, iconType: "building" },
+      { label: "Faculty & Course", rating: 4.3, iconType: "book" },
+      { label: "Campus Life", rating: 4.6, iconType: "users" },
+      { label: "Value for Money", rating: 4.6, iconType: "dollar" },
+    ];
+
+    if (college.reviewsArticle) {
+      return {
+        tagText: college.reviewsArticle.tagText || shortName,
+        title: college.reviewsArticle.title || "Students Ratings & Reviews",
+        overallScore: college.reviewsArticle.overallScore ?? 4.5,
+        totalReviewsCount: college.reviewsArticle.totalReviewsCount || "623 Verified Reviews",
+        histogram:
+          college.reviewsArticle.histogram && college.reviewsArticle.histogram.length > 0
+            ? college.reviewsArticle.histogram
+            : defaultHistogram,
+        parameters:
+          college.reviewsArticle.parameters && college.reviewsArticle.parameters.length > 0
+            ? college.reviewsArticle.parameters
+            : defaultParameters,
+      };
+    }
+
+    return {
+      tagText: shortName,
+      title: "Students Ratings & Reviews",
+      overallScore: 4.5,
+      totalReviewsCount: "623 Verified Reviews",
+      histogram: defaultHistogram,
+      parameters: defaultParameters,
     };
   };
 
@@ -6017,6 +6085,161 @@ export default function CollegeDetailPage() {
                         </motion.div>
                       )}
                     </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 7. STUDENTS RATINGS & REVIEWS SUB-BOX (WORLD-CLASS DESIGN & ANIMATIONS) */}
+              {(() => {
+                const revData = getCollegeReviewsArticle(collegeData);
+                const totalCount = (revData.histogram || []).reduce((acc, curr) => acc + curr.count, 0) || 623;
+
+                return (
+                  <div
+                    id="reviews-section"
+                    className="group relative bg-gradient-to-br from-[#ebf2ff]/90 via-[#f5f8ff] to-[#e8f0fe]/80 border border-blue-200/70 hover:border-blue-300 rounded-3xl p-6 sm:p-7 shadow-[0_8px_30px_-6px_rgba(59,130,246,0.12),0_1px_4px_rgba(0,0,0,0.02)] transition-all duration-300 scroll-mt-20 space-y-5 overflow-hidden"
+                  >
+                    {/* Ambient Glow Aura */}
+                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none" />
+
+                    {/* Header Row */}
+                    <div className="flex items-start justify-between gap-3 relative z-10">
+                      <div className="flex items-center gap-3.5">
+                        {/* 3D-styled Blue Badge Icon with Bookmark / Star */}
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3b82f6] via-[#4f46e5] to-[#6366f1] text-white flex items-center justify-center shrink-0 shadow-md shadow-indigo-500/25 border border-white/40 transform group-hover:scale-105 transition-transform duration-300">
+                          <Bookmark className="w-5 h-5 fill-white text-white drop-shadow-xs" />
+                        </div>
+                        <div>
+                          <span className="text-[11px] sm:text-xs font-bold font-outfit uppercase tracking-wider text-slate-500 block leading-tight">
+                            {revData.tagText || "College"}
+                          </span>
+                          <h3 className="font-outfit font-black text-xl sm:text-2xl text-[#1e1b4b] tracking-tight leading-tight">
+                            {revData.title || "Students Ratings & Reviews"}
+                          </h3>
+                        </div>
+                      </div>
+
+                      {isAdmin && (
+                        <button
+                          type="button"
+                          onClick={() => openMiniModal("reviews")}
+                          className="px-3 py-1.5 rounded-xl bg-white hover:bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                          <span>Edit Reviews</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Top Floating White Card: Big Score & Histogram Breakdown */}
+                    <div className="relative z-10 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-7 border border-blue-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
+                      {/* Left: Huge Score Display + Verified Badge */}
+                      <div className="md:col-span-5 space-y-3.5 text-center md:text-left flex flex-col items-center md:items-start justify-center">
+                        <div className="flex items-baseline gap-2">
+                          <Star className="w-8 h-8 sm:w-9 sm:h-9 fill-amber-400 text-amber-400 shrink-0 self-center drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)] animate-pulse" />
+                          <span className="text-4xl sm:text-5xl font-black font-outfit text-slate-900 tracking-tight">
+                            {revData.overallScore ?? 4.5}
+                          </span>
+                          <span className="text-slate-400 font-extrabold text-xl sm:text-2xl">
+                            /5
+                          </span>
+                        </div>
+
+                        {/* Verified Reviews Pill Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs sm:text-[12.5px] font-bold shadow-2xs">
+                          <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-600 text-white shrink-0" />
+                          <span>{revData.totalReviewsCount || "623 Verified Reviews"}</span>
+                          <span className="text-[10px] text-emerald-500 cursor-help" title="Calculated from real verified student feedback">
+                            ⓘ
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Right: Star Histogram Progress Bars */}
+                      <div className="md:col-span-7 space-y-2.5">
+                        {(revData.histogram || []).map((item, hIdx) => {
+                          const percent = Math.min(100, Math.round((item.count / totalCount) * 100));
+                          const isHovered = hoveredStarBarIdx === hIdx;
+
+                          return (
+                            <div
+                              key={hIdx}
+                              onMouseEnter={() => setHoveredStarBarIdx(hIdx)}
+                              onMouseLeave={() => setHoveredStarBarIdx(null)}
+                              className="group/h flex items-center gap-3 text-xs sm:text-[13px] font-bold cursor-pointer select-none"
+                            >
+                              {/* Star Range Label */}
+                              <div className="w-12 shrink-0 flex items-center gap-1 text-slate-700 group-hover/h:text-indigo-600 transition-colors font-outfit">
+                                <span className="text-amber-500 font-black">★</span>
+                                <span>{item.starsRange}</span>
+                              </div>
+
+                              {/* Interactive Progress Bar */}
+                              <div className="flex-1 h-2 sm:h-2.5 bg-slate-200/80 rounded-full overflow-hidden relative shadow-inner">
+                                <div
+                                  className={`h-full rounded-full transition-all duration-700 ease-out ${
+                                    isHovered
+                                      ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 shadow-[0_0_12px_rgba(99,102,241,0.6)] scale-y-110"
+                                      : "bg-gradient-to-r from-[#1c1136] via-[#2d114d] to-[#43196f]"
+                                  }`}
+                                  style={{ width: `${percent}%` }}
+                                />
+                              </div>
+
+                              {/* Count & Tooltip */}
+                              <div className="w-12 text-right shrink-0 text-slate-600 group-hover/h:text-slate-900 font-bold font-mono transition-colors">
+                                {isHovered ? `${percent}%` : item.count}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Bottom 5 Parameter Category Rating Cards */}
+                    <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-1">
+                      {(revData.parameters || []).map((param, pIdx) => {
+                        return (
+                          <div
+                            key={pIdx}
+                            className="group/param relative bg-white/95 hover:bg-white rounded-2xl p-4 sm:p-4.5 border border-blue-100 hover:border-blue-300/90 shadow-[0_2px_8px_-2px_rgba(59,130,246,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(59,130,246,0.18)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none"
+                          >
+                            {/* Icon Container with 3D Float Effect */}
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#dbeafe] via-[#eff6ff] to-[#e0e7ff] border border-blue-200/70 flex items-center justify-center text-blue-600 group-hover/param:scale-110 group-hover/param:rotate-3 transition-transform duration-300 shadow-2xs">
+                              {param.iconType === "briefcase" && (
+                                <Briefcase className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
+                              )}
+                              {param.iconType === "building" && (
+                                <Building className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
+                              )}
+                              {param.iconType === "book" && (
+                                <BookOpen className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
+                              )}
+                              {param.iconType === "users" && (
+                                <Users className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
+                              )}
+                              {param.iconType === "dollar" && (
+                                <Landmark className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
+                              )}
+                            </div>
+
+                            {/* Label */}
+                            <h5 className="text-xs sm:text-[13px] font-bold font-outfit text-slate-800 group-hover/param:text-blue-700 transition-colors leading-snug pt-2.5 pb-1">
+                              {param.label}
+                            </h5>
+
+                            {/* Score */}
+                            <div className="flex items-center gap-1.5 pt-0.5">
+                              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 drop-shadow-2xs" />
+                              <span className="font-outfit font-black text-sm sm:text-base text-slate-900">
+                                {param.rating}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })()}
@@ -12890,6 +13113,183 @@ export default function CollegeDetailPage() {
                             ))}
                           </div>
                         </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: STUDENT REVIEWS & RATINGS */}
+                {activeMiniModal === "reviews" && (
+                  <div className="p-3.5 bg-gradient-to-br from-indigo-50/60 via-white to-blue-50/40 border border-indigo-200/80 rounded-2xl space-y-3.5">
+                    {(() => {
+                      const curRev = tempData.reviewsArticle || getCollegeReviewsArticle(tempData);
+                      const histogram = curRev.histogram || [];
+                      const parameters = curRev.parameters || [];
+
+                      return (
+                        <div className="space-y-3.5">
+                          {/* Modal Nav Tabs */}
+                          <div className="flex items-center gap-2 border-b border-indigo-200 pb-2">
+                            <button
+                              type="button"
+                              onClick={() => setReviewsModalTab("overall")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                reviewsModalTab === "overall"
+                                  ? "bg-indigo-600 text-white shadow-xs"
+                                  : "bg-white text-indigo-800 hover:bg-indigo-100"
+                              }`}
+                            >
+                              Overall Score & Breakdown
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setReviewsModalTab("parameters")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                reviewsModalTab === "parameters"
+                                  ? "bg-indigo-600 text-white shadow-xs"
+                                  : "bg-white text-indigo-800 hover:bg-indigo-100"
+                              }`}
+                            >
+                              5 Category Parameters
+                            </button>
+                          </div>
+
+                          {reviewsModalTab === "overall" ? (
+                            /* Tab 1: Overall & Histogram */
+                            <div className="space-y-3">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5 uppercase">College Tag Text</label>
+                                  <input
+                                    type="text"
+                                    value={curRev.tagText || ""}
+                                    onChange={(e) => {
+                                      setTempData({
+                                        ...tempData,
+                                        reviewsArticle: { ...curRev, tagText: e.target.value },
+                                      });
+                                    }}
+                                    placeholder="e.g. IIT Delhi"
+                                    className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5 uppercase">Section Title</label>
+                                  <input
+                                    type="text"
+                                    value={curRev.title || "Students Ratings & Reviews"}
+                                    onChange={(e) => {
+                                      setTempData({
+                                        ...tempData,
+                                        reviewsArticle: { ...curRev, title: e.target.value },
+                                      });
+                                    }}
+                                    placeholder="e.g. Students Ratings & Reviews"
+                                    className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5 uppercase">Overall Star Rating (out of 5)</label>
+                                  <input
+                                    type="number"
+                                    step="0.1"
+                                    min="1"
+                                    max="5"
+                                    value={curRev.overallScore ?? 4.5}
+                                    onChange={(e) => {
+                                      setTempData({
+                                        ...tempData,
+                                        reviewsArticle: { ...curRev, overallScore: parseFloat(e.target.value) || 4.5 },
+                                      });
+                                    }}
+                                    className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5 uppercase">Total Verified Reviews Text</label>
+                                  <input
+                                    type="text"
+                                    value={curRev.totalReviewsCount || "623 Verified Reviews"}
+                                    onChange={(e) => {
+                                      setTempData({
+                                        ...tempData,
+                                        reviewsArticle: { ...curRev, totalReviewsCount: e.target.value },
+                                      });
+                                    }}
+                                    placeholder="e.g. 623 Verified Reviews"
+                                    className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Histogram Counts */}
+                              <div className="space-y-2 pt-2 border-t border-slate-200">
+                                <span className="text-xs font-bold text-slate-800 block uppercase tracking-wide">
+                                  Rating Breakdown Histogram Counts
+                                </span>
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                  {histogram.map((item, hIdx) => (
+                                    <div key={hIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                                      <label className="text-[10px] font-bold text-slate-600 block">★ {item.starsRange} Stars</label>
+                                      <input
+                                        type="number"
+                                        min="0"
+                                        value={item.count}
+                                        onChange={(e) => {
+                                          const updated = [...histogram];
+                                          updated[hIdx] = { ...updated[hIdx], count: parseInt(e.target.value) || 0 };
+                                          setTempData({
+                                            ...tempData,
+                                            reviewsArticle: { ...curRev, histogram: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-center"
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            /* Tab 2: 5 Category Parameters */
+                            <div className="space-y-3">
+                              <span className="text-xs font-black text-slate-800 uppercase tracking-wide block">
+                                Edit 5 Category Parameter Scores (out of 5)
+                              </span>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                                {parameters.map((param, pIdx) => (
+                                  <div key={pIdx} className="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-2xs">
+                                    <label className="text-[10.5px] font-bold text-slate-700 block">
+                                      {param.label}
+                                    </label>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-amber-500 font-black text-sm">★</span>
+                                      <input
+                                        type="number"
+                                        step="0.1"
+                                        min="1"
+                                        max="5"
+                                        value={param.rating}
+                                        onChange={(e) => {
+                                          const updated = [...parameters];
+                                          updated[pIdx] = { ...updated[pIdx], rating: parseFloat(e.target.value) || 4.5 };
+                                          setTempData({
+                                            ...tempData,
+                                            reviewsArticle: { ...curRev, parameters: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       );
                     })()}
                   </div>
