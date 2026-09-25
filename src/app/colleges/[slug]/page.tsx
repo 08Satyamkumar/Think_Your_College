@@ -252,6 +252,12 @@ interface CourseRankingTableRow {
   rank2026: string;
 }
 
+interface RankingFaqItem {
+  question: string;
+  answer: string;
+  upvotes?: number;
+}
+
 interface CourseRankingBoxItem {
   title: string;
   yearsHeader?: string[];
@@ -268,6 +274,11 @@ interface RankingsArticleData {
   nationalRows?: RankingTableRow[];
   footerNote?: string;
   courseRankingBoxes?: CourseRankingBoxItem[];
+  faqsHeading?: string;
+  faqsSubtitle?: string;
+  faqsBtn1Text?: string;
+  faqsBtn2Text?: string;
+  faqs?: RankingFaqItem[];
 }
 
 interface AdmissionArticleData {
@@ -1216,6 +1227,7 @@ type MiniModalId =
   | "cutoff_comparison"
   | "secondary_cutoff_comparison"
   | "rankings"
+  | "rankings_faqs"
   | "gallery"
   | "hostel"
   | "faculty"
@@ -1430,7 +1442,8 @@ export default function CollegeDetailPage() {
   const [isRankingsCardOpen, setIsRankingsCardOpen] = useState(true);
   const [isRankingsArticleExpanded, setIsRankingsArticleExpanded] = useState(false);
   const [openCourseRankingBoxes, setOpenCourseRankingBoxes] = useState<Record<number, boolean>>({});
-  const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national" | "course_boxes">("overview");
+  const [openRankingsFaqIdx, setOpenRankingsFaqIdx] = useState<number | null>(null);
+  const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national" | "course_boxes" | "faqs">("overview");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -2499,6 +2512,13 @@ export default function CollegeDetailPage() {
       },
     ];
 
+    const defaultRankingFaqs: RankingFaqItem[] = [
+      {
+        question: `How is the ranking of DMS ${shortName}?`,
+        answer: `As per NIRF 2025 Rankings, the Department of Management Studies (DMS) ${shortName} is ranked 4th in the Management category nationwide. It consistently features among the premier top 5 management institutions in India.`,
+      },
+    ];
+
     if (college.rankingsArticle) {
       return {
         title: college.rankingsArticle.title || `${shortName} Rankings 2026`,
@@ -2526,6 +2546,14 @@ export default function CollegeDetailPage() {
           college.rankingsArticle.courseRankingBoxes && college.rankingsArticle.courseRankingBoxes.length > 0
             ? college.rankingsArticle.courseRankingBoxes
             : defaultCourseRankingBoxes,
+        faqsHeading: college.rankingsArticle.faqsHeading || "Commonly asked questions",
+        faqsSubtitle: college.rankingsArticle.faqsSubtitle || "On Rankings",
+        faqsBtn1Text: college.rankingsArticle.faqsBtn1Text || "View Ranking Details",
+        faqsBtn2Text: college.rankingsArticle.faqsBtn2Text || "Ranking Details",
+        faqs:
+          college.rankingsArticle.faqs && college.rankingsArticle.faqs.length > 0
+            ? college.rankingsArticle.faqs
+            : defaultRankingFaqs,
       };
     }
 
@@ -2538,6 +2566,11 @@ export default function CollegeDetailPage() {
       nationalRows: defaultNationalRows,
       footerNote: `Check course-specific **${shortName} rankings** below:`,
       courseRankingBoxes: defaultCourseRankingBoxes,
+      faqsHeading: "Commonly asked questions",
+      faqsSubtitle: "On Rankings",
+      faqsBtn1Text: "View Ranking Details",
+      faqsBtn2Text: "Ranking Details",
+      faqs: defaultRankingFaqs,
     };
   };
 
@@ -5870,6 +5903,116 @@ export default function CollegeDetailPage() {
                                 })}
                               </div>
                             )}
+
+                            {/* Separator line & COMMONLY ASKED QUESTIONS ON RANKINGS ACCORDION */}
+                            {rkData.faqs && rkData.faqs.length > 0 && (
+                              <div className="pt-5 mt-4 border-t border-slate-200/80 space-y-3.5">
+                                {/* Header Row with Yellow/Amber Q&A Badge */}
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-full bg-amber-100/90 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
+                                      <HelpCircle className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                      <h4 className="font-outfit font-bold text-sm sm:text-base text-slate-900 leading-tight">
+                                        {rkData.faqsHeading || "Commonly asked questions"}
+                                      </h4>
+                                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                                        {rkData.faqsSubtitle || "On Rankings"}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => openMiniModal("rankings_faqs")}
+                                      className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200/80 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                      <span>Edit Ranking FAQs</span>
+                                    </button>
+                                  )}
+                                </div>
+
+                                {/* Accordion Questions List */}
+                                <div className="divide-y divide-slate-100/90 pt-1">
+                                  {rkData.faqs.map((faq, fIdx) => {
+                                    const isOpen = openRankingsFaqIdx === fIdx;
+                                    const rawQ = faq.question.trim();
+                                    const formattedQ = rawQ.startsWith("Q:") || rawQ.startsWith("Q.") ? rawQ : `Q: ${rawQ}`;
+                                    const rawA = faq.answer.trim();
+                                    const formattedA = rawA.startsWith("A:") || rawA.startsWith("A.") ? rawA : `A: ${rawA}`;
+
+                                    return (
+                                      <div key={fIdx} className="py-2.5 first:pt-1 last:pb-0">
+                                        <button
+                                          type="button"
+                                          onClick={() => setOpenRankingsFaqIdx(isOpen ? null : fIdx)}
+                                          className="w-full flex items-center justify-between gap-3 text-left py-1 text-slate-800 hover:text-blue-600 transition-colors cursor-pointer group/q"
+                                        >
+                                          <span className="font-outfit font-bold text-[13px] sm:text-[13.5px] leading-snug group-hover/q:text-blue-600 transition-colors">
+                                            {formattedQ}
+                                          </span>
+                                          <ChevronDown
+                                            className={`w-4 h-4 text-slate-500 group-hover/q:text-blue-600 transition-transform duration-200 ${
+                                              isOpen ? "rotate-180 text-blue-600" : ""
+                                            }`}
+                                          />
+                                        </button>
+
+                                        <AnimatePresence initial={false}>
+                                          {isOpen && (
+                                            <motion.div
+                                              initial={{ opacity: 0, height: 0 }}
+                                              animate={{ opacity: 1, height: "auto" }}
+                                              exit={{ opacity: 0, height: 0 }}
+                                              transition={{ duration: 0.22, ease: "easeInOut" }}
+                                              className="overflow-hidden"
+                                            >
+                                              <div className="pt-2 pb-2 pl-0.5 text-[13px] sm:text-[13.5px] text-slate-600 leading-relaxed font-normal">
+                                                <p className="leading-relaxed">
+                                                  {formattedA}
+                                                </p>
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+
+                                {/* Centered Double Action Buttons (Image Match) */}
+                                <div className="flex flex-wrap items-center justify-center gap-3 pt-3 pb-1">
+                                  {/* Button 1: Outline 'View Ranking Details ->' */}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setActiveTab("rankings");
+                                      document.getElementById("college-nav-tabs-bar")?.scrollIntoView({ behavior: "smooth" });
+                                    }}
+                                    className="px-6 py-2.5 rounded-full border border-[#2d114d] hover:border-[#1a0830] text-[#2d114d] hover:text-[#1a0830] hover:bg-purple-50/60 font-bold text-xs sm:text-[13px] transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-2xs cursor-pointer select-none"
+                                  >
+                                    <span>{rkData.faqsBtn1Text || "View Ranking Details"}</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                  </button>
+
+                                  {/* Button 2: Green Filled 'Ranking Details' */}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setActiveTab("rankings");
+                                      document.getElementById("college-nav-tabs-bar")?.scrollIntoView({ behavior: "smooth" });
+                                    }}
+                                    className="px-6 py-2.5 rounded-full bg-[#00a859] hover:bg-[#00964e] text-white font-bold text-xs sm:text-[13px] transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-sm cursor-pointer select-none"
+                                  >
+                                    <Download className="w-4 h-4" />
+                                    <span>{rkData.faqsBtn2Text || "Ranking Details"}</span>
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -6056,6 +6199,7 @@ export default function CollegeDetailPage() {
                     {activeMiniModal === "cutoff_comparison" && "📈 Edit Cutoff Round 3-Year Comparison Table"}
                     {activeMiniModal === "secondary_cutoff_comparison" && "📊 Edit Secondary Exam Cutoff Table (UCEED / Specialized)"}
                     {activeMiniModal === "rankings" && "🏆 Edit Rankings"}
+                    {activeMiniModal === "rankings_faqs" && "❓ Edit Ranking FAQs"}
                     {activeMiniModal === "gallery" && "📸 Edit Photo Gallery"}
                     {activeMiniModal === "hostel" && "🏢 Edit Campus Facilities & Hostels"}
                     {activeMiniModal === "faculty" && "👨‍🏫 Edit Faculty Profiles"}
@@ -11852,6 +11996,17 @@ export default function CollegeDetailPage() {
                             >
                               Course Ranking Boxes (${(curRk.courseRankingBoxes || []).length})
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => setRankingsModalTab("faqs")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                rankingsModalTab === "faqs"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              Ranking FAQs (${(curRk.faqs || []).length})
+                            </button>
                           </div>
 
                           {rankingsModalTab === "overview" ? (
@@ -12137,7 +12292,7 @@ export default function CollegeDetailPage() {
                                 ))}
                               </div>
                             </div>
-                          ) : (
+                          ) : rankingsModalTab === "course_boxes" ? (
                             /* Tab 4: Course Ranking Boxes Editor */
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
@@ -12348,8 +12503,393 @@ export default function CollegeDetailPage() {
                                 ))}
                               </div>
                             </div>
+                          ) : (
+                            /* Tab 5: Ranking FAQs */
+                            <div className="p-3.5 bg-gradient-to-br from-purple-50/60 via-white to-purple-50/30 border border-purple-200/80 rounded-2xl space-y-3.5">
+                              {(() => {
+                                const faqs = curRk.faqs || getCollegeRankingsArticle(tempData).faqs || [];
+
+                                return (
+                                  <>
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <div>
+                                        <span className="text-xs font-black text-purple-950 uppercase tracking-wide block">
+                                          ❓ Commonly Asked Questions on Rankings
+                                        </span>
+                                        <span className="text-[10px] text-slate-500 font-medium">
+                                          Ranking FAQs list ({faqs.length} questions)
+                                        </span>
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = [
+                                            ...faqs,
+                                            {
+                                              question: "",
+                                              answer: "",
+                                            },
+                                          ];
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: {
+                                              ...curRk,
+                                              faqs: updated,
+                                            },
+                                          });
+                                        }}
+                                        className="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                      >
+                                        <Plus className="w-3 h-3" />
+                                        <span>Add FAQ Item</span>
+                                      </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Section Main Title
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curRk.faqsHeading || "Commonly asked questions"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, faqsHeading: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. Commonly asked questions"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Subtitle / Topic
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curRk.faqsSubtitle || "On Rankings"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, faqsSubtitle: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. On Rankings"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Button 1 Text
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curRk.faqsBtn1Text || "View Ranking Details"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, faqsBtn1Text: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. View Ranking Details"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                          Button 2 Text
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={curRk.faqsBtn2Text || "Ranking Details"}
+                                          onChange={(e) => {
+                                            setTempData({
+                                              ...tempData,
+                                              rankingsArticle: { ...curRk, faqsBtn2Text: e.target.value },
+                                            });
+                                          }}
+                                          placeholder="e.g. Ranking Details"
+                                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    {/* FAQ Questions List */}
+                                    <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+                                      {faqs.map((faq, fIdx) => (
+                                        <div
+                                          key={fIdx}
+                                          className="p-3 bg-white border border-slate-200/90 hover:border-purple-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                                        >
+                                          <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                              <span className="text-purple-700 font-black">Q{fIdx + 1}:</span> {faq.question ? (faq.question.length > 50 ? `${faq.question.slice(0, 50)}...` : faq.question) : "Untitled Question"}
+                                            </span>
+                                            <button
+                                              type="button"
+                                              onClick={() => {
+                                                const updated = faqs.filter((_, i) => i !== fIdx);
+                                                setTempData({
+                                                  ...tempData,
+                                                  rankingsArticle: { ...curRk, faqs: updated },
+                                                });
+                                              }}
+                                              className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                              title="Delete FAQ"
+                                            >
+                                              <Trash2 className="w-3 h-3" />
+                                              <span>Delete</span>
+                                            </button>
+                                          </div>
+
+                                          <div className="space-y-2">
+                                            <div>
+                                              <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                                Question *
+                                              </label>
+                                              <input
+                                                type="text"
+                                                required
+                                                value={faq.question}
+                                                onChange={(e) => {
+                                                  const updated = [...faqs];
+                                                  updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                                  setTempData({
+                                                    ...tempData,
+                                                    rankingsArticle: { ...curRk, faqs: updated },
+                                                  });
+                                                }}
+                                                placeholder="e.g. How is the ranking of DMS IIT Delhi?"
+                                                className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                              />
+                                            </div>
+
+                                            <div>
+                                              <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                                Answer *
+                                              </label>
+                                              <textarea
+                                                rows={3}
+                                                required
+                                                value={faq.answer}
+                                                onChange={(e) => {
+                                                  const updated = [...faqs];
+                                                  updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                                  setTempData({
+                                                    ...tempData,
+                                                    rankingsArticle: { ...curRk, faqs: updated },
+                                                  });
+                                                }}
+                                                placeholder="e.g. As per NIRF 2025 Rankings..."
+                                                className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none leading-relaxed"
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </div>
                           )}
                         </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: RANKINGS FAQS STANDALONE */}
+                {activeMiniModal === "rankings_faqs" && (
+                  <div className="p-3.5 bg-gradient-to-br from-purple-50/60 via-white to-purple-50/30 border border-purple-200/80 rounded-2xl space-y-3.5">
+                    {(() => {
+                      const curRk = tempData.rankingsArticle || getCollegeRankingsArticle(tempData);
+                      const faqs = curRk.faqs || getCollegeRankingsArticle(tempData).faqs || [];
+
+                      return (
+                        <>
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <span className="text-xs font-black text-purple-950 uppercase tracking-wide block">
+                                ❓ Commonly Asked Questions on Rankings
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                Ranking FAQs list ({faqs.length} questions)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = [
+                                  ...faqs,
+                                  {
+                                    question: "",
+                                    answer: "",
+                                  },
+                                ];
+                                setTempData({
+                                  ...tempData,
+                                  rankingsArticle: {
+                                    ...curRk,
+                                    faqs: updated,
+                                  },
+                                });
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add FAQ Item</span>
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Section Main Title
+                              </label>
+                              <input
+                                type="text"
+                                value={curRk.faqsHeading || "Commonly asked questions"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    rankingsArticle: { ...curRk, faqsHeading: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Commonly asked questions"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Subtitle / Topic
+                              </label>
+                              <input
+                                type="text"
+                                value={curRk.faqsSubtitle || "On Rankings"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    rankingsArticle: { ...curRk, faqsSubtitle: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. On Rankings"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Button 1 Text
+                              </label>
+                              <input
+                                type="text"
+                                value={curRk.faqsBtn1Text || "View Ranking Details"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    rankingsArticle: { ...curRk, faqsBtn1Text: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. View Ranking Details"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-600 block mb-1 uppercase">
+                                Button 2 Text
+                              </label>
+                              <input
+                                type="text"
+                                value={curRk.faqsBtn2Text || "Ranking Details"}
+                                onChange={(e) => {
+                                  setTempData({
+                                    ...tempData,
+                                    rankingsArticle: { ...curRk, faqsBtn2Text: e.target.value },
+                                  });
+                                }}
+                                placeholder="e.g. Ranking Details"
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                              />
+                            </div>
+                          </div>
+
+                          {/* FAQ Questions List */}
+                          <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+                            {faqs.map((faq, fIdx) => (
+                              <div
+                                key={fIdx}
+                                className="p-3 bg-white border border-slate-200/90 hover:border-purple-300 rounded-xl space-y-2.5 shadow-2xs relative transition-all"
+                              >
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                    <span className="text-purple-700 font-black">Q{fIdx + 1}:</span> {faq.question ? (faq.question.length > 50 ? `${faq.question.slice(0, 50)}...` : faq.question) : "Untitled Question"}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = faqs.filter((_, i) => i !== fIdx);
+                                      setTempData({
+                                        ...tempData,
+                                        rankingsArticle: { ...curRk, faqs: updated },
+                                      });
+                                    }}
+                                    className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors"
+                                    title="Delete FAQ"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                    <span>Delete</span>
+                                  </button>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Question *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      required
+                                      value={faq.question}
+                                      onChange={(e) => {
+                                        const updated = [...faqs];
+                                        updated[fIdx] = { ...updated[fIdx], question: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          rankingsArticle: { ...curRk, faqs: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. How is the ranking of DMS IIT Delhi?"
+                                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                    />
+                                  </div>
+
+                                  <div>
+                                    <label className="text-[9.5px] font-bold text-slate-600 block mb-0.5">
+                                      Answer *
+                                    </label>
+                                    <textarea
+                                      rows={3}
+                                      required
+                                      value={faq.answer}
+                                      onChange={(e) => {
+                                        const updated = [...faqs];
+                                        updated[fIdx] = { ...updated[fIdx], answer: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          rankingsArticle: { ...curRk, faqs: updated },
+                                        });
+                                      }}
+                                      placeholder="e.g. As per NIRF 2025 Rankings..."
+                                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 resize-none leading-relaxed"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
                       );
                     })()}
                   </div>
