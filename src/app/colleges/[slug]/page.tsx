@@ -239,6 +239,22 @@ interface AdmissionFaqItem {
   upvotes?: number;
 }
 
+interface RankingTableRow {
+  body: string;
+  category: string;
+  rank: string;
+}
+
+interface RankingsArticleData {
+  title?: string;
+  introParagraph?: string;
+  internationalHeading?: string;
+  internationalRows?: RankingTableRow[];
+  nationalHeading?: string;
+  nationalRows?: RankingTableRow[];
+  footerNote?: string;
+}
+
 interface AdmissionArticleData {
   title?: string;
   introParagraph1?: string;
@@ -425,6 +441,7 @@ interface CollegeDetail {
   coursesFeesArticle?: CoursesFeesArticleData;
   placementsArticle?: PlacementsArticleData;
   admissionArticle?: AdmissionArticleData;
+  rankingsArticle?: RankingsArticleData;
 }
 
 // Master Benchmark Dataset for IIT Delhi
@@ -1395,6 +1412,9 @@ export default function CollegeDetailPage() {
   const [openAdmissionBoxes, setOpenAdmissionBoxes] = useState<Record<number, boolean>>({});
   const [openAdmissionFaqIdx, setOpenAdmissionFaqIdx] = useState<number | null>(null);
   const [admissionModalTab, setAdmissionModalTab] = useState<"article" | "boxes" | "faqs">("article");
+  const [isRankingsCardOpen, setIsRankingsCardOpen] = useState(true);
+  const [isRankingsArticleExpanded, setIsRankingsArticleExpanded] = useState(false);
+  const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national">("overview");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Section-by-Section Edit State Buffer
@@ -2403,6 +2423,64 @@ export default function CollegeDetailPage() {
       faqsSubtitle: "On Admissions",
       faqsButtonText: "Admission Details for all courses",
       faqs: defaultAdmissionFaqs,
+    };
+  };
+
+  const getCollegeRankingsArticle = (college: CollegeDetail): RankingsArticleData => {
+    const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
+    const fullName = college.fullName || college.name;
+
+    const defaultInternationalRows: RankingTableRow[] = [
+      { body: "QS World University Rankings 2027", category: "World University", rank: "118" },
+      { body: "QS World University Rankings 2026", category: "World University", rank: "123" },
+      { body: "QS World Ranking 2025", category: "World University", rank: "150" },
+      { body: "QS World Rankings: Southern Asia 2026", category: "Institute", rank: "1" },
+      { body: "QS Asian University Rankings 2026", category: "Institute", rank: "59" },
+    ];
+
+    const defaultNationalRows: RankingTableRow[] = [
+      { body: "India Today", category: "Engineering", rank: "1" },
+      { body: "NIRF 2025", category: "Engineering", rank: "2" },
+      { body: "NIRF 2025", category: "Research Institutions", rank: "3" },
+      { body: "NIRF 2025", category: "Overall", rank: "4" },
+      { body: "NIRF 2025", category: "Management", rank: "4" },
+      { body: "NIRF 2025", category: "Innovation", rank: "7" },
+    ];
+
+    if (college.rankingsArticle) {
+      return {
+        title: college.rankingsArticle.title || `${shortName} Rankings 2026`,
+        introParagraph:
+          college.rankingsArticle.introParagraph ||
+          `**${shortName}** has improved its global standing from 123rd rank to **118th rank in QS World University Ranking 2027**, retaining the top spot for the 2nd consecutive year. ${shortName} is one of the **top ranking engineering institutes** in various rankings, including NIRF, QS World University Rankings, QS Asia Ranking, Times Higher Education, etc., the **${fullName}** has significantly risen over the past few years. Take a look at the comprehensive **${shortName} Rankings** below:`,
+        internationalHeading:
+          college.rankingsArticle.internationalHeading ||
+          `${shortName} International Rankings 2025, 2026, 2027`,
+        internationalRows:
+          college.rankingsArticle.internationalRows && college.rankingsArticle.internationalRows.length > 0
+            ? college.rankingsArticle.internationalRows
+            : defaultInternationalRows,
+        nationalHeading:
+          college.rankingsArticle.nationalHeading ||
+          `${shortName} National Rankings 2025, 2026`,
+        nationalRows:
+          college.rankingsArticle.nationalRows && college.rankingsArticle.nationalRows.length > 0
+            ? college.rankingsArticle.nationalRows
+            : defaultNationalRows,
+        footerNote:
+          college.rankingsArticle.footerNote ||
+          `Check course-specific **${shortName} rankings** below:`,
+      };
+    }
+
+    return {
+      title: `${shortName} Rankings 2026`,
+      introParagraph: `**${shortName}** has improved its global standing from 123rd rank to **118th rank in QS World University Ranking 2027**, retaining the top spot for the 2nd consecutive year. ${shortName} is one of the **top ranking engineering institutes** in various rankings, including NIRF, QS World University Rankings, QS Asia Ranking, Times Higher Education, etc., the **${fullName}** has significantly risen over the past few years. Take a look at the comprehensive **${shortName} Rankings** below:`,
+      internationalHeading: `${shortName} International Rankings 2025, 2026, 2027`,
+      internationalRows: defaultInternationalRows,
+      nationalHeading: `${shortName} National Rankings 2025, 2026`,
+      nationalRows: defaultNationalRows,
+      footerNote: `Check course-specific **${shortName} rankings** below:`,
     };
   };
 
@@ -5428,6 +5506,205 @@ export default function CollegeDetailPage() {
                                   >
                                     <span>{admData.faqsButtonText || "Admission Details for all courses"}</span>
                                     <ArrowRight className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+
+              {/* 6. RANKINGS 2026 SUB-BOX */}
+              {(() => {
+                const rkData = getCollegeRankingsArticle(collegeData);
+                const collegeShortName = collegeData.name.split(" - ")[0].split("(")[0].trim() || "College";
+
+                return (
+                  <div
+                    id="rankings-section"
+                    className="group relative bg-white/95 backdrop-blur-sm border border-slate-200/90 hover:border-slate-300/90 rounded-2xl p-5 sm:p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_28px_-6px_rgba(15,23,42,0.08)] transition-all duration-300 scroll-mt-20"
+                  >
+                    {/* Top Header Row */}
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-outfit font-black text-lg sm:text-xl text-[#2d114d] tracking-tight">
+                        {rkData.title || `${collegeShortName} Rankings 2026`}
+                      </h3>
+
+                      <div className="flex items-center gap-2">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("rankings")}
+                            className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Rankings</span>
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => setIsRankingsCardOpen(!isRankingsCardOpen)}
+                          aria-label={isRankingsCardOpen ? "Collapse Rankings Card" : "Expand Rankings Card"}
+                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all cursor-pointer shadow-2xs active:scale-90"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                              isRankingsCardOpen ? "rotate-180 text-blue-600" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Collapsible Card Body */}
+                    <AnimatePresence initial={false}>
+                      {isRankingsCardOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-3.5 space-y-3.5 text-[13.5px] sm:text-[14px] text-slate-700 leading-relaxed font-normal">
+                            {!isRankingsArticleExpanded ? (
+                              /* Collapsed / Preview State (Image 1) */
+                              <div className="space-y-3 relative pt-0.5">
+                                {rkData.introParagraph && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(rkData.introParagraph)}
+                                  </p>
+                                )}
+
+                                {/* Sub-header banner preview with mask */}
+                                <div className="relative max-h-[38px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_20%,transparent_100%)]">
+                                  <div className="px-4 py-2.5 rounded-lg bg-[#f0f4f9] text-[#1e3a8a] font-outfit font-bold text-xs sm:text-[13.5px]">
+                                    {rkData.internationalHeading || `${collegeShortName} International Rankings 2025, 2026, 2027`}
+                                  </div>
+                                </div>
+
+                                {/* Read More Trigger at Bottom Right */}
+                                <div className="flex justify-end pt-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsRankingsArticleExpanded(true)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] hover:underline cursor-pointer transition-colors"
+                                  >
+                                    Read more
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              /* Full Expanded State (Image 2 & 3) */
+                              <div className="space-y-5 pt-0.5">
+                                {rkData.introParagraph && (
+                                  <p className="leading-relaxed">
+                                    {renderFormattedText(rkData.introParagraph)}
+                                  </p>
+                                )}
+
+                                {/* 1. International Rankings Section */}
+                                <div className="space-y-2.5">
+                                  <div className="px-4 py-2.5 rounded-lg bg-[#f0f4f9] text-[#1e3a8a] font-outfit font-bold text-xs sm:text-[13.5px]">
+                                    {rkData.internationalHeading || `${collegeShortName} International Rankings 2025, 2026, 2027`}
+                                  </div>
+
+                                  {rkData.internationalRows && rkData.internationalRows.length > 0 && (
+                                    <div className="overflow-x-auto rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                      <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                        <thead>
+                                          <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs border-b border-slate-200/80">
+                                            <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-5/12 border-r border-slate-200/80">
+                                              Ranking Body
+                                            </th>
+                                            <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-4/12 border-r border-slate-200/80">
+                                              Category
+                                            </th>
+                                            <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-3/12">
+                                              Ranking
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100">
+                                          {rkData.internationalRows.map((row, rIdx) => (
+                                            <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                                              <td className="py-3 px-4 font-semibold text-slate-900 align-middle border-r border-slate-100">
+                                                {row.body}
+                                              </td>
+                                              <td className="py-3 px-4 text-slate-700 align-middle border-r border-slate-100">
+                                                {row.category}
+                                              </td>
+                                              <td className="py-3 px-4 font-bold text-slate-900 align-middle">
+                                                {row.rank}
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* 2. National Rankings Section */}
+                                <div className="space-y-2.5">
+                                  <div className="px-4 py-2.5 rounded-lg bg-[#f0f4f9] text-[#1e3a8a] font-outfit font-bold text-xs sm:text-[13.5px]">
+                                    {rkData.nationalHeading || `${collegeShortName} National Rankings 2025, 2026`}
+                                  </div>
+
+                                  {rkData.nationalRows && rkData.nationalRows.length > 0 && (
+                                    <div className="overflow-x-auto rounded-xl border border-slate-200/90 shadow-[0_1px_4px_rgba(0,0,0,0.02)] bg-white">
+                                      <table className="w-full text-left border-collapse text-xs sm:text-[13px]">
+                                        <thead>
+                                          <tr className="bg-[#f0f4f9] text-slate-800 font-bold font-outfit text-xs border-b border-slate-200/80">
+                                            <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-5/12 border-r border-slate-200/80">
+                                              Ranking Body
+                                            </th>
+                                            <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-4/12 border-r border-slate-200/80">
+                                              Category
+                                            </th>
+                                            <th className="py-3 px-4 font-bold font-outfit text-slate-900 w-3/12">
+                                              Ranking
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100">
+                                          {rkData.nationalRows.map((row, rIdx) => (
+                                            <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                                              <td className="py-3 px-4 font-semibold text-slate-900 align-middle border-r border-slate-100">
+                                                {row.body}
+                                              </td>
+                                              <td className="py-3 px-4 text-slate-700 align-middle border-r border-slate-100">
+                                                {row.category}
+                                              </td>
+                                              <td className="py-3 px-4 font-bold text-slate-900 align-middle">
+                                                {row.rank}
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Footer Note with Link & Show Less Button */}
+                                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-[13px]">
+                                  {rkData.footerNote && (
+                                    <p className="text-slate-600 font-medium leading-relaxed">
+                                      {renderFormattedText(rkData.footerNote)}
+                                    </p>
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsRankingsArticleExpanded(false)}
+                                    className="text-[#1a73e8] hover:text-[#0b57d0] font-bold text-xs sm:text-[13px] hover:underline cursor-pointer transition-colors self-end shrink-0"
+                                  >
+                                    Show less
                                   </button>
                                 </div>
                               </div>
@@ -11353,6 +11630,343 @@ export default function CollegeDetailPage() {
                             ))}
                           </div>
                         </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* MODAL: RANKINGS ARTICLE & TABLES */}
+                {activeMiniModal === "rankings" && (
+                  <div className="p-3.5 bg-purple-50/50 border border-purple-200/80 rounded-2xl space-y-3">
+                    {(() => {
+                      const curRk = tempData.rankingsArticle || getCollegeRankingsArticle(tempData);
+                      const intlRows = curRk.internationalRows || [];
+                      const natRows = curRk.nationalRows || [];
+
+                      return (
+                        <div className="space-y-3">
+                          {/* Modal Nav Tabs */}
+                          <div className="flex items-center gap-2 border-b border-purple-200 pb-2">
+                            <button
+                              type="button"
+                              onClick={() => setRankingsModalTab("overview")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                rankingsModalTab === "overview"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              Overview Article
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setRankingsModalTab("international")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                rankingsModalTab === "international"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              International Rankings (${intlRows.length})
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setRankingsModalTab("national")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                                rankingsModalTab === "national"
+                                  ? "bg-purple-600 text-white shadow-xs"
+                                  : "bg-white text-purple-800 hover:bg-purple-100"
+                              }`}
+                            >
+                              National Rankings (${natRows.length})
+                            </button>
+                          </div>
+
+                          {rankingsModalTab === "overview" ? (
+                            /* Tab 1: Overview Article */
+                            <div className="space-y-3">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Section Title</label>
+                                <input
+                                  type="text"
+                                  value={curRk.title || `${tempData.name.split(" - ")[0]} Rankings 2026`}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: { ...curRk, title: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Introductory Paragraph (Markdown supported)</label>
+                                <textarea
+                                  rows={4}
+                                  value={curRk.introParagraph || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: { ...curRk, introParagraph: e.target.value },
+                                    });
+                                  }}
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 resize-none"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Footer Note Text</label>
+                                <input
+                                  type="text"
+                                  value={curRk.footerNote || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: { ...curRk, footerNote: e.target.value },
+                                    });
+                                  }}
+                                  placeholder="e.g. Check course-specific rankings below:"
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                                />
+                              </div>
+                            </div>
+                          ) : rankingsModalTab === "international" ? (
+                            /* Tab 2: International Rankings Table */
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-black text-purple-950 uppercase tracking-wide">
+                                  International Rankings Table
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newRow: RankingTableRow = {
+                                      body: "QS World University Rankings 2028",
+                                      category: "World University",
+                                      rank: "115",
+                                    };
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: {
+                                        ...curRk,
+                                        internationalRows: [...intlRows, newRow],
+                                      },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Ranking Row</span>
+                                </button>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Table Sub-Header Banner Text</label>
+                                <input
+                                  type="text"
+                                  value={curRk.internationalHeading || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: { ...curRk, internationalHeading: e.target.value },
+                                    });
+                                  }}
+                                  placeholder="e.g. IIT Delhi International Rankings 2025, 2026, 2027"
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                                {intlRows.map((row, rIdx) => (
+                                  <div key={rIdx} className="p-2.5 bg-white border border-purple-200 rounded-xl grid grid-cols-12 gap-2 items-center">
+                                    <div className="col-span-5">
+                                      <label className="text-[9px] font-bold text-slate-500 block">Ranking Body *</label>
+                                      <input
+                                        type="text"
+                                        value={row.body}
+                                        onChange={(e) => {
+                                          const updated = [...intlRows];
+                                          updated[rIdx] = { ...updated[rIdx], body: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, internationalRows: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-semibold"
+                                      />
+                                    </div>
+                                    <div className="col-span-4">
+                                      <label className="text-[9px] font-bold text-slate-500 block">Category *</label>
+                                      <input
+                                        type="text"
+                                        value={row.category}
+                                        onChange={(e) => {
+                                          const updated = [...intlRows];
+                                          updated[rIdx] = { ...updated[rIdx], category: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, internationalRows: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-medium"
+                                      />
+                                    </div>
+                                    <div className="col-span-2">
+                                      <label className="text-[9px] font-bold text-slate-500 block">Rank *</label>
+                                      <input
+                                        type="text"
+                                        value={row.rank}
+                                        onChange={(e) => {
+                                          const updated = [...intlRows];
+                                          updated[rIdx] = { ...updated[rIdx], rank: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, internationalRows: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-bold text-center text-purple-700"
+                                      />
+                                    </div>
+                                    <div className="col-span-1 flex justify-center pt-3">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = intlRows.filter((_, i) => i !== rIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, internationalRows: updated },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:bg-red-50 rounded"
+                                        title="Delete Row"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ) : (
+                            /* Tab 3: National Rankings Table */
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-black text-purple-950 uppercase tracking-wide">
+                                  National Rankings Table
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newRow: RankingTableRow = {
+                                      body: "NIRF 2026",
+                                      category: "Engineering",
+                                      rank: "2",
+                                    };
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: {
+                                        ...curRk,
+                                        nationalRows: [...natRows, newRow],
+                                      },
+                                    });
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Ranking Row</span>
+                                </button>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Table Sub-Header Banner Text</label>
+                                <input
+                                  type="text"
+                                  value={curRk.nationalHeading || ""}
+                                  onChange={(e) => {
+                                    setTempData({
+                                      ...tempData,
+                                      rankingsArticle: { ...curRk, nationalHeading: e.target.value },
+                                    });
+                                  }}
+                                  placeholder="e.g. IIT Delhi National Rankings 2025, 2026"
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900"
+                                />
+                              </div>
+
+                              <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                                {natRows.map((row, rIdx) => (
+                                  <div key={rIdx} className="p-2.5 bg-white border border-purple-200 rounded-xl grid grid-cols-12 gap-2 items-center">
+                                    <div className="col-span-5">
+                                      <label className="text-[9px] font-bold text-slate-500 block">Ranking Body *</label>
+                                      <input
+                                        type="text"
+                                        value={row.body}
+                                        onChange={(e) => {
+                                          const updated = [...natRows];
+                                          updated[rIdx] = { ...updated[rIdx], body: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, nationalRows: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-semibold"
+                                      />
+                                    </div>
+                                    <div className="col-span-4">
+                                      <label className="text-[9px] font-bold text-slate-500 block">Category *</label>
+                                      <input
+                                        type="text"
+                                        value={row.category}
+                                        onChange={(e) => {
+                                          const updated = [...natRows];
+                                          updated[rIdx] = { ...updated[rIdx], category: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, nationalRows: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-medium"
+                                      />
+                                    </div>
+                                    <div className="col-span-2">
+                                      <label className="text-[9px] font-bold text-slate-500 block">Rank *</label>
+                                      <input
+                                        type="text"
+                                        value={row.rank}
+                                        onChange={(e) => {
+                                          const updated = [...natRows];
+                                          updated[rIdx] = { ...updated[rIdx], rank: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, nationalRows: updated },
+                                          });
+                                        }}
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-bold text-center text-purple-700"
+                                      />
+                                    </div>
+                                    <div className="col-span-1 flex justify-center pt-3">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = natRows.filter((_, i) => i !== rIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            rankingsArticle: { ...curRk, nationalRows: updated },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:bg-red-50 rounded"
+                                        title="Delete Row"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       );
                     })()}
                   </div>
