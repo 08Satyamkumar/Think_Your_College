@@ -276,6 +276,51 @@ interface ReviewParameterItem {
   iconType: "briefcase" | "building" | "book" | "users" | "dollar";
 }
 
+interface StudentFeedbackCategory {
+  category: string;
+  likesText: string;
+  likesCountText: string;
+  dislikesText: string;
+  dislikesCountText: string;
+}
+
+interface StudentFeedbackData {
+  heading?: string;
+  categories: StudentFeedbackCategory[];
+}
+
+
+const DEFAULT_STUDENT_FEEDBACK_CATEGORIES: StudentFeedbackCategory[] = [
+  {
+    category: "Placements",
+    likesText: "The recruiting companies were Capgemini, Microsoft, Uber, Amazon, Zomato, Flipkart, Deloitte, Google, Shell, KPMG, IBM, Dell, Wipro, Infosys, Absolute Data, and Ernst & Young.",
+    likesCountText: "Based on 178 Reviews",
+    dislikesText: "Many decent students missed internship opportunities due to lack of visiting companies, or the companies having unfound minimum criteria for selection.",
+    dislikesCountText: "Based on 16 Reviews",
+  },
+  {
+    category: "Infrastructure",
+    likesText: "Hostels are well-maintained with high-speed Wi-Fi, modern air-conditioned research laboratories, world-class central library, and top sports facilities including Olympic-standard grounds.",
+    likesCountText: "Based on 142 Reviews",
+    dislikesText: "Some older hostel wings and mess areas require periodic maintenance and room allocation can get crowded during peak incoming batch admissions.",
+    dislikesCountText: "Based on 22 Reviews",
+  },
+  {
+    category: "Faculty",
+    likesText: "Distinguished professors with extensive research backgrounds, PhDs from top global universities, highly accessible during office hours, and curriculum aligned with modern industry demands.",
+    likesCountText: "Based on 115 Reviews",
+    dislikesText: "Rigorous grading policies with high academic workload and frequent surprise quizzes can sometimes create stressful exam schedules for students.",
+    dislikesCountText: "Based on 18 Reviews",
+  },
+  {
+    category: "Other",
+    likesText: "Vibrant campus fest culture (Rendezvous & Tryst), active student tech clubs, great alumni network backing, and unmatched peer learning environment across diverse streams.",
+    likesCountText: "Based on 98 Reviews",
+    dislikesText: "Competitive campus atmosphere can be challenging initially for freshmen before adjusting to peer pace and routine.",
+    dislikesCountText: "Based on 12 Reviews",
+  },
+];
+
 interface ReviewsArticleData {
   tagText?: string;
   title?: string;
@@ -283,6 +328,7 @@ interface ReviewsArticleData {
   totalReviewsCount?: string;
   histogram?: ReviewHistogramItem[];
   parameters?: ReviewParameterItem[];
+  studentFeedback?: StudentFeedbackData;
 }
 
 interface RankingsArticleData {
@@ -1234,6 +1280,7 @@ type MiniModalId =
   | "course_summary_box"
   | "fees"
   | "reviews"
+  | "studentFeedback"
   | "admissions"
   | "placements"
   | "placements_article"
@@ -1466,6 +1513,7 @@ export default function CollegeDetailPage() {
   const [openRankingsFaqIdx, setOpenRankingsFaqIdx] = useState<number | null>(null);
   const [reviewsModalTab, setReviewsModalTab] = useState<"overall" | "parameters">("overall");
   const [hoveredStarBarIdx, setHoveredStarBarIdx] = useState<number | null>(null);
+  const [activeFeedbackCategory, setActiveFeedbackCategory] = useState<string>("Placements");
   const [rankingsModalTab, setRankingsModalTab] = useState<"overview" | "international" | "national" | "course_boxes" | "faqs">("overview");
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -2628,6 +2676,37 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
       { label: "Value for Money", rating: 4.6, iconType: "dollar" },
     ];
 
+    const DEFAULT_STUDENT_FEEDBACK_CATEGORIES: StudentFeedbackCategory[] = [
+      {
+        category: "Placements",
+        likesText: "The recruiting companies were Capgemini, Microsoft, Uber, Amazon, Zomato, Flipkart, Deloitte, Google, Shell, KPMG, IBM, Dell, Wipro, Infosys, Absolute Data, and Ernst & Young.",
+        likesCountText: "Based on 178 Reviews",
+        dislikesText: "Many decent students missed internship opportunities due to lack of visiting companies, or the companies having unfound minimum criteria for selection.",
+        dislikesCountText: "Based on 16 Reviews",
+      },
+      {
+        category: "Infrastructure",
+        likesText: "Hostels are well-maintained with high-speed Wi-Fi, modern air-conditioned research laboratories, world-class central library, and top sports facilities including Olympic-standard grounds.",
+        likesCountText: "Based on 142 Reviews",
+        dislikesText: "Some older hostel wings and mess areas require periodic maintenance and room allocation can get crowded during peak incoming batch admissions.",
+        dislikesCountText: "Based on 22 Reviews",
+      },
+      {
+        category: "Faculty",
+        likesText: "Distinguished professors with extensive research backgrounds, PhDs from top global universities, highly accessible during office hours, and curriculum aligned with modern industry demands.",
+        likesCountText: "Based on 115 Reviews",
+        dislikesText: "Rigorous grading policies with high academic workload and frequent surprise quizzes can sometimes create stressful exam schedules for students.",
+        dislikesCountText: "Based on 18 Reviews",
+      },
+      {
+        category: "Other",
+        likesText: "Vibrant campus fest culture (Rendezvous & Tryst), active student tech clubs, great alumni network backing, and unmatched peer learning environment across diverse streams.",
+        likesCountText: "Based on 98 Reviews",
+        dislikesText: "Competitive campus atmosphere can be challenging initially for freshmen before adjusting to peer pace and routine.",
+        dislikesCountText: "Based on 12 Reviews",
+      },
+    ];
+
     if (college.reviewsArticle) {
       return {
         tagText: college.reviewsArticle.tagText || shortName,
@@ -2642,6 +2721,10 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
           college.reviewsArticle.parameters && college.reviewsArticle.parameters.length > 0
             ? college.reviewsArticle.parameters
             : defaultParameters,
+        studentFeedback: college.reviewsArticle.studentFeedback || {
+          heading: "What students say about " + (college.fullName || college.name),
+          categories: DEFAULT_STUDENT_FEEDBACK_CATEGORIES,
+        },
       };
     }
 
@@ -2652,6 +2735,10 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
       totalReviewsCount: "623 Verified Reviews",
       histogram: defaultHistogram,
       parameters: defaultParameters,
+      studentFeedback: {
+        heading: "What students say about " + (college.fullName || college.name),
+        categories: DEFAULT_STUDENT_FEEDBACK_CATEGORIES,
+      },
     };
   };
 
@@ -6362,6 +6449,122 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                         })}
                       </div>
                     </div>
+
+                    {/* What students say about {College} - Likes & Dislikes Vertical Table */}
+                    {(() => {
+                      const feedbackData = revData.studentFeedback || {
+                        heading: "What students say about " + (collegeData.fullName || collegeData.name),
+                        categories: DEFAULT_STUDENT_FEEDBACK_CATEGORIES,
+                      };
+                      const categories = (feedbackData.categories && feedbackData.categories.length > 0)
+                        ? feedbackData.categories
+                        : DEFAULT_STUDENT_FEEDBACK_CATEGORIES;
+                      const activeItem = categories.find(
+                        (c: StudentFeedbackCategory) => c.category.toLowerCase() === activeFeedbackCategory.toLowerCase()
+                      ) || categories[0] || DEFAULT_STUDENT_FEEDBACK_CATEGORIES[0];
+
+                      return (
+                        <div className="mt-8 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)] space-y-6">
+                          {/* Heading + Individual Admin Edit Button */}
+                          <div className="flex items-start justify-between gap-3">
+                            <h4 className="font-outfit font-bold text-lg sm:text-xl text-slate-900 tracking-tight leading-snug">
+                              {feedbackData.heading || ("What students say about " + (collegeData.fullName || collegeData.name))}
+                            </h4>
+                            {isAdmin && (
+                              <button
+                                type="button"
+                                onClick={() => openMiniModal("studentFeedback")}
+                                className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                                <span>Edit Feedback</span>
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Category Filter Pills (Placements, Infrastructure, Faculty, Other) */}
+                          <div className="flex items-center gap-2.5 overflow-x-auto pb-1 no-scrollbar">
+                            {categories.map((cat: StudentFeedbackCategory, cIdx: number) => {
+                              const isCatActive = (cat.category.toLowerCase() === (activeItem?.category || "").toLowerCase());
+                              return (
+                                <button
+                                  key={cIdx}
+                                  type="button"
+                                  onClick={() => setActiveFeedbackCategory(cat.category)}
+                                  className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-[13px] font-semibold transition-all duration-200 shrink-0 cursor-pointer ${
+                                    isCatActive
+                                      ? "border-2 border-slate-800 bg-slate-900 text-white shadow-xs scale-100"
+                                      : "border border-slate-200/90 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-900 hover:bg-slate-50"
+                                  }`}
+                                >
+                                  {cat.category}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {/* Vertical Table / Stack for Likes & Dislikes */}
+                          <div className="space-y-6 pt-2">
+                            {/* 1. LIKES ROW */}
+                            <div className="space-y-2 group/like">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-xs shrink-0" />
+                                  <h5 className="font-outfit font-bold text-base sm:text-lg text-slate-900">
+                                    Likes
+                                  </h5>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    alert("Full Student Feedback on " + (activeItem?.category || "Likes") + ":\n\n" + activeItem?.likesText);
+                                  }}
+                                  className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                                >
+                                  View All
+                                </button>
+                              </div>
+                              <p className="text-xs sm:text-[14px] text-slate-700 leading-relaxed pl-5 sm:pl-5.5">
+                                {activeItem?.likesText}
+                              </p>
+                              <span className="block text-[11.5px] sm:text-xs font-medium text-slate-400 pl-5 sm:pl-5.5">
+                                {activeItem?.likesCountText || "Based on Student Reviews"}
+                              </span>
+                            </div>
+
+                            {/* Subtle Divider */}
+                            <div className="border-t border-slate-100" />
+
+                            {/* 2. DISLIKES ROW */}
+                            <div className="space-y-2 group/dislike">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-3 h-3 rounded-full bg-rose-500 shadow-xs shrink-0" />
+                                  <h5 className="font-outfit font-bold text-base sm:text-lg text-slate-900">
+                                    Dislikes
+                                  </h5>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    alert("Full Student Feedback on " + (activeItem?.category || "Dislikes") + ":\n\n" + activeItem?.dislikesText);
+                                  }}
+                                  className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                                >
+                                  View All
+                                </button>
+                              </div>
+                              <p className="text-xs sm:text-[14px] text-slate-700 leading-relaxed pl-5 sm:pl-5.5">
+                                {activeItem?.dislikesText}
+                              </p>
+                              <span className="block text-[11.5px] sm:text-xs font-medium text-slate-400 pl-5 sm:pl-5.5">
+                                {activeItem?.dislikesCountText || "Based on Student Reviews"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })()}
@@ -13434,7 +13637,232 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                   </div>
                 )}
 
-                {/* MODAL: QA */}
+                {/* MODAL: STUDENT FEEDBACK (LIKES & DISLIKES) */}
+                {activeMiniModal === "studentFeedback" && (
+                  <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-1">
+                    {(() => {
+                      const curRev = tempData.reviewsArticle || getCollegeReviewsArticle(tempData);
+                      const curFeedback = curRev.studentFeedback || {
+                        heading: "What students say about " + (tempData.fullName || tempData.name),
+                        categories: DEFAULT_STUDENT_FEEDBACK_CATEGORIES,
+                      };
+                      const categories = curFeedback.categories || DEFAULT_STUDENT_FEEDBACK_CATEGORIES;
+
+                      return (
+                        <div className="space-y-4">
+                          {/* Heading input */}
+                          <div className="space-y-1">
+                            <label className="text-xs font-bold text-slate-700 block">Section Heading</label>
+                            <input
+                              type="text"
+                              value={curFeedback.heading || ""}
+                              onChange={(e) => {
+                                setTempData({
+                                  ...tempData,
+                                  reviewsArticle: {
+                                    ...curRev,
+                                    studentFeedback: {
+                                      ...curFeedback,
+                                      heading: e.target.value,
+                                    },
+                                  },
+                                });
+                              }}
+                              className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                              placeholder="What students say about IIT Delhi..."
+                            />
+                          </div>
+
+                          {/* Categories List */}
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                                Categories & Likes/Dislikes ({categories.length})
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [
+                                    ...categories,
+                                    {
+                                      category: `Category ${categories.length + 1}`,
+                                      likesText: "Positive feedback from students regarding this aspect...",
+                                      likesCountText: "Based on 50 Reviews",
+                                      dislikesText: "Areas where students suggested improvements...",
+                                      dislikesCountText: "Based on 10 Reviews",
+                                    },
+                                  ];
+                                  setTempData({
+                                    ...tempData,
+                                    reviewsArticle: {
+                                      ...curRev,
+                                      studentFeedback: {
+                                        ...curFeedback,
+                                        categories: updated,
+                                      },
+                                    },
+                                  });
+                                }}
+                                className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 flex items-center gap-1"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>Add Category</span>
+                              </button>
+                            </div>
+
+                            <div className="space-y-3">
+                              {categories.map((cat: StudentFeedbackCategory, cIdx: number) => (
+                                <div key={cIdx} className="p-3.5 bg-white border border-slate-200 rounded-xl space-y-2.5 shadow-2xs relative">
+                                  <div className="flex items-center justify-between gap-2 pr-6">
+                                    <input
+                                      type="text"
+                                      value={cat.category}
+                                      onChange={(e) => {
+                                        const updated = [...categories];
+                                        updated[cIdx] = { ...updated[cIdx], category: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          reviewsArticle: {
+                                            ...curRev,
+                                            studentFeedback: {
+                                              ...curFeedback,
+                                              categories: updated,
+                                            },
+                                          },
+                                        });
+                                      }}
+                                      placeholder="Category Name (e.g. Placements, Infrastructure)"
+                                      className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-indigo-700"
+                                    />
+                                    {categories.length > 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updated = categories.filter((_: any, i: number) => i !== cIdx);
+                                          setTempData({
+                                            ...tempData,
+                                            reviewsArticle: {
+                                              ...curRev,
+                                              studentFeedback: {
+                                                ...curFeedback,
+                                                categories: updated,
+                                              },
+                                            },
+                                          });
+                                        }}
+                                        className="p-1 text-red-500 hover:bg-red-50 rounded-lg shrink-0"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    )}
+                                  </div>
+
+                                  {/* Likes Field */}
+                                  <div className="space-y-1 bg-emerald-50/40 p-2.5 rounded-lg border border-emerald-100">
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+                                      <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                      <span>Likes</span>
+                                    </div>
+                                    <textarea
+                                      rows={2}
+                                      value={cat.likesText}
+                                      onChange={(e) => {
+                                        const updated = [...categories];
+                                        updated[cIdx] = { ...updated[cIdx], likesText: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          reviewsArticle: {
+                                            ...curRev,
+                                            studentFeedback: {
+                                              ...curFeedback,
+                                              categories: updated,
+                                            },
+                                          },
+                                        });
+                                      }}
+                                      placeholder="Likes description..."
+                                      className="w-full px-2 py-1 bg-white border border-emerald-200/80 rounded-md text-xs"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={cat.likesCountText}
+                                      onChange={(e) => {
+                                        const updated = [...categories];
+                                        updated[cIdx] = { ...updated[cIdx], likesCountText: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          reviewsArticle: {
+                                            ...curRev,
+                                            studentFeedback: {
+                                              ...curFeedback,
+                                              categories: updated,
+                                            },
+                                          },
+                                        });
+                                      }}
+                                      placeholder="e.g. Based on 178 Reviews"
+                                      className="w-full px-2 py-0.5 bg-white border border-emerald-200/80 rounded text-[11px] text-slate-500 font-medium"
+                                    />
+                                  </div>
+
+                                  {/* Dislikes Field */}
+                                  <div className="space-y-1 bg-rose-50/40 p-2.5 rounded-lg border border-rose-100">
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-rose-700">
+                                      <div className="w-2 h-2 rounded-full bg-rose-500" />
+                                      <span>Dislikes</span>
+                                    </div>
+                                    <textarea
+                                      rows={2}
+                                      value={cat.dislikesText}
+                                      onChange={(e) => {
+                                        const updated = [...categories];
+                                        updated[cIdx] = { ...updated[cIdx], dislikesText: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          reviewsArticle: {
+                                            ...curRev,
+                                            studentFeedback: {
+                                              ...curFeedback,
+                                              categories: updated,
+                                            },
+                                          },
+                                        });
+                                      }}
+                                      placeholder="Dislikes description..."
+                                      className="w-full px-2 py-1 bg-white border border-rose-200/80 rounded-md text-xs"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={cat.dislikesCountText}
+                                      onChange={(e) => {
+                                        const updated = [...categories];
+                                        updated[cIdx] = { ...updated[cIdx], dislikesCountText: e.target.value };
+                                        setTempData({
+                                          ...tempData,
+                                          reviewsArticle: {
+                                            ...curRev,
+                                            studentFeedback: {
+                                              ...curFeedback,
+                                              categories: updated,
+                                            },
+                                          },
+                                        });
+                                      }}
+                                      placeholder="e.g. Based on 16 Reviews"
+                                      className="w-full px-2 py-0.5 bg-white border border-rose-200/80 rounded text-[11px] text-slate-500 font-medium"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {`/* MODAL: QA */`}
                 {activeMiniModal === "qa" && (
                   <div className="space-y-3">
                     <div className="max-h-72 overflow-y-auto space-y-3 pr-1">
