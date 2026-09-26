@@ -2479,19 +2479,19 @@ export default function CollegeDetailPage() {
   };
 
   
-// Helper to render authentic two-tone line icons matching user's Image 1 & 2
+// Helper to render authentic two-tone line icons matching user's Image 1 & 2 (2.5x larger, crisp line art)
 const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   const norm = (label + " " + (iconType || "")).toLowerCase();
 
   // 1. Placement / Job / Career / Briefcase (Exact Match with Image 2)
   if (norm.includes("place") || norm.includes("job") || norm.includes("career") || norm.includes("briefcase")) {
     return (
-      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 12C18 9.79086 19.7909 8 22 8H26C28.2091 8 30 9.79086 30 12V14H18V12Z" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
-        <rect x="8" y="14" width="32" height="24" rx="4" fill="white" stroke="#1e293b" strokeWidth="2.4" />
-        <path d="M8 18C8 15.7909 9.79086 14 12 14H36C38.2091 14 40 15.7909 40 18V24H8V18Z" fill="#d1d5db" stroke="#1e293b" strokeWidth="2.4" />
-        <rect x="21" y="20.5" width="6" height="7" rx="1.5" fill="white" stroke="#1e293b" strokeWidth="2" />
-        <line x1="24" y1="23" x2="24" y2="25" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
+      <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 12C17 9.23858 19.2386 7 22 7H26C28.7614 7 31 9.23858 31 12V14H17V12Z" stroke="#1e293b" strokeWidth="3" strokeLinejoin="round" />
+        <rect x="7" y="14" width="34" height="26" rx="5" fill="white" stroke="#1e293b" strokeWidth="3" />
+        <path d="M7 19C7 16.2386 9.23858 14 12 14H36C38.7614 14 41 16.2386 41 19V25H7V19Z" fill="#d1d5db" stroke="#1e293b" strokeWidth="3" />
+        <rect x="20.5" y="21" width="7" height="8" rx="2" fill="white" stroke="#1e293b" strokeWidth="2.5" />
+        <line x1="24" y1="24" x2="24" y2="26.5" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     );
   }
@@ -2499,11 +2499,11 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   // 2. Academic / Degree / Graduation Cap (Exact Match with Image 1)
   if (norm.includes("acad") || norm.includes("degree") || norm.includes("graduat")) {
     return (
-      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 10L40 18L24 26L8 18L24 10Z" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
-        <path d="M14 21.5V30C14 30 17.5 35 24 35C30.5 35 34 30 34 30V21.5" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 20V29" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
-        <circle cx="12" cy="30.5" r="2.2" fill="#1e293b" />
+      <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 9L42 18L24 27L6 18L24 9Z" fill="#e5e7eb" stroke="#1e293b" strokeWidth="3" strokeLinejoin="round" />
+        <path d="M13 22V31C13 31 17 37 24 37C31 37 35 31 35 31V22" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M11 20V30" stroke="#1e293b" strokeWidth="2.6" strokeLinecap="round" />
+        <circle cx="11" cy="32" r="2.8" fill="#1e293b" />
       </svg>
     );
   }
@@ -2511,15 +2511,15 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   // 3. Faculty / Faculty & Course / Teacher / Instructor (Exact Match with Image 1)
   if (norm.includes("facult") || norm.includes("teach") || norm.includes("prof") || norm.includes("course")) {
     return (
-      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="23" y="10" width="18" height="18" rx="2" fill="#f1f5f9" stroke="#1e293b" strokeWidth="2.4" />
-        <line x1="28" y1="28" x2="26" y2="38" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
-        <line x1="36" y1="28" x2="38" y2="38" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
-        <line x1="23" y1="36" x2="41" y2="36" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
-        <path d="M32 15A4 4 0 1 0 36 19L32 19V15Z" fill="#cbd5e1" stroke="#1e293b" strokeWidth="2" strokeLinejoin="round" />
-        <circle cx="13" cy="15" r="3.5" stroke="#1e293b" strokeWidth="2.4" />
-        <path d="M7 36V28C7 25 10 23 13 23C16 23 19 25 19 28V36" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
-        <path d="M17 26L24 24" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="9" width="20" height="20" rx="3" fill="#f1f5f9" stroke="#1e293b" strokeWidth="3" />
+        <line x1="27" y1="29" x2="25" y2="39" stroke="#1e293b" strokeWidth="2.6" strokeLinecap="round" />
+        <line x1="37" y1="29" x2="39" y2="39" stroke="#1e293b" strokeWidth="2.6" strokeLinecap="round" />
+        <line x1="22" y1="37" x2="42" y2="37" stroke="#1e293b" strokeWidth="2.6" strokeLinecap="round" />
+        <path d="M32 15A4.5 4.5 0 1 0 36.5 19.5L32 19.5V15Z" fill="#cbd5e1" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+        <circle cx="12" cy="14" r="4" stroke="#1e293b" strokeWidth="3" />
+        <path d="M5 37V29C5 25.5 8.5 23 12 23C15.5 23 19 25.5 19 29V37" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+        <path d="M16 26.5L23.5 24.5" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
       </svg>
     );
   }
@@ -2527,13 +2527,13 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   // 4. Infrastructure / Campus / Building (Exact Match with Image 1)
   if (norm.includes("infra") || norm.includes("build") || (norm.includes("campus") && !norm.includes("life"))) {
     return (
-      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="11" y="10" width="13" height="26" rx="1.5" fill="white" stroke="#1e293b" strokeWidth="2.4" />
-        <line x1="17.5" y1="14" x2="17.5" y2="28" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
-        <rect x="22" y="16" width="14" height="20" rx="1.5" fill="#d1d5db" stroke="#1e293b" strokeWidth="2.4" />
-        <path d="M8 38C8 35.5 10 34 12 34C13 34 14 34.5 14.5 35C15.5 33.5 17.5 33 19.5 34C21 34.8 21.5 36 21.5 38H8Z" fill="#9ca3af" stroke="#1e293b" strokeWidth="2" strokeLinejoin="round" />
-        <path d="M22 38C22 35.5 24 34 26 34C27.5 33.5 29.5 34 30.5 35C32 34 34 34.5 35 35.5C36 36.5 36 38 36 38H22Z" fill="#9ca3af" stroke="#1e293b" strokeWidth="2" strokeLinejoin="round" />
-        <line x1="6" y1="38" x2="42" y2="38" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="9" width="14" height="28" rx="2" fill="white" stroke="#1e293b" strokeWidth="3" />
+        <line x1="17" y1="13" x2="17" y2="29" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" />
+        <rect x="22" y="16" width="16" height="21" rx="2" fill="#d1d5db" stroke="#1e293b" strokeWidth="3" />
+        <path d="M7 39C7 36 9.5 34.5 12 34.5C13.5 34.5 14.5 35 15.5 35.5C16.5 34 18.5 33.5 20.5 34.5C22 35.5 22.5 37 22.5 39H7Z" fill="#9ca3af" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M22 39C22 36 24 34.5 26.5 34.5C28 34 30.5 34.5 31.5 35.5C33 34.5 35.5 35 36.5 36C37.5 37 37.5 39 37.5 39H22Z" fill="#9ca3af" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+        <line x1="5" y1="39" x2="43" y2="39" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
       </svg>
     );
   }
@@ -2541,11 +2541,11 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   // 5. Accommodation / Hostel / Housing / Living / Home (Exact Match with Image 1)
   if (norm.includes("accom") || norm.includes("hostel") || norm.includes("stay") || norm.includes("house") || norm.includes("home") || norm.includes("room")) {
     return (
-      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M31 16V12H35V20" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M8 22L24 10L40 22" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 20.5V36C12 37.1046 12.8954 38 14 38H34C35.1046 38 36 37.1046 36 36V20.5" fill="white" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
-        <rect x="20" y="27" width="8" height="11" rx="1" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2" />
+      <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M31 16V11H36V20" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M7 22L24 9L41 22" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M11 20.5V37C11 38.1046 11.8954 39 13 39H35C36.1046 39 37 38.1046 37 37V20.5" fill="white" stroke="#1e293b" strokeWidth="3" strokeLinejoin="round" />
+        <rect x="20" y="27" width="8" height="12" rx="1.5" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2.5" />
       </svg>
     );
   }
@@ -2553,26 +2553,26 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   // 6. Social Life / Campus Life / Community / Friends / Users (Exact Match with Image 1)
   if (norm.includes("social") || norm.includes("life") || norm.includes("user") || norm.includes("friend") || norm.includes("crowd") || norm.includes("campus")) {
     return (
-      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="17" cy="16" r="4" stroke="#1e293b" strokeWidth="2.4" fill="#f1f5f9" />
-        <circle cx="31" cy="16" r="4" stroke="#1e293b" strokeWidth="2.4" fill="#d1d5db" />
-        <path d="M10 36V29C10 26 12.5 24 16 24H32C35.5 24 38 26 38 29V36" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <line x1="24" y1="24" x2="24" y2="36" stroke="#1e293b" strokeWidth="2.2" />
-        <path d="M14 26C14 26 19 28 24 28C29 28 34 26 34 26" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+      <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="15" r="4.5" stroke="#1e293b" strokeWidth="3" fill="#f1f5f9" />
+        <circle cx="32" cy="15" r="4.5" stroke="#1e293b" strokeWidth="3" fill="#d1d5db" />
+        <path d="M9 37V29C9 25.5 12 23 16 23H32C36 23 39 25.5 39 29V37" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="24" y1="23" x2="24" y2="37" stroke="#1e293b" strokeWidth="2.5" />
+        <path d="M13 25.5C13 25.5 18.5 28 24 28C29.5 28 35 25.5 35 25.5" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     );
   }
 
   // 7. Value for Money / Finance / Landmark / Bank
   return (
-    <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 17L24 9L38 17H10Z" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
-      <line x1="14" y1="17" x2="14" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
-      <line x1="20.5" y1="17" x2="20.5" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
-      <line x1="27.5" y1="17" x2="27.5" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
-      <line x1="34" y1="17" x2="34" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
-      <rect x="8" y="31" width="32" height="4" rx="1" fill="#cbd5e1" stroke="#1e293b" strokeWidth="2.2" />
-      <line x1="6" y1="38" x2="42" y2="38" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+    <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 17L24 8L40 17H8Z" fill="#e5e7eb" stroke="#1e293b" strokeWidth="3" strokeLinejoin="round" />
+      <line x1="13" y1="17" x2="13" y2="32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+      <line x1="20" y1="17" x2="20" y2="32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+      <line x1="28" y1="17" x2="28" y2="32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+      <line x1="35" y1="17" x2="35" y2="32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+      <rect x="7" y="32" width="34" height="4.5" rx="1.5" fill="#cbd5e1" stroke="#1e293b" strokeWidth="2.5" />
+      <line x1="5" y1="39.5" x2="43" y2="39.5" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
     </svg>
   );
 };
@@ -6296,36 +6296,38 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                       </div>
                     </div>
 
-                    {/* Bottom 5 Overlapping Parameter Cards (Styled exactly as Image 1 & Image 2) */}
-                    <div className="relative z-20 px-3 sm:px-4 -mt-7 sm:-mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
-                      {(revData.parameters || []).map((param, pIdx) => {
-                        return (
-                          <div
-                            key={pIdx}
-                            className="group/param relative bg-white hover:bg-slate-50/50 rounded-2xl p-4 sm:p-5 border border-slate-200/90 hover:border-slate-300 shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none"
-                          >
-                            {/* Icon Container with subtle rounded box style matching Image 1 & 2 */}
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] flex items-center justify-center p-1.5 sm:p-2 mb-1 group-hover/param:scale-105 group-hover/param:border-slate-200 transition-all duration-300">
-                              {renderReviewCategoryIcon(param.label, param.iconType)}
-                            </div>
+                    {/* Bottom 5 Overlapping Parameter Cards (2.5x Bigger & Mobile Horizontal Side Scroll) */}
+                    <div className="relative z-20 -mt-7 sm:-mt-8 px-2 sm:px-4">
+                      <div className="flex sm:grid sm:grid-cols-5 gap-3 sm:gap-4 overflow-x-auto pb-4 pt-1 px-1 sm:px-0 no-scrollbar snap-x snap-mandatory">
+                        {(revData.parameters || []).map((param, pIdx) => {
+                          return (
+                            <div
+                              key={pIdx}
+                              className="group/param relative bg-white hover:bg-slate-50/60 rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 hover:border-slate-300 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.09)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none min-w-[155px] sm:min-w-0 shrink-0 snap-center"
+                            >
+                              {/* 2.5x Bigger Icon Container Box matching Image 1 & 2 */}
+                              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl bg-white border border-slate-100 shadow-[0_3px_12px_rgba(0,0,0,0.04)] flex items-center justify-center p-2 sm:p-2.5 mb-2 group-hover/param:scale-105 group-hover/param:border-slate-200 group-hover/param:shadow-md transition-all duration-300">
+                                {renderReviewCategoryIcon(param.label, param.iconType)}
+                              </div>
 
-                            {/* Label (Normal clean font matching Image 1 & 2) */}
-                            <h5 className="text-xs sm:text-[13px] font-medium font-outfit text-slate-700 group-hover/param:text-slate-900 transition-colors leading-snug pt-2 pb-0.5 text-center line-clamp-1">
-                              {param.label}
-                            </h5>
+                              {/* Category Name Label */}
+                              <h5 className="text-sm sm:text-[15px] font-semibold font-outfit text-slate-700 group-hover/param:text-slate-900 transition-colors leading-snug pt-2 pb-1 text-center line-clamp-1">
+                                {param.label}
+                              </h5>
 
-                            {/* Score & Star - Number first, then Star on the right as in Image 1 & 2 */}
-                            <div className="flex items-center justify-center gap-1 pt-0.5">
-                              <span className="font-outfit font-bold text-sm sm:text-base text-slate-800 tracking-tight">
-                                {Number(param.rating).toFixed(1)}
-                              </span>
-                              <span className="text-amber-500 font-black text-sm sm:text-base leading-none select-none">
-                                ★
-                              </span>
+                              {/* Score & Star - Number first, then Star on the right as in Image 1 & 2 */}
+                              <div className="flex items-center justify-center gap-1.5 pt-0.5">
+                                <span className="font-outfit font-bold text-base sm:text-lg text-slate-800 tracking-tight">
+                                  {Number(param.rating).toFixed(1)}
+                                </span>
+                                <span className="text-amber-500 font-black text-base sm:text-lg leading-none select-none">
+                                  ★
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 );
