@@ -2478,6 +2478,105 @@ export default function CollegeDetailPage() {
     };
   };
 
+  
+// Helper to render authentic two-tone line icons matching user's Image 1 & 2
+const renderReviewCategoryIcon = (label: string, iconType?: string) => {
+  const norm = (label + " " + (iconType || "")).toLowerCase();
+
+  // 1. Placement / Job / Career / Briefcase (Exact Match with Image 2)
+  if (norm.includes("place") || norm.includes("job") || norm.includes("career") || norm.includes("briefcase")) {
+    return (
+      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 12C18 9.79086 19.7909 8 22 8H26C28.2091 8 30 9.79086 30 12V14H18V12Z" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+        <rect x="8" y="14" width="32" height="24" rx="4" fill="white" stroke="#1e293b" strokeWidth="2.4" />
+        <path d="M8 18C8 15.7909 9.79086 14 12 14H36C38.2091 14 40 15.7909 40 18V24H8V18Z" fill="#d1d5db" stroke="#1e293b" strokeWidth="2.4" />
+        <rect x="21" y="20.5" width="6" height="7" rx="1.5" fill="white" stroke="#1e293b" strokeWidth="2" />
+        <line x1="24" y1="23" x2="24" y2="25" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 2. Academic / Degree / Graduation Cap (Exact Match with Image 1)
+  if (norm.includes("acad") || norm.includes("degree") || norm.includes("graduat")) {
+    return (
+      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 10L40 18L24 26L8 18L24 10Z" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M14 21.5V30C14 30 17.5 35 24 35C30.5 35 34 30 34 30V21.5" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 20V29" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+        <circle cx="12" cy="30.5" r="2.2" fill="#1e293b" />
+      </svg>
+    );
+  }
+
+  // 3. Faculty / Faculty & Course / Teacher / Instructor (Exact Match with Image 1)
+  if (norm.includes("facult") || norm.includes("teach") || norm.includes("prof") || norm.includes("course")) {
+    return (
+      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="23" y="10" width="18" height="18" rx="2" fill="#f1f5f9" stroke="#1e293b" strokeWidth="2.4" />
+        <line x1="28" y1="28" x2="26" y2="38" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+        <line x1="36" y1="28" x2="38" y2="38" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+        <line x1="23" y1="36" x2="41" y2="36" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M32 15A4 4 0 1 0 36 19L32 19V15Z" fill="#cbd5e1" stroke="#1e293b" strokeWidth="2" strokeLinejoin="round" />
+        <circle cx="13" cy="15" r="3.5" stroke="#1e293b" strokeWidth="2.4" />
+        <path d="M7 36V28C7 25 10 23 13 23C16 23 19 25 19 28V36" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M17 26L24 24" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 4. Infrastructure / Campus / Building (Exact Match with Image 1)
+  if (norm.includes("infra") || norm.includes("build") || (norm.includes("campus") && !norm.includes("life"))) {
+    return (
+      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="11" y="10" width="13" height="26" rx="1.5" fill="white" stroke="#1e293b" strokeWidth="2.4" />
+        <line x1="17.5" y1="14" x2="17.5" y2="28" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
+        <rect x="22" y="16" width="14" height="20" rx="1.5" fill="#d1d5db" stroke="#1e293b" strokeWidth="2.4" />
+        <path d="M8 38C8 35.5 10 34 12 34C13 34 14 34.5 14.5 35C15.5 33.5 17.5 33 19.5 34C21 34.8 21.5 36 21.5 38H8Z" fill="#9ca3af" stroke="#1e293b" strokeWidth="2" strokeLinejoin="round" />
+        <path d="M22 38C22 35.5 24 34 26 34C27.5 33.5 29.5 34 30.5 35C32 34 34 34.5 35 35.5C36 36.5 36 38 36 38H22Z" fill="#9ca3af" stroke="#1e293b" strokeWidth="2" strokeLinejoin="round" />
+        <line x1="6" y1="38" x2="42" y2="38" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 5. Accommodation / Hostel / Housing / Living / Home (Exact Match with Image 1)
+  if (norm.includes("accom") || norm.includes("hostel") || norm.includes("stay") || norm.includes("house") || norm.includes("home") || norm.includes("room")) {
+    return (
+      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M31 16V12H35V20" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8 22L24 10L40 22" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 20.5V36C12 37.1046 12.8954 38 14 38H34C35.1046 38 36 37.1046 36 36V20.5" fill="white" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+        <rect x="20" y="27" width="8" height="11" rx="1" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  // 6. Social Life / Campus Life / Community / Friends / Users (Exact Match with Image 1)
+  if (norm.includes("social") || norm.includes("life") || norm.includes("user") || norm.includes("friend") || norm.includes("crowd") || norm.includes("campus")) {
+    return (
+      <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="17" cy="16" r="4" stroke="#1e293b" strokeWidth="2.4" fill="#f1f5f9" />
+        <circle cx="31" cy="16" r="4" stroke="#1e293b" strokeWidth="2.4" fill="#d1d5db" />
+        <path d="M10 36V29C10 26 12.5 24 16 24H32C35.5 24 38 26 38 29V36" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="24" y1="24" x2="24" y2="36" stroke="#1e293b" strokeWidth="2.2" />
+        <path d="M14 26C14 26 19 28 24 28C29 28 34 26 34 26" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  // 7. Value for Money / Finance / Landmark / Bank
+  return (
+    <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 17L24 9L38 17H10Z" fill="#e5e7eb" stroke="#1e293b" strokeWidth="2.4" strokeLinejoin="round" />
+      <line x1="14" y1="17" x2="14" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="20.5" y1="17" x2="20.5" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="27.5" y1="17" x2="27.5" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="34" y1="17" x2="34" y2="31" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+      <rect x="8" y="31" width="32" height="4" rx="1" fill="#cbd5e1" stroke="#1e293b" strokeWidth="2.2" />
+      <line x1="6" y1="38" x2="42" y2="38" stroke="#1e293b" strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
+  );
+};
+
   const getCollegeReviewsArticle = (college: CollegeDetail): ReviewsArticleData => {
     const shortName = college.name.split(" - ")[0].split("(")[0].trim() || "College";
 
@@ -6197,43 +6296,31 @@ export default function CollegeDetailPage() {
                       </div>
                     </div>
 
-                    {/* Bottom 5 Overlapping Parameter Cards (Overlaps the blue container edge as in Image 2) */}
+                    {/* Bottom 5 Overlapping Parameter Cards (Styled exactly as Image 1 & Image 2) */}
                     <div className="relative z-20 px-3 sm:px-4 -mt-7 sm:-mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
                       {(revData.parameters || []).map((param, pIdx) => {
                         return (
                           <div
                             key={pIdx}
-                            className="group/param relative bg-white hover:bg-slate-50/50 rounded-2xl p-4 sm:p-5 border border-slate-200/90 hover:border-blue-300 shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_28px_rgba(59,130,246,0.14)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none"
+                            className="group/param relative bg-white hover:bg-slate-50/50 rounded-2xl p-4 sm:p-5 border border-slate-200/90 hover:border-slate-300 shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none"
                           >
-                            {/* Icon Container with 3D Float Effect */}
-                            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-[#dbeafe] via-[#eff6ff] to-[#e0e7ff] border border-blue-200/70 flex items-center justify-center text-blue-600 group-hover/param:scale-110 group-hover/param:rotate-3 transition-transform duration-300 shadow-2xs">
-                              {param.iconType === "briefcase" && (
-                                <Briefcase className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
-                              )}
-                              {param.iconType === "building" && (
-                                <Building className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
-                              )}
-                              {param.iconType === "book" && (
-                                <BookOpen className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
-                              )}
-                              {param.iconType === "users" && (
-                                <Users className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
-                              )}
-                              {param.iconType === "dollar" && (
-                                <Landmark className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
-                              )}
+                            {/* Icon Container with subtle rounded box style matching Image 1 & 2 */}
+                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] flex items-center justify-center p-1.5 sm:p-2 mb-1 group-hover/param:scale-105 group-hover/param:border-slate-200 transition-all duration-300">
+                              {renderReviewCategoryIcon(param.label, param.iconType)}
                             </div>
 
-                            {/* Label */}
-                            <h5 className="text-xs sm:text-[13px] font-bold font-outfit text-slate-800 group-hover/param:text-blue-700 transition-colors leading-snug pt-2.5 pb-1">
+                            {/* Label (Normal clean font matching Image 1 & 2) */}
+                            <h5 className="text-xs sm:text-[13px] font-medium font-outfit text-slate-700 group-hover/param:text-slate-900 transition-colors leading-snug pt-2 pb-0.5 text-center line-clamp-1">
                               {param.label}
                             </h5>
 
-                            {/* Score */}
-                            <div className="flex items-center gap-1.5 pt-0.5">
-                              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 drop-shadow-2xs" />
-                              <span className="font-outfit font-bold text-sm sm:text-base text-slate-900">
-                                {param.rating}
+                            {/* Score & Star - Number first, then Star on the right as in Image 1 & 2 */}
+                            <div className="flex items-center justify-center gap-1 pt-0.5">
+                              <span className="font-outfit font-bold text-sm sm:text-base text-slate-800 tracking-tight">
+                                {Number(param.rating).toFixed(1)}
+                              </span>
+                              <span className="text-amber-500 font-black text-sm sm:text-base leading-none select-none">
+                                ★
                               </span>
                             </div>
                           </div>
@@ -13261,12 +13348,28 @@ export default function CollegeDetailPage() {
                               </span>
                               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
                                 {parameters.map((param, pIdx) => (
-                                  <div key={pIdx} className="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-2xs">
-                                    <label className="text-[10.5px] font-bold text-slate-700 block">
-                                      {param.label}
-                                    </label>
+                                  <div key={pIdx} className="p-3 bg-white border border-slate-200 rounded-xl space-y-2 shadow-2xs">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-amber-500 font-black text-sm">★</span>
+                                      <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0">
+                                        {renderReviewCategoryIcon(param.label, param.iconType)}
+                                      </div>
+                                      <input
+                                        type="text"
+                                        value={param.label}
+                                        onChange={(e) => {
+                                          const updated = [...parameters];
+                                          updated[pIdx] = { ...updated[pIdx], label: e.target.value };
+                                          setTempData({
+                                            ...tempData,
+                                            reviewsArticle: { ...curRev, parameters: updated },
+                                          });
+                                        }}
+                                        placeholder="Category Name"
+                                        className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+                                      />
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[11px] font-bold text-slate-500 shrink-0">Rating:</span>
                                       <input
                                         type="number"
                                         step="0.1"
@@ -13283,6 +13386,7 @@ export default function CollegeDetailPage() {
                                         }}
                                         className="w-full px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
                                       />
+                                      <span className="text-amber-500 font-black text-sm">★</span>
                                     </div>
                                   </div>
                                 ))}
