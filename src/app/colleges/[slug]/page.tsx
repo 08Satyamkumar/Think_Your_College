@@ -6314,9 +6314,9 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                 const totalCount = (revData.histogram || []).reduce((acc, curr) => acc + curr.count, 0) || 623;
 
                 return (
-                  <div id="reviews-section" className="group relative scroll-mt-20">
-                    {/* Top Main Blue Gradient Container */}
-                    <div className="relative bg-gradient-to-b from-[#eef4ff] via-[#f3f7ff] to-[#e4edff] border border-blue-200/80 rounded-3xl p-6 sm:p-7 pb-12 sm:pb-14 shadow-sm relative overflow-hidden">
+                  <div id="reviews-section" className="group relative scroll-mt-20 bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-xs">
+                    {/* Top Main Sky-Blue Gradient Container */}
+                    <div className="relative bg-gradient-to-b from-[#eef4ff] via-[#f3f7ff] to-[#e4edff] p-6 sm:p-7 pb-12 sm:pb-14 border-b border-blue-100/60 relative overflow-hidden">
                       {/* Ambient Glow Aura */}
                       <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
                       <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none" />
@@ -6416,8 +6416,8 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                       </div>
                     </div>
 
-                    {/* Bottom 5 Overlapping Parameter Cards (2.5x Bigger & Mobile Horizontal Side Scroll) */}
-                    <div className="relative z-20 -mt-7 sm:-mt-8 px-2 sm:px-4">
+                    {/* Bottom 5 Overlapping Parameter Cards (Overlaps the Sky-Blue & White boundary seamlessly) */}
+                    <div className="relative z-20 -mt-8 sm:-mt-10 px-3 sm:px-6">
                       <div className="flex sm:grid sm:grid-cols-5 gap-3 sm:gap-4 overflow-x-auto pb-4 pt-1 px-1 sm:px-0 no-scrollbar snap-x snap-mandatory">
                         {(revData.parameters || []).map((param, pIdx) => {
                           return (
@@ -6450,7 +6450,7 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                       </div>
                     </div>
 
-                    {/* What students say about {College} - Likes & Dislikes Vertical Table */}
+                    {/* What students say about {College} (Seamless White Background & Minimal Gap) */}
                     {(() => {
                       const feedbackData = revData.studentFeedback || {
                         heading: "What students say about " + (collegeData.fullName || collegeData.name),
@@ -6464,7 +6464,7 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                       ) || categories[0] || DEFAULT_STUDENT_FEEDBACK_CATEGORIES[0];
 
                       return (
-                        <div className="mt-8 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)] space-y-6">
+                        <div className="p-6 sm:p-7 pt-2 sm:pt-3 space-y-5">
                           {/* Heading + Individual Admin Edit Button */}
                           <div className="flex items-start justify-between gap-3">
                             <h4 className="font-outfit font-bold text-lg sm:text-xl text-slate-900 tracking-tight leading-snug">
@@ -6504,7 +6504,7 @@ const renderReviewCategoryIcon = (label: string, iconType?: string) => {
                           </div>
 
                           {/* Vertical Table / Stack for Likes & Dislikes */}
-                          <div className="space-y-6 pt-2">
+                          <div className="space-y-6 pt-1">
                             {/* 1. LIKES ROW */}
                             <div className="space-y-2 group/like">
                               <div className="flex items-center justify-between gap-2">
