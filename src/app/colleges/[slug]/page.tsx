@@ -2483,15 +2483,48 @@ export default function CollegeDetailPage() {
 const renderReviewCategoryIcon = (label: string, iconType?: string) => {
   const norm = (label + " " + (iconType || "")).toLowerCase();
 
-  // 1. Placement / Job / Career / Briefcase (Exact Match with Image 2)
+  // 1. Placement / Job / Career / Briefcase (Open Briefcase with Flying Money/Cash)
   if (norm.includes("place") || norm.includes("job") || norm.includes("career") || norm.includes("briefcase")) {
     return (
       <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M17 12C17 9.23858 19.2386 7 22 7H26C28.7614 7 31 9.23858 31 12V14H17V12Z" stroke="#1e293b" strokeWidth="3" strokeLinejoin="round" />
-        <rect x="7" y="14" width="34" height="26" rx="5" fill="white" stroke="#1e293b" strokeWidth="3" />
-        <path d="M7 19C7 16.2386 9.23858 14 12 14H36C38.7614 14 41 16.2386 41 19V25H7V19Z" fill="#d1d5db" stroke="#1e293b" strokeWidth="3" />
-        <rect x="20.5" y="21" width="7" height="8" rx="2" fill="white" stroke="#1e293b" strokeWidth="2.5" />
-        <line x1="24" y1="24" x2="24" y2="26.5" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" />
+        {/* Open Top Lid (Tilted Back) */}
+        <path d="M8 20L13 8C13.8 6.5 15.5 5.5 17.5 5.5H30.5C32.5 5.5 34.2 6.5 35 8L40 20" stroke="#1e293b" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" fill="#e2e8f0" />
+        {/* Lid Handle */}
+        <path d="M20 5.5V3C20 2.2 20.8 1.5 21.6 1.5H26.4C27.2 1.5 28 2.2 28 3V5.5" stroke="#1e293b" strokeWidth="2.6" strokeLinecap="round" />
+        
+        {/* Money / Cash Emerging & Flying from Peti */}
+        {/* Banknote 1 (Tilted Left) */}
+        <g transform="translate(10, 8) rotate(-14)">
+          <rect width="13" height="7.5" rx="1.2" fill="#dcfce7" stroke="#16a34a" strokeWidth="2" />
+          <circle cx="6.5" cy="3.75" r="1.5" fill="#16a34a" />
+        </g>
+        {/* Banknote 2 (Tilted Right) */}
+        <g transform="translate(24, 6) rotate(16)">
+          <rect width="13" height="7.5" rx="1.2" fill="#dcfce7" stroke="#16a34a" strokeWidth="2" />
+          <circle cx="6.5" cy="3.75" r="1.5" fill="#16a34a" />
+        </g>
+        {/* Banknote 3 (Center High Rise) */}
+        <g transform="translate(17.5, 5) rotate(2)">
+          <rect width="13" height="8" rx="1.2" fill="#bbf7d0" stroke="#15803d" strokeWidth="2.2" />
+          <circle cx="6.5" cy="4" r="1.6" fill="#15803d" />
+          <line x1="2" y1="4" x2="3.5" y2="4" stroke="#15803d" strokeWidth="1.2" />
+          <line x1="9.5" y1="4" x2="11" y2="4" stroke="#15803d" strokeWidth="1.2" />
+        </g>
+
+        {/* Floating Gold Coin / Sparkle */}
+        <circle cx="10" cy="5" r="2.2" fill="#f59e0b" stroke="#d97706" strokeWidth="1.4" />
+        <circle cx="38" cy="4" r="2.2" fill="#f59e0b" stroke="#d97706" strokeWidth="1.4" />
+
+        {/* Main Briefcase Body (Base) */}
+        <rect x="7" y="20" width="34" height="21" rx="4.5" fill="white" stroke="#1e293b" strokeWidth="3" />
+        {/* Upper Rim of Base */}
+        <line x1="7" y1="20" x2="41" y2="20" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+        {/* Top Accent Band on Base */}
+        <path d="M7 20H41V25H7V20Z" fill="#d1d5db" />
+        
+        {/* Center Metal Lock/Latch */}
+        <rect x="20.5" y="22" width="7" height="8" rx="2" fill="white" stroke="#1e293b" strokeWidth="2.4" />
+        <line x1="24" y1="25" x2="24" y2="27.5" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
       </svg>
     );
   }
