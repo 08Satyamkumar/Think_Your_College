@@ -6089,124 +6089,124 @@ export default function CollegeDetailPage() {
                 );
               })()}
 
-              {/* 7. STUDENTS RATINGS & REVIEWS SUB-BOX (WORLD-CLASS DESIGN & ANIMATIONS) */}
+              {/* 7. STUDENTS RATINGS & REVIEWS SUB-BOX (WITH LARGER SCORE CARD & OVERLAPPING PARAMETERS) */}
               {(() => {
                 const revData = getCollegeReviewsArticle(collegeData);
                 const totalCount = (revData.histogram || []).reduce((acc, curr) => acc + curr.count, 0) || 623;
 
                 return (
-                  <div
-                    id="reviews-section"
-                    className="group relative bg-gradient-to-br from-[#ebf2ff]/90 via-[#f5f8ff] to-[#e8f0fe]/80 border border-blue-200/70 hover:border-blue-300 rounded-3xl p-6 sm:p-7 shadow-[0_8px_30px_-6px_rgba(59,130,246,0.12),0_1px_4px_rgba(0,0,0,0.02)] transition-all duration-300 scroll-mt-20 space-y-5 overflow-hidden"
-                  >
-                    {/* Ambient Glow Aura */}
-                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
-                    <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none" />
+                  <div id="reviews-section" className="group relative scroll-mt-20">
+                    {/* Top Main Blue Gradient Container */}
+                    <div className="relative bg-gradient-to-b from-[#eef4ff] via-[#f3f7ff] to-[#e4edff] border border-blue-200/80 rounded-3xl p-6 sm:p-7 pb-12 sm:pb-14 shadow-sm relative overflow-hidden">
+                      {/* Ambient Glow Aura */}
+                      <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+                      <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none" />
 
-                    {/* Header Row */}
-                    <div className="flex items-start justify-between gap-3 relative z-10">
-                      <div className="flex items-center gap-3.5">
-                        {/* 3D-styled Blue Badge Icon with Bookmark / Star */}
-                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3b82f6] via-[#4f46e5] to-[#6366f1] text-white flex items-center justify-center shrink-0 shadow-md shadow-indigo-500/25 border border-white/40 transform group-hover:scale-105 transition-transform duration-300">
-                          <Bookmark className="w-5 h-5 fill-white text-white drop-shadow-xs" />
+                      {/* Header Row (Clean, Normal font weight text) */}
+                      <div className="flex items-start justify-between gap-3 relative z-10 mb-5">
+                        <div className="flex items-center gap-3.5">
+                          {/* Blue Badge Icon */}
+                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-[#3b82f6] via-[#4f46e5] to-[#6366f1] text-white flex items-center justify-center shrink-0 shadow-md shadow-indigo-500/25 border border-white/40 transform group-hover:scale-105 transition-transform duration-300">
+                            <Bookmark className="w-5 h-5 fill-white text-white drop-shadow-xs" />
+                          </div>
+                          <div>
+                            <span className="text-xs font-semibold font-outfit uppercase tracking-wider text-slate-500 block leading-tight">
+                              {revData.tagText || "College"}
+                            </span>
+                            <h3 className="font-outfit font-bold text-lg sm:text-xl text-slate-800 tracking-tight leading-tight">
+                              {revData.title || "Students Ratings & Reviews"}
+                            </h3>
+                          </div>
                         </div>
-                        <div>
-                          <span className="text-[11px] sm:text-xs font-bold font-outfit uppercase tracking-wider text-slate-500 block leading-tight">
-                            {revData.tagText || "College"}
-                          </span>
-                          <h3 className="font-outfit font-black text-xl sm:text-2xl text-[#1e1b4b] tracking-tight leading-tight">
-                            {revData.title || "Students Ratings & Reviews"}
-                          </h3>
-                        </div>
+
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => openMiniModal("reviews")}
+                            className="px-3 py-1.5 rounded-xl bg-white hover:bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit Reviews</span>
+                          </button>
+                        )}
                       </div>
 
-                      {isAdmin && (
-                        <button
-                          type="button"
-                          onClick={() => openMiniModal("reviews")}
-                          className="px-3 py-1.5 rounded-xl bg-white hover:bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
-                        >
-                          <Edit className="w-3.5 h-3.5" />
-                          <span>Edit Reviews</span>
-                        </button>
-                      )}
+                      {/* Spacious Big Score & Histogram Breakdown Card */}
+                      <div className="relative z-10 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-9 border border-blue-100/90 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.05)] grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
+                        {/* Left: Score Display + Verified Badge */}
+                        <div className="md:col-span-5 space-y-4 text-center md:text-left flex flex-col items-center md:items-start justify-center">
+                          <div className="flex items-baseline gap-2.5">
+                            <Star className="w-8 h-8 sm:w-10 sm:h-10 fill-amber-400 text-amber-400 shrink-0 self-center drop-shadow-[0_2px_8px_rgba(251,191,36,0.45)] animate-pulse" />
+                            <span className="text-4xl sm:text-5xl font-bold font-outfit text-slate-800 tracking-tight">
+                              {revData.overallScore ?? 4.5}
+                            </span>
+                            <span className="text-slate-400 font-bold text-xl sm:text-2xl">
+                              /5
+                            </span>
+                          </div>
+
+                          {/* Verified Reviews Pill Badge */}
+                          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs sm:text-[13px] font-bold shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-600 text-white shrink-0" />
+                            <span>{revData.totalReviewsCount || "623 Verified Reviews"}</span>
+                            <span className="text-[10px] text-emerald-500 cursor-help ml-0.5" title="Calculated from real verified student feedback">
+                              ⓘ
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Right: Star Histogram Progress Bars */}
+                        <div className="md:col-span-7 space-y-3">
+                          {(revData.histogram || []).map((item, hIdx) => {
+                            const percent = Math.min(100, Math.round((item.count / totalCount) * 100));
+                            const isHovered = hoveredStarBarIdx === hIdx;
+
+                            return (
+                              <div
+                                key={hIdx}
+                                onMouseEnter={() => setHoveredStarBarIdx(hIdx)}
+                                onMouseLeave={() => setHoveredStarBarIdx(null)}
+                                className="group/h flex items-center gap-3.5 text-xs sm:text-[13px] font-bold cursor-pointer select-none"
+                              >
+                                {/* Star Range Label */}
+                                <div className="w-12 shrink-0 flex items-center gap-1 text-slate-700 group-hover/h:text-indigo-600 transition-colors font-outfit">
+                                  <span className="text-amber-500 font-black">★</span>
+                                  <span>{item.starsRange}</span>
+                                </div>
+
+                                {/* Interactive Progress Bar */}
+                                <div className="flex-1 h-2 sm:h-2.5 bg-slate-200/80 rounded-full overflow-hidden relative shadow-inner">
+                                  <div
+                                    className={`h-full rounded-full transition-all duration-700 ease-out ${
+                                      isHovered
+                                        ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 shadow-[0_0_12px_rgba(99,102,241,0.6)] scale-y-110"
+                                        : "bg-gradient-to-r from-[#1c1136] via-[#2d114d] to-[#43196f]"
+                                    }`}
+                                    style={{ width: `${percent}%` }}
+                                  />
+                                </div>
+
+                                {/* Count & Tooltip */}
+                                <div className="w-12 text-right shrink-0 text-slate-600 group-hover/h:text-slate-900 font-bold font-mono transition-colors">
+                                  {isHovered ? `${percent}%` : item.count}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Top Floating White Card: Big Score & Histogram Breakdown */}
-                    <div className="relative z-10 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-7 border border-blue-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
-                      {/* Left: Huge Score Display + Verified Badge */}
-                      <div className="md:col-span-5 space-y-3.5 text-center md:text-left flex flex-col items-center md:items-start justify-center">
-                        <div className="flex items-baseline gap-2">
-                          <Star className="w-8 h-8 sm:w-9 sm:h-9 fill-amber-400 text-amber-400 shrink-0 self-center drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)] animate-pulse" />
-                          <span className="text-4xl sm:text-5xl font-black font-outfit text-slate-900 tracking-tight">
-                            {revData.overallScore ?? 4.5}
-                          </span>
-                          <span className="text-slate-400 font-extrabold text-xl sm:text-2xl">
-                            /5
-                          </span>
-                        </div>
-
-                        {/* Verified Reviews Pill Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs sm:text-[12.5px] font-bold shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-600 text-white shrink-0" />
-                          <span>{revData.totalReviewsCount || "623 Verified Reviews"}</span>
-                          <span className="text-[10px] text-emerald-500 cursor-help" title="Calculated from real verified student feedback">
-                            ⓘ
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Right: Star Histogram Progress Bars */}
-                      <div className="md:col-span-7 space-y-2.5">
-                        {(revData.histogram || []).map((item, hIdx) => {
-                          const percent = Math.min(100, Math.round((item.count / totalCount) * 100));
-                          const isHovered = hoveredStarBarIdx === hIdx;
-
-                          return (
-                            <div
-                              key={hIdx}
-                              onMouseEnter={() => setHoveredStarBarIdx(hIdx)}
-                              onMouseLeave={() => setHoveredStarBarIdx(null)}
-                              className="group/h flex items-center gap-3 text-xs sm:text-[13px] font-bold cursor-pointer select-none"
-                            >
-                              {/* Star Range Label */}
-                              <div className="w-12 shrink-0 flex items-center gap-1 text-slate-700 group-hover/h:text-indigo-600 transition-colors font-outfit">
-                                <span className="text-amber-500 font-black">★</span>
-                                <span>{item.starsRange}</span>
-                              </div>
-
-                              {/* Interactive Progress Bar */}
-                              <div className="flex-1 h-2 sm:h-2.5 bg-slate-200/80 rounded-full overflow-hidden relative shadow-inner">
-                                <div
-                                  className={`h-full rounded-full transition-all duration-700 ease-out ${
-                                    isHovered
-                                      ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 shadow-[0_0_12px_rgba(99,102,241,0.6)] scale-y-110"
-                                      : "bg-gradient-to-r from-[#1c1136] via-[#2d114d] to-[#43196f]"
-                                  }`}
-                                  style={{ width: `${percent}%` }}
-                                />
-                              </div>
-
-                              {/* Count & Tooltip */}
-                              <div className="w-12 text-right shrink-0 text-slate-600 group-hover/h:text-slate-900 font-bold font-mono transition-colors">
-                                {isHovered ? `${percent}%` : item.count}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Bottom 5 Parameter Category Rating Cards */}
-                    <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-1">
+                    {/* Bottom 5 Overlapping Parameter Cards (Overlaps the blue container edge as in Image 2) */}
+                    <div className="relative z-20 px-3 sm:px-4 -mt-7 sm:-mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
                       {(revData.parameters || []).map((param, pIdx) => {
                         return (
                           <div
                             key={pIdx}
-                            className="group/param relative bg-white/95 hover:bg-white rounded-2xl p-4 sm:p-4.5 border border-blue-100 hover:border-blue-300/90 shadow-[0_2px_8px_-2px_rgba(59,130,246,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(59,130,246,0.18)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none"
+                            className="group/param relative bg-white hover:bg-slate-50/50 rounded-2xl p-4 sm:p-5 border border-slate-200/90 hover:border-blue-300 shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_28px_rgba(59,130,246,0.14)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col items-center text-center justify-between cursor-pointer select-none"
                           >
                             {/* Icon Container with 3D Float Effect */}
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#dbeafe] via-[#eff6ff] to-[#e0e7ff] border border-blue-200/70 flex items-center justify-center text-blue-600 group-hover/param:scale-110 group-hover/param:rotate-3 transition-transform duration-300 shadow-2xs">
+                            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-[#dbeafe] via-[#eff6ff] to-[#e0e7ff] border border-blue-200/70 flex items-center justify-center text-blue-600 group-hover/param:scale-110 group-hover/param:rotate-3 transition-transform duration-300 shadow-2xs">
                               {param.iconType === "briefcase" && (
                                 <Briefcase className="w-5 h-5 text-[#2563eb] stroke-[2.2]" />
                               )}
@@ -6232,7 +6232,7 @@ export default function CollegeDetailPage() {
                             {/* Score */}
                             <div className="flex items-center gap-1.5 pt-0.5">
                               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 drop-shadow-2xs" />
-                              <span className="font-outfit font-black text-sm sm:text-base text-slate-900">
+                              <span className="font-outfit font-bold text-sm sm:text-base text-slate-900">
                                 {param.rating}
                               </span>
                             </div>
